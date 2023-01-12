@@ -1,0 +1,44 @@
+server:
+  port: 0
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  nacos:
+    group: YUE-CHIP-GROUP
+    host: 192.168.177.129:8848
+    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
+  application:
+    name: yue-chip-upms-serve
+  cloud:
+    nacos:
+      config:
+        server-addr: ${spring.nacos.host}
+        file-extension: yaml
+        namespace: ${spring.nacos.namespace}
+        group: ${spring.nacos.group}
+        extension-configs:
+          - data-id: yue-chip-common.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: yue-chip-datasource-common.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: yue-chip-jpa-common.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: yue-chip-oauth2-resource-serve-common.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+#          - data-id: yue-chip-sentinel-common.${spring.cloud.nacos.config.file-extension}
+#            refresh: true
+#            group: GLOBAL_GROUP
+          - data-id: yue-chip-dubbo-common.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: yue-chip-seata-common.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: yue-chip-redis-common.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP

@@ -1,0 +1,11 @@
+apply from: this.rootProject.file('javaLibrary.gradle')
+archivesBaseName = 'yue-chip-upms-business'
+apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
+dependencies {
+    api project(':common')
+    api project(':interface-expose')
+    api 'yue.chip:yue-chip-interface-expose-impl-starter'
+    api 'yue.chip:yue-chip-business-starter'
+    api 'org.springframework.boot:spring-boot-starter-security'
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}

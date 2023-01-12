@@ -1,0 +1,14 @@
+ext {
+
+}
+
+dependencies {
+    constraints {
+        api "yue.chip:yue-chip-core:${yueChipVersion}"
+        api "yue.chip:yue-chip-business-starter:${yueChipVersion}"
+        api "yue.chip:yue-chip-interface-expose-impl-starter:${yueChipVersion}"
+        api "yue.chip:yue-chip-interface-expose-starter:${yueChipVersion}"
+        api "yue.chip:yue-chip-serve-starter:${yueChipVersion}"
+    }
+
+}

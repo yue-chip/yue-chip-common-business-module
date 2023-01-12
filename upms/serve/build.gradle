@@ -1,0 +1,23 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'application'
+}
+archivesBaseName = 'yue-chip-upms-serve'
+apply plugin: 'org.springframework.boot'
+apply from: this.rootProject.file('javaLibrary.gradle')
+apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
+bootJar {
+    enabled true
+}
+dependencies {
+    api project(':common')
+    api 'yue.chip:yue-chip-serve-starter'
+    api 'yue.chip:yue-chip-business-starter'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+configurations.all() {
+    resolutionStrategy.force "org.antlr:antlr4-runtime:4.11.1"
+    resolutionStrategy.force "org.antlr:antlr4-tool:4.11.1"
+}

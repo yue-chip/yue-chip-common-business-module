@@ -1,0 +1,5 @@
+apply plugin: 'java-platform'
+apply plugin: 'maven-publish'
+javaPlatform {
+    allowDependencies()
+}

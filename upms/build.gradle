@@ -1,0 +1,16 @@
+apply from: this.rootProject.file('javaPlatformMvnPublish.gradle')
+
+allprojects {
+    group = projectGroup
+    version = projectVersion
+    apply plugin: 'maven-publish'
+    repositories {
+        mavenLocal()
+        maven { allowInsecureProtocol true; url mavenRepository }
+        mavenCentral()
+    }
+}
+
+subprojects {
+
+}
