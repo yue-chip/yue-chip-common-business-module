@@ -7,6 +7,7 @@ import com.yue.chip.upms.enums.Type;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -19,28 +20,28 @@ import org.hibernate.annotations.SelectBeforeUpdate;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_resources", indexes = {@Index(columnList = "parent_id"),@Index(columnList = "code"),@Index(columnList = "name")})
+@Table(name = "t_resources", indexes = {@Index(columnList = "parentId"),@Index(columnList = "code"),@Index(columnList = "name")})
 @DynamicInsert
 @DynamicUpdate
 @SelectBeforeUpdate
-@Data
 @SuperBuilder
+@NoArgsConstructor
 public class ResourcesPo extends ResourcesDefinition {
 
     @Override
-    @Column(name = "parent_id",nullable = false)
+    @Column(nullable = false)
     public Long getParentId() {
         return super.getParentId();
     }
 
     @Override
-    @Column(name = "code",unique = true,nullable = false)
+    @Column(unique = true,nullable = false)
     public String getCode() {
         return super.getCode();
     }
 
     @Override
-    @Column(name = "name",nullable = false)
+    @Column(nullable = false)
     public String getName() {
         return super.getName();
     }
@@ -72,7 +73,4 @@ public class ResourcesPo extends ResourcesDefinition {
         return super.getIsDefault();
     }
 
-    public ResourcesPo() {
-        super();
-    }
 }

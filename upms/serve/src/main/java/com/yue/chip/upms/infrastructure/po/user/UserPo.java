@@ -7,6 +7,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -23,9 +24,10 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 @DynamicInsert
 @DynamicUpdate
 @SelectBeforeUpdate
-@Data
 @SuperBuilder
+@NoArgsConstructor
 public class UserPo extends UserDefinition {
+
     @Override
     @Column(nullable = false)
     public String getPassword() {
@@ -33,17 +35,15 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
-    @Column(name = "username",nullable = false,unique = true)
+    @Column(nullable = false,unique = true)
     public String getUsername() {
         return super.getUsername();
     }
 
     @Override
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     public String getName() {
         return super.getName();
     }
 
-    public UserPo() {
-    }
 }

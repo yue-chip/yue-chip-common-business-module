@@ -7,6 +7,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -19,26 +20,32 @@ import org.hibernate.annotations.SelectBeforeUpdate;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_user_role",indexes = {@Index(columnList = "user_id"),@Index(columnList = "role_id")})
+@Table(name = "t_user_role",indexes = {@Index(columnList = "userId"),@Index(columnList = "roleId")})
 @DynamicInsert
 @DynamicUpdate
 @SelectBeforeUpdate
-@Data
 @SuperBuilder
+@NoArgsConstructor
+@Data
 public class UserRolePo extends BaseEntity {
 
     /**
      * 用户id
      */
-    @Column(name ="user_id",nullable = false)
     private Long userId;
 
     /**
      * 角色id
      */
-    @Column(name ="role_id",nullable = false)
     private Long roleId;
 
-    public UserRolePo() {
+    @Column(nullable = false)
+    public Long getUserId() {
+        return this.userId;
+    }
+
+    @Column(nullable = false)
+    public Long getRoleId() {
+        return this.roleId;
     }
 }

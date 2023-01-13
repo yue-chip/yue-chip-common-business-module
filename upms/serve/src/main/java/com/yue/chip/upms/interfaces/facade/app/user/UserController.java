@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2023/1/12 下午3:18
  * @description UserController
  */
-@RestController
+@RestController("userAppController")
 @RequestMapping("/user/app")
 @Validated
 @Tag(name = "用户管理-app端后台")

@@ -19,7 +19,7 @@ import org.hibernate.annotations.SelectBeforeUpdate;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_role_resources",indexes = {@Index(columnList = "role_id"),@Index(columnList = "resources_id") })
+@Table(name = "t_role_resources",indexes = {@Index(columnList = "roleId"),@Index(columnList = "resourcesId") })
 @DynamicInsert
 @DynamicUpdate
 @SelectBeforeUpdate
@@ -30,16 +30,23 @@ public class RoleResourcesPo extends BaseEntity {
     /**
      * 角色id
      */
-    @Column(name = "role_id",nullable = false)
     private Long roleId;
 
     /**
      * 资源id
      */
-    @Column(name = "resources_id",nullable = false)
     private Long resourcesId;
 
     public RoleResourcesPo() {
+    }
 
+    @Column( nullable = false)
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    @Column(nullable = false)
+    public Long getResourcesId() {
+        return resourcesId;
     }
 }

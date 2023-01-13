@@ -6,6 +6,8 @@ import com.yue.chip.upms.enums.Scope;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -22,8 +24,9 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 @DynamicInsert
 @DynamicUpdate
 @SelectBeforeUpdate
-@Data
 @SuperBuilder
+@NoArgsConstructor
+@Data
 public class RolePo extends RoleDefinition {
 
     @Override
@@ -34,13 +37,13 @@ public class RolePo extends RoleDefinition {
     }
 
     @Override
-    @Column(name = "code",unique = true,nullable = false)
+    @Column(unique = true,nullable = false)
     public String getCode() {
         return super.getCode();
     }
 
     @Override
-    @Column(name = "name",nullable = false)
+    @Column(nullable = false)
     public String getName() {
         return super.getName();
     }
@@ -58,13 +61,4 @@ public class RolePo extends RoleDefinition {
         return super.getIsDefault();
     }
 
-    @Override
-    @Column(name = "remark",length = 255)
-    public String getRemark() {
-        return super.getRemark();
-    }
-
-    public RolePo() {
-        super();
-    }
 }

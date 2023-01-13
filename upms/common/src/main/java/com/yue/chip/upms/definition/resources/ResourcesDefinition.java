@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -17,9 +18,9 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @Schema(description = "资源")
-@MappedSuperclass
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
+@NoArgsConstructor
 public class ResourcesDefinition extends BaseDefinition {
 
     @Schema(description = "父节点ID")
@@ -52,6 +53,4 @@ public class ResourcesDefinition extends BaseDefinition {
     @Schema(description = "备注")
     private String remark;
 
-    public ResourcesDefinition() {
-    }
 }

@@ -1,6 +1,6 @@
-package com.yue.chip.upms.definition.aggregates;
+package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.upms.definition.resources.ResourcesDefinition;
+import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,5 +15,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
-public class ResourcesVODefinition extends ResourcesDefinition {
+public class ResourcesVO extends ResourcesVODefinition {
 }

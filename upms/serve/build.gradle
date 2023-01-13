@@ -11,10 +11,12 @@ bootJar {
 }
 dependencies {
     api project(':common')
+    api project(':interface-expose')
     api 'yue.chip:yue-chip-serve-starter'
     api 'yue.chip:yue-chip-business-starter'
     implementation 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
 
 configurations.all() {

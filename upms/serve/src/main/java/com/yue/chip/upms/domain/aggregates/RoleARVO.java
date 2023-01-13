@@ -1,5 +1,6 @@
-package com.yue.chip.upms.definition.aggregates;
+package com.yue.chip.upms.domain.aggregates;
 
+import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.definition.role.RoleDefinition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,10 +18,6 @@ import java.util.List;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
-public class RoleARVODefinition extends RoleDefinition {
+public class RoleARVO extends RoleARVODefinition {
 
-    /**
-     * 资源
-     */
-    private List<ResourcesVODefinition> resources;
 }

@@ -9,6 +9,7 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -18,9 +19,9 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @Schema(description = "角色")
-@MappedSuperclass
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
+@NoArgsConstructor
 public class RoleDefinition extends BaseDefinition {
 
     @Schema(description = "角色编码")
@@ -40,6 +41,5 @@ public class RoleDefinition extends BaseDefinition {
 
     @Schema(description = "状态")
     private State state;
-    public RoleDefinition() {
-    }
+
 }
