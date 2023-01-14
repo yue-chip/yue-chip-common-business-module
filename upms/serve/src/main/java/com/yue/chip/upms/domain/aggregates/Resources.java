@@ -1,10 +1,13 @@
 package com.yue.chip.upms.domain.aggregates;
 
 import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
+import com.yue.chip.upms.domain.repository.resources.ResourcesRepository;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Mr.Liu
@@ -15,5 +18,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
-public class ResourcesVO extends ResourcesVODefinition {
+public class Resources extends ResourcesVODefinition {
+
+    private ResourcesRepository resourcesRepository;
 }

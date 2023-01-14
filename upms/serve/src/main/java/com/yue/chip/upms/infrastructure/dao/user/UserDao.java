@@ -8,5 +8,5 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
  * @date 2023/1/12 下午4:15
  * @description UserDao
  */
-public interface UserDao extends BaseDao<UserPo> {
+public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
 }

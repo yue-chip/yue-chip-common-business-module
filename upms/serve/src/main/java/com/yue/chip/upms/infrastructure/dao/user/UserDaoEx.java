@@ -1,0 +1,9 @@
+package com.yue.chip.upms.infrastructure.dao.user;
+
+/**
+ * @author Mr.Liu
+ * @date 2023/1/14 上午10:33
+ * @description UserDaoEx
+ */
+public interface UserDaoEx {
+}

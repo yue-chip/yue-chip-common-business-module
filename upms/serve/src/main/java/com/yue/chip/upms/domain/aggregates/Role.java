@@ -1,13 +1,13 @@
 package com.yue.chip.upms.domain.aggregates;
 
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
-import com.yue.chip.upms.definition.role.RoleDefinition;
+import com.yue.chip.upms.domain.repository.role.RoleRepository;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Mr.Liu
@@ -18,6 +18,8 @@ import java.util.List;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
-public class RoleARVO extends RoleARVODefinition {
+public class Role extends RoleARVODefinition {
+
+    private RoleRepository roleRepository;
 
 }
