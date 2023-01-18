@@ -18,7 +18,6 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     public User save(User user) {
-
         return user;
     }
 }
