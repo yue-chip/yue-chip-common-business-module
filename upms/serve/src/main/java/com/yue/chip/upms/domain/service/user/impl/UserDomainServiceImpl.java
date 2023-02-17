@@ -2,7 +2,7 @@ package com.yue.chip.upms.domain.service.user.impl;
 
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.user.UserRepository;
-import com.yue.chip.upms.domain.service.user.UserService;
+import com.yue.chip.upms.domain.service.user.UserDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @description UserServiceImpl
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserDomainServiceImpl implements UserDomainService {
 
     @Autowired
     private UserRepository userRepository;

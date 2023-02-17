@@ -3,11 +3,17 @@ package com.yue.chip.upms.interfaces.facade.console.user;
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.controller.BaseController;
 import com.yue.chip.core.controller.impl.BaseControllerImpl;
+import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.domain.repository.user.UserRepository;
+import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -20,9 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "用户管理-pc端后台")
 public class UserController extends BaseControllerImpl implements BaseController {
 
+    @Resource
+    private UserRepository userRepository;
+
     @GetMapping("/test")
     @AuthorizationIgnore
-    public String test() {
-        return "test";
+    public User test() {
+        Optional<User> optional = userRepository.find("admin");
+        return optional.isPresent()?optional.get():null;
     }
 }

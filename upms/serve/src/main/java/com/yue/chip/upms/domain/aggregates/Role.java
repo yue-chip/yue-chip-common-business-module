@@ -20,6 +20,4 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class Role extends RoleARVODefinition {
 
-    private RoleRepository roleRepository;
-
 }

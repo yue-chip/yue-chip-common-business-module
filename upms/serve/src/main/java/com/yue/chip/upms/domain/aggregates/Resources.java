@@ -20,5 +20,4 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class Resources extends ResourcesVODefinition {
 
-    private ResourcesRepository resourcesRepository;
 }

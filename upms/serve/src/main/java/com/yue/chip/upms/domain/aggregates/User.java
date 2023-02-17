@@ -20,6 +20,4 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class User extends UserARDefinition {
 
-    private UserRepository userRepository;
-
 }

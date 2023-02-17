@@ -1,12 +1,18 @@
 package com.yue.chip.upms.infrastructure.repository.impl.user;
 
 import com.yue.chip.core.repository.impl.BaseRepositoryImpl;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.user.UserRepository;
+import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserRoleDao;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -16,11 +22,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserRepositoryImpl extends BaseRepositoryImpl<UserPo> implements UserRepository {
 
-    @Autowired
+    @Resource
     private UserDao userDao;
 
-    @Autowired
+    @Resource
     private UserRoleDao userRoleDao;
 
+    @Resource
+    private UserMapper userMapper;
 
+    @Override
+    public Optional<User> find(@NotNull String username) {
+        Optional<UserPo> optional = userDao.find(username);
+        return optional.isPresent()?Optional.ofNullable(userMapper.userPoToUser(optional.get())):Optional.empty();
+    }
 }
