@@ -4,13 +4,10 @@ import com.yue.chip.exception.BusinessException;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
-import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.user.UserRepository;
-import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -34,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optional = userRepository.find(username);
         if (!optional.isPresent()){
-            BusinessException.throwException("用户不存在");
+            return null;
         }
         User user = optional.get();
         YueChipUserDetails userDetails = new YueChipUserDetails(user.getUsername(),user.getPassword(),getUserGrantedAuthority(user.getRoles()));
@@ -47,13 +45,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     private List<GrantedAuthority> getUserGrantedAuthority(List<RoleARVODefinition> roles){
         List<GrantedAuthority> listGrantedAuthority = new ArrayList<GrantedAuthority>();
-        roles.forEach(roleARVODefinition -> {
-            roleARVODefinition.getResources().forEach(resourcesVODefinition -> {
-                YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
-                grantedAuthority.setAuthority(resourcesVODefinition.getCode());
-                listGrantedAuthority.add(grantedAuthority);
+        if (Objects.nonNull(roles)) {
+            roles.forEach(roleARVODefinition -> {
+                roleARVODefinition.getResources().forEach(resourcesVODefinition -> {
+                    YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
+                    grantedAuthority.setAuthority(resourcesVODefinition.getCode());
+                    listGrantedAuthority.add(grantedAuthority);
+                });
             });
-        });
+        }
         return listGrantedAuthority;
     }
 }

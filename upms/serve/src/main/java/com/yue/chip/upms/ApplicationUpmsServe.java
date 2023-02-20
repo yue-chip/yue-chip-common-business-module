@@ -26,4 +26,5 @@ public class ApplicationUpmsServe {
          */
         SpringApplication.run(ApplicationUpmsServe.class, args);
     }
+
 }
