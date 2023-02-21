@@ -6,8 +6,11 @@ import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.user.UserRepository;
+import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +30,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
     private UserRepository userRepository;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,6 +41,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         User user = optional.get();
         YueChipUserDetails userDetails = new YueChipUserDetails(user.getUsername(),user.getPassword(),getUserGrantedAuthority(user.getRoles()));
+        redisTemplate.opsForValue().set(CurrentUserUtil.TENANT_ID + "-" + username,user.getTenantId());
+        redisTemplate.opsForValue().set(CurrentUserUtil.USER_ID + "-" + username,user.getId());
         return userDetails;
     }
     /**
