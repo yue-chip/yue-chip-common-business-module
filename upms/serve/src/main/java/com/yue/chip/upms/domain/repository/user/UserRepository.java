@@ -15,5 +15,10 @@ import java.util.Optional;
 
 public interface UserRepository extends BaseRepository<UserPo> {
 
+    /**
+     * 根据登录账号获取用户
+     * @param username
+     * @return
+     */
     public Optional<User> find(@NotNull String username);
 }
