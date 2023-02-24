@@ -21,4 +21,5 @@ public interface UserRepository extends BaseRepository<UserPo> {
      * @return
      */
     public Optional<User> find(@NotNull String username);
+
 }

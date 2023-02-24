@@ -11,6 +11,7 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -41,8 +42,11 @@ public class UserController extends BaseControllerImpl implements BaseController
     @GetMapping("/test")
     @PreAuthorize("hasAnyAuthority('"+ GlobalConstant.DEFAULT_ROLE_PREFIX +"test')")
     public User test() {
-        Optional<User> optional = userRepository.find("admin");
-        CurrentUserUtil.getCurrentUser();
-        return optional.isPresent()?optional.get():null;
+//        Optional<User> optional = userRepository.find("admin");
+//        CurrentUserUtil.getCurrentUser();
+//        return optional.isPresent()?optional.get():null;
+        userRepository.save(UserPo.builder().username(RandomStringUtils.random(5)).password(RandomStringUtils.random(5)).name(RandomStringUtils.random(5)).build());
+        return null;
     }
+
 }
