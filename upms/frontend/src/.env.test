@@ -1,0 +1,3 @@
+NODE_ENV=development
+VITE_BASEURL="http://192.168.177.129"
+VITE_BASEAPI="/api"

@@ -1,10 +1,14 @@
 package com.yue.chip.upms.domain.repository.user;
 
 import com.yue.chip.core.repository.BaseRepository;
+import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
+import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,6 +24,14 @@ public interface UserRepository extends BaseRepository<UserPo> {
      * @param username
      * @return
      */
-    public Optional<User> find(@NotNull String username);
+    public Optional<User> find(String username);
+
+    /**
+     * 根据用户id查询用户
+     * @param userId
+     * @return
+     */
+    public Optional<User> find(Long userId);
+
 
 }

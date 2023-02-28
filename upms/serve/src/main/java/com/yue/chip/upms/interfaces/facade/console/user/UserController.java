@@ -1,14 +1,22 @@
 package com.yue.chip.upms.interfaces.facade.console.user;
 
+import com.sun.jna.platform.win32.WinDef;
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.constant.GlobalConstant;
+import com.yue.chip.core.IResultData;
+import com.yue.chip.core.ResultData;
 import com.yue.chip.core.controller.BaseController;
 import com.yue.chip.core.controller.impl.BaseControllerImpl;
+import com.yue.chip.upms.domain.aggregates.Resources;
+import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.domain.repository.resources.ResourcesRepository;
 import com.yue.chip.upms.domain.repository.user.UserRepository;
+import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.CurrentUserUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,6 +27,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -38,6 +48,9 @@ public class UserController extends BaseControllerImpl implements BaseController
     @DubboReference
     private UserDetailsService userDetailsService;
 
+    @Resource
+    private ResourcesRepository resourcesRepository;
+
 
     @GetMapping("/test")
     @PreAuthorize("hasAnyAuthority('"+ GlobalConstant.DEFAULT_ROLE_PREFIX +"test')")
@@ -47,6 +60,16 @@ public class UserController extends BaseControllerImpl implements BaseController
 //        return optional.isPresent()?optional.get():null;
         userRepository.save(UserPo.builder().username(RandomStringUtils.random(5)).password(RandomStringUtils.random(5)).name(RandomStringUtils.random(5)).build());
         return null;
+    }
+
+    @GetMapping("/currentUser/permissions")
+    @Operation(summary = "获取当前用户的权限(菜单，资源)", description = "获取当前用户的权限(菜单，资源)")
+    public IResultData<List<Resources>> userPermissions(){
+        Long userId = CurrentUserUtil.getCurrentUserId();
+        ResultData resultData = ResultData.builder()
+            .data(resourcesRepository.findResourcesToTree(userId,0L, Scope.CONSOLE))
+            .build();
+        return resultData;
     }
 
 }

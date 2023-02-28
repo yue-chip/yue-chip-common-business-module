@@ -11,5 +11,11 @@ import java.util.Optional;
  */
 public interface UserDaoEx {
 
+    /**
+     * 根据登录账号查询
+     * @param username
+     * @return
+     */
     public Optional<UserPo> find(String username);
+
 }

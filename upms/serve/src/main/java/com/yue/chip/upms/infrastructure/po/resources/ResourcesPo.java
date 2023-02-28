@@ -55,7 +55,7 @@ public class ResourcesPo extends ResourcesDefinition {
 
     @Override
     @Column(name = "type",nullable = false)
-    @Convert(converter = State.StateConverter.class)
+    @Convert(converter = Type.TypeConverter.class)
     public Type getType() {
         return super.getType();
     }

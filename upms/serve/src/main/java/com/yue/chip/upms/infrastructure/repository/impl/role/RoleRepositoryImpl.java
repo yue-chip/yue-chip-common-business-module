@@ -21,4 +21,6 @@ public class RoleRepositoryImpl extends BaseRepositoryImpl<RolePo> implements Ro
 
     @Autowired
     private RoleResourcesDao roleResourcesDao;
+
+
 }

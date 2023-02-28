@@ -2,9 +2,15 @@ package com.yue.chip.upms.infrastructure.dao.resources.impl;
 
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.domain.aggregates.Resources;
+import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDaoEx;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -15,4 +21,16 @@ public class ResourcesDaoImpl implements ResourcesDaoEx {
 
     @Autowired
     private BaseDao<ResourcesPo> baseDao;
+
+    @Override
+    public List<ResourcesPo> findByUserId(Long userId, Long parentId, Scope scope) {
+        StringBuffer sb = new StringBuffer(" select re from ResourcesPo re join RoleResourcesPo ro on re.id = ro.resourcesId join UserRolePo ur on ro.roleId = ur.roleId " +
+                "where ur.userId = :userId and re.parentId = :parentId and re.scope = :scope");
+        Map<String, Object> para = new HashMap<>();
+        para.put("userId",userId);
+        para.put("parentId",parentId);
+        para.put("scope",scope);
+        List<ResourcesPo> list = (List<ResourcesPo>) baseDao.findAll(sb.toString(),para);
+        return list;
+    }
 }
