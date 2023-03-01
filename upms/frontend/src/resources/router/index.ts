@@ -8,6 +8,7 @@ export const router = createRouter({
       path: '/',
       name: 'index',
       component: () => import('../views/index.vue'),
+      meta: {keepAlive: true }
     },
   ],
   strict: true,

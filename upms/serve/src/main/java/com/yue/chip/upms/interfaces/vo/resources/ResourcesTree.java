@@ -21,5 +21,5 @@ import java.util.List;
 @NoArgsConstructor
 public class ResourcesTree extends ResourcesDefinition {
 
-    private List<ResourcesTree> child;
+    private List<ResourcesTree> children;
 }

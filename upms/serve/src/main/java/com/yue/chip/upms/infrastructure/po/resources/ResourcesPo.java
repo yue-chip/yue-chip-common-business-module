@@ -73,4 +73,18 @@ public class ResourcesPo extends ResourcesDefinition {
         return super.getIsDefault();
     }
 
+    @Override
+    public String getUrl() {
+        return super.getUrl();
+    }
+
+    @Override
+    public Integer getSort() {
+        return super.getSort();
+    }
+
+    @Override
+    public String getRemark() {
+        return super.getRemark();
+    }
 }

@@ -24,7 +24,9 @@ public class ResourcesDaoImpl implements ResourcesDaoEx {
 
     @Override
     public List<ResourcesPo> findByUserId(Long userId, Long parentId, Scope scope) {
-        StringBuffer sb = new StringBuffer(" select re from ResourcesPo re join RoleResourcesPo ro on re.id = ro.resourcesId join UserRolePo ur on ro.roleId = ur.roleId " +
+        StringBuffer sb = new StringBuffer(" select re from ResourcesPo re " +
+                "join RoleResourcesPo ro on re.id = ro.resourcesId " +
+                "join UserRolePo ur on ro.roleId = ur.roleId " +
                 "where ur.userId = :userId and re.parentId = :parentId and re.scope = :scope");
         Map<String, Object> para = new HashMap<>();
         para.put("userId",userId);

@@ -61,4 +61,13 @@ public class RolePo extends RoleDefinition {
         return super.getIsDefault();
     }
 
+    @Override
+    public String getRemark() {
+        return super.getRemark();
+    }
+
+    @Override
+    public void setCode(String code) {
+        super.setCode(code);
+    }
 }
