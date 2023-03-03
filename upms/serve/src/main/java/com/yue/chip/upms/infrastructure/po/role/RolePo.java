@@ -50,13 +50,6 @@ public class RolePo extends RoleDefinition {
 
     @Override
     @Column(nullable = false)
-    @Convert(converter = Scope.ScopeConverter.class)
-    public Scope getScope() {
-        return super.getScope();
-    }
-
-    @Override
-    @Column(nullable = false)
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }

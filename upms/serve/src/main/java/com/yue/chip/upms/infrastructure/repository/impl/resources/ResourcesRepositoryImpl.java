@@ -8,7 +8,9 @@ import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
+import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Repository;
 
@@ -32,25 +34,36 @@ public class ResourcesRepositoryImpl extends BaseRepositoryImpl<ResourcesPo> imp
     private ResourcesMapper resourcesMapper;
 
     @Override
-    public List<ResourcesTree> findResourcesToTree(Long userId, Long parentId, Scope scope) {
-        List<ResourcesPo> list = new ArrayList<>();
+    public List<ResourcesTreeList> findResourcesToTreeList(Long userId, Long parentId, Scope scope) {
+        List<ResourcesPo> list ;
         if (Objects.nonNull(userId)) {
             list = resourcesDao.findByUserId(userId,parentId,scope);
         }else {
             list = resourcesDao.findByParentIdAndScopeOrderBySort(parentId,scope);
         }
-        List<ResourcesTree> treeList = new ArrayList<>();
+        List<ResourcesTreeList> treeList;
+        if (Objects.nonNull(list) && list.size()>0){
+            treeList = new ArrayList<>();
+        } else {
+            treeList = null;
+        }
         list.forEach(resourcesPo -> {
-            ResourcesTree resourcesTree = resourcesMapper.toResourcesTree(resourcesPo);
-            resourcesTree.setChildren(findResourcesToTree(userId,resourcesPo.getId(),scope));
+            ResourcesTreeList resourcesTree = resourcesMapper.toResourcesTreeList(resourcesPo);
+            resourcesTree.setChildren(findResourcesToTreeList(userId,resourcesPo.getId(),scope));
             treeList.add(resourcesTree);
         });
         return treeList;
     }
 
     @Override
+    public List<ResourcesTreeList> findResourcesToTreeList(Long parentId, Scope scope) {
+        return findResourcesToTreeList(null,parentId,scope);
+    }
+
+    @Override
     public List<ResourcesTree> findResourcesToTree(Long parentId, Scope scope) {
-        return findResourcesToTree(null,parentId,scope);
+        List<ResourcesTreeList> list = findResourcesToTreeList(parentId,scope);
+        return resourcesMapper.toResourcesTree(list);
     }
 
     @Override
@@ -78,6 +91,12 @@ public class ResourcesRepositoryImpl extends BaseRepositoryImpl<ResourcesPo> imp
         ResourcesPo resourcesPo = resourcesMapper.toResourcesPo(resources);
         resourcesPo = this.save(resourcesPo);
         return resourcesMapper.toResources(resourcesPo);
+    }
+
+    @Override
+    public void update(ResourcesUpdateDto resources) {
+        ResourcesPo resourcesPo = resourcesMapper.toResourcesPo(resources);
+        resourcesPo = this.save(resourcesPo);
     }
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {

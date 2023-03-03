@@ -5,7 +5,9 @@ import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
+import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +27,7 @@ public interface ResourcesRepository extends BaseRepository<ResourcesPo> {
      * @param scope
      * @return
      */
-    public List<ResourcesTree> findResourcesToTree(Long userId, Long parentId, Scope scope);
+    public List<ResourcesTreeList> findResourcesToTreeList(Long userId, Long parentId, Scope scope);
 
     /**
      * 查询树形结构数据
@@ -33,6 +35,8 @@ public interface ResourcesRepository extends BaseRepository<ResourcesPo> {
      * @param scope
      * @return
      */
+    public List<ResourcesTreeList> findResourcesToTreeList(Long parentId, Scope scope);
+
     public List<ResourcesTree> findResourcesToTree(Long parentId, Scope scope);
 
     /**
@@ -71,4 +75,10 @@ public interface ResourcesRepository extends BaseRepository<ResourcesPo> {
      * @return
      */
     public Resources save(ResourcesAddDto resources);
+
+    /**
+     * 修改
+     * @param resources
+     */
+    public void  update(ResourcesUpdateDto resources);
 }

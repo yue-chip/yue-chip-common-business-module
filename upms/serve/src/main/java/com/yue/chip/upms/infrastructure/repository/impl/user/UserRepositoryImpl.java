@@ -15,7 +15,6 @@ import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserRoleDao;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Repository;
 
@@ -71,7 +70,6 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<UserPo> implements Us
         List<RoleARVODefinition> list = new ArrayList<>();
         Role role = Role.builder()
                 .code("test")
-                .scope(Scope.CONSOLE)
                 .state(State.NORMAL)
                 .name("测试")
                 .build();

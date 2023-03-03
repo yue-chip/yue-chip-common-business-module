@@ -6,6 +6,7 @@ import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.enums.Type;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -42,10 +43,12 @@ public class ResourcesDefinition extends BaseDefinition {
     private Integer sort;
 
     @Schema(description = "状态")
-    private State state;
+    @Builder.Default
+    private State state = State.NORMAL;
 
     @Schema(description = "是否默认资源,默认资源不能删除")
-    private Boolean isDefault;
+    @Builder.Default
+    private Boolean isDefault = false;
 
     @Schema(description = "url")
     private String url;

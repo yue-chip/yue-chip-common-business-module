@@ -31,7 +31,7 @@ public class UserDaoImpl implements UserDaoEx {
     public Optional<UserPo> find(String username) {
         QueryRunner queryRunner = new QueryRunner(dataSource);
         try {
-            UserPo userPo = queryRunner.query("select * from t_user where username = ? limit 0,1 ",new BeanHandler<UserPo>(UserPo.class),new String[]{username});
+            UserPo userPo = queryRunner.query("select * from t_user where username = ? limit 0,1 ",new BeanHandler<UserPo>(UserPo.class),new Object[]{username});
             return Optional.ofNullable(userPo);
         } catch (SQLException e) {
             e.printStackTrace();

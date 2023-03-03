@@ -1,19 +1,15 @@
 package com.yue.chip.upms.interfaces.facade.console.user;
 
-import com.sun.jna.platform.win32.WinDef;
-import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.constant.GlobalConstant;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.controller.BaseController;
 import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import com.yue.chip.upms.domain.aggregates.Resources;
-import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.resources.ResourcesRepository;
 import com.yue.chip.upms.domain.repository.user.UserRepository;
 import com.yue.chip.upms.enums.Scope;
-import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -67,7 +62,7 @@ public class UserController extends BaseControllerImpl implements BaseController
     public IResultData<List<Resources>> userPermissions(){
         Long userId = CurrentUserUtil.getCurrentUserId();
         ResultData resultData = ResultData.builder()
-            .data(resourcesRepository.findResourcesToTree(userId,0L, Scope.CONSOLE))
+            .data(resourcesRepository.findResourcesToTreeList(userId,0L, Scope.CONSOLE))
             .build();
         return resultData;
     }

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -30,16 +31,15 @@ public class RoleDefinition extends BaseDefinition {
     @Schema(description = "角色名称")
     private String name;
 
-    @Schema(description = "作用域")
-    private Scope scope;
-
     @Schema(description = "是否默认角色（0：否，1：是）默认角色不能删除")
-    private Boolean isDefault;
+    @Builder.Default
+    private Boolean isDefault = false;
 
     @Schema(description = "备注")
     private String remark;
 
     @Schema(description = "状态")
-    private State state;
+    @Builder.Default
+    private State state = State.NORMAL;
 
 }
