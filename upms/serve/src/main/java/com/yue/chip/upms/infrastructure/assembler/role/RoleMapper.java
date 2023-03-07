@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.assembler.role;
 
+import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.interfaces.dto.role.RoleAUDto;
 import com.yue.chip.upms.interfaces.vo.role.RoleListVo;
@@ -18,4 +19,6 @@ public interface RoleMapper {
     public List<RoleListVo> toRoleListVo(List<RolePo> list);
 
     public RolePo toRolePo(RoleAUDto role);
+
+    public Role toRole(RolePo rolePo);
 }

@@ -9,4 +9,11 @@ import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
  * @description RoleResurcesDao
  */
 public interface RoleResourcesDao extends BaseDao<RoleResourcesPo> {
+
+    /**
+     * 根据角色id删除绑定的资源
+     * @param roleId
+     * @return
+     */
+    public int deleteByRoleId(Long roleId);
 }

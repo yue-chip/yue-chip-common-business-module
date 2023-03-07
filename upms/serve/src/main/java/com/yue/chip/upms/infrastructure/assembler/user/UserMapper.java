@@ -5,6 +5,8 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 /**
  * @author Mr.Liu
  * @date 2023/2/16 下午2:51
@@ -15,4 +17,6 @@ public interface UserMapper {
 //    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     public User userPoToUser(UserPo userPo);
+
+    public List<User> toUserList(List<UserPo> list);
 }

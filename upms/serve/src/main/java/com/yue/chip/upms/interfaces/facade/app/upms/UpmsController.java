@@ -1,4 +1,4 @@
-package com.yue.chip.upms.interfaces.facade.app.user;
+package com.yue.chip.upms.interfaces.facade.app.upms;
 
 import com.yue.chip.core.controller.BaseController;
 import com.yue.chip.core.controller.impl.BaseControllerImpl;
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Mr.Liu
  * @date 2023/1/12 下午3:18
- * @description UserController
+ * @description UpmsController
  */
-@RestController("userAppController")
-@RequestMapping("/user/app")
+@RestController("upmsAppController")
+@RequestMapping("/upms/app")
 @Validated
-@Tag(name = "用户管理-app端后台")
-public class UserController extends BaseControllerImpl implements BaseController {
+@Tag(name = "角色&用户&资源-app端后台")
+public class UpmsController extends BaseControllerImpl implements BaseController {
 }

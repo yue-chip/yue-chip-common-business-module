@@ -1,13 +1,15 @@
 package com.yue.chip.upms.domain.aggregates;
 
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
-import com.yue.chip.upms.domain.repository.role.RoleRepository;
+import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.utils.SpringContextUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -20,4 +22,27 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class Role extends RoleARVODefinition {
 
+    private  static volatile UpmsRepository upmsRepository;
+
+    public Boolean checkNameIsExist() {
+        Optional<Role> optional = upmsRepository.findRoleByName(getName());
+        if (optional.isPresent()) {
+            if (Objects.nonNull(getId()) && optional.get().getId().equals(getId())){
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private UpmsRepository getRepository() {
+        if (Objects.isNull(upmsRepository)) {
+            synchronized (this) {
+                if (Objects.isNull(upmsRepository)) {
+                    upmsRepository = (UpmsRepository) SpringContextUtil.getBean(UpmsRepository.class);
+                }
+            }
+        }
+        return upmsRepository;
+    }
 }

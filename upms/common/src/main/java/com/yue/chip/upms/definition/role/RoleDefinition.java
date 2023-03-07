@@ -2,11 +2,7 @@ package com.yue.chip.upms.definition.role;
 
 import com.yue.chip.core.BaseDefinition;
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.upms.enums.Scope;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.MappedSuperclass;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

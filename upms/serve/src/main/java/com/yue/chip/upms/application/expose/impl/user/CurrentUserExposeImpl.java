@@ -2,10 +2,10 @@ package com.yue.chip.upms.application.expose.impl.user;
 
 import com.yue.chip.core.ICurrentUser;
 import com.yue.chip.upms.domain.aggregates.User;
-import com.yue.chip.upms.domain.repository.user.UserRepository;
+import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.utils.BeanToMapUtil;
+import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 import java.util.Optional;
@@ -18,12 +18,12 @@ import java.util.Optional;
 @DubboService(interfaceClass = ICurrentUser.class)
 public class CurrentUserExposeImpl implements ICurrentUser<User> {
 
-    @Autowired
-    private UserRepository userRepository;
+    @Resource
+    private UpmsRepository upmsRepository;
 
     @Override
     public Map<String, Object> findUserToMap(String username) {
-        Optional<User> optional = userRepository.find(username);
+        Optional<User> optional = upmsRepository.findUserByName(username);
         if (optional.isPresent()) {
             User user = optional.get();
             Map<String, Object> map = BeanToMapUtil.transBeanToMap(user);

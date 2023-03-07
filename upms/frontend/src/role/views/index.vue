@@ -30,6 +30,10 @@
                   <template #icon><PlusOutlined /></template>
                   添加
                 </a-button>
+                <a-button type="danger" @click="del(record.id)">
+                  <template #icon><DeleteOutlined /></template>
+                  删除
+                </a-button>
               </a-space>
             </a-form-item>
           </a-col>
@@ -42,12 +46,12 @@
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.key === 'operation'">
             <a-space :size="5">
-              <a-button size="small" @click="permissions()">
+              <a-button size="small" @click="permissions(record.id)">
                 <template #icon><FilterOutlined /></template>
                 权限
               </a-button>
 
-              <a-button size="small" @click="user()">
+              <a-button size="small" @click="user(record.id)">
                 <template #icon><UserAddOutlined /></template>
                 人员
               </a-button>
@@ -86,16 +90,25 @@
       </a-form>
     </a-modal>
 
-    <a-modal width="400px" height="600px"  v-model:visible="permissionsVisible" title="权限" cancelText="取消" okText="保存" :destroyOnClose="true" :mask="true" :maskClosable="false" @cancel="permissionsCancel" @ok="permissionSave">
+    <a-modal width="400px" height="600px"  v-model:visible="permissionsVisible" title="权限" cancelText="取消" okText="保存" :destroyOnClose=true :mask=true :maskClosable=false @cancel="permissionsCancel" @ok="permissionsSave">
       <a-tree
-          v-model:selectedKeys="selectedKeys"
-          v-model:checkedKeys="checkedKeys"
+          v-model:checkedKeys="permissionsCheckedKeys"
           default-expand-all
           checkable
           :height="600"
           :tree-data="treeData"
       >
       </a-tree>
+    </a-modal>
+
+    <a-modal width="400px" height="600px"  v-model:visible="userVisible" title="人员" cancelText="取消" okText="保存" :destroyOnClose=true :mask=true :maskClosable=false @cancel="userCancel" @ok="userSave">
+      <a-select
+          v-model:value="roleUser"
+          mode="tags"
+          style="width: 100%"
+          placeholder="请选择人员"
+          :options="userOptions"
+      ></a-select>
     </a-modal>
   </div>
 </template>
@@ -104,14 +117,19 @@
   import {ref, reactive, onMounted,onActivated,getCurrentInstance} from 'vue'
   import { SearchOutlined,PlusOutlined,UserAddOutlined,FilterOutlined,DeleteOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
+  import {message} from "ant-design-vue";
 
   const _this:any = getCurrentInstance();
   let searchModel = ref({});
   let permissionsVisible = ref<boolean>(false);
   let visible = ref<boolean>(false);
   let addOrUpdateModel = ref({})
-  let selectedRowKeys = reactive([])
   let treeData = ref([]);
+  let permissionsCheckedKeys = ref([]);
+  let roleId: any;
+  let userVisible =ref<boolean>(false);
+  let roleUser = ref<string[]>([]);
+  let userOptions = ref<any>([]);
   const rules:any={
     code:[{required:true,message:"请输入编码",trigger:'blur'}],
     name:[{required:true,message:"请输入名称",trigger:'blur'}]
@@ -145,7 +163,7 @@
   });
 
   function search(){
-    axios.axiosGet("/yue-chip-upms-serve/role/console/list",searchModel,(data:any)=>{
+    axios.axiosGet("/yue-chip-upms-serve/upms/console/role/list",{params:searchModel.value},(data:any)=>{
       dataList.value = data.data;
     },null)
   }
@@ -161,7 +179,7 @@
 
   function save(){
     _this.ctx.$refs.from.validate().then(() => {
-      axios.axiosPost("/yue-chip-upms-serve/role/console/add",addOrUpdateModel.value,
+      axios.axiosPost("/yue-chip-upms-serve/upms/console/role/add",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
               visible.value = false;
@@ -174,18 +192,39 @@
   }
 
 
-  function permissions(){
+  function permissions(_roleId:string){
     permissionsVisible.value = true;
-    axios.axiosGet("/yue-chip-upms-serve/resources/console/tree",searchModel,(data:any)=>{
+    roleId=_roleId;
+    axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/tree",{params: {}},(data:any)=>{
       treeData.value = data.data;
     },null)
   }
 
   function permissionsCancel(){
-
+    permissionsCheckedKeys.value = [];
+    permissionsVisible.value = false;
+    treeData.value=[];
+    roleId = null;
   }
 
   function permissionsSave(){
+    axios.axiosPost("/yue-chip-upms-serve/upms/console/role/resources", {"roleId":roleId,resourcesIds:permissionsCheckedKeys.value},(data:any)=>{
+      if (data.status === 200) {
+        message.info(data.message);
+        permissionsCancel();
+      }
+    },null)
+  }
+
+  function user(_roleId:string) {
+    roleId = _roleId;
+    userVisible.value = true;
+    axios.axiosGet("/yue-chip-upms-serve/upms/console/user/list", {params: {}},(data:any)=>{
+      const list = data.data;
+      for (const index:any in list) {
+        userOptions.value.push({"value":list[index].id,"label":list[index].name});
+      }
+    },null)
 
   }
 </script>

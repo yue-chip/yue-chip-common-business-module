@@ -126,8 +126,7 @@
   import {ref, reactive, onMounted,onActivated,getCurrentInstance} from 'vue'
   import { SearchOutlined,PlusOutlined,DeleteOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-  import {types} from "sass";
-  import Boolean = types.Boolean;
+
 
   const _this:any = getCurrentInstance();
   let visible = ref<boolean>(false);
@@ -187,12 +186,12 @@
     url:[{validator:checkUrlIsExist,trigger:'blur'}],
   };
 
-  async function checkCodeIsExist(rule :any, value:string, addOrUpdateModel:any){
+  async function checkCodeIsExist(rule :any, value:string){
     let promise:any = null;
     if (!value || value.trim() === ''){
       return Promise.reject('请输入编码');
     }else if (value && value.trim() !== ''){
-      await axios.service.get("/yue-chip-upms-serve/resources/console/check/code/exist",{params:{"code":addOrUpdateModel.code,"id":addOrUpdateModel.id}})
+      await axios.service.get("/yue-chip-upms-serve/upms/console/resources/check/code/exist",{params:{"code":addOrUpdateModel.value.code,"id":addOrUpdateModel.value.id}})
           .then((data)=>{
             if (data.status === 200 && data.data) {
               promise = Promise.reject("该编码已存在");
@@ -219,7 +218,7 @@
     if (!value || value.trim() === ''){
       return Promise.reject("请输入名称")
     }else if (value && value.trim() !== ''){
-      await axios.service.get("/yue-chip-upms-serve/resources/console/check/name/exist",{params:{"name":addOrUpdateModel.value.name,"parentId":addOrUpdateModel.value.parentId}})
+      await axios.service.get("/yue-chip-upms-serve/upms/console/resources/check/name/exist",{params:{"name":addOrUpdateModel.value.name,"parentId":addOrUpdateModel.value.parentId}})
           .then((data)=>{
             if (data.status === 200 && data.data) {
               promise = Promise.reject("名称在同节点已存在");
@@ -241,12 +240,12 @@
    * @param value
    * @param callback
    */
-  async function checkUrlIsExist(rule :any, value:string, addOrUpdateModel:any){
+  async function checkUrlIsExist(rule :any, value:string){
     let promise:any = null;
-    if (addOrUpdateModel.type ==='MENU' && (!value || value.trim() === '')){
+    if (addOrUpdateModelvalue.value.type ==='MENU' && (!value || value.trim() === '')){
       return Promise.reject("请输入url")
-    }else if (addOrUpdateModel.type ==='MENU' && value && value.trim() !== ''){
-      await axios.service.get("/yue-chip-upms-serve/resources/console/check/url/exist",{params:{"url":addOrUpdateModel.url,"id":addOrUpdateModel.id}})
+    }else if (addOrUpdateModel.value.type ==='MENU' && value && value.trim() !== ''){
+      await axios.service.get("/yue-chip-upms-serve/upms/console/resources/check/url/exist",{params:{"url":addOrUpdateModel.value.url,"id":addOrUpdateModel.value.id}})
           .then((data)=>{
             if (data.status === 200 && data.data) {
               promise = Promise.reject("该url已存在");
@@ -267,7 +266,7 @@
   });
 
   function search(){
-    axios.axiosGet("/yue-chip-upms-serve/resources/console/tree/list",searchModel,(data:any)=>{
+    axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/tree/list",{params:searchModel.value},(data:any)=>{
       dataList.value = data.data;
     },null)
   }
@@ -295,7 +294,7 @@
 
   function save(){
     _this.ctx.$refs.from.validate().then(() => {
-      axios.axiosPost("/yue-chip-upms-serve/resources/console/add",addOrUpdateModel.value,
+      axios.axiosPost("/yue-chip-upms-serve/upms/console/resources/add",addOrUpdateModel.value,
         (data:any)=>{
           if (data.status === 200 ) {
             visible.value = false;
@@ -305,14 +304,6 @@
         },null)
     }).catch((err: any) => {
     });
-  }
-
-  function permissionsCancel(){
-
-  }
-
-  function permissionsSave(){
-
   }
 </script>
 

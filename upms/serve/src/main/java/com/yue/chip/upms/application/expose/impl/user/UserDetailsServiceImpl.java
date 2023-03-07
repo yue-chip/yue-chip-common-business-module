@@ -1,15 +1,13 @@
 package com.yue.chip.upms.application.expose.impl.user;
 
-import com.yue.chip.exception.BusinessException;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.domain.aggregates.User;
-import com.yue.chip.upms.domain.repository.user.UserRepository;
+import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,13 +27,13 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
-    private UserRepository userRepository;
-    @Autowired
+    private UpmsRepository upmsRepository;
+    @Resource
     private RedisTemplate redisTemplate;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optional = userRepository.find(username);
+        Optional<User> optional = upmsRepository.findUserByName(username);
         if (!optional.isPresent()){
             return null;
         }

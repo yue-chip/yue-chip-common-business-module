@@ -1,6 +1,8 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -17,5 +19,7 @@ public interface UserDaoEx {
      * @return
      */
     public Optional<UserPo> find(String username);
+
+    public Page<UserPo> find(String name, String username, Pageable pageable);
 
 }
