@@ -8,6 +8,7 @@ import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Mr.Liu
@@ -23,6 +24,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     private UpmsRepository upmsRepository;
 
     @Override
+    @Transactional(rollbackFor = {Throwable.class})
     public void roleBindResources(RoleResourcesAddDto roleResourcesAddDto) {
         //先删除已经绑定的资源
         upmsRepository.deleteRoleResources(roleResourcesAddDto.getRoleId());

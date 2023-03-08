@@ -4,6 +4,7 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,6 +21,20 @@ public interface UserDaoEx {
      */
     public Optional<UserPo> find(String username);
 
+    /**
+     * 分页类表
+     * @param name
+     * @param username
+     * @param pageable
+     * @return
+     */
     public Page<UserPo> find(String name, String username, Pageable pageable);
+
+    /**
+     * 根据角色查询关联的用户
+     * @param roleId
+     * @return
+     */
+    public List<UserPo> findByRoleId(Long roleId);
 
 }

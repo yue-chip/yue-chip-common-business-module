@@ -13,6 +13,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
 import com.yue.chip.upms.interfaces.vo.role.RoleListVo;
+import com.yue.chip.upms.interfaces.vo.user.UserListVo;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -40,6 +41,13 @@ public interface UpmsRepository {
     public Optional<User> findUserById(Long id);
 
     /**
+     * 根据角色查询关联的用户
+     * @param roleId
+     * @return
+     */
+    public List<User> findUserByRoleId(Long roleId);
+
+    /**
      * 角色列表
      *
      * @param name
@@ -55,6 +63,21 @@ public interface UpmsRepository {
      * @return
      */
     public Optional<Role> findRoleByName(String name);
+
+    /**
+     * 根据用户查询关联的角色
+     * @param userId
+     * @return
+     */
+    public List<Role> findRoleByUserId(Long userId);
+
+    /**
+     * 根据角色id查询角色
+     *
+     * @param id
+     * @return
+     */
+    public Optional<Role> findRoleById(Long id);
 
     /**
      * 新增
@@ -95,6 +118,13 @@ public interface UpmsRepository {
      * @return
      */
     public Optional<Resources> findResourcesByCode(String code);
+
+    /**
+     * 根据角色查询关联的资源
+     * @param roleId
+     * @return
+     */
+    public List<Resources> findResourcesByRoleId(Long roleId);
 
     /**
      * 根据名称查询资源
@@ -147,8 +177,10 @@ public interface UpmsRepository {
 
     /**
      * 用户列表
+     *
      * @param name
      * @return
      */
-    public IPageResultData<List<User>> userList(String name, Pageable pageable);
+    public IPageResultData<List<UserListVo>> userList(String name, Pageable pageable);
+
 }

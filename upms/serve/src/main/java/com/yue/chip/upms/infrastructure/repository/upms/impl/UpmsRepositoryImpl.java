@@ -3,15 +3,11 @@ package com.yue.chip.upms.infrastructure.repository.upms.impl;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
-import com.yue.chip.core.common.enums.State;
-import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
-import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
-import com.yue.chip.upms.enums.Type;
 import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
 import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
@@ -31,15 +27,13 @@ import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
 import com.yue.chip.upms.interfaces.vo.role.RoleListVo;
+import com.yue.chip.upms.interfaces.vo.user.UserListVo;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -68,13 +62,26 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public Optional<User> findUserByName(String username) {
         Optional<UserPo> optional = userDao.find(username);
-        return convertToUser(optional);
+        if (optional.isPresent()) {
+            User user = userMapper.toUser(optional.get());
+            return Optional.ofNullable(user);
+        }
+        return Optional.empty();
     }
 
     @Override
     public Optional<User> findUserById(Long id) {
         Optional<UserPo> optional = userDao.findFirstById(id);
-        return convertToUser(optional);
+        if (optional.isPresent()){
+            Optional.ofNullable(userMapper.toUser(optional.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<User> findUserByRoleId(Long roleId) {
+        List<UserPo> list = userDao.findByRoleId(roleId);
+        return userMapper.toUserList(list);
     }
 
     @Override
@@ -86,6 +93,24 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public Optional<Role> findRoleByName(String name) {
         Optional<RolePo> optional = roleDao.findFirstByName(name);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(roleMapper.toRole(optional.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Role> findRoleByUserId(Long userId) {
+        List<RolePo> list = roleDao.list(userId);
+        if (list.size()>0){
+            return roleMapper.toRoleList(list);
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public Optional<Role> findRoleById(Long id) {
+        Optional<RolePo> optional = roleDao.findById(id);
         if (optional.isPresent()) {
             return Optional.ofNullable(roleMapper.toRole(optional.get()));
         }
@@ -106,7 +131,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public List<ResourcesTreeList> findResourcesToTreeList(Long userId, Long parentId, Scope scope) {
         List<ResourcesPo> list ;
         if (Objects.nonNull(userId)) {
-            list = resourcesDao.findByUserId(userId,parentId,scope);
+            list = resourcesDao.find(userId,parentId,scope);
         }else {
             list = resourcesDao.findByParentIdAndScopeOrderBySort(parentId,scope);
         }
@@ -138,6 +163,12 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public Optional<Resources> findResourcesByCode(String code) {
         return convertResources(resourcesDao.findFirstByCode(code));
+    }
+
+    @Override
+    public List<Resources> findResourcesByRoleId(Long roleId) {
+        List<ResourcesPo> resourcesPoList = resourcesDao.find(roleId);
+        return resourcesMapper.listResourcesPoToResourcesList(resourcesPoList);
     }
 
     @Override
@@ -177,62 +208,24 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public void saveRoleResources(Long roleId, Long[] resourcesIds) {
-        List<RoleResourcesPo> list = new ArrayList<>();
+//        List<RoleResourcesPo> list = new ArrayList<>();
         if (Objects.nonNull(resourcesIds)) {
             for (Long id : resourcesIds) {
                 RoleResourcesPo roleResourcesPo = RoleResourcesPo.builder()
                         .resourcesId(id)
                         .roleId(roleId)
                         .build();
-                list.add(roleResourcesPo);
+//                list.add(roleResourcesPo);
+                roleResourcesDao.save(roleResourcesPo);
             }
-            roleResourcesDao.saveAll(list);
+//            roleResourcesDao.saveAll(list);
         }
     }
 
     @Override
-    public IPageResultData<List<User>> userList(String name, Pageable pageable) {
+    public IPageResultData<List<UserListVo>> userList(String name, Pageable pageable) {
         Page<UserPo> page = userDao.find(name,null,pageable);
-        return (IPageResultData<List<User>>) PageResultData.convert(page,userMapper.toUserList(page.getContent()));
-    }
-
-    private Optional<User> convertToUser(Optional<UserPo> optional) {
-        if (optional.isPresent()) {
-            User user = userMapper.userPoToUser(optional.get());
-            user.setRoles(findRole(user));
-            return Optional.ofNullable(user);
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * 根据用户获取角色
-     * @param user
-     * @return
-     */
-    private List<RoleARVODefinition> findRole(User user) {
-        List<RoleARVODefinition> list = new ArrayList<>();
-        Role role = Role.builder()
-                .code("test")
-                .state(State.NORMAL)
-                .name("测试")
-                .build();
-        role.setResources(findResources(role));
-        list.add(role);
-        return list;
-    }
-
-    private List<ResourcesVODefinition> findResources(Role role) {
-        List<ResourcesVODefinition> list = new ArrayList<>();
-        Resources resources = Resources.builder()
-                .code("test")
-                .scope(Scope.CONSOLE)
-                .state(State.NORMAL)
-                .type(Type.MENU)
-                .name("测试")
-                .build();
-        list.add(resources);
-        return list;
+        return (IPageResultData<List<UserListVo>>) PageResultData.convert(page,userMapper.toUserListVo(page.getContent()));
     }
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {

@@ -7,10 +7,7 @@ import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDaoEx;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -23,7 +20,7 @@ public class ResourcesDaoImpl implements ResourcesDaoEx {
     private BaseDao<ResourcesPo> baseDao;
 
     @Override
-    public List<ResourcesPo> findByUserId(Long userId, Long parentId, Scope scope) {
+    public List<ResourcesPo> find(Long userId, Long parentId, Scope scope) {
         StringBuffer sb = new StringBuffer(" select re from ResourcesPo re " +
                 "join RoleResourcesPo ro on re.id = ro.resourcesId " +
                 "join UserRolePo ur on ro.roleId = ur.roleId " +
@@ -35,4 +32,20 @@ public class ResourcesDaoImpl implements ResourcesDaoEx {
         List<ResourcesPo> list = (List<ResourcesPo>) baseDao.findAll(sb.toString(),para);
         return list;
     }
+
+    @Override
+    public List<ResourcesPo> find(Long roleId) {
+        if (Objects.isNull(roleId)) {
+            return Collections.EMPTY_LIST;
+        }
+        StringBuffer sb = new StringBuffer(" select re from ResourcesPo re " +
+                "join RoleResourcesPo ro on re.id = ro.resourcesId " +
+                "where ro.roleId = :roleId ");
+        Map<String, Object> para = new HashMap<>();
+        para.put("roleId",roleId);
+        List<ResourcesPo> list = (List<ResourcesPo>) baseDao.findAll(sb.toString(),para);
+        return list;
+    }
+
+
 }

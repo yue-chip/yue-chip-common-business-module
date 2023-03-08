@@ -1,10 +1,26 @@
 package com.yue.chip.upms.domain.aggregates;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
+import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.definition.aggregates.UserARDefinition;
+import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
+import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
+import com.yue.chip.utils.SpringContextUtil;
+import jakarta.persistence.RollbackException;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Mr.Liu
@@ -16,5 +32,46 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class User extends UserARDefinition {
+
+    private  static volatile UpmsRepository upmsRepository;
+
+    @Builder.Default
+    private RoleMapper roleMapper = RoleMapper.INSTANCE;
+
+    @Builder.Default
+    private ResourcesMapper resourcesMapper = ResourcesMapper.INSTANCE;
+
+    @Override
+    public List<RoleARVODefinition> getRoles() {
+        List<? extends RoleARVODefinition> list = getRepository().findRoleByUserId(getId());
+        super.setRoles((List<RoleARVODefinition>) list);
+        return super.getRoles();
+    }
+
+    /**
+     * 获取用户关联的资源权限
+     * @return
+     */
+    public List<Resources> getResources() {
+        List<RoleARVODefinition> listRoleARVODefinition = getRoles();
+        List<Role> roleList = roleMapper.listRoleARVODefinitionToRoleList(listRoleARVODefinition);
+        List<Resources > resourcesList = new ArrayList<>();
+        roleList.forEach(role -> {
+            List<ResourcesVODefinition> list = role.getResources();
+            resourcesList.addAll(resourcesMapper.listResourcesVODefinitionToResourcesList(list));
+        });
+        return resourcesList;
+    }
+
+    private UpmsRepository getRepository() {
+        if (Objects.isNull(upmsRepository)) {
+            synchronized (this) {
+                if (Objects.isNull(upmsRepository)) {
+                    upmsRepository = (UpmsRepository) SpringContextUtil.getBean(UpmsRepository.class);
+                }
+            }
+        }
+        return upmsRepository;
+    }
 
 }

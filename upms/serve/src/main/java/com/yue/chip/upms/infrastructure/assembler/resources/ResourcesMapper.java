@@ -10,6 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -20,7 +21,9 @@ import java.util.List;
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ResourcesMapper {
 
-    public List<Resources> toListResources(List<ResourcesVODefinition> list);
+    ResourcesMapper INSTANCE = Mappers.getMapper(ResourcesMapper.class);
+
+    public List<Resources> listResourcesVODefinitionToResourcesList(List<ResourcesVODefinition> list);
 
     public ResourcesTreeList toResourcesTreeList(ResourcesPo resourcesPo);
 
@@ -32,6 +35,8 @@ public interface ResourcesMapper {
     public ResourcesTree toResourcesTree(ResourcesTreeList resourcesTreeList);
 
     public Resources toResources(ResourcesPo resourcesPo);
+
+    public List<Resources> listResourcesPoToResourcesList(List<ResourcesPo> list);
 
     public ResourcesPo toResourcesPo(ResourcesAUDto resources);
 }

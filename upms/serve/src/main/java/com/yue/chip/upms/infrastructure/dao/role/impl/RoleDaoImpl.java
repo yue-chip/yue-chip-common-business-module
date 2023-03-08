@@ -8,8 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -35,5 +34,17 @@ public class RoleDaoImpl implements RoleDaoEx {
             para.put("code","%"+code+"%");
         }
         return (Page<RolePo>) baseDao.findNavigator(pageable,sb.toString(),para);
+    }
+
+    @Override
+    public List<RolePo> list(Long userId) {
+        if (Objects.isNull(userId)) {
+            return Collections.EMPTY_LIST;
+        }
+        StringBuffer sb = new StringBuffer();
+        Map<String, Object> para = new HashMap<>();
+        sb.append("select r from RolePo r join UserRolePo ur on r.id = ur.roleId where ur.userId = :userId ");
+        para.put("userId",userId);
+        return (List<RolePo>) baseDao.findAll(sb.toString(),para);
     }
 }

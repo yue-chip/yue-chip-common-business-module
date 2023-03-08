@@ -39,8 +39,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         User user = optional.get();
         YueChipUserDetails userDetails = new YueChipUserDetails(user.getUsername(),user.getPassword(),getUserGrantedAuthority(user.getRoles()));
-        redisTemplate.opsForValue().set(CurrentUserUtil.TENANT_ID + "-" + username,user.getTenantId());
-        redisTemplate.opsForValue().set(CurrentUserUtil.USER_ID + "-" + username,user.getId());
+        redisTemplate.opsForValue().set(CurrentUserUtil.TENANT_ID + username,user.getTenantId());
+        redisTemplate.opsForValue().set(CurrentUserUtil.USER_ID + username,user.getId());
         return userDetails;
     }
     /**

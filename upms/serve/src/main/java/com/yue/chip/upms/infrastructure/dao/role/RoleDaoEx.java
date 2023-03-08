@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,8 +20,15 @@ public interface RoleDaoEx {
      * 列表分页
      * @param name
      * @param code
-     * @param page
+     * @param pageable
      * @return
      */
     public Page<RolePo> list(String name, String code, Pageable pageable);
+
+    /**
+     * 根据用户id查询关联的角色
+     * @param userId
+     * @return
+     */
+    public List<RolePo> list(Long userId);
 }

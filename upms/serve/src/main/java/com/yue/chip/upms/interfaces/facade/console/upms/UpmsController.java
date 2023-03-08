@@ -10,7 +10,6 @@ import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
-import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
@@ -21,6 +20,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
 import com.yue.chip.upms.interfaces.vo.role.RoleListVo;
+import com.yue.chip.upms.interfaces.vo.user.UserListVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,6 +32,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -101,14 +102,23 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @Operation(description = "获取角色已绑定的资源权限",summary = "获取角色已绑定的资源权限")
     @GetMapping("/role/resources")
     public IResultData<List<Long>> roleResources(@Parameter(description = "角色id",name = "roleId",required = true)Long roleId){
-        return ResultData.builder().build();
+        Optional<Role> operation = upmsRepository.findRoleById(roleId);
+        ResultData resultData = ResultData.builder().build();
+        if (operation.isPresent()) {
+            resultData.setData(operation.get().getResourcesId());
+        }
+        return resultData;
     }
 
     @Operation(description = "获取角色已绑定的用户",summary = "获取角色已绑定的用户")
     @GetMapping("/role/user")
     public IResultData<List<Long>> roleUser(@Parameter(description = "角色id",name = "roleId",required = true)Long roleId){
-
-        return ResultData.builder().build();
+        ResultData resultData = ResultData.builder().build();
+        Optional<Role> operation = upmsRepository.findRoleById(roleId);
+        if (operation.isPresent()) {
+            resultData.setData(operation.get().getUserId());
+        }
+        return resultData;
     }
 
 
@@ -179,8 +189,8 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @GetMapping("/user/list")
     @Operation(description = "用户列表",summary = "用户列表")
-    public IPageResultData<List<User>> userList(@Parameter(description = "姓名",name="name")String name,YueChipPage page) {
-        IPageResultData pageResultData = upmsRepository.userList(name,page);
+    public IPageResultData<List<UserListVo>> userList(@Parameter(description = "姓名",name="name")String name, YueChipPage page) {
+        IPageResultData<List<UserListVo>> pageResultData = upmsRepository.userList(name,page);
         return pageResultData;
     }
 

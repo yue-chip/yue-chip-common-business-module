@@ -198,6 +198,10 @@
     axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/tree",{params: {}},(data:any)=>{
       treeData.value = data.data;
     },null)
+    axios.axiosGet("/yue-chip-upms-serve/upms/console/role/resources",{params: {roleId:_roleId}},(data:any)=>{
+      permissionsCheckedKeys.value = data.data;
+    },null)
+
   }
 
   function permissionsCancel(){
@@ -219,11 +223,15 @@
   function user(_roleId:string) {
     roleId = _roleId;
     userVisible.value = true;
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/user/list", {params: {}},(data:any)=>{
+    axios.axiosGet("/yue-chip-upms-serve/upms/console/user/list", {params: {pageNumber:1,pageSize:99999}},(data:any)=>{
       const list = data.data;
+      userOptions.value = [];
       for (const index:any in list) {
         userOptions.value.push({"value":list[index].id,"label":list[index].name});
       }
+    },null)
+    axios.axiosGet("/yue-chip-upms-serve/upms/console/role/user", {params: {roleId:_roleId}},(data:any)=>{
+      roleUser.value = data.data;
     },null)
 
   }

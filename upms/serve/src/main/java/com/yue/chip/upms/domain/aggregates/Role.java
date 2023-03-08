@@ -1,5 +1,7 @@
 package com.yue.chip.upms.domain.aggregates;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.utils.SpringContextUtil;
@@ -8,6 +10,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -24,8 +28,50 @@ public class Role extends RoleARVODefinition {
 
     private  static volatile UpmsRepository upmsRepository;
 
+    @Override
+    public List<ResourcesVODefinition> getResources() {
+        List<? extends ResourcesVODefinition>  list = getRepository().findResourcesByRoleId(getId());
+        super.setResources((List<ResourcesVODefinition>) list);
+        return super.getResources();
+    }
+
+    /**
+     * 获取角色关联资源的id
+     * @return
+     */
+    public List<Long> getResourcesId(){
+        List<ResourcesVODefinition> list = getResources();
+        List<Long> returnList = new ArrayList<>();
+        list.forEach(resourcesVODefinition -> {
+            returnList.add(resourcesVODefinition.getId());
+        });
+        return returnList;
+    }
+
+    /**
+     * 获取角色关联的用户
+     * @return
+     */
+    public List<User> getUser() {
+        List<User> list = getRepository().findUserByRoleId(getId());
+        return list;
+    }
+
+    /**
+     * 获取角色关联的用户id
+     * @return
+     */
+    public List<Long> getUserId(){
+        List<User> list = getUser();
+        List<Long> returnList = new ArrayList<>();
+        list.forEach(user -> {
+            returnList.add(user.getId());
+        });
+        return returnList;
+    }
+
     public Boolean checkNameIsExist() {
-        Optional<Role> optional = upmsRepository.findRoleByName(getName());
+        Optional<Role> optional = getRepository().findRoleByName(getName());
         if (optional.isPresent()) {
             if (Objects.nonNull(getId()) && optional.get().getId().equals(getId())){
                 return false;

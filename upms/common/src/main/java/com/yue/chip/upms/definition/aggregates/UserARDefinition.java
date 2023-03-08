@@ -1,5 +1,6 @@
 package com.yue.chip.upms.definition.aggregates;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

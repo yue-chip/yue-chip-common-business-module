@@ -1,11 +1,14 @@
 package com.yue.chip.upms.infrastructure.assembler.role;
 
+import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.domain.aggregates.Role;
+import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.interfaces.dto.role.RoleAUDto;
 import com.yue.chip.upms.interfaces.vo.role.RoleListVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -16,9 +19,18 @@ import java.util.List;
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RoleMapper {
 
+    RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
+
     public List<RoleListVo> toRoleListVo(List<RolePo> list);
 
     public RolePo toRolePo(RoleAUDto role);
 
     public Role toRole(RolePo rolePo);
+
+    public List<Role> toRoleList(List<RolePo> list);
+
+    public Role toRole(RoleARVODefinition roleARVODefinition);
+
+    public List<Role> listRoleARVODefinitionToRoleList(List<RoleARVODefinition> list);
+
 }
