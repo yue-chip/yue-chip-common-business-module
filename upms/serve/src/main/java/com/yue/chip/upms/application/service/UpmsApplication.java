@@ -1,6 +1,7 @@
 package com.yue.chip.upms.application.service;
 
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
+import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 
 /**
  * @author Mr.Liu
@@ -13,4 +14,10 @@ public interface UpmsApplication {
      * @param roleResourcesAddDto
      */
     public void roleBindResources(RoleResourcesAddDto roleResourcesAddDto);
+
+    /**
+     * 用户绑定角色
+     * @param userRoleAddDto
+     */
+    public void userBindRole(UserRoleAddDto userRoleAddDto);
 }

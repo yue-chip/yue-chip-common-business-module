@@ -9,4 +9,11 @@ import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
  * @description UserRoleDao
  */
 public interface UserRoleDao extends BaseDao<UserRolePo> {
+
+    /**
+     * 根据角色删除用户与角色的绑定关系
+     * @param roleId
+     * @return
+     */
+    public int deleteByRoleId(Long roleId);
 }

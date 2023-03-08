@@ -5,6 +5,7 @@ import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.definition.aggregates.UserARDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
@@ -49,7 +50,7 @@ public class User extends UserARDefinition {
     }
 
     /**
-     * 获取用户关联的资源权限
+     * 获取用户关联的资源权限(平级)
      * @return
      */
     public List<Resources> getResources() {
@@ -62,6 +63,16 @@ public class User extends UserARDefinition {
         });
         return resourcesList;
     }
+
+    /**
+     * 获取用户关联的权限(树形结构)
+     * @return
+     */
+    public List<ResourcesTreeList> getResourcesTree() {
+        List<ResourcesTreeList> list = getRepository().findResourcesToTreeList(getId(),0L, Scope.CONSOLE);
+        return list;
+    }
+
 
     private UpmsRepository getRepository() {
         if (Objects.isNull(upmsRepository)) {

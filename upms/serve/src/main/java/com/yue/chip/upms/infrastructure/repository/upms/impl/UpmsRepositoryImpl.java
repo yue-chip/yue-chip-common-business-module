@@ -20,6 +20,7 @@ import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
@@ -73,7 +74,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public Optional<User> findUserById(Long id) {
         Optional<UserPo> optional = userDao.findFirstById(id);
         if (optional.isPresent()){
-            Optional.ofNullable(userMapper.toUser(optional.get()));
+            return Optional.ofNullable(userMapper.toUser(optional.get()));
         }
         return Optional.empty();
     }
@@ -82,6 +83,27 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public List<User> findUserByRoleId(Long roleId) {
         List<UserPo> list = userDao.findByRoleId(roleId);
         return userMapper.toUserList(list);
+    }
+
+    @Override
+    public int deleteUserRoleByRoleId(Long roleId) {
+        return userRoleDao.deleteByRoleId(roleId);
+    }
+
+    @Override
+    public void saveUserRole(Long roleId, Long[] userIds) {
+        List<UserRolePo> list = new ArrayList<>();
+        if (Objects.nonNull(userIds)) {
+            for (Long id : userIds) {
+                UserRolePo userRolePo = UserRolePo.builder()
+                        .userId(id)
+                        .roleId(roleId)
+                        .build();
+                list.add(userRolePo);
+//                userRoleDao.save(userRolePo);
+            }
+            userRoleDao.saveAll(list);
+        }
     }
 
     @Override
@@ -208,17 +230,17 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public void saveRoleResources(Long roleId, Long[] resourcesIds) {
-//        List<RoleResourcesPo> list = new ArrayList<>();
+        List<RoleResourcesPo> list = new ArrayList<>();
         if (Objects.nonNull(resourcesIds)) {
             for (Long id : resourcesIds) {
                 RoleResourcesPo roleResourcesPo = RoleResourcesPo.builder()
                         .resourcesId(id)
                         .roleId(roleId)
                         .build();
-//                list.add(roleResourcesPo);
-                roleResourcesDao.save(roleResourcesPo);
+                list.add(roleResourcesPo);
+//                roleResourcesDao.save(roleResourcesPo);
             }
-//            roleResourcesDao.saveAll(list);
+            roleResourcesDao.saveAll(list);
         }
     }
 

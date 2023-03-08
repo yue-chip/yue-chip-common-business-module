@@ -10,6 +10,7 @@ import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
@@ -17,6 +18,7 @@ import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
+import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
 import com.yue.chip.upms.interfaces.vo.role.RoleListVo;
@@ -53,10 +55,9 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @GetMapping("/currentUser/permissions")
     @Operation(summary = "获取当前用户的权限(菜单，资源)", description = "获取当前用户的权限(菜单，资源)")
     public IResultData<List<ResourcesTreeList>> userPermissions(){
-        Long userId = CurrentUserUtil.getCurrentUserId();
-        ResultData resultData = ResultData.builder()
-                .data(upmsRepository.findResourcesToTreeList(userId,0L, Scope.CONSOLE))
-                .build();
+        Optional<User> optional = upmsRepository.findUserById(CurrentUserUtil.getCurrentUserId());
+
+        ResultData resultData = ResultData.builder().data(optional.get().getResourcesTree()).build();
         return resultData;
     }
 
@@ -118,6 +119,15 @@ public class UpmsController extends BaseControllerImpl implements BaseController
         if (operation.isPresent()) {
             resultData.setData(operation.get().getUserId());
         }
+        return resultData;
+
+    }
+
+    @Operation(description = "用户绑定角色(全量，先删后增)",summary = "用户绑定角色(全量，先删后增)")
+    @PostMapping("/user/role")
+    public IResultData roleUserAdd(@RequestBody @Validated UserRoleAddDto userRoleAddDto){
+        ResultData resultData = ResultData.builder().build();
+        upmsApplication.userBindRole(userRoleAddDto);
         return resultData;
     }
 

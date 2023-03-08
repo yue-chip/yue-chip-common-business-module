@@ -48,6 +48,20 @@ public interface UpmsRepository {
     public List<User> findUserByRoleId(Long roleId);
 
     /**
+     * 根据角色删除用户与角色的绑定关系
+     * @param roleId
+     * @return
+     */
+    public int deleteUserRoleByRoleId(Long roleId);
+
+    /**
+     * 关联用户与角色关系
+     * @param roleId
+     * @param userIds
+     */
+    public void saveUserRole(Long roleId,Long[] userIds);
+
+    /**
      * 角色列表
      *
      * @param name

@@ -40,6 +40,7 @@ public class UserDaoImpl implements UserDaoEx {
                     if (rs.next()) {
                         UserPo userPo = UserPo.builder()
                                 .username(rs.getString("username"))
+                                .id(rs.getLong("id"))
                                 .name(rs.getString("name"))
                                 .password(rs.getString("password"))
                                 .version(rs.getLong("version"))

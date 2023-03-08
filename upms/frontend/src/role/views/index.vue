@@ -233,8 +233,25 @@
     axios.axiosGet("/yue-chip-upms-serve/upms/console/role/user", {params: {roleId:_roleId}},(data:any)=>{
       roleUser.value = data.data;
     },null)
-
   }
+
+  function userCancel() {
+    roleId = null;
+    userVisible.value = false;
+    userOptions.value = [];
+    roleUser.value = [];
+  }
+
+  function userSave(_roleId:string) {
+    axios.axiosPost("/yue-chip-upms-serve/upms/console/user/role", {"roleId":roleId,userIds:roleUser.value},(data:any)=>{
+      if (data.status === 200) {
+        message.info(data.message);
+        userCancel();
+      }
+    },null)
+  }
+
+
 </script>
 
 <style scoped>

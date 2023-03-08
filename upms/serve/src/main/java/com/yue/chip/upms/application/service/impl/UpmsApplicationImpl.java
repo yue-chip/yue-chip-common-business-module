@@ -6,6 +6,7 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
+import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,5 +31,14 @@ public class UpmsApplicationImpl implements UpmsApplication {
         upmsRepository.deleteRoleResources(roleResourcesAddDto.getRoleId());
         //保存角色关联的资源权限
         upmsRepository.saveRoleResources(roleResourcesAddDto.getRoleId(),roleResourcesAddDto.getResourcesIds());
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Throwable.class})
+    public void userBindRole(UserRoleAddDto userRoleAddDto) {
+        //先删除用户与角色的绑定关系
+        upmsRepository.deleteUserRoleByRoleId(userRoleAddDto.getRoleId());
+        //保存用户与角色关系
+        upmsRepository.saveUserRole(userRoleAddDto.getRoleId(), userRoleAddDto.getUserIds());
     }
 }

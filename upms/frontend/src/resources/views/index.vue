@@ -242,7 +242,7 @@
    */
   async function checkUrlIsExist(rule :any, value:string){
     let promise:any = null;
-    if (addOrUpdateModelvalue.value.type ==='MENU' && (!value || value.trim() === '')){
+    if (addOrUpdateModel.value.type ==='MENU' && (!value || value.trim() === '')){
       return Promise.reject("请输入url")
     }else if (addOrUpdateModel.value.type ==='MENU' && value && value.trim() !== ''){
       await axios.service.get("/yue-chip-upms-serve/upms/console/resources/check/url/exist",{params:{"url":addOrUpdateModel.value.url,"id":addOrUpdateModel.value.id}})

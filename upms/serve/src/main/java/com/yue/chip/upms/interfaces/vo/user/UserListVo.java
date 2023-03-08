@@ -1,6 +1,5 @@
 package com.yue.chip.upms.interfaces.vo.user;
 
-import com.yue.chip.upms.definition.aggregates.UserARDefinition;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

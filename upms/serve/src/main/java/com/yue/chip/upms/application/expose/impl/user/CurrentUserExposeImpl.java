@@ -8,6 +8,7 @@ import com.yue.chip.utils.BeanToMapUtil;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,7 +31,8 @@ public class CurrentUserExposeImpl implements ICurrentUser<User> {
         Optional<User> optional = upmsRepository.findUserByName(username);
         if (optional.isPresent()) {
             User user = optional.get();
-            Map<String, Object> map = BeanToMapUtil.transBeanToMap(userMapper.toUserPo(user));
+            Map<String, Object> map = new HashMap<>();
+            map.put("id",user.getId());
             map.put("tenantId",user.getTenantId());
             return map;
         }
