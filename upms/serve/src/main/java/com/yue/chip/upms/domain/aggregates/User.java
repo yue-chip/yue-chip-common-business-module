@@ -1,6 +1,5 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.definition.aggregates.UserARDefinition;
@@ -8,10 +7,8 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
 import com.yue.chip.utils.SpringContextUtil;
-import jakarta.persistence.RollbackException;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 

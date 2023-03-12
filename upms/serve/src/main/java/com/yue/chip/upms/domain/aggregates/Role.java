@@ -1,6 +1,5 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;

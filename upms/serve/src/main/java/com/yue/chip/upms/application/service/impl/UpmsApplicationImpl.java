@@ -8,6 +8,9 @@ import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import jakarta.annotation.Resource;
+import org.apache.skywalking.apm.toolkit.trace.Tag;
+import org.apache.skywalking.apm.toolkit.trace.Tags;
+import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
 
     @Override
     @Transactional(rollbackFor = {Throwable.class})
+    @Trace
+    @Tags({@Tag(key = "userBindRole",value = "arg[0]")})
     public void roleBindResources(RoleResourcesAddDto roleResourcesAddDto) {
         //先删除已经绑定的资源
         upmsRepository.deleteRoleResources(roleResourcesAddDto.getRoleId());
@@ -35,6 +40,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
 
     @Override
     @Transactional(rollbackFor = {Throwable.class})
+    @Trace
+    @Tags({@Tag(key = "userBindRole",value = "arg[0]")})
     public void userBindRole(UserRoleAddDto userRoleAddDto) {
         //先删除用户与角色的绑定关系
         upmsRepository.deleteUserRoleByRoleId(userRoleAddDto.getRoleId());

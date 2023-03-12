@@ -1,5 +1,6 @@
 package com.yue.chip.upms.interfaces.facade.console.upms;
 
+import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
@@ -30,6 +31,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.java.Log;
+import org.apache.skywalking.apm.toolkit.trace.Tags;
+import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +48,7 @@ import java.util.Optional;
 @RequestMapping("/upms/console")
 @Validated
 @Tag(name = "角色&用户&资源-pc端后台")
+@Log
 public class UpmsController extends BaseControllerImpl implements BaseController {
 
     @Resource
@@ -51,6 +56,13 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @Resource
     private UpmsApplication upmsApplication;
+
+    @GetMapping("/test")
+    @AuthorizationIgnore
+    public IResultData test(String name){
+        log.info("test");
+        return ResultData.builder().build();
+    }
 
     @GetMapping("/currentUser/permissions")
     @Operation(summary = "获取当前用户的权限(菜单，资源)", description = "获取当前用户的权限(菜单，资源)")
