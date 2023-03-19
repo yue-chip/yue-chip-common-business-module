@@ -1,5 +1,6 @@
 package com.yue.chip.upms.application.service;
 
+import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 
@@ -20,4 +21,6 @@ public interface UpmsApplication {
      * @param userRoleAddDto
      */
     public void userBindRole(UserRoleAddDto userRoleAddDto);
+
+    public UserDefinition test(String name);
 }

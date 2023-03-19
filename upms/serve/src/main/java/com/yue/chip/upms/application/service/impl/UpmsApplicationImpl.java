@@ -1,18 +1,25 @@
 package com.yue.chip.upms.application.service.impl;
 
+import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
+import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
+import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.skywalking.apm.toolkit.trace.Tag;
 import org.apache.skywalking.apm.toolkit.trace.Tags;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 /**
  * @author Mr.Liu
@@ -26,6 +33,9 @@ public class UpmsApplicationImpl implements UpmsApplication {
 
     @Resource
     private UpmsRepository upmsRepository;
+
+    @DubboReference
+    private TestExpose testExpose;
 
     @Override
     @Transactional(rollbackFor = {Throwable.class})
@@ -48,4 +58,20 @@ public class UpmsApplicationImpl implements UpmsApplication {
         //保存用户与角色关系
         upmsRepository.saveUserRole(userRoleAddDto.getRoleId(), userRoleAddDto.getUserIds());
     }
+
+    @Override
+    @Trace
+    @Tags({@Tag(key = "name",value = "arg[0]"),@Tag(key = "UserDefinition",value = "returnedObj")})
+    @GlobalTransactional
+    public UserDefinition test(String name) {
+        RoleAddDto roleAddDto = RoleAddDto.builder()
+                .name(UUID.randomUUID().toString())
+                .code(UUID.randomUUID().toString())
+                .build();
+        upmsRepository.saveRole(roleAddDto);
+        testExpose.test("test code");
+        return UserDefinition.builder().name("张三").build();
+    }
 }
+
+

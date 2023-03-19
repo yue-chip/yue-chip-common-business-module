@@ -57,13 +57,6 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @Resource
     private UpmsApplication upmsApplication;
 
-    @GetMapping("/test")
-    @AuthorizationIgnore
-    public IResultData test(String name){
-        log.info("test");
-        return ResultData.builder().build();
-    }
-
     @GetMapping("/currentUser/permissions")
     @Operation(summary = "获取当前用户的权限(菜单，资源)", description = "获取当前用户的权限(菜单，资源)")
     public IResultData<List<ResourcesTreeList>> userPermissions(){
