@@ -117,8 +117,7 @@
   import {ref, reactive, onMounted,onActivated,getCurrentInstance} from 'vue'
   import { SearchOutlined,PlusOutlined,UserAddOutlined,FilterOutlined,DeleteOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-  import {message} from "ant-design-vue";
-
+  import {message,Card,Modal,Select,Tree,Form,Col,FormItem,Input,Space,Button,SelectOption} from "ant-design-vue";
   const _this:any = getCurrentInstance();
   let searchModel = ref({});
   let permissionsVisible = ref<boolean>(false);
