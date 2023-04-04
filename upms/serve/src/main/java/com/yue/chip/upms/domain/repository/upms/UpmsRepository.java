@@ -52,7 +52,14 @@ public interface UpmsRepository {
      * @param roleId
      * @return
      */
-    public int deleteUserRoleByRoleId(Long roleId);
+    public int deleteUserRole(Long roleId);
+
+    /**
+     * 根据id删除角色
+     *
+     * @param roleId
+     */
+    public void deleteRole(Long roleId);
 
     /**
      * 关联用户与角色关系
@@ -134,6 +141,13 @@ public interface UpmsRepository {
     public Optional<Resources> findResourcesByCode(String code);
 
     /**
+     * 根据资源id查询资源
+     * @param id
+     * @return
+     */
+    public Optional<Resources> findResourcesById(Long id);
+
+    /**
      * 根据角色查询关联的资源
      * @param roleId
      * @return
@@ -177,10 +191,22 @@ public interface UpmsRepository {
     public void  updateResources(ResourcesUpdateDto resources);
 
     /**
+     * 根据id删除资源
+     * @param id
+     */
+    public void deleteResources(Long id);
+
+    /**
      * 根据角色id删除 绑定的资源权限
      * @param roleId
      */
-    public void deleteRoleResources(Long roleId);
+    public void deleteRoleResourcesByRoleId(Long roleId);
+
+    /**
+     * 根据资源id删除 绑定的资源权限
+     * @param resourcesId
+     */
+    public void deleteRoleResourcesByResourcesId(Long resourcesId);
 
     /**
      * 绑定角色资源

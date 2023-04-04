@@ -3,6 +3,7 @@ package com.yue.chip.upms.application.expose.impl.user;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
+import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.utils.CurrentUserUtil;
@@ -48,11 +49,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @param roles
      * @return
      */
-    private List<GrantedAuthority> getUserGrantedAuthority(List<RoleARVODefinition> roles){
+    private List<GrantedAuthority> getUserGrantedAuthority(List<Role> roles){
         List<GrantedAuthority> listGrantedAuthority = new ArrayList<GrantedAuthority>();
         if (Objects.nonNull(roles)) {
-            roles.forEach(roleARVODefinition -> {
-                roleARVODefinition.getResources().forEach(resourcesVODefinition -> {
+            roles.forEach(role -> {
+                role.getResources().forEach(resourcesVODefinition -> {
                     YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
                     grantedAuthority.setAuthority(resourcesVODefinition.getCode());
                     listGrantedAuthority.add(grantedAuthority);

@@ -31,6 +31,6 @@ public interface RoleMapper {
 
     public Role toRole(RoleARVODefinition roleARVODefinition);
 
-    public List<Role> listRoleARVODefinitionToRoleList(List<RoleARVODefinition> list);
+    public List<Role> listRoleARVODefinitionToRoleList(List<Role> list);
 
 }

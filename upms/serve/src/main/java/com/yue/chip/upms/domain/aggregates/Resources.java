@@ -40,7 +40,7 @@ public class Resources extends ResourcesVODefinition {
      * @return
      */
     public Boolean checkNameIsExist() {
-        Optional<Resources> optional =  getRepository().findResourcesByName(getName());
+        Optional<Resources> optional =  getRepository().findResourcesByNameAndParentId(getName(),getParentId());
         if (optional.isPresent()) {
             return checkIsExist(optional.get(), getId());
         }

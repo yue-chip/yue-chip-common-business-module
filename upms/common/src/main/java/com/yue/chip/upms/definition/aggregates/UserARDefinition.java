@@ -20,8 +20,4 @@ import java.util.List;
 @NoArgsConstructor
 public class UserARDefinition extends UserDefinition {
 
-    /**
-     * 角色
-     */
-    private List<RoleARVODefinition> roles;
 }

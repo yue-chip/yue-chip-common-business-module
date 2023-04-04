@@ -21,9 +21,9 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 @EqualsAndHashCode(callSuper=true)
 @Entity
 @Table(name = "t_resources", indexes = {@Index(columnList = "parentId"),@Index(columnList = "code"),@Index(columnList = "name")})
-@DynamicInsert
-@DynamicUpdate
-@SelectBeforeUpdate
+//@DynamicInsert
+//@DynamicUpdate
+//@SelectBeforeUpdate
 @SuperBuilder
 @NoArgsConstructor
 public class ResourcesPo extends ResourcesDefinition {

@@ -86,8 +86,13 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public int deleteUserRoleByRoleId(Long roleId) {
+    public int deleteUserRole(Long roleId) {
         return userRoleDao.deleteByRoleId(roleId);
+    }
+
+    @Override
+    public void deleteRole(Long roleId) {
+        roleDao.deleteById(roleId);
     }
 
     @Override
@@ -188,6 +193,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public Optional<Resources> findResourcesById(Long id) {
+        return convertResources(resourcesDao.findById(id));
+    }
+
+    @Override
     public List<Resources> findResourcesByRoleId(Long roleId) {
         List<ResourcesPo> resourcesPoList = resourcesDao.find(roleId);
         return resourcesMapper.listResourcesPoToResourcesList(resourcesPoList);
@@ -222,9 +232,21 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public void deleteRoleResources(Long roleId) {
+    public void deleteResources(Long id) {
+        resourcesDao.deleteById(id);
+    }
+
+    @Override
+    public void deleteRoleResourcesByRoleId(Long roleId) {
         if (Objects.nonNull(roleId)) {
             roleResourcesDao.deleteByRoleId(roleId);
+        }
+    }
+
+    @Override
+    public void deleteRoleResourcesByResourcesId(Long resourcesId) {
+        if (Objects.nonNull(resourcesId)) {
+            roleResourcesDao.deleteByResourcesId(resourcesId);
         }
     }
 

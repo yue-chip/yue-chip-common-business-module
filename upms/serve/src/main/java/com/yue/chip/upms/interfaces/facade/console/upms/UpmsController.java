@@ -1,6 +1,5 @@
 package com.yue.chip.upms.interfaces.facade.console.upms;
 
-import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
@@ -32,8 +31,6 @@ import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.java.Log;
-import org.apache.skywalking.apm.toolkit.trace.Tags;
-import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,6 +88,13 @@ public class UpmsController extends BaseControllerImpl implements BaseController
         return ResultData.builder().build();
     }
 
+    @Operation(description = "角色详情",summary = "角色详情")
+    @GetMapping("/role/details")
+    public IResultData<Role> roleDetails(@NotNull(message = "角色id不能为空")@Parameter(description = "角色id",name = "id",required = true)Long id){
+        Optional<Role> optional = upmsRepository.findRoleById(id);
+        return ResultData.builder().data(optional.isPresent()?optional.get():null).build();
+    }
+
     @Operation(description = "修改角色",summary = "修改角色")
     @PutMapping("/role/update")
     public IResultData roleUpdate(@RequestBody @Validated RoleUpdateDto role){
@@ -105,9 +109,16 @@ public class UpmsController extends BaseControllerImpl implements BaseController
         return ResultData.builder().build();
     }
 
+    @Operation(description = "删除角色(默认角色不能删除)",summary = "删除角色(默认角色不能删除)")
+    @DeleteMapping("/role/delete")
+    public IResultData roleDelete(@NotNull(message = "角色id不能为空")@Parameter(description = "角色id",name = "id",required = true)Long id){
+        upmsApplication.deleteRole(id);
+        return ResultData.builder().build();
+    }
+
     @Operation(description = "获取角色已绑定的资源权限",summary = "获取角色已绑定的资源权限")
     @GetMapping("/role/resources")
-    public IResultData<List<Long>> roleResources(@Parameter(description = "角色id",name = "roleId",required = true)Long roleId){
+    public IResultData<List<Long>> roleResources(@NotNull(message = "角色id不能为空")@Parameter(description = "角色id",name = "roleId",required = true)Long roleId){
         Optional<Role> operation = upmsRepository.findRoleById(roleId);
         ResultData resultData = ResultData.builder().build();
         if (operation.isPresent()) {
@@ -118,7 +129,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @Operation(description = "获取角色已绑定的用户",summary = "获取角色已绑定的用户")
     @GetMapping("/role/user")
-    public IResultData<List<Long>> roleUser(@Parameter(description = "角色id",name = "roleId",required = true)Long roleId){
+    public IResultData<List<Long>> roleUser(@NotNull(message = "角色id不能为空")@Parameter(description = "角色id",name = "roleId",required = true)Long roleId){
         ResultData resultData = ResultData.builder().build();
         Optional<Role> operation = upmsRepository.findRoleById(roleId);
         if (operation.isPresent()) {
@@ -171,7 +182,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
                                                  @Parameter(description = "修改需要传id，新增则不需要传",name = "id") Long id,
                                                  @NotNull(message = "父节点id不能为空") @Parameter(description = "父节点id",required = true,name = "parentId") Long parentId){
         ResultData resultData = ResultData.builder().data(false).build();
-        Resources resources = Resources.builder().name(name).id(id).build();
+        Resources resources = Resources.builder().name(name).id(id).parentId(parentId).build();
         resultData.setData(resources.checkNameIsExist());
         return resultData;
     }
@@ -199,6 +210,20 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     public IResultData resourcesUpdate(@RequestBody @Validated({Validator.Update.class}) ResourcesUpdateDto resources){
         resources.setCode(resources.getCode().trim().toUpperCase());
         upmsRepository.updateResources(resources);
+        return ResultData.builder().build();
+    }
+
+    @Operation(description = "资源详情",summary = "资源详情")
+    @GetMapping("/resources/details")
+    public IResultData<Resources> resourcesDetails(@NotNull(message = "资源id不能为空")@Parameter(description = "url",name="url",required = true)Long id ){
+        Optional<Resources> optional = upmsRepository.findResourcesById(id);
+        return ResultData.builder().data(optional.isPresent()?optional.get():null).build();
+    }
+
+    @Operation(description = "删除资源",summary = "删除资源")
+    @DeleteMapping("/resources/delete")
+    public IResultData resourcesDelete(@NotNull(message = "资源id不能为空")@Parameter(description = "url",name="url",required = true)Long id ){
+        upmsApplication.deleteResources(id);
         return ResultData.builder().build();
     }
 

@@ -4,6 +4,7 @@ import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
 import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.utils.SpringContextUtil;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -27,11 +28,15 @@ public class Role extends RoleARVODefinition {
 
     private  static volatile UpmsRepository upmsRepository;
 
-    @Override
-    public List<ResourcesVODefinition> getResources() {
-        List<? extends ResourcesVODefinition>  list = getRepository().findResourcesByRoleId(getId());
-        super.setResources((List<ResourcesVODefinition>) list);
-        return super.getResources();
+    @Schema(description = "资源")
+    private List<Resources> resources;
+
+    public List<Resources> getResources() {
+        if (Objects.nonNull(resources)) {
+            return resources;
+        }
+        List<Resources> list = getRepository().findResourcesByRoleId(getId());
+        return list;
     }
 
     /**
@@ -39,7 +44,7 @@ public class Role extends RoleARVODefinition {
      * @return
      */
     public List<Long> getResourcesId(){
-        List<ResourcesVODefinition> list = getResources();
+        List<Resources> list = getResources();
         List<Long> returnList = new ArrayList<>();
         list.forEach(resourcesVODefinition -> {
             returnList.add(resourcesVODefinition.getId());

@@ -25,4 +25,5 @@ import lombok.experimental.SuperBuilder;
 @JsonIgnoreProperties(ignoreUnknown = true,value = {"id","version","isDelete","createUserId","updateUserId","tenantId","createDateTime","updateDateTime"})
 public class ResourcesAddDto extends ResourcesAUDto {
 
+
 }

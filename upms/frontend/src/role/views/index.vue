@@ -22,7 +22,7 @@
           <a-col :span="24" style="text-align:right;">
             <a-form-item>
               <a-space :size="5">
-                <a-button type="primary" @click="search()">
+                <a-button type="primary" @click="searchModel.pageNumber=1;search()">
                   <template #icon><SearchOutlined /></template>
                   查询
                 </a-button>
@@ -30,10 +30,10 @@
                   <template #icon><PlusOutlined /></template>
                   添加
                 </a-button>
-                <a-button type="danger" @click="del(record.id)">
-                  <template #icon><DeleteOutlined /></template>
-                  删除
-                </a-button>
+<!--                <a-button type="danger" @click="">-->
+<!--                  <template #icon><DeleteOutlined /></template>-->
+<!--                  删除-->
+<!--                </a-button>-->
               </a-space>
             </a-form-item>
           </a-col>
@@ -42,20 +42,22 @@
     </a-card>
 
     <a-card>
-      <a-table rowKey="id" :columns="columns" :data-source="dataList" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys }">
+      <a-table rowKey="id" :columns="columns" :data-source="dataList" :pagination="pagination" :loading="loading" :scroll="{ y: 440 }" >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.key === 'operation'">
             <a-space :size="5">
+              <a-button size="small" @click="details(record.id)">
+                <template #icon><EditOutlined /></template>
+                修改
+              </a-button>
               <a-button size="small" @click="permissions(record.id)">
                 <template #icon><FilterOutlined /></template>
                 权限
               </a-button>
-
               <a-button size="small" @click="user(record.id)">
                 <template #icon><UserAddOutlined /></template>
                 人员
               </a-button>
-
               <a-button v-if="record.isDefault === false" size="small" type="danger" @click="del(record.id)">
                 <template #icon><DeleteOutlined /></template>
                 删除
@@ -114,12 +116,15 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, reactive, onMounted,onActivated,getCurrentInstance} from 'vue'
+  import {ref, onActivated,getCurrentInstance} from 'vue'
   import { SearchOutlined,PlusOutlined,UserAddOutlined,FilterOutlined,DeleteOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   import {message,Card,Modal,Select,Tree,Form,Col,FormItem,Input,Space,Button,SelectOption} from "ant-design-vue";
+  import qs from "qs";
+  import "ant-design-vue/es/message/style/index.css"
   const _this:any = getCurrentInstance();
-  let searchModel = ref({});
+  let loading = ref(false);
+  let searchModel = ref({pageSize:10,pageNumber:1});
   let permissionsVisible = ref<boolean>(false);
   let visible = ref<boolean>(false);
   let addOrUpdateModel = ref({})
@@ -137,6 +142,7 @@
     {
       title: '名称',
       dataIndex: 'name',
+      fixed: 'left',
       key: 'name',
     },
     {
@@ -152,18 +158,30 @@
     {
       title: '操作',
       key: "operation",
-      width: 250,
+      fixed: 'right',
+      width: '300px',
     },
   ]
   let dataList = ref([]);
+
+  const pagination = ref({
+      current: searchModel.value.pageNumber?searchModel.value.pageNumber:1,
+      pageSize: searchModel.value.pageSize?searchModel.value.pageSize:30,
+      onChange:(pageNumber: number, pageSize: number)=>{ searchModel.value.pageSize=pageSize ;searchModel.value.pageNumber=pageNumber ;search()},
+  });
 
   onActivated(() => {
     search();
   });
 
   function search(){
+    loading.value=true;
     axios.axiosGet("/yue-chip-upms-serve/upms/console/role/list",{params:searchModel.value},(data:any)=>{
       dataList.value = data.data;
+      pagination.value.total = data.totalElements;
+      pagination.value.current = data.pageNumber;
+      pagination.value.pageSize = data.pageSize;
+      loading.value=false;
     },null)
   }
 
@@ -176,9 +194,22 @@
     addOrUpdateModel.value = {};
   }
 
+  function details(id:string) {
+    axios.axiosGet("/yue-chip-upms-serve/upms/console/role/details", {params:{id:id}},
+      (data:any)=>{
+        if (data.status === 200 ) {
+          addOrUpdateModel.value = data.data;
+          addOrUpdateModel.value.state = data.data.state.name;
+          visible.value = true;
+        }
+      },null)
+  }
+
   function save(){
     _this.ctx.$refs.from.validate().then(() => {
-      axios.axiosPost("/yue-chip-upms-serve/upms/console/role/add",addOrUpdateModel.value,
+      if (addOrUpdateModel.value.id) {
+        addOrUpdateModel.value.remark = null;
+        axios.axiosPut("/yue-chip-upms-serve/upms/console/role/update",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
               visible.value = false;
@@ -186,8 +217,40 @@
               search();
             }
           },null)
+      }else {
+        axios.axiosPost("/yue-chip-upms-serve/upms/console/role/add",addOrUpdateModel.value,
+          (data:any)=>{
+            if (data.status === 200 ) {
+              visible.value = false;
+              addOrUpdateModel.value = {};
+              search();
+            }
+          },null)
+      }
     }).catch((err: any) => {
     });
+
+
+  }
+
+  function del(id:string){
+      Modal.confirm({
+          title: '是否要删除该数据?(错误的操作会带来灾难性的后果)',
+          // content: '',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk() {
+              axios.axiosDelete("/yue-chip-upms-serve/upms/console/role/delete",{params:{id:id}},(data:any)=>{
+                if (data.status === 200 ) {
+                    message.info(data.message);
+                    search();
+                }
+              },null);
+          },
+          onCancel() {
+          },
+      });
   }
 
 

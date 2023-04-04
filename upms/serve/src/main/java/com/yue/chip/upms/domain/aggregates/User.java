@@ -1,7 +1,5 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
-import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
 import com.yue.chip.upms.definition.aggregates.UserARDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
@@ -9,6 +7,7 @@ import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
 import com.yue.chip.utils.SpringContextUtil;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,11 +37,15 @@ public class User extends UserARDefinition {
     @Builder.Default
     private ResourcesMapper resourcesMapper = ResourcesMapper.INSTANCE;
 
-    @Override
-    public List<RoleARVODefinition> getRoles() {
-        List<? extends RoleARVODefinition> list = getRepository().findRoleByUserId(getId());
-        super.setRoles((List<RoleARVODefinition>) list);
-        return super.getRoles();
+    @Schema(description = "角色")
+    private List<Role> roles;
+
+    public List<Role> getRoles() {
+        if (Objects.nonNull(roles)) {
+            return roles;
+        }
+        List<Role> list = getRepository().findRoleByUserId(getId());
+        return list;
     }
 
     /**
@@ -50,12 +53,11 @@ public class User extends UserARDefinition {
      * @return
      */
     public List<Resources> getResources() {
-        List<RoleARVODefinition> listRoleARVODefinition = getRoles();
-        List<Role> roleList = roleMapper.listRoleARVODefinitionToRoleList(listRoleARVODefinition);
+        List<Role> listRole = getRoles();
         List<Resources > resourcesList = new ArrayList<>();
-        roleList.forEach(role -> {
-            List<ResourcesVODefinition> list = role.getResources();
-            resourcesList.addAll(resourcesMapper.listResourcesVODefinitionToResourcesList(list));
+        listRole.forEach(role -> {
+            List<Resources> list = role.getResources();
+            resourcesList.addAll(list);
         });
         return resourcesList;
     }

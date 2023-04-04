@@ -40,11 +40,11 @@
     </a-card>
 
     <a-card>
-      <a-table rowKey="id" :columns="columns" :data-source="dataList" :pagination="false">
+      <a-table rowKey="id" :columns="columns" :data-source="dataList" :loading="loading" :pagination="false" :scroll="{y:500}">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.key === 'operation'">
             <a-space :size="5">
-              <a-button size="small" @click="getDetails(record.id)">
+              <a-button size="small" @click="details(record.id)">
                 <template #icon><EditOutlined /></template>
                 修改
               </a-button>
@@ -108,7 +108,7 @@
         <a-row>
           <a-col :span="12">
             <a-form-item label="URL" name="url" ref="url">
-              <a-input v-bind:disabled="urlDisabled" placeholder="请输入URL" v-model:value="addOrUpdateModel.url" />
+              <a-input v-bind:disabled="addOrUpdateModel.type === 'FUNCTION' || addOrUpdateModel.type === 'CATALOG'" placeholder="请输入URL" v-model:value="addOrUpdateModel.url" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -123,16 +123,29 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, reactive, onMounted,onActivated,getCurrentInstance} from 'vue'
+  import {ref, onActivated,getCurrentInstance} from 'vue'
   import { SearchOutlined,PlusOutlined,DeleteOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-  import {message,Card,Modal,Select,Tree,Form,Col,FormItem,Input,Space,Button,SelectOption} from "ant-design-vue";
+  import {
+      Card,
+      Modal,
+      Select,
+      Tree,
+      Form,
+      Col,
+      FormItem,
+      Input,
+      Space,
+      Button,
+      SelectOption,
+      message
+  } from "ant-design-vue";
   const _this:any = getCurrentInstance();
   let visible = ref<boolean>(false);
   let permissionsVisible = ref<boolean>(false);
-  let urlDisabled = ref<boolean>(false);
   const searchModel = ref({scope:"CONSOLE"})
   let addOrUpdateModel = ref({})
+  const loading = ref(false);
   const columns = [
     {
       title: '名称',
@@ -217,7 +230,7 @@
     if (!value || value.trim() === ''){
       return Promise.reject("请输入名称")
     }else if (value && value.trim() !== ''){
-      await axios.service.get("/yue-chip-upms-serve/upms/console/resources/check/name/exist",{params:{"name":addOrUpdateModel.value.name,"parentId":addOrUpdateModel.value.parentId}})
+      await axios.service.get("/yue-chip-upms-serve/upms/console/resources/check/name/exist",{params:{"name":addOrUpdateModel.value.name,"parentId":addOrUpdateModel.value.parentId,"id":addOrUpdateModel.value.id}})
           .then((data)=>{
             if (data.status === 200 && data.data) {
               promise = Promise.reject("名称在同节点已存在");
@@ -265,8 +278,10 @@
   });
 
   function search(){
+    loading.value = true;
     axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/tree/list",{params:searchModel.value},(data:any)=>{
       dataList.value = data.data;
+      loading.value = false;
     },null)
   }
 
@@ -293,16 +308,60 @@
 
   function save(){
     _this.ctx.$refs.from.validate().then(() => {
-      axios.axiosPost("/yue-chip-upms-serve/upms/console/resources/add",addOrUpdateModel.value,
-        (data:any)=>{
-          if (data.status === 200 ) {
-            visible.value = false;
-            addOrUpdateModel.value = {};
-            search();
-          }
-        },null)
+      if (addOrUpdateModel.value.id) {
+        axios.axiosPut("/yue-chip-upms-serve/upms/console/resources/update", addOrUpdateModel.value,
+          (data: any) => {
+            if (data.status === 200) {
+                visible.value = false;
+                addOrUpdateModel.value = {};
+                search();
+            }
+          }, null)
+      }else {
+        axios.axiosPost("/yue-chip-upms-serve/upms/console/resources/add", addOrUpdateModel.value,
+          (data: any) => {
+            if (data.status === 200) {
+                visible.value = false;
+                addOrUpdateModel.value = {};
+                search();
+            }
+        }, null)
+      }
     }).catch((err: any) => {
     });
+  }
+
+  function details(id:string) {
+    axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/details", {params:{id:id}},
+      (data:any)=>{
+        if (data.status === 200 ) {
+          addOrUpdateModel.value = data.data;
+          addOrUpdateModel.value.scope = data.data.scope.name;
+          addOrUpdateModel.value.type = data.data.type.name;
+          addOrUpdateModel.value.state = data.data.state.name;
+          visible.value = true;
+        }
+      },null)
+  }
+
+  function del(id:string){
+      Modal.confirm({
+          title: '是否要删除该数据?(错误的操作会带来灾难性的后果)',
+          // content: '',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk() {
+              axios.axiosDelete("/yue-chip-upms-serve/upms/console/resources/delete",{params:{id:id}},(data:any)=>{
+                  if (data.status === 200 ) {
+                      message.info(data.message);
+                      search();
+                  }
+              },null);
+          },
+          onCancel() {
+          },
+      });
   }
 </script>
 

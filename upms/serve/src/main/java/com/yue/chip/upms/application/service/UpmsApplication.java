@@ -22,5 +22,18 @@ public interface UpmsApplication {
      */
     public void userBindRole(UserRoleAddDto userRoleAddDto);
 
+    /**
+     * 删除角色
+     * @param roleId
+     */
+    public void deleteRole(Long roleId);
+
+    /**
+     * 根据id删除资源
+     * @param resourcesId
+     */
+    public void deleteResources(Long resourcesId);
+
     public UserDefinition test(String name);
+
 }

@@ -16,4 +16,11 @@ public interface RoleResourcesDao extends BaseDao<RoleResourcesPo> {
      * @return
      */
     public int deleteByRoleId(Long roleId);
+
+    /**
+     * 根据资源id删除绑定的资源
+     * @param resourcesId
+     * @return
+     */
+    public int deleteByResourcesId(Long resourcesId);
 }

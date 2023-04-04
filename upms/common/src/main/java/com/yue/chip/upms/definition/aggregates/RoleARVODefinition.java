@@ -18,9 +18,4 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
 public class RoleARVODefinition extends RoleDefinition {
-
-    /**
-     * 资源
-     */
-    private List<ResourcesVODefinition> resources;
 }
