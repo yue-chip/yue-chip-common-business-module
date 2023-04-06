@@ -13,6 +13,8 @@ import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
+import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
+import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
@@ -21,8 +23,9 @@ import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
-import com.yue.chip.upms.interfaces.vo.role.RoleListVo;
-import com.yue.chip.upms.interfaces.vo.user.UserListVo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesVo;
+import com.yue.chip.upms.interfaces.vo.role.RoleVo;
+import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -54,6 +57,12 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @Resource
     private UpmsApplication upmsApplication;
 
+    @Resource
+    private RoleMapper roleMapper;
+
+    @Resource
+    private ResourcesMapper resourcesMapper;
+
     @GetMapping("/currentUser/permissions")
     @Operation(summary = "获取当前用户的权限(菜单，资源)", description = "获取当前用户的权限(菜单，资源)")
     public IResultData<List<ResourcesTreeList>> userPermissions(){
@@ -65,10 +74,10 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @GetMapping("/role/list")
     @Operation(description = "角色列表",summary = "角色列表")
-    public IPageResultData<List<RoleListVo>> roleList(@Parameter(description = "名称",name = "name")String name,
+    public IPageResultData<List<RoleVo>> roleList(@Parameter(description = "名称",name = "name")String name,
                                                   @Parameter(description = "编码",name = "code") String code,
                                                   YueChipPage pageable) {
-        return (IPageResultData<List<RoleListVo>>) upmsRepository.roleList(name,code,pageable);
+        return (IPageResultData<List<RoleVo>>) upmsRepository.roleList(name,code,pageable);
     }
 
     @Operation(description = "判断角色名称是否存在",summary = "判断角色名称是否存在")
@@ -90,9 +99,9 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @Operation(description = "角色详情",summary = "角色详情")
     @GetMapping("/role/details")
-    public IResultData<Role> roleDetails(@NotNull(message = "角色id不能为空")@Parameter(description = "角色id",name = "id",required = true)Long id){
+    public IResultData<RoleVo> roleDetails(@NotNull(message = "角色id不能为空")@Parameter(description = "角色id",name = "id",required = true)Long id){
         Optional<Role> optional = upmsRepository.findRoleById(id);
-        return ResultData.builder().data(optional.isPresent()?optional.get():null).build();
+        return ResultData.builder().data(optional.isPresent()?roleMapper.toRoleVo(optional.get()):null).build();
     }
 
     @Operation(description = "修改角色",summary = "修改角色")
@@ -122,7 +131,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
         Optional<Role> operation = upmsRepository.findRoleById(roleId);
         ResultData resultData = ResultData.builder().build();
         if (operation.isPresent()) {
-            resultData.setData(operation.get().getResourcesId());
+            resultData.setData(operation.get().getResourcesIdForFront());
         }
         return resultData;
     }
@@ -215,9 +224,9 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @Operation(description = "资源详情",summary = "资源详情")
     @GetMapping("/resources/details")
-    public IResultData<Resources> resourcesDetails(@NotNull(message = "资源id不能为空")@Parameter(description = "url",name="url",required = true)Long id ){
+    public IResultData<ResourcesVo> resourcesDetails(@NotNull(message = "资源id不能为空")@Parameter(description = "url",name="url",required = true)Long id ){
         Optional<Resources> optional = upmsRepository.findResourcesById(id);
-        return ResultData.builder().data(optional.isPresent()?optional.get():null).build();
+        return ResultData.builder().data(optional.isPresent()?resourcesMapper.toResourcesVo(optional.get()):null).build();
     }
 
     @Operation(description = "删除资源",summary = "删除资源")
@@ -229,8 +238,8 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @GetMapping("/user/list")
     @Operation(description = "用户列表",summary = "用户列表")
-    public IPageResultData<List<UserListVo>> userList(@Parameter(description = "姓名",name="name")String name, YueChipPage page) {
-        IPageResultData<List<UserListVo>> pageResultData = upmsRepository.userList(name,page);
+    public IPageResultData<List<UserVo>> userList(@Parameter(description = "姓名",name="name")String name, YueChipPage page) {
+        IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(name,page);
         return pageResultData;
     }
 

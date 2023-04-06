@@ -1,13 +1,16 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
+import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
 import com.yue.chip.utils.SpringContextUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -20,7 +23,8 @@ import java.util.Optional;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
-public class Resources extends ResourcesVODefinition {
+public class Resources extends ResourcesDefinition {
+
     private  static volatile UpmsRepository upmsRepository;
 
     /**
@@ -57,6 +61,27 @@ public class Resources extends ResourcesVODefinition {
             return checkIsExist(optional.get(), getId());
         }
         return false;
+    }
+
+    public Optional<Resources> getParent() {
+        return getRepository().findResourcesById(getParentId());
+    }
+
+    public List<Resources> getChildren() {
+        return getRepository().findResourcesByParentId(getId());
+    }
+
+    public List<Resources> getAllChildren() {
+        List<Resources> list = new ArrayList<>();
+        getAllChildren(list);
+        return list;
+    }
+    private void getAllChildren(List<Resources> list) {
+        List<Resources> children = getChildren();
+        list.addAll(children);
+        children.forEach(resources -> {
+            resources.getAllChildren(list);
+        });
     }
 
     private Boolean checkIsExist(Resources resources,Long id) {

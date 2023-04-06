@@ -47,7 +47,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         //先删除已经绑定的资源
         upmsRepository.deleteRoleResourcesByRoleId(roleResourcesAddDto.getRoleId());
         //保存角色关联的资源权限
-        upmsRepository.saveRoleResources(roleResourcesAddDto.getRoleId(),roleResourcesAddDto.getResourcesIds());
+        upmsDomainService.roleResources(roleResourcesAddDto.getRoleId(),roleResourcesAddDto.getResourcesIds());
     }
 
     @Override

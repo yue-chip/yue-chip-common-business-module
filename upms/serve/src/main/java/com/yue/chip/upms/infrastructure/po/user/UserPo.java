@@ -13,6 +13,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import java.time.LocalDate;
+
 /**
  * @author Mr.Liu
  * @date 2023/1/10 下午4:17
@@ -44,6 +46,16 @@ public class UserPo extends UserDefinition {
     @Column(nullable = false)
     public String getName() {
         return super.getName();
+    }
+
+    @Override
+    public Long getProfilePhoto() {
+        return super.getProfilePhoto();
+    }
+
+    @Override
+    public LocalDate getBirthday() {
+        return super.getBirthday();
     }
 
     @Override

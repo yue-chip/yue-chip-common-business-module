@@ -1,7 +1,6 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.upms.definition.aggregates.ResourcesVODefinition;
-import com.yue.chip.upms.definition.aggregates.RoleARVODefinition;
+import com.yue.chip.upms.definition.role.RoleDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.utils.SpringContextUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Mr.Liu
@@ -24,7 +24,7 @@ import java.util.Optional;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
-public class Role extends RoleARVODefinition {
+public class Role extends RoleDefinition {
 
     private  static volatile UpmsRepository upmsRepository;
 
@@ -32,8 +32,8 @@ public class Role extends RoleARVODefinition {
     private List<Resources> resources;
 
     public List<Resources> getResources() {
-        if (Objects.nonNull(resources)) {
-            return resources;
+        if (Objects.nonNull(this.resources)) {
+            return this.resources;
         }
         List<Resources> list = getRepository().findResourcesByRoleId(getId());
         return list;
@@ -46,11 +46,36 @@ public class Role extends RoleARVODefinition {
     public List<Long> getResourcesId(){
         List<Resources> list = getResources();
         List<Long> returnList = new ArrayList<>();
-        list.forEach(resourcesVODefinition -> {
-            returnList.add(resourcesVODefinition.getId());
+        list.forEach(resources -> {
+            returnList.add(resources.getId());
         });
         return returnList;
     }
+
+    /**
+     * 获取角色关联资源的id(仅限前端展示用)
+     * @return
+     */
+    public List<Long> getResourcesIdForFront(){
+        List<Resources> list = getRepository().findResourcesByRoleId(getId());
+        List<Long> returnList = new ArrayList<>();
+        list.forEach(resources -> {
+            List<Resources> allChildren = resources.getAllChildren();
+            AtomicReference<Boolean> isCheckedAllChildren = new AtomicReference<>(false);
+            allChildren.forEach(cr -> {
+                list.forEach(r->{
+                    if (Objects.equals(cr.getId(),r.getId())) {
+                        isCheckedAllChildren.set(true);
+                    }
+                });
+            });
+            if (isCheckedAllChildren.get()) {
+                returnList.add(resources.getId());
+            }
+        });
+        return returnList;
+    }
+
 
     /**
      * 获取角色关联的用户

@@ -1,10 +1,13 @@
 package com.yue.chip.upms.definition.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.core.BaseDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
 
 @Data
 @Schema(description = "用户")
@@ -22,6 +25,13 @@ public class UserDefinition extends BaseDefinition {
 
     @Schema(description = "姓名")
     private  String name;
+
+    @Schema(description = "头像")
+    private Long profilePhoto;
+
+    @Schema(description = "出生日期")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthday;
 
     private  boolean accountNonExpired;
 

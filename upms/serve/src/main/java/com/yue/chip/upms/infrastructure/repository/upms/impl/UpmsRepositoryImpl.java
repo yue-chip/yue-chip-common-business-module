@@ -27,8 +27,8 @@ import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
-import com.yue.chip.upms.interfaces.vo.role.RoleListVo;
-import com.yue.chip.upms.interfaces.vo.user.UserListVo;
+import com.yue.chip.upms.interfaces.vo.role.RoleVo;
+import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -112,9 +112,9 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public IPageResultData<List<RoleListVo>> roleList(String name, String code, YueChipPage pageable) {
+    public IPageResultData<List<RoleVo>> roleList(String name, String code, YueChipPage pageable) {
         Page<RolePo> page = roleDao.list(name,code, pageable);
-        return (IPageResultData<List<RoleListVo>>) PageResultData.convert(page,roleMapper.toRoleListVo(page.getContent()));
+        return (IPageResultData<List<RoleVo>>) PageResultData.convert(page,roleMapper.toRoleListVo(page.getContent()));
     }
 
     @Override
@@ -198,9 +198,14 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public List<Resources> findResourcesByParentId(Long parentId) {
+        return resourcesMapper.toResourcesList(resourcesDao.findFirstByParentId(parentId));
+    }
+
+    @Override
     public List<Resources> findResourcesByRoleId(Long roleId) {
         List<ResourcesPo> resourcesPoList = resourcesDao.find(roleId);
-        return resourcesMapper.listResourcesPoToResourcesList(resourcesPoList);
+        return resourcesMapper.toResourcesList(resourcesPoList);
     }
 
     @Override
@@ -223,6 +228,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         ResourcesPo resourcesPo = resourcesMapper.toResourcesPo(resources);
         resourcesPo = resourcesDao.save(resourcesPo);
         return resourcesMapper.toResources(resourcesPo);
+    }
+
+    @Override
+    public void saveAllRoleResources(List<RoleResourcesPo> list) {
+        roleResourcesDao.saveAll(list);
     }
 
     @Override
@@ -251,25 +261,9 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public void saveRoleResources(Long roleId, Long[] resourcesIds) {
-        List<RoleResourcesPo> list = new ArrayList<>();
-        if (Objects.nonNull(resourcesIds)) {
-            for (Long id : resourcesIds) {
-                RoleResourcesPo roleResourcesPo = RoleResourcesPo.builder()
-                        .resourcesId(id)
-                        .roleId(roleId)
-                        .build();
-                list.add(roleResourcesPo);
-//                roleResourcesDao.save(roleResourcesPo);
-            }
-            roleResourcesDao.saveAll(list);
-        }
-    }
-
-    @Override
-    public IPageResultData<List<UserListVo>> userList(String name, Pageable pageable) {
+    public IPageResultData<List<UserVo>> userList(String name, Pageable pageable) {
         Page<UserPo> page = userDao.find(name,null,pageable);
-        return (IPageResultData<List<UserListVo>>) PageResultData.convert(page,userMapper.toUserListVo(page.getContent()));
+        return (IPageResultData<List<UserVo>>) PageResultData.convert(page,userMapper.toUserListVo(page.getContent()));
     }
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {

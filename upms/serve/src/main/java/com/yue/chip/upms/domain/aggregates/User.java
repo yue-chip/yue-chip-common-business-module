@@ -1,6 +1,6 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.upms.definition.aggregates.UserARDefinition;
+import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
@@ -27,7 +27,7 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-public class User extends UserARDefinition {
+public class User extends UserDefinition {
 
     private  static volatile UpmsRepository upmsRepository;
 
@@ -41,8 +41,8 @@ public class User extends UserARDefinition {
     private List<Role> roles;
 
     public List<Role> getRoles() {
-        if (Objects.nonNull(roles)) {
-            return roles;
+        if (Objects.nonNull(this.roles)) {
+            return this.roles;
         }
         List<Role> list = getRepository().findRoleByUserId(getId());
         return list;

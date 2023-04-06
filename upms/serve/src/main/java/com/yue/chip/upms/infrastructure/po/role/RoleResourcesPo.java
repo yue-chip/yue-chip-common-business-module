@@ -1,10 +1,12 @@
 package com.yue.chip.upms.infrastructure.po.role;
 
 import com.yue.chip.core.persistence.entity.BaseEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -49,4 +51,5 @@ public class RoleResourcesPo extends BaseEntity {
     public Long getResourcesId() {
         return resourcesId;
     }
+
 }

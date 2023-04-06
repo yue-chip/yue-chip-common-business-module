@@ -23,6 +23,7 @@ public interface ResourcesDaoEx {
 
     /**
      * 根据角色id查询关联的资源
+     *
      * @param roleId
      * @return
      */

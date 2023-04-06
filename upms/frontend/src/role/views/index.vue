@@ -208,7 +208,6 @@
   function save(){
     _this.ctx.$refs.from.validate().then(() => {
       if (addOrUpdateModel.value.id) {
-        addOrUpdateModel.value.remark = null;
         axios.axiosPut("/yue-chip-upms-serve/upms/console/role/update",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
@@ -256,7 +255,7 @@
 
   function permissions(_roleId:string){
     permissionsVisible.value = true;
-    roleId=_roleId;
+    roleId = _roleId;
     axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/tree",{params: {}},(data:any)=>{
       treeData.value = data.data;
     },null)

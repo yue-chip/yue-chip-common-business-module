@@ -13,10 +13,10 @@ import lombok.experimental.SuperBuilder;
  * @date 2023/3/3 下午2:49
  */
 @Data
-@Schema(description = "资源")
+@Schema(description = "角色")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RoleListVo extends RoleDefinition {
+public class RoleVo extends RoleDefinition {
 }

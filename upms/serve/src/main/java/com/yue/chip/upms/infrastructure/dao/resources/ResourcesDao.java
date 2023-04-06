@@ -22,6 +22,8 @@ public interface ResourcesDao extends BaseDao<ResourcesPo>, ResourcesDaoEx {
 
     public Optional<ResourcesPo> findFirstByNameAndParentId(String name, Long parentId);
 
+    public List<ResourcesPo> findFirstByParentId(Long parentId);
+
     public Optional<ResourcesPo> findFirstByUrl(String url);
 
 }
