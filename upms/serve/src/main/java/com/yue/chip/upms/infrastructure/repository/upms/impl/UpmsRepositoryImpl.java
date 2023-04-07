@@ -199,7 +199,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public List<Resources> findResourcesByParentId(Long parentId) {
-        return resourcesMapper.toResourcesList(resourcesDao.findFirstByParentId(parentId));
+        return resourcesMapper.toResourcesList(resourcesDao.findByParentId(parentId));
     }
 
     @Override

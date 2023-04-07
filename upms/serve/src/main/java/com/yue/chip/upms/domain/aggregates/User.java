@@ -37,7 +37,9 @@ public class User extends UserDefinition {
     @Builder.Default
     private ResourcesMapper resourcesMapper = ResourcesMapper.INSTANCE;
 
-    @Schema(description = "角色")
+    /**
+     * 角色
+     */
     private List<Role> roles;
 
     public List<Role> getRoles() {

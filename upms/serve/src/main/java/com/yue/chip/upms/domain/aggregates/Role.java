@@ -28,7 +28,9 @@ public class Role extends RoleDefinition {
 
     private  static volatile UpmsRepository upmsRepository;
 
-    @Schema(description = "资源")
+    /**
+     *  资源
+     */
     private List<Resources> resources;
 
     public List<Resources> getResources() {
@@ -61,13 +63,11 @@ public class Role extends RoleDefinition {
         List<Long> returnList = new ArrayList<>();
         list.forEach(resources -> {
             List<Resources> allChildren = resources.getAllChildren();
-            AtomicReference<Boolean> isCheckedAllChildren = new AtomicReference<>(false);
+            AtomicReference<Boolean> isCheckedAllChildren = new AtomicReference<>(true);
             allChildren.forEach(cr -> {
-                list.forEach(r->{
-                    if (Objects.equals(cr.getId(),r.getId())) {
-                        isCheckedAllChildren.set(true);
-                    }
-                });
+                if (!list.contains(cr)) {
+                    isCheckedAllChildren.set(false);
+                }
             });
             if (isCheckedAllChildren.get()) {
                 returnList.add(resources.getId());
