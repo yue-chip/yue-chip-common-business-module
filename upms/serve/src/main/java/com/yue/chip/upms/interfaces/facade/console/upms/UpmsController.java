@@ -66,9 +66,9 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @GetMapping("/currentUser/permissions")
     @Operation(summary = "获取当前用户的权限(菜单，资源)", description = "获取当前用户的权限(菜单，资源)")
     public IResultData<List<ResourcesTreeList>> userPermissions(){
-        Optional<User> optional = upmsRepository.findUserById(CurrentUserUtil.getCurrentUserId());
-
-        ResultData resultData = ResultData.builder().data(optional.get().getResourcesTree()).build();
+//        Optional<User> optional = upmsRepository.findUserById(CurrentUserUtil.getCurrentUserId());
+        User user = User.builder().id(CurrentUserUtil.getCurrentUserId()).build();
+        ResultData resultData = ResultData.builder().data(user.getResourcesTree()).build();
         return resultData;
     }
 

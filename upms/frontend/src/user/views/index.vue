@@ -140,67 +140,6 @@
     });
   }
 
-
-  function permissions(_roleId:string){
-    permissionsVisible.value = true;
-    roleId=_roleId;
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/tree",{params: {}},(data:any)=>{
-      treeData.value = data.data;
-    },null)
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/role/resources",{params: {roleId:_roleId}},(data:any)=>{
-      permissionsCheckedKeys.value = data.data;
-    },null)
-
-  }
-
-  function permissionsCancel(){
-    permissionsCheckedKeys.value = [];
-    permissionsVisible.value = false;
-    treeData.value=[];
-    roleId = null;
-  }
-
-  function permissionsSave(){
-    axios.axiosPost("/yue-chip-upms-serve/upms/console/role/resources", {"roleId":roleId,resourcesIds:permissionsCheckedKeys.value},(data:any)=>{
-      if (data.status === 200) {
-        message.info(data.message);
-        permissionsCancel();
-      }
-    },null)
-  }
-
-  function user(_roleId:string) {
-    roleId = _roleId;
-    userVisible.value = true;
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/user/list", {params: {pageNumber:1,pageSize:99999}},(data:any)=>{
-      const list = data.data;
-      userOptions.value = [];
-      for (const index:any in list) {
-        userOptions.value.push({"value":list[index].id,"label":list[index].name});
-      }
-    },null)
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/role/user", {params: {roleId:_roleId}},(data:any)=>{
-      roleUser.value = data.data;
-    },null)
-  }
-
-  function userCancel() {
-    roleId = null;
-    userVisible.value = false;
-    userOptions.value = [];
-    roleUser.value = [];
-  }
-
-  function userSave(_roleId:string) {
-    axios.axiosPost("/yue-chip-upms-serve/upms/console/user/role", {"roleId":roleId,userIds:roleUser.value},(data:any)=>{
-      if (data.status === 200) {
-        message.info(data.message);
-        userCancel();
-      }
-    },null)
-  }
-
-
 </script>
 
 <style scoped>
