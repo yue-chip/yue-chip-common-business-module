@@ -2,7 +2,6 @@ package com.yue.chip.upms.interfaces.vo.resources;
 
 import lombok.Builder;
 import lombok.Data;
-import org.apache.commons.io.input.buffer.PeekableInputStream;
 
 import java.util.List;
 
@@ -12,11 +11,11 @@ import java.util.List;
  */
 @Data
 @Builder
-public class ResourcesTree {
+public class ResourcesTreeVo {
 
     private String title;
 
     private Long key;
 
-    private List<ResourcesTree> children;
+    private List<ResourcesTreeVo> children;
 }

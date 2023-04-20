@@ -1,6 +1,7 @@
 package com.yue.chip.upms.application.service;
 
 import com.yue.chip.upms.definition.user.UserDefinition;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 
@@ -33,6 +34,12 @@ public interface UpmsApplication {
      * @param resourcesId
      */
     public void deleteResources(Long resourcesId);
+
+    /**
+     * 保存用户
+     * @param user
+     */
+    public void saveUser(User user);
 
     public UserDefinition test(String name);
 

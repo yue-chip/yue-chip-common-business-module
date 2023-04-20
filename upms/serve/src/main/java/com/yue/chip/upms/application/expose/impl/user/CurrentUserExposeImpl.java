@@ -4,7 +4,6 @@ import com.yue.chip.core.ICurrentUser;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
-import com.yue.chip.utils.BeanToMapUtil;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 
@@ -28,7 +27,7 @@ public class CurrentUserExposeImpl implements ICurrentUser<User> {
 
     @Override
     public Map<String, Object> findUserToMap(String username) {
-        Optional<User> optional = upmsRepository.findUserByName(username);
+        Optional<User> optional = upmsRepository.findUserByUsername(username);
         if (optional.isPresent()) {
             User user = optional.get();
             Map<String, Object> map = new HashMap<>();

@@ -15,14 +15,16 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
+import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
@@ -63,9 +65,12 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @Resource
     private ResourcesMapper resourcesMapper;
 
+    @Resource
+    private UserMapper userMapper;
+
     @GetMapping("/currentUser/permissions")
     @Operation(summary = "获取当前用户的权限(菜单，资源)", description = "获取当前用户的权限(菜单，资源)")
-    public IResultData<List<ResourcesTreeList>> userPermissions(){
+    public IResultData<List<ResourcesTreeListVo>> userPermissions(){
 //        Optional<User> optional = upmsRepository.findUserById(CurrentUserUtil.getCurrentUserId());
         User user = User.builder().id(CurrentUserUtil.getCurrentUserId()).build();
         ResultData resultData = ResultData.builder().data(user.getResourcesTree()).build();
@@ -159,7 +164,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @GetMapping("/resources/tree/list")
     @Operation(description = "树型结构资源列表",summary = "树型结构资源列表")
-    public IResultData<List<ResourcesTreeList>> resourcesTreeList(@Parameter(description = "作用域",name = "scope")@RequestParam(defaultValue = "CONSOLE") Scope scope) {
+    public IResultData<List<ResourcesTreeListVo>> resourcesTreeList(@Parameter(description = "作用域",name = "scope")@RequestParam(defaultValue = "CONSOLE") Scope scope) {
         IResultData resultData = ResultData.builder()
                 .data(upmsRepository.findResourcesToTreeList(0L,scope))
                 .build();
@@ -168,7 +173,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @GetMapping("/resources/tree")
     @Operation(description = "树型结构资源",summary = "树型结构资源")
-    public IResultData<List<ResourcesTree>> resourcesTree(@Parameter(description = "作用域",name = "scope")@RequestParam(defaultValue = "CONSOLE") Scope scope) {
+    public IResultData<List<ResourcesTreeVo>> resourcesTree(@Parameter(description = "作用域",name = "scope")@RequestParam(defaultValue = "CONSOLE") Scope scope) {
         IResultData resultData = ResultData.builder()
                 .data(upmsRepository.findResourcesToTree(0L,scope))
                 .build();
@@ -241,6 +246,26 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     public IPageResultData<List<UserVo>> userList(@Parameter(description = "姓名",name="name")String name, YueChipPage page) {
         IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(name,page);
         return pageResultData;
+    }
+
+    @PostMapping("/user/add")
+    @Operation(description = "新增用户",summary = "新增用户")
+    public IResultData saveUser(@RequestBody @Validated({Validator.Insert.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
+        upmsApplication.saveUser(userMapper.toUser(userAddOrUpdateDto));
+        return ResultData.builder().build();
+    }
+
+    @PostMapping("/user/update")
+    @Operation(description = "修改用户",summary = "修改用户")
+    public IResultData updateUser(@RequestBody @Validated({Validator.Update.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
+        upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
+        return ResultData.builder().build();
+    }
+
+    @GetMapping("/user/is/exist")
+    @Operation(description = "判断账号是否存在",summary = "判断账号是否存在")
+    public IResultData<Boolean> updateUser(@NotNull(message = "账号不能为空")@Parameter(description = "账号",name="username",required = true)String username) {
+        return ResultData.builder().data(User.builder().username(username).build().checkUsernameIsExist()).build();
     }
 
 }

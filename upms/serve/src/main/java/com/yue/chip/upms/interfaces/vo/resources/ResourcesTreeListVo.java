@@ -18,7 +18,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ResourcesTreeList extends ResourcesDefinition {
+public class ResourcesTreeListVo extends ResourcesDefinition {
 
-    private List<ResourcesTreeList> children;
+    private List<ResourcesTreeListVo> children;
 }

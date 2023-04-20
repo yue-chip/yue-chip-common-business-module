@@ -3,8 +3,8 @@ package com.yue.chip.upms.infrastructure.assembler.resources;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAUDto;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,14 +23,14 @@ public interface ResourcesMapper {
 
     ResourcesMapper INSTANCE = Mappers.getMapper(ResourcesMapper.class);
 
-    public ResourcesTreeList toResourcesTreeList(ResourcesPo resourcesPo);
+    public ResourcesTreeListVo toResourcesTreeListVo(ResourcesPo resourcesPo);
 
-    public List<ResourcesTree> toResourcesTree(List<ResourcesTreeList> list);
+    public List<ResourcesTreeVo> toResourcesTreeVo(List<ResourcesTreeListVo> list);
 
     @Mappings({@Mapping(source = "id", target = "key"),
             @Mapping(source = "name", target = "title")
     })
-    public ResourcesTree toResourcesTree(ResourcesTreeList resourcesTreeList);
+    public ResourcesTreeVo toResourcesTreeVo(ResourcesTreeListVo resourcesTreeListVo);
 
     public Resources toResources(ResourcesPo resourcesPo);
 

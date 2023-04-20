@@ -1,13 +1,16 @@
 package com.yue.chip.upms.application.service.impl;
 
+import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
+import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
@@ -17,6 +20,7 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.skywalking.apm.toolkit.trace.Tag;
 import org.apache.skywalking.apm.toolkit.trace.Tags;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +42,12 @@ public class UpmsApplicationImpl implements UpmsApplication {
 
     @DubboReference
     private TestExpose testExpose;
+
+    @Resource
+    private UserMapper userMapper;
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(rollbackFor = {Throwable.class})
@@ -94,6 +104,17 @@ public class UpmsApplicationImpl implements UpmsApplication {
             //删除资源
             upmsRepository.deleteResources(resourcesId);
         }
+    }
+
+    @Override
+    public void saveUser(User user) {
+        //检查用户是否存在
+        if (user.checkUsernameIsExist()) {
+            BusinessException.throwException("该账号已存在");
+        }
+        //保存用户
+        user.setPassword(passwordEncoder.encode(SecureUtil.md5(user.getPassword())));
+        upmsRepository.saveUser(userMapper.toUserPo(user));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.yue.chip.upms.infrastructure.assembler.user;
 
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -25,4 +26,8 @@ public interface UserMapper {
     public List<User> toUserList(List<UserPo> list);
 
     public UserPo toUserPo(User user);
+
+    public UserPo toUserPo(UserAddOrUpdateDto userAddOrUpdateDto);
+
+    public User toUser(UserAddOrUpdateDto userAddOrUpdateDto);
 }

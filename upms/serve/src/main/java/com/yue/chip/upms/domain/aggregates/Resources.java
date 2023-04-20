@@ -2,7 +2,6 @@ package com.yue.chip.upms.domain.aggregates;
 
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
 import com.yue.chip.utils.SpringContextUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

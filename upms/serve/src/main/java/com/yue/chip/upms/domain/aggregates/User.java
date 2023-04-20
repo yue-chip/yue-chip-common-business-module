@@ -5,9 +5,8 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.utils.SpringContextUtil;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -41,6 +41,11 @@ public class User extends UserDefinition {
      * 角色
      */
     private List<Role> roles;
+
+    public Boolean checkUsernameIsExist() {
+        Optional<User> optional = getRepository().findUserByUsername(getUsername());
+        return optional.isPresent();
+    }
 
     public List<Role> getRoles() {
         if (Objects.nonNull(this.roles)) {
@@ -68,8 +73,8 @@ public class User extends UserDefinition {
      * 获取用户关联的权限(树形结构)
      * @return
      */
-    public List<ResourcesTreeList> getResourcesTree() {
-        List<ResourcesTreeList> list = getRepository().findResourcesToTreeList(getId(),0L, Scope.CONSOLE);
+    public List<ResourcesTreeListVo> getResourcesTree() {
+        List<ResourcesTreeListVo> list = getRepository().findResourcesToTreeList(getId(),0L, Scope.CONSOLE);
         return list;
     }
 

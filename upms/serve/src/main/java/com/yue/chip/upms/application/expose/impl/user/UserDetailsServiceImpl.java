@@ -33,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optional = upmsRepository.findUserByName(username);
+        Optional<User> optional = upmsRepository.findUserByUsername(username);
         if (!optional.isPresent()){
             return null;
         }

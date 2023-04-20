@@ -7,12 +7,13 @@ import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ public interface UpmsRepository {
      * @param username
      * @return
      */
-    public Optional<User> findUserByName(String username);
+    public Optional<User> findUserByUsername(String username);
 
     /**
      * 根据用户id查询用户
@@ -122,7 +123,7 @@ public interface UpmsRepository {
      * @param scope
      * @return
      */
-    public List<ResourcesTreeList> findResourcesToTreeList(Long userId, Long parentId, Scope scope);
+    public List<ResourcesTreeListVo> findResourcesToTreeList(Long userId, Long parentId, Scope scope);
 
     /**
      * 查询树形结构数据
@@ -130,7 +131,7 @@ public interface UpmsRepository {
      * @param scope
      * @return
      */
-    public List<ResourcesTreeList> findResourcesToTreeList(Long parentId, Scope scope);
+    public List<ResourcesTreeListVo> findResourcesToTreeList(Long parentId, Scope scope);
 
     /**
      * 查询树形结构数据
@@ -138,7 +139,7 @@ public interface UpmsRepository {
      * @param scope
      * @return
      */
-    public List<ResourcesTree> findResourcesToTree(Long parentId, Scope scope);
+    public List<ResourcesTreeVo> findResourcesToTree(Long parentId, Scope scope);
 
     /**
      * 根据编码查询
@@ -236,5 +237,18 @@ public interface UpmsRepository {
      * @return
      */
     public IPageResultData<List<UserVo>> userList(String name, Pageable pageable);
+
+    /**
+     * 保存用户
+     * @param userPo
+     * @return
+     */
+    public User saveUser(UserPo userPo);
+
+    /**
+     * 修改用户
+     * @param userPo
+     */
+    public void updateUser(UserPo userPo);
 
 }

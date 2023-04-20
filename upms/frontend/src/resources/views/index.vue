@@ -282,7 +282,7 @@
     axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/tree/list",{params:searchModel.value},(data:any)=>{
       dataList.value = data.data;
       loading.value = false;
-    },null)
+    },null,null)
   }
 
   function add(id:string,parentId:string,scope:string,type:string){
@@ -312,20 +312,22 @@
         axios.axiosPut("/yue-chip-upms-serve/upms/console/resources/update", addOrUpdateModel.value,
           (data: any) => {
             if (data.status === 200) {
-                visible.value = false;
-                addOrUpdateModel.value = {};
-                search();
+              visible.value = false;
+              addOrUpdateModel.value = {};
+              message.info(data.message);
+              search();
             }
-          }, null)
+          }, null,null)
       }else {
         axios.axiosPost("/yue-chip-upms-serve/upms/console/resources/add", addOrUpdateModel.value,
           (data: any) => {
             if (data.status === 200) {
-                visible.value = false;
-                addOrUpdateModel.value = {};
-                search();
+              visible.value = false;
+              addOrUpdateModel.value = {};
+              message.info(data.message);
+              search();
             }
-        }, null)
+        }, null,null)
       }
     }).catch((err: any) => {
     });
@@ -341,7 +343,7 @@
           addOrUpdateModel.value.state = data.data.state.name;
           visible.value = true;
         }
-      },null)
+      },null,null)
   }
 
   function del(id:string){
@@ -357,7 +359,7 @@
                       message.info(data.message);
                       search();
                   }
-              },null);
+              },null,null);
           },
           onCancel() {
           },

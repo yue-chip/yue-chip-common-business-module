@@ -25,8 +25,8 @@ import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTree;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeList;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.annotation.Resource;
@@ -61,7 +61,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private ResourcesMapper resourcesMapper;
 
     @Override
-    public Optional<User> findUserByName(String username) {
+    public Optional<User> findUserByUsername(String username) {
         Optional<UserPo> optional = userDao.find(username);
         if (optional.isPresent()) {
             User user = userMapper.toUser(optional.get());
@@ -155,21 +155,21 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public List<ResourcesTreeList> findResourcesToTreeList(Long userId, Long parentId, Scope scope) {
+    public List<ResourcesTreeListVo> findResourcesToTreeList(Long userId, Long parentId, Scope scope) {
         List<ResourcesPo> list ;
         if (Objects.nonNull(userId)) {
             list = resourcesDao.find(userId,parentId,scope);
         }else {
             list = resourcesDao.findByParentIdAndScopeOrderBySort(parentId,scope);
         }
-        List<ResourcesTreeList> treeList;
+        List<ResourcesTreeListVo> treeList;
         if (Objects.nonNull(list) && list.size()>0){
             treeList = new ArrayList<>();
         } else {
             treeList = null;
         }
         list.forEach(resourcesPo -> {
-            ResourcesTreeList resourcesTree = resourcesMapper.toResourcesTreeList(resourcesPo);
+            ResourcesTreeListVo resourcesTree = resourcesMapper.toResourcesTreeListVo(resourcesPo);
             resourcesTree.setChildren(findResourcesToTreeList(userId,resourcesPo.getId(),scope));
             treeList.add(resourcesTree);
         });
@@ -177,14 +177,14 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public List<ResourcesTreeList> findResourcesToTreeList(Long parentId, Scope scope) {
+    public List<ResourcesTreeListVo> findResourcesToTreeList(Long parentId, Scope scope) {
         return findResourcesToTreeList(null,parentId,scope);
     }
 
     @Override
-    public List<ResourcesTree> findResourcesToTree(Long parentId, Scope scope) {
-        List<ResourcesTreeList> list = findResourcesToTreeList(parentId,scope);
-        return resourcesMapper.toResourcesTree(list);
+    public List<ResourcesTreeVo> findResourcesToTree(Long parentId, Scope scope) {
+        List<ResourcesTreeListVo> list = findResourcesToTreeList(parentId,scope);
+        return resourcesMapper.toResourcesTreeVo(list);
     }
 
     @Override
@@ -264,6 +264,17 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public IPageResultData<List<UserVo>> userList(String name, Pageable pageable) {
         Page<UserPo> page = userDao.find(name,null,pageable);
         return (IPageResultData<List<UserVo>>) PageResultData.convert(page,userMapper.toUserListVo(page.getContent()));
+    }
+
+    @Override
+    public User saveUser(UserPo userPo) {
+        userPo = userDao.save(userPo);
+        return userMapper.toUser(userPo);
+    }
+
+    @Override
+    public void updateUser(UserPo userPo) {
+        userDao.update(userPo);
     }
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {

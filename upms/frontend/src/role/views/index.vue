@@ -182,7 +182,7 @@
       pagination.value.current = data.pageNumber;
       pagination.value.pageSize = data.pageSize;
       loading.value=false;
-    },null)
+    },null,null)
   }
 
   function add(){
@@ -202,7 +202,7 @@
           addOrUpdateModel.value.state = data.data.state.name;
           visible.value = true;
         }
-      },null)
+      },null,null)
   }
 
   function save(){
@@ -213,18 +213,20 @@
             if (data.status === 200 ) {
               visible.value = false;
               addOrUpdateModel.value = {};
+              message.info(data.message);
               search();
             }
-          },null)
+          },null,null)
       }else {
         axios.axiosPost("/yue-chip-upms-serve/upms/console/role/add",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
               visible.value = false;
               addOrUpdateModel.value = {};
+              message.info(data.message);
               search();
             }
-          },null)
+          },null,null)
       }
     }).catch((err: any) => {
     });
@@ -245,7 +247,7 @@
                     message.info(data.message);
                     search();
                 }
-              },null);
+              },null,null);
           },
           onCancel() {
           },
@@ -258,10 +260,10 @@
     roleId = _roleId;
     axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/tree",{params: {}},(data:any)=>{
       treeData.value = data.data;
-    },null)
+    },null,null)
     axios.axiosGet("/yue-chip-upms-serve/upms/console/role/resources",{params: {roleId:_roleId}},(data:any)=>{
       permissionsCheckedKeys.value = data.data;
-    },null)
+    },null,null)
 
   }
 
@@ -278,7 +280,7 @@
         message.info(data.message);
         permissionsCancel();
       }
-    },null)
+    },null,null)
   }
 
   function user(_roleId:string) {
@@ -290,10 +292,10 @@
       for (const index:any in list) {
         userOptions.value.push({"value":list[index].id,"label":list[index].name});
       }
-    },null)
+    },null,null)
     axios.axiosGet("/yue-chip-upms-serve/upms/console/role/user", {params: {roleId:_roleId}},(data:any)=>{
       roleUser.value = data.data;
-    },null)
+    },null,null)
   }
 
   function userCancel() {
@@ -309,7 +311,7 @@
         message.info(data.message);
         userCancel();
       }
-    },null)
+    },null,null)
   }
 
 

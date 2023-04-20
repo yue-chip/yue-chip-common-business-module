@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-card >
-      <a-form ref="from" :model="searchModel" :labelCol="{span: 3,offset:0}" >
+      <a-form ref="from" :model="searchModel" :label-col="{span: 4,offset:0}" >
         <a-row >
           <a-col :span="6">
             <a-form-item label="姓名" name="name" ref="name" >
@@ -19,7 +19,7 @@
           <a-col :span="24" style="text-align:right;">
             <a-form-item>
               <a-space :size="5">
-                <a-button type="primary" @click="searchModel.value.pageNumber=1;search()">
+                <a-button type="primary" @click="searchModel.pageNumber=1;search()">
                   <template #icon><SearchOutlined /></template>
                   查询
                 </a-button>
@@ -47,14 +47,6 @@
                 <template #icon><EditOutlined /></template>
                 修改
               </a-button>
-              <a-button size="small" @click="permissions(record.id)">
-                <template #icon><FilterOutlined /></template>
-                权限
-              </a-button>
-              <a-button size="small" @click="user(record.id)">
-                <template #icon><UserAddOutlined /></template>
-                人员
-              </a-button>
               <a-button v-if="record.isDefault === false" size="small" type="danger" @click="del(record.id)">
                 <template #icon><DeleteOutlined /></template>
                 删除
@@ -69,12 +61,14 @@
 
 <script setup lang="ts">
   import {ref, onActivated,getCurrentInstance} from 'vue'
-  import { SearchOutlined,PlusOutlined,UserAddOutlined,FilterOutlined,DeleteOutlined } from '@ant-design/icons-vue';
+  import {useRouter} from 'vue-router'
+  import { SearchOutlined,PlusOutlined,DeleteOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   import {message,Modal,Card,Select,Form,Col,FormItem,Input,Space,Button} from "ant-design-vue";
   import qs from "qs";
   import "ant-design-vue/es/message/style/index.css"
   const _this:any = getCurrentInstance();
+  const router=useRouter();
   let loading = ref(false);
   let searchModel = ref({pageSize:10,pageNumber:1});
   const columns = [
@@ -85,7 +79,7 @@
       key: 'name',
     },
     {
-      title: '出身日期',
+      title: '出生日期',
       dataIndex: 'birthday',
       key: 'birthday',
     },
@@ -116,7 +110,11 @@
       pagination.value.current = data.pageNumber;
       pagination.value.pageSize = data.pageSize;
       loading.value=false;
-    },null)
+    },null,null)
+  }
+
+  function add(){
+    router.push('/addOrUpdate');
   }
 
   function del(id:string){
@@ -133,7 +131,7 @@
               message.info(data.message);
               search();
           }
-        },null);
+        },null,null);
       },
       onCancel() {
       },

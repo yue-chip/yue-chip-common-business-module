@@ -10,6 +10,12 @@ export const router = createRouter({
       component: () => import('../views/index.vue'),
       meta: {keepAlive: true }
     },
+    {
+      path: '/addOrUpdate',
+      name: 'addOrUpdate',
+      component: () => import('../views/addOrUpdate.vue'),
+      meta: {keepAlive: false }
+    },
   ],
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),
