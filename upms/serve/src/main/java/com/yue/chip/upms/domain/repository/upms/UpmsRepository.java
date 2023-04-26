@@ -57,6 +57,13 @@ public interface UpmsRepository {
     public int deleteUserRole(Long roleId);
 
     /**
+     * 根据用户删除用户与角色的绑定关系
+     * @param userId
+     * @return
+     */
+    public int deleteUserRoleByUserId(Long userId);
+
+    /**
      * 根据id删除角色
      *
      * @param roleId
@@ -250,5 +257,12 @@ public interface UpmsRepository {
      * @param userPo
      */
     public void updateUser(UserPo userPo);
+
+    /**
+     * 根据id删除用户
+     *
+     * @param id
+     */
+    public void deleteUser(Long id);
 
 }

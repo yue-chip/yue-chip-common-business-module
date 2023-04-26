@@ -21,16 +21,14 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=true)
 public class UserAddOrUpdateDto extends UserDefinition {
 
+    @NotBlank(message = "密码不能为空",groups = {Validator.Update.class,Validator.Insert.class})
+    @Schema(description = "密码")
+    private String passwordI;
+
     @Override
     @NotNull(message = "id不能为空",groups = {Validator.Update.class})
     public Long getId() {
         return super.getId();
-    }
-
-    @Override
-    @NotBlank(message = "密码不能为空",groups = {Validator.Update.class,Validator.Insert.class})
-    public String getPassword() {
-        return super.getPassword();
     }
 
     @Override

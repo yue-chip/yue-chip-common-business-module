@@ -1,6 +1,7 @@
 package com.yue.chip.upms.definition.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.core.BaseDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true,value = {"password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId","isDelete"})
 public class UserDefinition extends BaseDefinition {
 
-    @Setter(AccessLevel.PUBLIC)
+    @Schema(description = "密码")
     private String password;
 
     @Schema(description = "用户登陆账号")

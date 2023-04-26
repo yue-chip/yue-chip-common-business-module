@@ -91,6 +91,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public int deleteUserRoleByUserId(Long userId) {
+        return userRoleDao.deleteByUserId(userId);
+    }
+
+    @Override
     public void deleteRole(Long roleId) {
         roleDao.deleteById(roleId);
     }
@@ -275,6 +280,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public void updateUser(UserPo userPo) {
         userDao.update(userPo);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userDao.deleteById(id);
     }
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {

@@ -24,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -115,6 +117,19 @@ public class UpmsApplicationImpl implements UpmsApplication {
         //保存用户
         user.setPassword(passwordEncoder.encode(SecureUtil.md5(user.getPassword())));
         upmsRepository.saveUser(userMapper.toUserPo(user));
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void deleteUser(List<Long> ids) {
+        if (Objects.nonNull(ids)) {
+            ids.forEach(id->{
+                //删除用户与角色的关联
+                upmsRepository.deleteUserRoleByUserId(id);
+                //删除用户
+                upmsRepository.deleteUser(id);
+            });
+        }
     }
 
     @Override

@@ -4,8 +4,8 @@
       <a-form-item label="账号" name="username" ref="username" >
         <a-input placeholder="请输入账号" v-model:value="addOrUpdateModel.username" />
       </a-form-item>
-      <a-form-item label="密码" name="pass" ref="pass" >
-        <a-input-password v-model:value="addOrUpdateModel.pass" />
+      <a-form-item  label="密码" name="pass" ref="pass" >
+        <a-input-password v-bind:disabled="passwordDisabled" v-model:value="addOrUpdateModel.pass" />
       </a-form-item>
       <a-form-item label="姓名" name="name" ref="name" >
         <a-input placeholder="请输入姓名" v-model:value="addOrUpdateModel.name" />
@@ -35,13 +35,13 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, onActivated,getCurrentInstance} from 'vue'
+  import {ref, onMounted, getCurrentInstance} from 'vue'
   import {useRouter,useRoute} from 'vue-router'
   import { RollbackOutlined,SaveOutlined,UndoOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   import {message,Card,Form,Col,FormItem,Input,Space,Button,InputPassword} from "ant-design-vue";
   import "ant-design-vue/es/message/style/index.css"
-  import AddOrUpdate from "./addOrUpdate.vue";
+
   const router=useRouter();
   const route = useRoute();
   const _this:any = getCurrentInstance();
@@ -49,6 +49,7 @@
   let resetDisabled = ref(false);
   let backDisabled = ref(false);
   let addOrUpdateModel = ref({});
+  let passwordDisabled = ref(false);
   import {Md5} from 'ts-md5';
   const rules:any={
     username:[{required:true,message:"请输入账号",trigger:'blur'}],
@@ -56,11 +57,11 @@
     name:[{required:true,message:"请输入姓名",trigger:'blur'}],
   };
 
-
-  onActivated(() => {
+  onMounted(() => {
     const id = route.query.id;
     if (id) {
-      addOrUpdateModel.value.id = id;
+      passwordDisabled.value=true;
+      getInfo(id);
     }
   });
 
@@ -73,8 +74,17 @@
     _this.ctx.$refs.from.resetFields();
     const id = route.query.id;
     if (id) {
-      addOrUpdateModel.value.id = id;
+      getInfo(id);
     }
+  }
+
+  function getInfo(id: string ){
+    axios.axiosGet("/yue-chip-upms-serve/upms/console/user/details",{params: {id:id}},
+      (data:any)=>{
+        if (data.status === 200 ) {
+          addOrUpdateModel.value = data.data;
+        }
+      },null,null)
   }
 
   function save(){
@@ -88,13 +98,16 @@
         axios.axiosPut("/yue-chip-upms-serve/upms/console/user/update",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
+              message.info(data.message);
             }
           },null,null)
       }else {
-        addOrUpdateModel.value.password = Md5.hashStr(addOrUpdateModel.value.pass);
+        addOrUpdateModel.value.passwordI = Md5.hashStr(addOrUpdateModel.value.pass);
+        addOrUpdateModel.value.pass = null;
         axios.axiosPost("/yue-chip-upms-serve/upms/console/user/add",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
+              message.info(data.message);
             }
           },null,null)
       }

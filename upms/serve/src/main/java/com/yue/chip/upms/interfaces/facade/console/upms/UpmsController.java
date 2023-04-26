@@ -35,6 +35,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -253,12 +254,28 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     public IResultData saveUser(@RequestBody @Validated({Validator.Insert.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
         upmsApplication.saveUser(userMapper.toUser(userAddOrUpdateDto));
         return ResultData.builder().build();
+
+    }
+
+    @GetMapping("/user/details")
+    @Operation(description = "用户详情",summary = "用户详情")
+    public IResultData<UserVo> userDetails(@NotNull(message = "用户id不能为空") @Parameter(description = "用户id",name="id",required = true)Long id) {
+        Optional<User> optional = upmsRepository.findUserById(id);
+        return ResultData.builder().data(optional.isPresent()?userMapper.toUserVo(optional.get()):null).build();
+
     }
 
     @PostMapping("/user/update")
     @Operation(description = "修改用户",summary = "修改用户")
     public IResultData updateUser(@RequestBody @Validated({Validator.Update.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
         upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
+        return ResultData.builder().build();
+    }
+
+    @DeleteMapping("/user/delete")
+    @Operation(description = "删除用户",summary = "删除用户")
+    public IResultData deleteUser(@Size(min = 1,message = "要删除的数据不能为空") @Parameter(description = "用户id",name="ids",required = true)@RequestParam("ids")List<Long> ids) {
+        upmsApplication.deleteUser(ids);
         return ResultData.builder().build();
     }
 

@@ -47,7 +47,7 @@
                 <template #icon><EditOutlined /></template>
                 修改
               </a-button>
-              <a-button v-if="record.isDefault === false" size="small" type="danger" @click="del(record.id)">
+              <a-button v-if="record.username !== 'admin'" size="small" type="danger" @click="del(record.id)">
                 <template #icon><DeleteOutlined /></template>
                 删除
               </a-button>
@@ -64,9 +64,10 @@
   import {useRouter} from 'vue-router'
   import { SearchOutlined,PlusOutlined,DeleteOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-  import {message,Modal,Card,Select,Form,Col,FormItem,Input,Space,Button} from "ant-design-vue";
+  import {message,Card,Modal,Select,Form,Col,FormItem,Input,Space,Button} from "ant-design-vue";
   import qs from "qs";
   import "ant-design-vue/es/message/style/index.css"
+  import "ant-design-vue/es/modal/style/index.css"
   const _this:any = getCurrentInstance();
   const router=useRouter();
   let loading = ref(false);
@@ -87,7 +88,7 @@
       title: '操作',
       key: "operation",
       fixed: 'right',
-      width: '300px',
+      width: '150px',
     },
   ]
   let dataList = ref([]);
@@ -117,6 +118,10 @@
     router.push('/addOrUpdate');
   }
 
+  function edit(id:string) {
+    router.push({ path: '/addOrUpdate', query: { id: id }});
+  }
+
   function del(id:string){
     Modal.confirm({
       title: '是否要删除该数据?',
@@ -125,11 +130,14 @@
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        const params = {params:{id:id}};
+        const params = {params:{ids:id},
+          paramsSerializer: (params: any) => {
+            return qs.stringify(params, { indices: false })
+          }};
         axios.axiosDelete("/yue-chip-upms-serve/upms/console/user/delete",params,(data:any)=>{
           if (data.status === 200 ) {
-              message.info(data.message);
-              search();
+            message.info(data.message);
+            search();
           }
         },null,null);
       },

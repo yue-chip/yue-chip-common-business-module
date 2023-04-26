@@ -235,23 +235,23 @@
   }
 
   function del(id:string){
-      Modal.confirm({
-          title: '是否要删除该数据?(错误的操作会带来灾难性的后果)',
-          // content: '',
-          okText: 'Yes',
-          okType: 'danger',
-          cancelText: 'No',
-          onOk() {
-              axios.axiosDelete("/yue-chip-upms-serve/upms/console/role/delete",{params:{id:id}},(data:any)=>{
-                if (data.status === 200 ) {
-                    message.info(data.message);
-                    search();
-                }
-              },null,null);
-          },
-          onCancel() {
-          },
-      });
+    Modal.confirm({
+      title: '是否要删除该数据?(错误的操作会带来灾难性的后果)',
+      // content: '',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        axios.axiosDelete("/yue-chip-upms-serve/upms/console/role/delete",{params:{id:id}},(data:any)=>{
+          if (data.status === 200 ) {
+            message.info(data.message);
+            search();
+          }
+        },null,null);
+      },
+      onCancel() {
+      },
+    });
   }
 
 

@@ -5,6 +5,8 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -27,7 +29,10 @@ public interface UserMapper {
 
     public UserPo toUserPo(User user);
 
+    @Mappings({@Mapping(target = "password",source = "passwordI")})
     public UserPo toUserPo(UserAddOrUpdateDto userAddOrUpdateDto);
 
     public User toUser(UserAddOrUpdateDto userAddOrUpdateDto);
+
+    public UserVo toUserVo(User user);
 }
