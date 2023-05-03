@@ -30,6 +30,9 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.annotation.Resource;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -71,6 +74,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    @Cacheable(value = User.CACHE_KEY,key = "#id")
     public Optional<User> findUserById(Long id) {
         Optional<UserPo> optional = userDao.findFirstById(id);
         if (optional.isPresent()){
@@ -272,17 +276,20 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+//    @CachePut(value = User.CACHE_KEY,key = "#userPo.id")
     public User saveUser(UserPo userPo) {
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);
     }
 
     @Override
+    @CacheEvict(value = User.CACHE_KEY, key = "#userPo.id")
     public void updateUser(UserPo userPo) {
         userDao.update(userPo);
     }
 
     @Override
+    @CacheEvict(value = User.CACHE_KEY, key = "#id")
     public void deleteUser(Long id) {
         userDao.deleteById(id);
     }

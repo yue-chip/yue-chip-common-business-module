@@ -18,6 +18,8 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true,value = {"password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId","isDelete"})
 public class UserDefinition extends BaseDefinition {
 
+    public static final String CACHE_KEY = "user";
+
     @Schema(description = "密码")
     private String password;
 
