@@ -265,7 +265,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     }
 
-    @PostMapping("/user/update")
+    @PutMapping("/user/update")
     @Operation(description = "修改用户",summary = "修改用户")
     public IResultData updateUser(@RequestBody @Validated({Validator.Update.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
         upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));

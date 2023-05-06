@@ -27,7 +27,7 @@
                   <template #icon><PlusOutlined /></template>
                   添加
                 </a-button>
-                <a-button type="danger" @click="">
+                <a-button type="danger" @click="del(selectedRowKeys)">
                   <template #icon><DeleteOutlined /></template>
                   删除
                 </a-button>
@@ -39,7 +39,7 @@
     </a-card>
 
     <a-card>
-      <a-table rowKey="id" :columns="columns" :data-source="dataList" :pagination="pagination" :loading="loading" :scroll="{ y: 440 }" >
+      <a-table rowKey="id" :row-selection="rowSelection" :columns="columns" :data-source="dataList" :pagination="pagination" :loading="loading" :scroll="{ y: 440 }" >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.key === 'operation'">
             <a-space :size="5">
@@ -64,7 +64,7 @@
   import {useRouter} from 'vue-router'
   import { SearchOutlined,PlusOutlined,DeleteOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-  import {message,Card,Modal,Select,Form,Col,FormItem,Input,Space,Button} from "ant-design-vue";
+  import {message,Card,Modal,Select,Form,Col,FormItem,Input,Space,Button,TableProps} from "ant-design-vue";
   import qs from "qs";
   import "ant-design-vue/es/message/style/index.css"
   import "ant-design-vue/es/modal/style/index.css"
@@ -72,6 +72,7 @@
   const router=useRouter();
   let loading = ref(false);
   let searchModel = ref({pageSize:10,pageNumber:1});
+  let selectedRowKeys:string[] = [];
   const columns = [
     {
       title: '姓名',
@@ -103,6 +104,15 @@
     search();
   });
 
+  const rowSelection: TableProps['rowSelection'] = {
+    onChange: (_selectedRowKeys: string[], _selectedRows: any[]) => {
+      selectedRowKeys = _selectedRowKeys;
+    },
+    getCheckboxProps: (record: any) => ({
+      disabled: record.username === 'admin'
+    }),
+  };
+
   function search(){
     loading.value=true;
     axios.axiosGet("/yue-chip-upms-serve/upms/console/user/list",{params:searchModel.value},(data:any)=>{
@@ -122,7 +132,13 @@
     router.push({ path: '/addOrUpdate', query: { id: id }});
   }
 
+
+
   function del(id:string){
+    if (!id || id.length === 0) {
+      message.error("请选择要删除的数据！")
+      return;
+    }
     Modal.confirm({
       title: '是否要删除该数据?',
       // content: '',

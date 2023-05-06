@@ -74,7 +74,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    @Cacheable(value = User.CACHE_KEY,key = "#id")
     public Optional<User> findUserById(Long id) {
         Optional<UserPo> optional = userDao.findFirstById(id);
         if (optional.isPresent()){

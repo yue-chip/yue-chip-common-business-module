@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=true)
 public class UserAddOrUpdateDto extends UserDefinition {
 
-    @NotBlank(message = "密码不能为空",groups = {Validator.Update.class,Validator.Insert.class})
+    @NotBlank(message = "密码不能为空",groups = {Validator.Insert.class})
     @Schema(description = "密码")
     private String passwordI;
 

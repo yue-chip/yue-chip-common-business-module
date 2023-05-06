@@ -1,7 +1,9 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.core.persistence.curd.BaseDao;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.Optional;
 
@@ -17,5 +19,6 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @param id
      * @return
      */
+    @Cacheable(value = User.CACHE_KEY,key = "#id")
     public Optional<UserPo> findFirstById(Long id);
 }

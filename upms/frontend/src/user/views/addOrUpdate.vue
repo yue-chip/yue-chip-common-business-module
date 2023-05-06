@@ -2,7 +2,7 @@
   <a-card class="card" :bordered="false">
     <a-form ref="from" :rules="rules" :model="addOrUpdateModel" layout="horizontal" :label-col="{ span:4,offset:0 }" :wrapper-col="{ span: 16,offset:0 }" >
       <a-form-item label="账号" name="username" ref="username" >
-        <a-input placeholder="请输入账号" v-model:value="addOrUpdateModel.username" />
+        <a-input placeholder="请输入账号" v-bind:disabled="usernameDisabled" v-model:value="addOrUpdateModel.username" />
       </a-form-item>
       <a-form-item  label="密码" name="pass" ref="pass" >
         <a-input-password v-bind:disabled="passwordDisabled" v-model:value="addOrUpdateModel.pass" />
@@ -50,6 +50,7 @@
   let backDisabled = ref(false);
   let addOrUpdateModel = ref({});
   let passwordDisabled = ref(false);
+  let usernameDisabled = ref(false);
   import {Md5} from 'ts-md5';
   const rules:any={
     username:[{required:true,message:"请输入账号",trigger:'blur'}],
@@ -60,7 +61,10 @@
   onMounted(() => {
     const id = route.query.id;
     if (id) {
+      rules.pass[0].required=false;
+      rules.username[0].required=false;
       passwordDisabled.value=true;
+      usernameDisabled.value=true;
       getInfo(id);
     }
   });
