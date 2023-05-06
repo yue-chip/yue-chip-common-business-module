@@ -22,4 +22,3 @@ mavenSnapshots=http://192.168.8.213:32129/repository/maven-snapshots/
 mavenUsername=admin
 mavenPassword=
 ```
-```
