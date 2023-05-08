@@ -62,7 +62,7 @@
     const id = route.query.id;
     if (id) {
       rules.pass[0].required=false;
-      rules.username[0].required=false;
+      // rules.username[0].required=false;
       passwordDisabled.value=true;
       usernameDisabled.value=true;
       getInfo(id);
