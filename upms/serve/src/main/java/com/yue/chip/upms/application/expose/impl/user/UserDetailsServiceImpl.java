@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,8 @@ import java.util.Optional;
  * @author Mr.Liu
  * @date 2023/2/16 下午1:50
  */
-@DubboService(interfaceClass = UserDetailsService.class)
+//@DubboService(interfaceClass = UserDetailsService.class)
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource

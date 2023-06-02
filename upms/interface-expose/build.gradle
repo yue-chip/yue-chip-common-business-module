@@ -4,4 +4,5 @@ apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
     api platform(project(':dependencies'))
     api 'yue.chip:yue-chip-interface-expose-starter'
+    implementation 'jakarta.platform:jakarta.jakartaee-api'
 }

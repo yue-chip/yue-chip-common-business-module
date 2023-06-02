@@ -18,7 +18,7 @@ import java.util.UUID;
  * @author Mr.Liu
  * @date 2023/3/17 下午1:54
  */
-@DubboService
+@DubboService(validation = "true")
 @Log
 public class TestExposeImpl implements TestExpose {
 

@@ -37,8 +37,12 @@ bootJar {
 dependencies {
     api project(':common')
     api project(':interface-expose')
+    api project(':authentication')
     api 'yue.chip:yue-chip-serve-starter'
     api 'yue.chip:yue-chip-business-starter'
+    api 'yue.chip:yue-chip-business-starter'
+    api 'yue.chip:yue-chip-security'
+//    api "yue.chip:yue-chip-oauth2-resource-serve"
     implementation 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -49,8 +53,3 @@ dependencies {
     testCompileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 }
 
-configurations.all() {
-    resolutionStrategy.force "org.antlr:antlr4-runtime:4.11.1"
-    resolutionStrategy.force "org.antlr:antlr4-tool:4.11.1"
-//    resolutionStrategy.force "org.mariadb.jdbc:mariadb-java-client:2.7.8"
-}

@@ -42,7 +42,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Resource
     private UpmsRepository upmsRepository;
 
-    @DubboReference
+    @DubboReference(validation = "true")
     private TestExpose testExpose;
 
     @Resource
@@ -137,12 +137,12 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Tags({@Tag(key = "name",value = "arg[0]"),@Tag(key = "UserDefinition",value = "returnedObj")})
     @GlobalTransactional
     public UserDefinition test(String name) {
-        RoleAddDto roleAddDto = RoleAddDto.builder()
-                .name(UUID.randomUUID().toString())
-                .code(UUID.randomUUID().toString())
-                .build();
-        upmsRepository.saveRole(roleAddDto);
-        testExpose.test("test code");
+//        RoleAddDto roleAddDto = RoleAddDto.builder()
+//                .name(UUID.randomUUID().toString())
+//                .code(UUID.randomUUID().toString())
+//                .build();
+//        upmsRepository.saveRole(roleAddDto);
+        testExpose.test("");
         return UserDefinition.builder().name("张三").build();
     }
 

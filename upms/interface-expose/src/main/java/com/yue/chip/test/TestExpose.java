@@ -1,5 +1,7 @@
 package com.yue.chip.test;
 
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.Map;
 
 /**
@@ -7,5 +9,5 @@ import java.util.Map;
  * @date 2023/3/17 下午1:53
  */
 public interface TestExpose {
-    public Map<String,String> test(String code);
+    public Map<String,String> test(@NotBlank(message = "编码不能为空") String code);
 }
