@@ -32,7 +32,7 @@ public class CurrentUserExposeImpl implements ICurrentUser<User> {
             User user = optional.get();
             Map<String, Object> map = new HashMap<>();
             map.put("id",user.getId());
-            map.put("tenantId",user.getTenantId());
+//            map.put("tenantId",user.getTenantId());
             return map;
         }
         return null;

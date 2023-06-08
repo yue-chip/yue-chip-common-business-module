@@ -1,59 +1,55 @@
 package com.yue.chip.authentication;
 
+import com.yue.chip.security.properties.AuthorizationIgnoreProperties;
+import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
+import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
+import org.springframework.util.StringUtils;
+import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * @author Mr.Liu
- * @date 2023/6/2 下午3:41
+ * @date 2023/6/8 上午9:42
  */
-public class YueChipAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-
-    private static final String USERNAME = "username";
-
-    private static final String PASSWORD = "password";
-
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/yuechip/login", "POST");
-
-    public YueChipAuthenticationFilter() {
-        super(DEFAULT_ANT_PATH_REQUEST_MATCHER);
-    }
-
-    protected YueChipAuthenticationFilter(String defaultFilterProcessesUrl) {
-        super(defaultFilterProcessesUrl);
-    }
-
-    protected YueChipAuthenticationFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
-        super(requiresAuthenticationRequestMatcher);
-    }
-
-    protected YueChipAuthenticationFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager) {
-        super(defaultFilterProcessesUrl, authenticationManager);
-    }
-
-    protected YueChipAuthenticationFilter(RequestMatcher requiresAuthenticationRequestMatcher, AuthenticationManager authenticationManager) {
-        super(requiresAuthenticationRequestMatcher, authenticationManager);
-    }
+public class YueChipAuthenticationFilter extends GenericFilterBean implements InitializingBean {
+    private AuthorizationIgnoreProperties authorizationIgnoreProperties;
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        if (!request.getMethod().equals("POST")) {
-            throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        String url = request.getRequestURI();
+        String token = request.getHeader("token");
+        String username = "";
+        if (StringUtils.hasText(token)) {
+            username = YueChipRedisTokenStoreUtil.getUsername(token);
         }
-        String username = request.getParameter(USERNAME);
-        String password = request.getParameter(PASSWORD);
-        YueChipAuthenticationToken authRequest = new YueChipAuthenticationToken(username, password);
-        authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
-        return this.getAuthenticationManager().authenticate(authRequest);
+        if (StringUtils.hasText(username) || !authorizationIgnoreProperties.getIgnoreUrl().contains(url)) {
+            YueChipAuthenticationToken yueChipAuthenticationToken = new YueChipAuthenticationToken(username);
+            SecurityContextHolder.getContext().setAuthentication(yueChipAuthenticationToken);
+            YueChipRedisTokenStoreUtil.renewal(username,null,token);
+        }
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    public void setAuthorizationIgnoreProperties(AuthorizationIgnoreProperties authorizationIgnoreProperties) {
+        this.authorizationIgnoreProperties = authorizationIgnoreProperties;
     }
 }

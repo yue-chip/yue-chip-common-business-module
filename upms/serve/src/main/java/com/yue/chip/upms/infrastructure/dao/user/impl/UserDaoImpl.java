@@ -43,8 +43,8 @@ public class UserDaoImpl implements UserDaoEx {
                                 .id(rs.getLong("id"))
                                 .name(rs.getString("name"))
                                 .password(rs.getString("password"))
-                                .version(rs.getLong("version"))
-                                .tenantId(rs.getLong("tenant_id"))
+//                                .version(rs.getLong("version"))
+//                                .tenantId(rs.getLong("tenant_id"))
                                 .build();
                         return userPo;
                     }

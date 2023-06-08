@@ -3,14 +3,22 @@ package com.yue.chip.upms.interfaces.facade.console.upms;
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
+import com.yue.chip.core.controller.BaseController;
+import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.extern.java.Log;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Mr.Liu
@@ -21,16 +29,27 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "")
 @Log
-public class TestController {
+public class TestController extends BaseControllerImpl implements BaseController {
 
     @Resource
     private UpmsApplication upmsApplication;
 
     @GetMapping("/test")
-    @AuthorizationIgnore
+    @PreAuthorize("@aps.hasPermission('test111')")
+//    @AuthorizationIgnore
     public IResultData test(String name){
         log.info("test");
         upmsApplication.test("刘方");
         return ResultData.builder().build();
+    }
+
+    @PostMapping(value = "/dfd")
+    @AuthorizationIgnore
+    @PreAuthorize("@aps.hasPermission('test')")
+    public IResultData<String> dfd(String username,
+                                     String password) {
+
+        Map<String,String> map = new HashMap<>();
+        return ResultData.builder().data(map).build();
     }
 }

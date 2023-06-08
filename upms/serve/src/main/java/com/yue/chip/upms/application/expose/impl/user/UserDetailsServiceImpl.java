@@ -24,7 +24,7 @@ import java.util.Optional;
  * @author Mr.Liu
  * @date 2023/2/16 下午1:50
  */
-//@DubboService(interfaceClass = UserDetailsService.class)
+@DubboService(interfaceClass = UserDetailsService.class)
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -40,9 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return null;
         }
         User user = optional.get();
-        YueChipUserDetails userDetails = new YueChipUserDetails(user.getUsername(),user.getPassword(),getUserGrantedAuthority(user.getRoles()));
-        redisTemplate.opsForValue().set(CurrentUserUtil.TENANT_ID + username,user.getTenantId());
-        redisTemplate.opsForValue().set(CurrentUserUtil.USER_ID + username,user.getId());
+        YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),getUserGrantedAuthority(user.getRoles()));
         return userDetails;
     }
     /**

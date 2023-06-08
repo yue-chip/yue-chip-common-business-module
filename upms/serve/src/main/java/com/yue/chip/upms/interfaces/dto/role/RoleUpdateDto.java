@@ -28,10 +28,10 @@ public class RoleUpdateDto extends RoleAUDto{
         return super.getId();
     }
 
-    @Schema(description = "版本号" ,requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message="版本号不能为空")
-    @Override
-    public Long getVersion() {
-        return super.getVersion();
-    }
+//    @Schema(description = "版本号" ,requiredMode = Schema.RequiredMode.REQUIRED)
+//    @NotNull(message="版本号不能为空")
+//    @Override
+//    public Long getVersion() {
+//        return super.getVersion();
+//    }
 }

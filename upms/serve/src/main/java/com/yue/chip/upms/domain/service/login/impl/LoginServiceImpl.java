@@ -1,12 +1,16 @@
 package com.yue.chip.upms.domain.service.login.impl;
 
 import com.yue.chip.exception.BusinessException;
+import com.yue.chip.security.YueChipSimpleGrantedAuthority;
+import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,17 +32,29 @@ public class LoginServiceImpl implements LoginService {
     @Resource
     private UpmsRepository upmsRepository;
 
+//    @Resource
+//    private AuthenticationManager authenticationManager;
+
     @Override
     public String login(String username, String password) {
-//        Optional<User> optional = upmsRepository.findUserByUsername(username);
-//        if (optional.isEmpty()) {
-//            BusinessException.throwException("改账号不存在");
-//        }
-//        HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
-//        List<GrantedAuthority> authoritiesList = AuthorityUtils.createAuthorityList(authorities.toArray(new String[]{}));
-//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password, authoritiesList);
-//        SecurityContextHolder.getContext().setAuthentication(token);
+        Optional<User> optional = upmsRepository.findUserByUsername(username);
+        if (optional.isEmpty()) {
+            BusinessException.throwException("该账号不存在");
+        }
+        User user = optional.get();
+        HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
+        List<Resources> resourcesList = user.getResources();
+        List<GrantedAuthority> authoritiesList = AuthorityUtils.createAuthorityList();
+        resourcesList.forEach(resources -> {
+            YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
+            grantedAuthority.setAuthority(resources.getCode());
+            authoritiesList.add(grantedAuthority);
+        });
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password, authoritiesList);
+        SecurityContextHolder.getContext().setAuthentication(token);
 //        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-        return null;
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword());
+//        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+        return token.toString();
     }
 }

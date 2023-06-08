@@ -4,11 +4,14 @@ import com.yue.chip.core.ResultData;
 import com.yue.chip.core.common.enums.ResultDataState;
 import com.yue.chip.security.AbstractSecurityConfig;
 import com.yue.chip.security.AuthorizationIgnoreConfiguration;
+import com.yue.chip.security.properties.AuthorizationIgnoreProperties;
 import jakarta.annotation.Resource;
+import jakarta.servlet.Filter;
 import jakarta.servlet.Servlet;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -19,15 +22,20 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Mr.Liu
@@ -49,25 +57,44 @@ public class YueChipAuthenticationSecurityConfig extends AbstractSecurityConfig 
     @Resource
     private UserDetailsService userDetailsService;
 
+    @Resource
+    private PasswordEncoder passwordEncoder;
+
+    @Resource
+    private AuthorizationIgnoreProperties authorizationIgnoreProperties;
+
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http = security(http);
-        YueChipAuthenticationFilter yueChipAuthenticationFilter = new YueChipAuthenticationFilter();
-        yueChipAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
-        yueChipAuthenticationFilter.setAuthenticationSuccessHandler((request, response, authentication) -> {
-            ResultData resultData = ResultData.builder().data(authentication).build();
+        YueChipAuthenticationProvider yueChipAuthenticationProvider = new YueChipAuthenticationProvider();
+        yueChipAuthenticationProvider.setUserDetailsService(userDetailsService);
+        yueChipAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        YueChipUserPasswordFilter yueChipUserPasswordFilter = new YueChipUserPasswordFilter();
+        yueChipUserPasswordFilter.setAuthenticationSuccessHandler((request, response, authentication) -> {
+            YueChipAuthenticationToken yueChipAuthenticationToken = (YueChipAuthenticationToken) authentication;
+            Map<String,String> map = new HashMap<>();
+            map.put("token",yueChipAuthenticationToken.getToken());
+            ResultData resultData = ResultData.builder().data(map).build();
             responseWrite(response,resultData);
         });
-        yueChipAuthenticationFilter.setAuthenticationFailureHandler((request, response, exception) -> {
+        yueChipUserPasswordFilter.setAuthenticationFailureHandler((request, response, exception) -> {
             ResultData resultData = ResultData.builder().status(ResultDataState.LOGIN_FAIL.getKey()).message(exception.getMessage()).build();
             responseWrite(response,resultData);
         });
-        YueChipAuthenticationProvider yueChipAuthenticationProvider = new YueChipAuthenticationProvider();
-        yueChipAuthenticationProvider.setUserDetailsService(userDetailsService);
-        http.authenticationProvider(yueChipAuthenticationProvider)
-                .addFilterBefore(yueChipAuthenticationFilter, BasicAuthenticationFilter.class);
+        YueChipAuthenticationFilter yueChipAuthenticationFilter = new YueChipAuthenticationFilter();
+        yueChipAuthenticationFilter.setAuthorizationIgnoreProperties(authorizationIgnoreProperties);
+        http.authenticationProvider(yueChipAuthenticationProvider).addFilterBefore(yueChipAuthenticationFilter, AuthorizationFilter.class)
+                .addFilterBefore(yueChipUserPasswordFilter,AnonymousAuthenticationFilter.class);
         SecurityFilterChain securityFilterChain = http.build();
+        AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
+//        AuthorizationFilter
+        List<Filter> filterList = securityFilterChain.getFilters();
+        for (Filter filter : filterList) {
+            if (filter instanceof YueChipUserPasswordFilter) {
+                ((YueChipUserPasswordFilter) filter).setAuthenticationManager(authenticationManager);
+            }
+        }
         return securityFilterChain;
     }
 

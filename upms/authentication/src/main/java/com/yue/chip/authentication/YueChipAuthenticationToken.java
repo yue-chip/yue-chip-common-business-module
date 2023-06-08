@@ -1,16 +1,17 @@
 package com.yue.chip.authentication;
 
+import com.yue.chip.security.YueChipUserDetails;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 /**
  * @author Mr.Liu
  * @date 2023/6/2 下午3:22
  */
-
 public class YueChipAuthenticationToken extends AbstractAuthenticationToken {
 
     /**
@@ -23,12 +24,20 @@ public class YueChipAuthenticationToken extends AbstractAuthenticationToken {
      */
     private Object credentials;
 
+    private String token = UUID.randomUUID().toString();
+
     public YueChipAuthenticationToken(Object principal, Object credentials) {
         super(Collections.EMPTY_LIST);
         this.principal = principal;
         this.credentials = credentials;
         setAuthenticated(false);
     }
+    public YueChipAuthenticationToken(Object principal) {
+        super(Collections.EMPTY_LIST);
+        this.credentials = principal;
+        setAuthenticated(true);
+    }
+
     public YueChipAuthenticationToken(Object principal,Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
@@ -42,5 +51,9 @@ public class YueChipAuthenticationToken extends AbstractAuthenticationToken {
     @Override
     public Object getPrincipal() {
         return this.credentials;
+    }
+
+    public String getToken() {
+        return token;
     }
 }
