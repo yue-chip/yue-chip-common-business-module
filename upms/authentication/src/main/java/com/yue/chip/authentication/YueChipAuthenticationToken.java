@@ -1,6 +1,5 @@
 package com.yue.chip.authentication;
 
-import com.yue.chip.security.YueChipUserDetails;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 

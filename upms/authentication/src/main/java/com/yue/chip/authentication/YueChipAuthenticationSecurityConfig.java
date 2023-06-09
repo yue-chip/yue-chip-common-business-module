@@ -11,7 +11,6 @@ import jakarta.servlet.Servlet;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -22,7 +21,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -84,11 +82,11 @@ public class YueChipAuthenticationSecurityConfig extends AbstractSecurityConfig 
         });
         YueChipAuthenticationFilter yueChipAuthenticationFilter = new YueChipAuthenticationFilter();
         yueChipAuthenticationFilter.setAuthorizationIgnoreProperties(authorizationIgnoreProperties);
-        http.authenticationProvider(yueChipAuthenticationProvider).addFilterBefore(yueChipAuthenticationFilter, AuthorizationFilter.class)
+        http.authenticationProvider(yueChipAuthenticationProvider)
+                .addFilterBefore(yueChipAuthenticationFilter, AuthorizationFilter.class)
                 .addFilterBefore(yueChipUserPasswordFilter,AnonymousAuthenticationFilter.class);
         SecurityFilterChain securityFilterChain = http.build();
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-//        AuthorizationFilter
         List<Filter> filterList = securityFilterChain.getFilters();
         for (Filter filter : filterList) {
             if (filter instanceof YueChipUserPasswordFilter) {
