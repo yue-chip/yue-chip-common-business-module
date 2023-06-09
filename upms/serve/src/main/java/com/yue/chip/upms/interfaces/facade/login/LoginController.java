@@ -34,7 +34,7 @@ public class LoginController{
     @Resource
     private LoginService loginService;
 
-    @GetMapping("/login")
+    @RequestMapping("/login")
     @AuthorizationIgnore
     @Operation(summary = "登录", description = "登录")
     public IResultData<String> login(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username,
