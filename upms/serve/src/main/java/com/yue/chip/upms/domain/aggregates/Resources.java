@@ -1,8 +1,10 @@
 package com.yue.chip.upms.domain.aggregates;
 
+import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.utils.SpringContextUtil;
+import jakarta.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -22,16 +24,18 @@ import java.util.Optional;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
+@YueChipDDDEntity
 public class Resources extends ResourcesDefinition {
 
-    private  static volatile UpmsRepository upmsRepository;
+    @Resource
+    private  static UpmsRepository upmsRepository;
 
     /**
      * 判断编码是否存在
      * @return
      */
     public Boolean checkCodeIsExist() {
-        Optional<Resources> optional =  getRepository().findResourcesByCode(getCode());
+        Optional<Resources> optional =  upmsRepository.findResourcesByCode(getCode());
         if (optional.isPresent()) {
             return checkIsExist(optional.get(), getId());
         }
@@ -43,7 +47,7 @@ public class Resources extends ResourcesDefinition {
      * @return
      */
     public Boolean checkNameIsExist() {
-        Optional<Resources> optional =  getRepository().findResourcesByNameAndParentId(getName(),getParentId());
+        Optional<Resources> optional =  upmsRepository.findResourcesByNameAndParentId(getName(),getParentId());
         if (optional.isPresent()) {
             return checkIsExist(optional.get(), getId());
         }
@@ -55,7 +59,7 @@ public class Resources extends ResourcesDefinition {
      * @return
      */
     public Boolean checkUrlIsExist() {
-        Optional<Resources> optional =  getRepository().findResourcesByUrl(getUrl());
+        Optional<Resources> optional =  upmsRepository.findResourcesByUrl(getUrl());
         if (optional.isPresent()) {
             return checkIsExist(optional.get(), getId());
         }
@@ -63,11 +67,11 @@ public class Resources extends ResourcesDefinition {
     }
 
     public Optional<Resources> getParent() {
-        return getRepository().findResourcesById(getParentId());
+        return upmsRepository.findResourcesById(getParentId());
     }
 
     public List<Resources> getChildren() {
-        return getRepository().findResourcesByParentId(getId());
+        return upmsRepository.findResourcesByParentId(getId());
     }
 
     public List<Resources> getAllChildren() {
@@ -93,14 +97,4 @@ public class Resources extends ResourcesDefinition {
         return true;
     }
 
-    private UpmsRepository getRepository() {
-        if (Objects.isNull(upmsRepository)) {
-            synchronized (this) {
-                if (Objects.isNull(upmsRepository)) {
-                    upmsRepository = (UpmsRepository) SpringContextUtil.getBean(UpmsRepository.class);
-                }
-            }
-        }
-        return upmsRepository;
-    }
 }

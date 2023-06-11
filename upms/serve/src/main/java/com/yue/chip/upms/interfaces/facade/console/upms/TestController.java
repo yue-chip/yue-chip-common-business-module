@@ -35,7 +35,7 @@ public class TestController extends BaseControllerImpl implements BaseController
     private UpmsApplication upmsApplication;
 
     @GetMapping("/test")
-    @PreAuthorize("@aps.hasPermission('test111')")
+    @PreAuthorize("@aps.hasPermission('ADD')")
 //    @AuthorizationIgnore
     public IResultData test(String name){
         log.info("test");

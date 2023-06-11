@@ -1,5 +1,6 @@
 package com.yue.chip.upms.domain.aggregates;
 
+import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
@@ -7,6 +8,7 @@ import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.utils.SpringContextUtil;
+import jakarta.annotation.Resource;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,9 +29,11 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
+@YueChipDDDEntity
 public class User extends UserDefinition {
 
-    private  static volatile UpmsRepository upmsRepository;
+    @Resource
+    private  static UpmsRepository upmsRepository;
 
     @Builder.Default
     private RoleMapper roleMapper = RoleMapper.INSTANCE;
@@ -43,7 +47,7 @@ public class User extends UserDefinition {
     private List<Role> roles;
 
     public Boolean checkUsernameIsExist() {
-        Optional<User> optional = getRepository().findUserByUsername(getUsername());
+        Optional<User> optional = upmsRepository.findUserByUsername(getUsername());
         return optional.isPresent();
     }
 
@@ -51,7 +55,7 @@ public class User extends UserDefinition {
         if (Objects.nonNull(this.roles)) {
             return this.roles;
         }
-        List<Role> list = getRepository().findRoleByUserId(getId());
+        List<Role> list = upmsRepository.findRoleByUserId(getId());
         return list;
     }
 
@@ -74,20 +78,8 @@ public class User extends UserDefinition {
      * @return
      */
     public List<ResourcesTreeListVo> getResourcesTree() {
-        List<ResourcesTreeListVo> list = getRepository().findResourcesToTreeList(getId(),0L, Scope.CONSOLE);
+        List<ResourcesTreeListVo> list = upmsRepository.findResourcesToTreeList(getId(),0L, Scope.CONSOLE);
         return list;
-    }
-
-
-    private UpmsRepository getRepository() {
-        if (Objects.isNull(upmsRepository)) {
-            synchronized (this) {
-                if (Objects.isNull(upmsRepository)) {
-                    upmsRepository = (UpmsRepository) SpringContextUtil.getBean(UpmsRepository.class);
-                }
-            }
-        }
-        return upmsRepository;
     }
 
 }

@@ -80,19 +80,11 @@ public class YueChipAuthenticationSecurityConfig extends AbstractSecurityConfig 
             ResultData resultData = ResultData.builder().status(ResultDataState.LOGIN_FAIL.getKey()).message(exception.getMessage()).build();
             responseWrite(response,resultData);
         });
-        YueChipAuthenticationFilter yueChipAuthenticationFilter = new YueChipAuthenticationFilter();
-        yueChipAuthenticationFilter.setAuthorizationIgnoreProperties(authorizationIgnoreProperties);
         http.authenticationProvider(yueChipAuthenticationProvider)
-                .addFilterBefore(yueChipAuthenticationFilter, AuthorizationFilter.class)
                 .addFilterBefore(yueChipUserPasswordFilter,AnonymousAuthenticationFilter.class);
         SecurityFilterChain securityFilterChain = http.build();
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-        List<Filter> filterList = securityFilterChain.getFilters();
-        for (Filter filter : filterList) {
-            if (filter instanceof YueChipUserPasswordFilter) {
-                ((YueChipUserPasswordFilter) filter).setAuthenticationManager(authenticationManager);
-            }
-        }
+        yueChipUserPasswordFilter.setAuthenticationManager(authenticationManager);
         return securityFilterChain;
     }
 

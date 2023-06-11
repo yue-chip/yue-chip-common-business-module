@@ -1,9 +1,11 @@
 package com.yue.chip.upms.domain.aggregates;
 
+import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.role.RoleDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.utils.SpringContextUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,9 +26,11 @@ import java.util.concurrent.atomic.AtomicReference;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
+@YueChipDDDEntity
 public class Role extends RoleDefinition {
 
-    private  static volatile UpmsRepository upmsRepository;
+    @Resource
+    private  static UpmsRepository upmsRepository;
 
     /**
      *  资源
@@ -37,7 +41,7 @@ public class Role extends RoleDefinition {
         if (Objects.nonNull(this.resources)) {
             return this.resources;
         }
-        List<Resources> list = getRepository().findResourcesByRoleId(getId());
+        List<Resources> list = upmsRepository.findResourcesByRoleId(getId());
         return list;
     }
 
@@ -59,7 +63,7 @@ public class Role extends RoleDefinition {
      * @return
      */
     public List<Long> getResourcesIdForFront(){
-        List<Resources> list = getRepository().findResourcesByRoleId(getId());
+        List<Resources> list = upmsRepository.findResourcesByRoleId(getId());
         List<Long> returnList = new ArrayList<>();
         list.forEach(resources -> {
             List<Resources> allChildren = resources.getAllChildren();
@@ -82,7 +86,7 @@ public class Role extends RoleDefinition {
      * @return
      */
     public List<User> getUser() {
-        List<User> list = getRepository().findUserByRoleId(getId());
+        List<User> list = upmsRepository.findUserByRoleId(getId());
         return list;
     }
 
@@ -100,7 +104,7 @@ public class Role extends RoleDefinition {
     }
 
     public Boolean checkNameIsExist() {
-        Optional<Role> optional = getRepository().findRoleByName(getName());
+        Optional<Role> optional = upmsRepository.findRoleByName(getName());
         if (optional.isPresent()) {
             if (Objects.nonNull(getId()) && optional.get().getId().equals(getId())){
                 return false;
@@ -108,16 +112,5 @@ public class Role extends RoleDefinition {
             return true;
         }
         return false;
-    }
-
-    private UpmsRepository getRepository() {
-        if (Objects.isNull(upmsRepository)) {
-            synchronized (this) {
-                if (Objects.isNull(upmsRepository)) {
-                    upmsRepository = (UpmsRepository) SpringContextUtil.getBean(UpmsRepository.class);
-                }
-            }
-        }
-        return upmsRepository;
     }
 }
