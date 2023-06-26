@@ -25,7 +25,7 @@ import java.util.Map;
  * @date 2023/5/25 上午11:43
  */
 @RestController()
-@RequestMapping("/upms")
+@RequestMapping()
 @Validated
 @Tag(name = "登录")
 @Log
@@ -34,7 +34,7 @@ public class LoginController{
     @Resource
     private LoginService loginService;
 
-    @RequestMapping("/login")
+    @RequestMapping("/login1")
     @AuthorizationIgnore
     @Operation(summary = "登录", description = "登录")
     public IResultData<String> login(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username,

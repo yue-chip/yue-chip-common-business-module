@@ -4,6 +4,7 @@ import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
+import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import org.apache.catalina.LifecycleState;
 
 import java.util.List;
@@ -50,6 +51,6 @@ public interface UpmsApplication {
      */
     public void deleteUser(List<Long> ids);
 
-    public UserDefinition test(String name);
+    public UserVo test(String name);
 
 }

@@ -42,8 +42,7 @@ public class ResourcesDefinition extends BaseDefinition {
     private Integer sort;
 
     @Schema(description = "状态")
-    @Builder.Default
-    private State state = State.NORMAL;
+    private State state;
 
     @Schema(description = "是否默认资源,默认资源不能删除")
     @Builder.Default

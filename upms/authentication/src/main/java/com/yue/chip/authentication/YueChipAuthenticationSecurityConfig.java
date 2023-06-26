@@ -4,9 +4,7 @@ import com.yue.chip.core.ResultData;
 import com.yue.chip.core.common.enums.ResultDataState;
 import com.yue.chip.security.AbstractSecurityConfig;
 import com.yue.chip.security.AuthorizationIgnoreConfiguration;
-import com.yue.chip.security.properties.AuthorizationIgnoreProperties;
 import jakarta.annotation.Resource;
-import jakarta.servlet.Filter;
 import jakarta.servlet.Servlet;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -27,21 +25,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
-
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author Mr.Liu
  * @date 2023/6/2 下午4:14
  */
-@Configuration(
-        proxyBeanMethods = true
-)
+@Configuration()
 @EnableWebSecurity
 @ConditionalOnClass({EnableWebSecurity.class, Servlet.class})
 @AutoConfigureAfter({AuthorizationIgnoreConfiguration.class})
@@ -57,9 +50,6 @@ public class YueChipAuthenticationSecurityConfig extends AbstractSecurityConfig 
 
     @Resource
     private PasswordEncoder passwordEncoder;
-
-    @Resource
-    private AuthorizationIgnoreProperties authorizationIgnoreProperties;
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)

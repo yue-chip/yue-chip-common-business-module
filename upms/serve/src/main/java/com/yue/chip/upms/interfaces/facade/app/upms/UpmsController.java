@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description UpmsController
  */
 @RestController("upmsAppController")
-@RequestMapping("/upms/app")
+@RequestMapping("/app")
 @Validated
 @Tag(name = "角色&用户&资源-app端后台")
 public class UpmsController extends BaseControllerImpl implements BaseController {

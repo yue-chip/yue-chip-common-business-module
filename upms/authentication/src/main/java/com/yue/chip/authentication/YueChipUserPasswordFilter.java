@@ -22,7 +22,7 @@ public class YueChipUserPasswordFilter extends AbstractAuthenticationProcessingF
 
     private static final String PASSWORD = "password";
 
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/yuechip/login");
+    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/login");
 
     public YueChipUserPasswordFilter() {
         super(DEFAULT_ANT_PATH_REQUEST_MATCHER);

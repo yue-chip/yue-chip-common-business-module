@@ -1,11 +1,9 @@
 package com.yue.chip.upms.infrastructure.po.role;
 
+import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.core.persistence.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * @author Mr.Liu
@@ -22,11 +21,9 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 @EqualsAndHashCode(callSuper=true)
 @Entity
 @Table(name = "t_role_resources",indexes = {@Index(columnList = "roleId"),@Index(columnList = "resourcesId") })
-@DynamicInsert
-@DynamicUpdate
-@SelectBeforeUpdate
 @Data
 @SuperBuilder
+@EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 public class RoleResourcesPo extends BaseEntity {
 
     /**
@@ -42,12 +39,10 @@ public class RoleResourcesPo extends BaseEntity {
     public RoleResourcesPo() {
     }
 
-    @Column( nullable = false)
     public Long getRoleId() {
         return roleId;
     }
 
-    @Column(nullable = false)
     public Long getResourcesId() {
         return resourcesId;
     }

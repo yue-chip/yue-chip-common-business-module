@@ -1,6 +1,7 @@
 package com.yue.chip.upms.application.expose.impl.test;
 
 import com.yue.chip.test.TestExpose;
+import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import jakarta.annotation.Resource;
@@ -18,7 +19,7 @@ import java.util.UUID;
  * @author Mr.Liu
  * @date 2023/3/17 下午1:54
  */
-@DubboService(validation = "true")
+@DubboService()
 @Log
 public class TestExposeImpl implements TestExpose {
 
@@ -38,5 +39,10 @@ public class TestExposeImpl implements TestExpose {
                 .build();
         upmsRepository.saveRole(roleAddDto);
         return map;
+    }
+
+    @Override
+    public UserDefinition test1(String code) {
+        return UserDefinition.builder().name("test").build();
     }
 }

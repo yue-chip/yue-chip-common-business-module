@@ -1,0 +1,37 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'application'
+}
+archivesBaseName = 'yue-chip-common-business-serve'
+apply plugin: 'org.springframework.boot'
+apply from: this.rootProject.file('javaLibrary.gradle')
+apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    testCompileOnly {
+        extendsFrom testAnnotationProcessor
+    }
+}
+mainClassName = 'com.yue.chip.common.business.ApplicationCommonBusinessServe'
+bootJar {
+    enabled true
+}
+dependencies {
+    api project(':common')
+    api project(':interface-expose')
+    api 'yue.chip:yue-chip-serve-starter'
+    api 'yue.chip:yue-chip-business-starter'
+    api 'yue.chip:yue-chip-security'
+//    api "yue.chip:yue-chip-oauth2-resource-serve"
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    testCompileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+}
+

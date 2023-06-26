@@ -13,6 +13,8 @@ import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.extern.java.Log;
+import org.apache.skywalking.apm.toolkit.trace.Tags;
+import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,19 +37,18 @@ public class TestController extends BaseControllerImpl implements BaseController
     private UpmsApplication upmsApplication;
 
     @GetMapping("/test")
-    @PreAuthorize("@aps.hasPermission('ADD')")
-//    @AuthorizationIgnore
+//    @PreAuthorize("@aps.hasPermission('ADD')")
+    @AuthorizationIgnore
     public IResultData test(String name){
         log.info("test");
         upmsApplication.test("刘方");
         return ResultData.builder().build();
     }
 
-    @PostMapping(value = "/dfd")
+    @PostMapping(value = "/test1")
     @AuthorizationIgnore
     @PreAuthorize("@aps.hasPermission('test')")
-    public IResultData<String> dfd(String username,
-                                     String password) {
+    public IResultData<String> dfd(String username,String password) {
 
         Map<String,String> map = new HashMap<>();
         return ResultData.builder().data(map).build();

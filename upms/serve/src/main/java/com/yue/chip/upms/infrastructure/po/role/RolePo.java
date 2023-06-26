@@ -1,6 +1,7 @@
 package com.yue.chip.upms.infrastructure.po.role;
 
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.role.RoleDefinition;
 import com.yue.chip.upms.enums.Scope;
 import jakarta.persistence.*;
@@ -12,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * @author Mr.Liu
@@ -20,30 +22,26 @@ import org.hibernate.annotations.SelectBeforeUpdate;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_role",indexes = {@Index(columnList = "code"),@Index(columnList = "name") })
-@DynamicInsert
-@DynamicUpdate
-@SelectBeforeUpdate
+@Table(name = "t_role",indexes = {@Index(columnList = "name") })
 @SuperBuilder
 @NoArgsConstructor
 @Data
+@EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 public class RolePo extends RoleDefinition {
 
     @Override
-    @Column(nullable = false)
     @Convert(converter = State.StateConverter.class)
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column(unique = true,nullable = false)
+    @Column(unique = true)
     public String getCode() {
         return super.getCode();
     }
 
     @Override
-    @Column(nullable = false)
     public String getName() {
         return super.getName();
     }
@@ -57,10 +55,5 @@ public class RolePo extends RoleDefinition {
     @Override
     public String getRemark() {
         return super.getRemark();
-    }
-
-    @Override
-    public void setCode(String code) {
-        super.setCode(code);
     }
 }

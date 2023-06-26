@@ -1,0 +1,4 @@
+apply from: this.rootProject.file('javaPlatform.gradle')
+apply from: this.rootProject.file('dependencies.gradle')
+archivesBaseName = 'yue-chip-common-business-dependencies'
+apply from: this.rootProject.file('javaPlatformMvnPublish.gradle')

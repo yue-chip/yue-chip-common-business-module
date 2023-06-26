@@ -1,0 +1,19 @@
+apply from: this.rootProject.file('javaPlatformMvnPublish.gradle')
+
+allprojects {
+    group = projectGroup
+    version = projectVersion
+    apply plugin: 'maven-publish'
+    repositories {
+        mavenLocal()
+        maven { allowInsecureProtocol true; url mavenRepository }
+        mavenCentral()
+    }
+}
+
+subprojects {
+    configurations.all() {
+        resolutionStrategy.force "org.antlr:antlr4-runtime:4.11.1"
+        resolutionStrategy.force "org.antlr:antlr4-tool:4.11.1"
+    }
+}

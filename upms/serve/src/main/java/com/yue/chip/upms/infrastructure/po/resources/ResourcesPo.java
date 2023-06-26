@@ -1,6 +1,7 @@
 package com.yue.chip.upms.infrastructure.po.resources;
 
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.enums.Type;
@@ -12,6 +13,8 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 /**
  * @author Mr.Liu
@@ -20,55 +23,49 @@ import org.hibernate.annotations.SelectBeforeUpdate;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_resources", indexes = {@Index(columnList = "parentId"),@Index(columnList = "code"),@Index(columnList = "name")})
-//@DynamicInsert
-//@DynamicUpdate
-//@SelectBeforeUpdate
+@Table(name = "t_resources", indexes = {@Index(columnList = "parentId"),@Index(columnList = "name")})
 @SuperBuilder
+@EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
+@Data
 public class ResourcesPo extends ResourcesDefinition {
 
+
     @Override
-    @Column(nullable = false)
     public Long getParentId() {
         return super.getParentId();
     }
 
     @Override
-    @Column(unique = true,nullable = false)
+    @Column(unique = true)
     public String getCode() {
         return super.getCode();
     }
 
     @Override
-    @Column(nullable = false)
     public String getName() {
         return super.getName();
     }
 
     @Override
-    @Column(nullable = false)
     @Convert(converter = Scope.ScopeConverter.class)
     public Scope getScope() {
         return super.getScope();
     }
 
     @Override
-    @Column(name = "type",nullable = false)
     @Convert(converter = Type.TypeConverter.class)
     public Type getType() {
         return super.getType();
     }
 
     @Override
-    @Column(name = "state",nullable = false)
     @Convert(converter = State.StateConverter.class)
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column(nullable = false)
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }

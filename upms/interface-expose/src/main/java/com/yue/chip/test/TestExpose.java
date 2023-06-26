@@ -1,5 +1,6 @@
 package com.yue.chip.test;
 
+import com.yue.chip.upms.definition.user.UserDefinition;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Map;
@@ -10,4 +11,6 @@ import java.util.Map;
  */
 public interface TestExpose {
     public Map<String,String> test(@NotBlank(message = "编码不能为空") String code);
+
+    public UserDefinition test1(String code);
 }

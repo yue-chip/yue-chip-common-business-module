@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true,value = {"password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId","isDelete"})
 public class UserDefinition extends BaseDefinition {
 
-    public static final String CACHE_KEY = "user";
+    public static final String CACHE_KEY = "user-";
 
     @Schema(description = "密码")
     private String password;
@@ -27,7 +27,7 @@ public class UserDefinition extends BaseDefinition {
     private  String username;
 
     @Schema(description = "姓名")
-    private  String name;
+    private String name;
 
     @Schema(description = "头像")
     private Long profilePhoto;

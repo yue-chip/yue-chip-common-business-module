@@ -11,9 +11,9 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
-import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
+import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * @author Mr.Liu
@@ -42,7 +41,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Resource
     private UpmsRepository upmsRepository;
 
-    @DubboReference(validation = "true")
+    @DubboReference()
     private TestExpose testExpose;
 
     @Resource
@@ -136,14 +135,14 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Trace
     @Tags({@Tag(key = "name",value = "arg[0]"),@Tag(key = "UserDefinition",value = "returnedObj")})
     @GlobalTransactional
-    public UserDefinition test(String name) {
+    public UserVo test(String name) {
 //        RoleAddDto roleAddDto = RoleAddDto.builder()
 //                .name(UUID.randomUUID().toString())
 //                .code(UUID.randomUUID().toString())
 //                .build();
 //        upmsRepository.saveRole(roleAddDto);
-        testExpose.test("");
-        return UserDefinition.builder().name("张三").build();
+        UserDefinition userDefinition = testExpose.test1("");
+        return UserVo.builder().name("张三").build();
     }
 
 

@@ -48,7 +48,7 @@ import java.util.Optional;
  * @date 2023/3/7 下午2:28
  */
 @RestController("upmsConsoleController")
-@RequestMapping("/upms/console")
+@RequestMapping("/console")
 @Validated
 @Tag(name = "角色&用户&资源-pc端后台")
 @Log

@@ -9,7 +9,7 @@ spring:
     host: 192.168.177.129:8848
     namespace: cbce5ffe-31d2-4826-99ab-384241f16917
   application:
-    name: yue-chip-upms-serve
+    name: upms
   cloud:
     nacos:
       config:
@@ -18,27 +18,27 @@ spring:
         namespace: ${spring.nacos.namespace}
         group: ${spring.nacos.group}
         extension-configs:
-          - data-id: yue-chip-common.${spring.cloud.nacos.config.file-extension}
+          - data-id: common.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: GLOBAL_GROUP
-          - data-id: yue-chip-datasource-common.${spring.cloud.nacos.config.file-extension}
+          - data-id: datasource.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: GLOBAL_GROUP
-          - data-id: yue-chip-jpa-common.${spring.cloud.nacos.config.file-extension}
+          - data-id: jpa.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: GLOBAL_GROUP
-          - data-id: yue-chip-oauth2-resource-serve-common.${spring.cloud.nacos.config.file-extension}
+          - data-id: oauth2-resource.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: GLOBAL_GROUP
-#          - data-id: yue-chip-sentinel-common.${spring.cloud.nacos.config.file-extension}
-#            refresh: true
-#            group: GLOBAL_GROUP
-          - data-id: yue-chip-dubbo-common.${spring.cloud.nacos.config.file-extension}
+          - data-id: sentinel.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: GLOBAL_GROUP
-          - data-id: yue-chip-seata-common.${spring.cloud.nacos.config.file-extension}
+          - data-id: dubbo.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: GLOBAL_GROUP
-          - data-id: yue-chip-redis-common.${spring.cloud.nacos.config.file-extension}
+          - data-id: seata.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: redis.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: GLOBAL_GROUP
