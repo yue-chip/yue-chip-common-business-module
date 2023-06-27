@@ -42,7 +42,7 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
-    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '姓名'")
+    @Column(name = "name", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '姓名'")
     public String getName() {
         return super.getName();
     }
@@ -54,6 +54,7 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
+    @Column(columnDefinition = "datetime NULL COMMENT '生日'")
     public LocalDate getBirthday() {
         return super.getBirthday();
     }

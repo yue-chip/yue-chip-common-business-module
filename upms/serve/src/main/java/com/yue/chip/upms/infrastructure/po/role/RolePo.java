@@ -33,6 +33,7 @@ public class RolePo extends RoleDefinition {
 
     @Override
     @Convert(converter = State.StateConverter.class)
+    @Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)'")
     public State getState() {
         return super.getState();
     }
@@ -44,13 +45,13 @@ public class RolePo extends RoleDefinition {
     }
 
     @Override
-    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '名称'")
+    @Column(name = "name", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '名称'")
     public String getName() {
         return super.getName();
     }
 
     @Override
-    @Column(nullable = false)
+    @Column(columnDefinition = "bit(1) NULL COMMENT '是否默认角色（0：否，1：是）默认角色不能删除'")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }

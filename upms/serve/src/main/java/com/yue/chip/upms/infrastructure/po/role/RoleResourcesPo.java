@@ -21,26 +21,26 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_role_resources",indexes = {@Index(columnList = "roleId"),@Index(columnList = "resourcesId") })
+@Table(name = "t_role_resources",indexes = {@Index(columnList = "role_id"),@Index(columnList = "resources_id") })
 @Data
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @Comment("角色-资源关联表")
 public class RoleResourcesPo extends BaseEntity {
 
-    @Column( columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id'")
     private Long roleId;
 
-    @Column( columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '菜单资源id'")
     private Long resourcesId;
 
     public RoleResourcesPo() {
     }
 
+    @Column(name = "role_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id'")
     public Long getRoleId() {
         return roleId;
     }
 
+    @Column(name = "resources_id",  columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '菜单资源id'")
     public Long getResourcesId() {
         return resourcesId;
     }

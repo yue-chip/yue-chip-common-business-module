@@ -21,7 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_user_role",indexes = {@Index(columnList = "userId"),@Index(columnList = "roleId")})
+@Table(name = "t_user_role",indexes = {@Index(columnList = "user_id"),@Index(columnList = "role_id")})
 @SuperBuilder
 @NoArgsConstructor
 @Data
@@ -29,16 +29,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Comment("用户-角色关联表")
 public class UserRolePo extends BaseEntity {
 
-    @Column(columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '用户id'")
     private Long userId;
 
-    @Column(columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id'")
     private Long roleId;
 
+    @Column(name = "user_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '用户id'")
     public Long getUserId() {
         return this.userId;
     }
-
+    @Column(name = "role_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id'")
     public Long getRoleId() {
         return this.roleId;
     }

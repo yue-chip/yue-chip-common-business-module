@@ -33,16 +33,19 @@ public class ResourcesDefinition extends BaseDefinition {
     private String name;
 
     @Schema(description = "作用域")
-    private Scope scope;
+    @Builder.Default
+    private Scope scope = Scope.CONSOLE;
 
     @Schema(description = "类型")
-    private Type type;
+    @Builder.Default
+    private Type type = Type.CATALOG;
 
     @Schema(description = "排序")
     private Integer sort;
 
     @Schema(description = "状态")
-    private State state;
+    @Builder.Default
+    private State state = State.NORMAL;
 
     @Schema(description = "是否默认资源,默认资源不能删除")
     @Builder.Default
