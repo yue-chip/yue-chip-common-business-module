@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -25,25 +26,29 @@ import java.time.LocalDate;
 @SuperBuilder
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
+@Comment("用户")
 public class UserPo extends UserDefinition {
 
     @Override
+    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '密码'")
     public String getPassword() {
         return super.getPassword();
     }
 
     @Override
-    @Column(unique = true)
+    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '登录帐号'")
     public String getUsername() {
         return super.getUsername();
     }
 
     @Override
+    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '姓名'")
     public String getName() {
         return super.getName();
     }
 
     @Override
+    @Column(columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '头像id'")
     public Long getProfilePhoto() {
         return super.getProfilePhoto();
     }
@@ -54,21 +59,25 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
+    @Column(columnDefinition = "bit(1) NULL DEFAULT 0 COMMENT ''")
     public boolean isAccountNonExpired() {
         return super.isAccountNonExpired();
     }
 
     @Override
+    @Column(columnDefinition = "bit(1) NULL DEFAULT 0 COMMENT ''")
     public boolean isAccountNonLocked() {
         return super.isAccountNonLocked();
     }
 
     @Override
+    @Column(columnDefinition = "bit(1) NULL DEFAULT 0 COMMENT ''")
     public boolean isCredentialsNonExpired() {
         return super.isCredentialsNonExpired();
     }
 
     @Override
+    @Column(columnDefinition = "bit(1) NULL DEFAULT 1 COMMENT ''")
     public boolean isEnabled() {
         return super.isEnabled();
     }

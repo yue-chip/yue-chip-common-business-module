@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -24,16 +25,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Data
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
+@Comment("角色-资源关联表")
 public class RoleResourcesPo extends BaseEntity {
 
-    /**
-     * 角色id
-     */
+    @Column( columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id'")
     private Long roleId;
 
-    /**
-     * 资源id
-     */
+    @Column( columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '菜单资源id'")
     private Long resourcesId;
 
     public RoleResourcesPo() {

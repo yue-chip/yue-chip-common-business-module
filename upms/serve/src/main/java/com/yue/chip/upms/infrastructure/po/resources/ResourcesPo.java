@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -23,26 +24,28 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_resources", indexes = {@Index(columnList = "parentId"),@Index(columnList = "name")})
+@Table(name = "t_resources", indexes = {@Index(columnList = "parent_id"),@Index(columnList = "name")})
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
 @Data
+@Comment("菜单资源")
 public class ResourcesPo extends ResourcesDefinition {
 
-
     @Override
+    @Column(name = "parent_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '父节点id'")
     public Long getParentId() {
         return super.getParentId();
     }
 
     @Override
-    @Column(unique = true)
+    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '编码'")
     public String getCode() {
         return super.getCode();
     }
 
     @Override
+    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '名称'")
     public String getName() {
         return super.getName();
     }
@@ -66,21 +69,25 @@ public class ResourcesPo extends ResourcesDefinition {
     }
 
     @Override
+    @Column(columnDefinition = "bit(1) NULL DEFAULT 0 COMMENT '名称'")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }
 
     @Override
+    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT 'url'")
     public String getUrl() {
         return super.getUrl();
     }
 
     @Override
+    @Column(columnDefinition = "int NULL DEFAULT 0 COMMENT '排序'")
     public Integer getSort() {
         return super.getSort();
     }
 
     @Override
+    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '备注'")
     public String getRemark() {
         return super.getRemark();
     }

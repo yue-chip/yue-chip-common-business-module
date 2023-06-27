@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -27,6 +28,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @Data
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
+@Comment("角色")
 public class RolePo extends RoleDefinition {
 
     @Override
@@ -36,12 +38,13 @@ public class RolePo extends RoleDefinition {
     }
 
     @Override
-    @Column(unique = true)
+    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '编码'")
     public String getCode() {
         return super.getCode();
     }
 
     @Override
+    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '名称'")
     public String getName() {
         return super.getName();
     }
@@ -53,6 +56,7 @@ public class RolePo extends RoleDefinition {
     }
 
     @Override
+    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '备注'")
     public String getRemark() {
         return super.getRemark();
     }

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -25,16 +26,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @Data
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
+@Comment("用户-角色关联表")
 public class UserRolePo extends BaseEntity {
 
-    /**
-     * 用户id
-     */
+    @Column(columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '用户id'")
     private Long userId;
 
-    /**
-     * 角色id
-     */
+    @Column(columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id'")
     private Long roleId;
 
     public Long getUserId() {
