@@ -203,7 +203,7 @@
     if (!value || value.trim() === ''){
       return Promise.reject('请输入编码');
     }else if (value && value.trim() !== ''){
-      await axios.service.get("/yue-chip-upms-serve/upms/console/resources/check/code/exist",{params:{"code":addOrUpdateModel.value.code,"id":addOrUpdateModel.value.id}})
+      await axios.service.get("/upms/console/resources/check/code/exist",{params:{"code":addOrUpdateModel.value.code,"id":addOrUpdateModel.value.id}})
           .then((data)=>{
             if (data.status === 200 && data.data) {
               promise = Promise.reject("该编码已存在");
@@ -230,7 +230,7 @@
     if (!value || value.trim() === ''){
       return Promise.reject("请输入名称")
     }else if (value && value.trim() !== ''){
-      await axios.service.get("/yue-chip-upms-serve/upms/console/resources/check/name/exist",{params:{"name":addOrUpdateModel.value.name,"parentId":addOrUpdateModel.value.parentId,"id":addOrUpdateModel.value.id}})
+      await axios.service.get("/upms/console/resources/check/name/exist",{params:{"name":addOrUpdateModel.value.name,"parentId":addOrUpdateModel.value.parentId,"id":addOrUpdateModel.value.id}})
           .then((data)=>{
             if (data.status === 200 && data.data) {
               promise = Promise.reject("名称在同节点已存在");
@@ -257,7 +257,7 @@
     if (addOrUpdateModel.value.type ==='MENU' && (!value || value.trim() === '')){
       return Promise.reject("请输入url")
     }else if (addOrUpdateModel.value.type ==='MENU' && value && value.trim() !== ''){
-      await axios.service.get("/yue-chip-upms-serve/upms/console/resources/check/url/exist",{params:{"url":addOrUpdateModel.value.url,"id":addOrUpdateModel.value.id}})
+      await axios.service.get("/upms/console/resources/check/url/exist",{params:{"url":addOrUpdateModel.value.url,"id":addOrUpdateModel.value.id}})
           .then((data)=>{
             if (data.status === 200 && data.data) {
               promise = Promise.reject("该url已存在");
@@ -279,7 +279,7 @@
 
   function search(){
     loading.value = true;
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/tree/list",{params:searchModel.value},(data:any)=>{
+    axios.axiosGet("/upms/console/resources/tree/list",{params:searchModel.value},(data:any)=>{
       dataList.value = data.data;
       loading.value = false;
     },null,null)
@@ -309,7 +309,7 @@
   function save(){
     _this.ctx.$refs.from.validate().then(() => {
       if (addOrUpdateModel.value.id) {
-        axios.axiosPut("/yue-chip-upms-serve/upms/console/resources/update", addOrUpdateModel.value,
+        axios.axiosPut("/upms/console/resources/update", addOrUpdateModel.value,
           (data: any) => {
             if (data.status === 200) {
               visible.value = false;
@@ -319,7 +319,7 @@
             }
           }, null,null)
       }else {
-        axios.axiosPost("/yue-chip-upms-serve/upms/console/resources/add", addOrUpdateModel.value,
+        axios.axiosPost("/upms/console/resources/add", addOrUpdateModel.value,
           (data: any) => {
             if (data.status === 200) {
               visible.value = false;
@@ -334,7 +334,7 @@
   }
 
   function details(id:string) {
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/details", {params:{id:id}},
+    axios.axiosGet("/upms/console/resources/details", {params:{id:id}},
       (data:any)=>{
         if (data.status === 200 ) {
           addOrUpdateModel.value = data.data;
@@ -354,7 +354,7 @@
           okType: 'danger',
           cancelText: 'No',
           onOk() {
-              axios.axiosDelete("/yue-chip-upms-serve/upms/console/resources/delete",{params:{id:id}},(data:any)=>{
+              axios.axiosDelete("/upms/console/resources/delete",{params:{id:id}},(data:any)=>{
                   if (data.status === 200 ) {
                       message.info(data.message);
                       search();

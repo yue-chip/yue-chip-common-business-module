@@ -83,7 +83,7 @@
   }
 
   function getInfo(id: string ){
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/user/details",{params: {id:id}},
+    axios.axiosGet("/upms/console/user/details",{params: {id:id}},
       (data:any)=>{
         if (data.status === 200 ) {
           addOrUpdateModel.value = data.data;
@@ -99,7 +99,7 @@
     }
     _this.ctx.$refs.from.validate().then(() => {
       if (addOrUpdateModel.value.id) {
-        axios.axiosPut("/yue-chip-upms-serve/upms/console/user/update",addOrUpdateModel.value,
+        axios.axiosPut("/upms/console/user/update",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
               message.info(data.message);
@@ -108,7 +108,7 @@
       }else {
         addOrUpdateModel.value.passwordI = Md5.hashStr(addOrUpdateModel.value.pass);
         addOrUpdateModel.value.pass = null;
-        axios.axiosPost("/yue-chip-upms-serve/upms/console/user/add",addOrUpdateModel.value,
+        axios.axiosPost("/upms/console/user/add",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
               message.info(data.message);

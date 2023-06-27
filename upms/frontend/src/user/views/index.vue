@@ -115,7 +115,7 @@
 
   function search(){
     loading.value=true;
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/user/list",{params:searchModel.value},(data:any)=>{
+    axios.axiosGet("/upms/console/user/list",{params:searchModel.value},(data:any)=>{
       dataList.value = data.data;
       pagination.value.total = data.totalElements;
       pagination.value.current = data.pageNumber;
@@ -150,7 +150,7 @@
           paramsSerializer: (params: any) => {
             return qs.stringify(params, { indices: false })
           }};
-        axios.axiosDelete("/yue-chip-upms-serve/upms/console/user/delete",params,(data:any)=>{
+        axios.axiosDelete("/upms/console/user/delete",params,(data:any)=>{
           if (data.status === 200 ) {
             message.info(data.message);
             search();

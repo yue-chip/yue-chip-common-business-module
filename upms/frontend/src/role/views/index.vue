@@ -176,7 +176,7 @@
 
   function search(){
     loading.value=true;
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/role/list",{params:searchModel.value},(data:any)=>{
+    axios.axiosGet("/upms/console/role/list",{params:searchModel.value},(data:any)=>{
       dataList.value = data.data;
       pagination.value.total = data.totalElements;
       pagination.value.current = data.pageNumber;
@@ -195,7 +195,7 @@
   }
 
   function details(id:string) {
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/role/details", {params:{id:id}},
+    axios.axiosGet("/upms/console/role/details", {params:{id:id}},
       (data:any)=>{
         if (data.status === 200 ) {
           addOrUpdateModel.value = data.data;
@@ -208,7 +208,7 @@
   function save(){
     _this.ctx.$refs.from.validate().then(() => {
       if (addOrUpdateModel.value.id) {
-        axios.axiosPut("/yue-chip-upms-serve/upms/console/role/update",addOrUpdateModel.value,
+        axios.axiosPut("/upms/console/role/update",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
               visible.value = false;
@@ -218,7 +218,7 @@
             }
           },null,null)
       }else {
-        axios.axiosPost("/yue-chip-upms-serve/upms/console/role/add",addOrUpdateModel.value,
+        axios.axiosPost("/upms/console/role/add",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
               visible.value = false;
@@ -242,7 +242,7 @@
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        axios.axiosDelete("/yue-chip-upms-serve/upms/console/role/delete",{params:{id:id}},(data:any)=>{
+        axios.axiosDelete("/upms/console/role/delete",{params:{id:id}},(data:any)=>{
           if (data.status === 200 ) {
             message.info(data.message);
             search();
@@ -258,10 +258,10 @@
   function permissions(_roleId:string){
     permissionsVisible.value = true;
     roleId = _roleId;
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/resources/tree",{params: {}},(data:any)=>{
+    axios.axiosGet("/upms/console/resources/tree",{params: {}},(data:any)=>{
       treeData.value = data.data;
     },null,null)
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/role/resources",{params: {roleId:_roleId}},(data:any)=>{
+    axios.axiosGet("/upms/console/role/resources",{params: {roleId:_roleId}},(data:any)=>{
       permissionsCheckedKeys.value = data.data;
     },null,null)
 
@@ -275,7 +275,7 @@
   }
 
   function permissionsSave(){
-    axios.axiosPost("/yue-chip-upms-serve/upms/console/role/resources", {"roleId":roleId,resourcesIds:permissionsCheckedKeys.value},(data:any)=>{
+    axios.axiosPost("/upms/console/role/resources", {"roleId":roleId,resourcesIds:permissionsCheckedKeys.value},(data:any)=>{
       if (data.status === 200) {
         message.info(data.message);
         permissionsCancel();
@@ -286,14 +286,14 @@
   function user(_roleId:string) {
     roleId = _roleId;
     userVisible.value = true;
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/user/list", {params: {pageNumber:1,pageSize:99999}},(data:any)=>{
+    axios.axiosGet("/upms/console/user/list", {params: {pageNumber:1,pageSize:99999}},(data:any)=>{
       const list = data.data;
       userOptions.value = [];
       for (const index:any in list) {
         userOptions.value.push({"value":list[index].id,"label":list[index].name});
       }
     },null,null)
-    axios.axiosGet("/yue-chip-upms-serve/upms/console/role/user", {params: {roleId:_roleId}},(data:any)=>{
+    axios.axiosGet("/upms/console/role/user", {params: {roleId:_roleId}},(data:any)=>{
       roleUser.value = data.data;
     },null,null)
   }
@@ -306,7 +306,7 @@
   }
 
   function userSave(_roleId:string) {
-    axios.axiosPost("/yue-chip-upms-serve/upms/console/user/role", {"roleId":roleId,userIds:roleUser.value},(data:any)=>{
+    axios.axiosPost("/upms/console/user/role", {"roleId":roleId,userIds:roleUser.value},(data:any)=>{
       if (data.status === 200) {
         message.info(data.message);
         userCancel();
