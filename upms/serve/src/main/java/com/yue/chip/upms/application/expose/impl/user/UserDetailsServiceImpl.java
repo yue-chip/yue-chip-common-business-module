@@ -7,6 +7,7 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotBlank;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private RedisTemplate redisTemplate;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(@NotBlank String username) throws UsernameNotFoundException {
         Optional<User> optional = upmsRepository.findUserByUsername(username);
         if (!optional.isPresent()){
             return null;

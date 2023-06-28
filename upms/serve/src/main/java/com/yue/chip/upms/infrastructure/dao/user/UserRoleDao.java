@@ -2,6 +2,7 @@ package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author Mr.Liu
@@ -15,12 +16,12 @@ public interface UserRoleDao extends BaseDao<UserRolePo> {
      * @param roleId
      * @return
      */
-    public int deleteByRoleId(Long roleId);
+    public int deleteByRoleId(@NotNull Long roleId);
 
     /**
      * 根据用户删除用户与角色的绑定关系
      * @param userId
      * @return
      */
-    public int deleteByUserId(Long userId);
+    public int deleteByUserId(@NotNull Long userId);
 }

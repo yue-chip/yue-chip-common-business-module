@@ -2,6 +2,7 @@ package com.yue.chip.upms.infrastructure.dao.resources;
 
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface ResourcesDaoEx {
      * @param scope
      * @return
      */
-    public List<ResourcesPo> find(Long userId, Long parentId, Scope scope);
+    public List<ResourcesPo> find(@NotNull Long userId, @NotNull Long parentId, @NotNull Scope scope);
 
     /**
      * 根据角色id查询关联的资源
@@ -27,5 +28,5 @@ public interface ResourcesDaoEx {
      * @param roleId
      * @return
      */
-    public List<ResourcesPo> find(Long roleId);
+    public List<ResourcesPo> find(@NotNull Long roleId);
 }

@@ -16,6 +16,9 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -32,7 +35,7 @@ public interface UpmsRepository {
      * @param username
      * @return
      */
-    public Optional<User> findUserByUsername(String username);
+    public Optional<User> findUserByUsername(@NotBlank String username);
 
     /**
      * 根据用户id查询用户
@@ -40,42 +43,42 @@ public interface UpmsRepository {
      * @param id
      * @return
      */
-    public Optional<User> findUserById(Long id);
+    public Optional<User> findUserById(@NotNull Long id);
 
     /**
      * 根据角色查询关联的用户
      * @param roleId
      * @return
      */
-    public List<User> findUserByRoleId(Long roleId);
+    public List<User> findUserByRoleId(@NotNull Long roleId);
 
     /**
      * 根据角色删除用户与角色的绑定关系
      * @param roleId
      * @return
      */
-    public int deleteUserRole(Long roleId);
+    public int deleteUserRole(@NotNull Long roleId);
 
     /**
      * 根据用户删除用户与角色的绑定关系
      * @param userId
      * @return
      */
-    public int deleteUserRoleByUserId(Long userId);
+    public int deleteUserRoleByUserId(@NotNull Long userId);
 
     /**
      * 根据id删除角色
      *
      * @param roleId
      */
-    public void deleteRole(Long roleId);
+    public void deleteRole(@NotNull Long roleId);
 
     /**
      * 关联用户与角色关系
      * @param roleId
      * @param userIds
      */
-    public void saveUserRole(Long roleId,Long[] userIds);
+    public void saveUserRole(@NotNull Long roleId,@NotNull @Size(min = 1) Long[] userIds);
 
     /**
      * 角色列表
@@ -85,21 +88,21 @@ public interface UpmsRepository {
      * @param pageable
      * @return
      */
-    public IPageResultData<List<RoleVo>> roleList(String name, String code, YueChipPage pageable);
+    public IPageResultData<List<RoleVo>> roleList(String name, String code,@NotNull YueChipPage pageable);
 
     /**
      * 根据名称查询角色
      * @param name
      * @return
      */
-    public Optional<Role> findRoleByName(String name);
+    public Optional<Role> findRoleByName(@NotBlank String name);
 
     /**
      * 根据用户查询关联的角色
      * @param userId
      * @return
      */
-    public List<Role> findRoleByUserId(Long userId);
+    public List<Role> findRoleByUserId(@NotNull Long userId);
 
     /**
      * 根据角色id查询角色
@@ -107,20 +110,20 @@ public interface UpmsRepository {
      * @param id
      * @return
      */
-    public Optional<Role> findRoleById(Long id);
+    public Optional<Role> findRoleById(@NotNull Long id);
 
     /**
      * 新增
      * @param role
      * @return
      */
-    public void saveRole(RoleAddDto role);
+    public void saveRole(@NotNull RoleAddDto role);
 
     /**
      * 修改
      * @param role
      */
-    public void updateRole(RoleUpdateDto role);
+    public void updateRole(@NotNull RoleUpdateDto role);
 
     /**
      * 根据用户id查询树形结构权限
@@ -130,7 +133,7 @@ public interface UpmsRepository {
      * @param scope
      * @return
      */
-    public List<ResourcesTreeListVo> findResourcesToTreeList(Long userId, Long parentId, Scope scope);
+    public List<ResourcesTreeListVo> findResourcesToTreeList(Long userId,@NotNull Long parentId,@NotNull Scope scope);
 
     /**
      * 查询树形结构数据
@@ -138,7 +141,7 @@ public interface UpmsRepository {
      * @param scope
      * @return
      */
-    public List<ResourcesTreeListVo> findResourcesToTreeList(Long parentId, Scope scope);
+    public List<ResourcesTreeListVo> findResourcesToTreeList(@NotNull Long parentId,@NotNull Scope scope);
 
     /**
      * 查询树形结构数据
@@ -146,28 +149,28 @@ public interface UpmsRepository {
      * @param scope
      * @return
      */
-    public List<ResourcesTreeVo> findResourcesToTree(Long parentId, Scope scope);
+    public List<ResourcesTreeVo> findResourcesToTree(@NotNull Long parentId, @NotNull Scope scope);
 
     /**
      * 根据编码查询
      * @param code
      * @return
      */
-    public Optional<Resources> findResourcesByCode(String code);
+    public Optional<Resources> findResourcesByCode(@NotBlank String code);
 
     /**
      * 根据资源id查询资源
      * @param id
      * @return
      */
-    public Optional<Resources> findResourcesById(Long id);
+    public Optional<Resources> findResourcesById(@NotNull Long id);
 
     /**
      * 根据父节点id查子节点
      * @param parentId
      * @return
      */
-    public List<Resources> findResourcesByParentId(Long parentId);
+    public List<Resources> findResourcesByParentId(@NotNull Long parentId);
 
     /**
      * 根据角色查询关联的资源
@@ -175,14 +178,14 @@ public interface UpmsRepository {
      * @param roleId
      * @return
      */
-    public List<Resources> findResourcesByRoleId(Long roleId);
+    public List<Resources> findResourcesByRoleId(@NotNull Long roleId);
 
     /**
      * 根据名称查询资源
      * @param name
      * @return
      */
-    public Optional<Resources> findResourcesByName(String name);
+    public Optional<Resources> findResourcesByName(@NotBlank String name);
 
     /**
      * 根据名称查询当前节点下的资源
@@ -190,14 +193,14 @@ public interface UpmsRepository {
      * @param parentId
      * @return
      */
-    public Optional<Resources> findResourcesByNameAndParentId(String name,Long parentId);
+    public Optional<Resources> findResourcesByNameAndParentId(@NotBlank String name,@NotNull Long parentId);
 
     /**
      * 根据url查询资源
      * @param url
      * @return
      */
-    public Optional<Resources> findResourcesByUrl(String url);
+    public Optional<Resources> findResourcesByUrl(@NotBlank String url);
 
     /**
      * 新建资源
@@ -205,37 +208,37 @@ public interface UpmsRepository {
      * @param resources
      * @return
      */
-    public Resources saveResources(ResourcesAddDto resources);
+    public Resources saveResources(@NotNull ResourcesAddDto resources);
 
     /**
      * 批量保存角色关联资源
      * @param list
      */
-    public void saveAllRoleResources(List<RoleResourcesPo> list);
+    public void saveAllRoleResources(@NotNull @Size(min = 1) List<RoleResourcesPo> list);
 
     /**
      * 修改资源
      * @param resources
      */
-    public void  updateResources(ResourcesUpdateDto resources);
+    public void  updateResources(@NotNull ResourcesUpdateDto resources);
 
     /**
      * 根据id删除资源
      * @param id
      */
-    public void deleteResources(Long id);
+    public void deleteResources(@NotNull Long id);
 
     /**
      * 根据角色id删除 绑定的资源权限
      * @param roleId
      */
-    public void deleteRoleResourcesByRoleId(Long roleId);
+    public void deleteRoleResourcesByRoleId(@NotNull Long roleId);
 
     /**
      * 根据资源id删除 绑定的资源权限
      * @param resourcesId
      */
-    public void deleteRoleResourcesByResourcesId(Long resourcesId);
+    public void deleteRoleResourcesByResourcesId(@NotNull Long resourcesId);
 
     /**
      * 用户列表
@@ -243,26 +246,26 @@ public interface UpmsRepository {
      * @param name
      * @return
      */
-    public IPageResultData<List<UserVo>> userList(String name, Pageable pageable);
+    public IPageResultData<List<UserVo>> userList(String name, @NotNull Pageable pageable);
 
     /**
      * 保存用户
      * @param userPo
      * @return
      */
-    public User saveUser(UserPo userPo);
+    public User saveUser(@NotNull UserPo userPo);
 
     /**
      * 修改用户
      * @param userPo
      */
-    public void updateUser(UserPo userPo);
+    public void updateUser(@NotNull UserPo userPo);
 
     /**
      * 根据id删除用户
      *
      * @param id
      */
-    public void deleteUser(Long id);
+    public void deleteUser(@NotNull Long id);
 
 }

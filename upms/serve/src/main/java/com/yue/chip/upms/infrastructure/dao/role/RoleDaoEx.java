@@ -1,6 +1,8 @@
 package com.yue.chip.upms.infrastructure.dao.role;
 
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
@@ -23,12 +25,12 @@ public interface RoleDaoEx {
      * @param pageable
      * @return
      */
-    public Page<RolePo> list(String name, String code, Pageable pageable);
+    public Page<RolePo> list(String name, String code,@NotNull Pageable pageable);
 
     /**
      * 根据用户id查询关联的角色
      * @param userId
      * @return
      */
-    public List<RolePo> list(Long userId);
+    public List<RolePo> list(@NotNull Long userId);
 }

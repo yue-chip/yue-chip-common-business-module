@@ -1,6 +1,8 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,7 +21,7 @@ public interface UserDaoEx {
      * @param username
      * @return
      */
-    public Optional<UserPo> find(String username);
+    public Optional<UserPo> find(@NotBlank String username);
 
     /**
      * 分页类表
@@ -28,13 +30,13 @@ public interface UserDaoEx {
      * @param pageable
      * @return
      */
-    public Page<UserPo> find(String name, String username, Pageable pageable);
+    public Page<UserPo> find( String name, String username,@NotNull Pageable pageable);
 
     /**
      * 根据角色查询关联的用户
      * @param roleId
      * @return
      */
-    public List<UserPo> findByRoleId(Long roleId);
+    public List<UserPo> findByRoleId(@NotNull Long roleId);
 
 }

@@ -5,8 +5,8 @@ import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDaoEx;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
-import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +29,11 @@ public class ResourcesDaoImpl implements ResourcesDaoEx {
     private DataSource dataSource;
 
     @Override
-    public List<ResourcesPo> find(Long userId, Long parentId, Scope scope) {
+    public List<ResourcesPo> find(@NotNull Long userId, @NotNull Long parentId, @NotNull Scope scope) {
         StringBuffer sb = new StringBuffer(" select re from ResourcesPo re " +
                 "join RoleResourcesPo ro on re.id = ro.resourcesId " +
                 "join UserRolePo ur on ro.roleId = ur.roleId " +
-                "where ur.userId = :userId and re.parentId = :parentId and re.scope = :scope");
+                "where ur.userId = :userId and re.parentId = :parentId and re.scope = :scope order by sort desc");
         Map<String, Object> para = new HashMap<>();
         para.put("userId",userId);
         para.put("parentId",parentId);

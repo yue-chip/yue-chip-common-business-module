@@ -3,6 +3,7 @@ package com.yue.chip.upms.infrastructure.repository.upms.impl;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -31,8 +32,6 @@ import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.annotation.Resource;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -168,7 +167,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         if (Objects.nonNull(userId)) {
             list = resourcesDao.find(userId,parentId,scope);
         }else {
-            list = resourcesDao.findByParentIdAndScopeOrderBySort(parentId,scope);
+            list = resourcesDao.findByParentIdAndScopeOrderBySortDesc(parentId,scope);
         }
         List<ResourcesTreeListVo> treeList;
         if (Objects.nonNull(list) && list.size()>0){
