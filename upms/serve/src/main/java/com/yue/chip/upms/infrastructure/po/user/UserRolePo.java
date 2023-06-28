@@ -37,6 +37,7 @@ public class UserRolePo extends BaseEntity {
     public Long getUserId() {
         return this.userId;
     }
+
     @Column(name = "role_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id'")
     public Long getRoleId() {
         return this.roleId;
