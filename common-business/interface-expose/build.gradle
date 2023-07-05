@@ -3,6 +3,7 @@ archivesBaseName = 'yue-chip-common-business-interface-expose'
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
     api platform(project(':dependencies'))
+    api project(':common')
     api 'yue.chip:yue-chip-interface-expose-starter'
     implementation 'jakarta.platform:jakarta.jakartaee-api'
 }

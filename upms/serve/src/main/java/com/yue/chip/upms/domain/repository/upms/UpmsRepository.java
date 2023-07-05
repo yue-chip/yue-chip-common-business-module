@@ -6,12 +6,10 @@ import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.enums.Scope;
+import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
+import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
-import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
-import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
-import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
@@ -117,13 +115,13 @@ public interface UpmsRepository {
      * @param role
      * @return
      */
-    public void saveRole(@NotNull RoleAddDto role);
+    public void saveRole(@NotNull RolePo role);
 
     /**
      * 修改
      * @param role
      */
-    public void updateRole(@NotNull RoleUpdateDto role);
+    public void updateRole(@NotNull RolePo role);
 
     /**
      * 根据用户id查询树形结构权限
@@ -208,7 +206,7 @@ public interface UpmsRepository {
      * @param resources
      * @return
      */
-    public Resources saveResources(@NotNull ResourcesAddDto resources);
+    public Resources saveResources(@NotNull ResourcesPo resources);
 
     /**
      * 批量保存角色关联资源
@@ -218,9 +216,10 @@ public interface UpmsRepository {
 
     /**
      * 修改资源
-     * @param resources
+     *
+     * @param resourcesPo
      */
-    public void  updateResources(@NotNull ResourcesUpdateDto resources);
+    public void  updateResources(@NotNull ResourcesPo resourcesPo);
 
     /**
      * 根据id删除资源

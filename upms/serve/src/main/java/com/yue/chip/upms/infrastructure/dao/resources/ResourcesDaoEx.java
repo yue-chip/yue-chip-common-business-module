@@ -14,7 +14,7 @@ import java.util.List;
 public interface ResourcesDaoEx {
 
     /**
-     * 根据用户/父节点查询
+     * 根据用户&父节点查询
      * @param userId
      * @param parentId
      * @param scope

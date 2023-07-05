@@ -3,15 +3,14 @@ package com.yue.chip.upms.infrastructure.repository.upms.impl;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
-import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
-import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
-import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
-import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
+import com.yue.chip.upms.assembler.resources.ResourcesMapper;
+import com.yue.chip.upms.assembler.role.RoleMapper;
+import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleResourcesDao;
@@ -22,15 +21,12 @@ import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
-import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
-import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
-import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
-import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -152,13 +148,13 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public void saveRole(RoleAddDto role) {
-        roleDao.save(roleMapper.toRolePo(role));
+    public void saveRole(@NotNull RolePo role) {
+        roleDao.save(role);
     }
 
     @Override
-    public void updateRole(RoleUpdateDto role) {
-        roleDao.update(roleMapper.toRolePo(role));
+    public void updateRole(@NotNull RolePo role) {
+        roleDao.update(role);
     }
 
     @Override
@@ -231,8 +227,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public Resources saveResources(ResourcesAddDto resources) {
-        ResourcesPo resourcesPo = resourcesMapper.toResourcesPo(resources);
+    public Resources saveResources(@NotNull ResourcesPo resourcesPo) {
         resourcesPo = resourcesDao.save(resourcesPo);
         return resourcesMapper.toResources(resourcesPo);
     }
@@ -243,8 +238,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public void updateResources(ResourcesUpdateDto resources) {
-        ResourcesPo resourcesPo = resourcesMapper.toResourcesPo(resources);
+    public void updateResources(@NotNull ResourcesPo resourcesPo) {
         resourcesDao.update(resourcesPo);
     }
 

@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private RedisTemplate redisTemplate;
 
     @Override
-    public UserDetails loadUserByUsername(@NotBlank String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optional = upmsRepository.findUserByUsername(username);
         if (!optional.isPresent()){
             return null;

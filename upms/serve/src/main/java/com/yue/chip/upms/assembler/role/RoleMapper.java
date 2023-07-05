@@ -1,4 +1,4 @@
-package com.yue.chip.upms.infrastructure.assembler.role;
+package com.yue.chip.upms.assembler.role;
 
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;

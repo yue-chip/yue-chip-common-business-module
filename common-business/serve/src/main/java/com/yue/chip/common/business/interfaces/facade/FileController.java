@@ -1,9 +1,16 @@
 package com.yue.chip.common.business.interfaces.facade;
 
+import com.yue.chip.common.business.assembler.file.FileMapper;
+import com.yue.chip.common.business.domain.aggregates.file.File;
+import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.domain.service.file.FileService;
+import com.yue.chip.common.business.infrastructure.po.file.FilePo;
+import com.yue.chip.common.business.interfaces.vo.FileVo;
+import com.yue.chip.core.IResultData;
+import com.yue.chip.core.ResultData;
 import com.yue.chip.core.controller.BaseController;
 import com.yue.chip.core.controller.impl.BaseControllerImpl;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
@@ -14,10 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -32,34 +36,42 @@ public class FileController extends BaseControllerImpl implements BaseController
 
     @Resource
     private FileService fileService;
+    @Resource
+    private FileRepository fileRepository;
+
+    @Resource
+    private FileMapper fileMapper;
 
     @PostMapping("/upload")
-    @ApiOperation(value = "上传文件(支持多文件)",notes = "上传文件(支持多文件)")
-    public IResultData<List<File>> upload(StandardMultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
+    @Operation(description = "上传文件(支持多文件)",summary = "上传文件(支持多文件)")
+    public IResultData<List<FileVo>> upload(StandardMultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
         Map<String, MultipartFile> files = multipartHttpServletRequest.getFileMap();
-        List<File> fileList = new ArrayList<File>();
+        List<FileVo> fileList = new ArrayList<FileVo>();
         for(String originalFileName : files.keySet()) {
             MultipartFile file = files.get(originalFileName);
             if (file.getSize() <= 0) {
                 continue;
             }
-            com.lion.common.entity.file.File entity = fileUploadService.upload(file);
-            if (Objects.nonNull(entity)) {
-                fileService.save(entity);
-                if (Objects.nonNull(entity.getId())) {
-                    String url = entity.getUrl();
-                    if (!Objects.equals(url.substring(0,1),"/")) {
-                        url = "/"+url;
+            Optional<File> optional = fileService.upload(file);
+            if (optional.isPresent()) {
+                File fileAggregateRoot = optional.get();
+                if (Objects.nonNull(fileAggregateRoot)) {
+                    fileAggregateRoot = fileRepository.add(fileMapper.toFilePo(fileAggregateRoot));
+                    if (Objects.nonNull(fileAggregateRoot.getId())) {
+                        String url = fileAggregateRoot.getUrl();
+                        if (!Objects.equals(url.substring(0, 1), "/")) {
+                            url = "/" + url;
+                        }
+                        if (url.indexOf("/file") < 0) {
+                            url = fileService.URL_PREFIX + url;
+                        }
+                        fileAggregateRoot.setUrl(url);
+                        fileList.add(fileMapper.toFileVo(fileAggregateRoot));
                     }
-                    if (url.indexOf("/file")<0){
-                        url = FileUploadService.URL_PREFIX+url;
-                    }
-                    entity.setUrl(url);
-                    fileList.add(entity);
                 }
             }
         }
-        return ResultData.instance().setData(fileList);
+        return ResultData.builder().data(fileList).build();
     }
 
 }

@@ -19,7 +19,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableDiscoveryClient
 @DubboComponentScan(basePackages = {"com.yue.chip.**"})
 @EnableJpaRepositories(basePackages = {"com.yue.chip.common.business.infrastructure.dao.**"}, repositoryFactoryBeanClass = BaseDaoFactoryBean.class)
-@EntityScan({"com.yue.chip.upms.infrastructure.po.**"})
+@EntityScan({"com.yue.chip.common.business.infrastructure.po.**"})
 @EnableJpaAuditing
 @EnableCaching
 public class ApplicationCommonBusinessServe {

@@ -1,0 +1,47 @@
+server:
+  port: 0
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  nacos:
+    group: YUE-CHIP-GROUP
+    host: 192.168.177.129:8848
+    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
+  application:
+    name: common
+  cloud:
+    nacos:
+      config:
+        server-addr: ${spring.nacos.host}
+        file-extension: yaml
+        namespace: ${spring.nacos.namespace}
+        group: ${spring.nacos.group}
+        extension-configs:
+          - data-id: common.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: datasource.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: jpa.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: oauth2-resource.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: sentinel.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: dubbo.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: seata.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: redis.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP
+          - data-id: file.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP

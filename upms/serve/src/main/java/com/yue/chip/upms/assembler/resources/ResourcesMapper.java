@@ -1,4 +1,4 @@
-package com.yue.chip.upms.infrastructure.assembler.resources;
+package com.yue.chip.upms.assembler.resources;
 
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;

@@ -1,7 +1,7 @@
 package com.yue.chip.upms.application.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.crypto.SecureUtil;
-import com.yue.chip.exception.BusinessException;
 import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.definition.user.UserDefinition;
@@ -10,7 +10,7 @@ import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
-import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
+import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
@@ -23,7 +23,6 @@ import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -79,9 +78,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         Optional<Role> optional = upmsRepository.findRoleById(roleId);
         if (optional.isPresent()){
             Role role = optional.get();
-            if (role.getIsDefault()) {
-                BusinessException.throwException("默认角色不能删除");
-            }
+            Assert.isFalse(role.getIsDefault(),"默认角色不能删除");
             //删除角色与用户的关联关系
             upmsRepository.deleteUserRole(roleId);
             //删除角色与资源的关联关系
@@ -97,9 +94,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         Optional<Resources> optional = upmsRepository.findResourcesById(resourcesId);
         if (optional.isPresent()){
             Resources resources = optional.get();
-            if (resources.getIsDefault()) {
-                BusinessException.throwException("默认资源不能删除");
-            }
+            Assert.isFalse(resources.getIsDefault(),"默认资源不能删除");
             //删除资源与角色的关联关系
             upmsRepository.deleteRoleResourcesByResourcesId(resourcesId);
             //删除资源
@@ -110,9 +105,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Override
     public void saveUser(User user) {
         //检查用户是否存在
-        if (user.checkUsernameIsExist()) {
-            BusinessException.throwException("该账号已存在");
-        }
+        Assert.isFalse(user.checkUsernameIsExist(),"该账号已存在");
         //保存用户
         user.setPassword(passwordEncoder.encode(SecureUtil.md5(user.getPassword())));
         upmsRepository.saveUser(userMapper.toUserPo(user));

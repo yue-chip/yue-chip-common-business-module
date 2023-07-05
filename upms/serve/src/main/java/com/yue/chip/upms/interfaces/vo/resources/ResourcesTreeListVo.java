@@ -17,7 +17,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResourcesTreeListVo extends ResourcesDefinition {
 
     private List<ResourcesTreeListVo> children;

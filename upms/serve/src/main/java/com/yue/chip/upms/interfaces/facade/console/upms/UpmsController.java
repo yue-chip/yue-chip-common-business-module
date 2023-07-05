@@ -13,9 +13,9 @@ import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
-import com.yue.chip.upms.infrastructure.assembler.resources.ResourcesMapper;
-import com.yue.chip.upms.infrastructure.assembler.role.RoleMapper;
-import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
+import com.yue.chip.upms.assembler.resources.ResourcesMapper;
+import com.yue.chip.upms.assembler.role.RoleMapper;
+import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
@@ -99,7 +99,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @Operation(description = "新建角色",summary = "新建角色")
     @PostMapping("/role/add")
     public IResultData add(@RequestBody @Validated RoleAddDto role){
-        upmsRepository.saveRole(role);
+        upmsRepository.saveRole(roleMapper.toRolePo(role));
         return ResultData.builder().build();
     }
 
@@ -113,7 +113,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @Operation(description = "修改角色",summary = "修改角色")
     @PutMapping("/role/update")
     public IResultData roleUpdate(@RequestBody @Validated RoleUpdateDto role){
-        upmsRepository.updateRole(role);
+        upmsRepository.updateRole(roleMapper.toRolePo(role));
         return ResultData.builder().build();
     }
 
@@ -216,7 +216,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @PostMapping("/resources/add")
     public IResultData resourcesAdd(@RequestBody @Validated({Validator.Insert.class}) ResourcesAddDto resources){
         resources.setCode(resources.getCode().trim().toUpperCase());
-        upmsRepository.saveResources(resources);
+        upmsRepository.saveResources(resourcesMapper.toResourcesPo(resources));
         return ResultData.builder().build();
     }
 
@@ -224,7 +224,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @PutMapping("/resources/update")
     public IResultData resourcesUpdate(@RequestBody @Validated({Validator.Update.class}) ResourcesUpdateDto resources){
         resources.setCode(resources.getCode().trim().toUpperCase());
-        upmsRepository.updateResources(resources);
+        upmsRepository.updateResources(resourcesMapper.toResourcesPo(resources));
         return ResultData.builder().build();
     }
 

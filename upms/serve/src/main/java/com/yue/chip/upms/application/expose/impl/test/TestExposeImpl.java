@@ -1,6 +1,7 @@
 package com.yue.chip.upms.application.expose.impl.test;
 
 import com.yue.chip.test.TestExpose;
+import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
@@ -26,6 +27,9 @@ public class TestExposeImpl implements TestExpose {
     @Resource
     private UpmsRepository upmsRepository;
 
+    @Resource
+    private RoleMapper roleMapper;
+
     @Override
     @Trace
     @Tags({@Tag(key = "code",value = "arg[0]"),@Tag(key = "return",value = "returnedObj")})
@@ -37,7 +41,7 @@ public class TestExposeImpl implements TestExpose {
                 .name(UUID.randomUUID().toString())
                 .code(UUID.randomUUID().toString())
                 .build();
-        upmsRepository.saveRole(roleAddDto);
+        upmsRepository.saveRole(roleMapper.toRolePo(roleAddDto));
         return map;
     }
 

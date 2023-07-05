@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'application'
-    id 'org.graalvm.buildtools.native' version "${nativeVersion}"
+//    id 'org.graalvm.buildtools.native' version "${nativeVersion}"
 }
 archivesBaseName = 'yue-chip-upms-serve'
 apply plugin: 'org.springframework.boot'
@@ -16,21 +16,21 @@ configurations {
     }
 }
 mainClassName = 'com.yue.chip.upms.ApplicationUpmsServe'
-graalvmNative {
-    binaries {
-        main {
-            verbose = true
-            fallback = true
-            buildArgs.add('-H:+ReportExceptionStackTraces')
-            buildArgs.add('--no-fallback')
-            buildArgs.add('--report-unsupported-elements-at-runtime')
-            buildArgs.add('--allow-incomplete-classpath')
-            buildArgs.add('--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback.classic.Logger,java.net.Inet4Address')
-            buildArgs.add('--trace-class-initialization=org.slf4j.LoggerFactory,ch.qos.logback.classic.Logger,java.net.Inet4Address')
-            buildArgs.add('--trace-object-instantiation=java.net.Inet4Address')
-        }
-    }
-}
+//graalvmNative {
+//    binaries {
+//        main {
+//            verbose = true
+//            fallback = true
+//            buildArgs.add('-H:+ReportExceptionStackTraces')
+//            buildArgs.add('--no-fallback')
+//            buildArgs.add('--report-unsupported-elements-at-runtime')
+//            buildArgs.add('--allow-incomplete-classpath')
+//            buildArgs.add('--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback.classic.Logger,java.net.Inet4Address')
+//            buildArgs.add('--trace-class-initialization=org.slf4j.LoggerFactory,ch.qos.logback.classic.Logger,java.net.Inet4Address')
+//            buildArgs.add('--trace-object-instantiation=java.net.Inet4Address')
+//        }
+//    }
+//}
 bootJar {
     enabled true
 }

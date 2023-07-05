@@ -3,7 +3,7 @@ package com.yue.chip.upms.application.expose.impl.user;
 import com.yue.chip.core.ICurrentUser;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
-import com.yue.chip.upms.infrastructure.assembler.user.UserMapper;
+import com.yue.chip.upms.assembler.user.UserMapper;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import org.apache.dubbo.config.annotation.DubboService;

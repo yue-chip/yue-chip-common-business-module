@@ -17,6 +17,5 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResourcesVo extends ResourcesDefinition {
 }

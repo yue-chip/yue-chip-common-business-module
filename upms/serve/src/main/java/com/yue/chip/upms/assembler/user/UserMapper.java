@@ -1,4 +1,4 @@
-package com.yue.chip.upms.infrastructure.assembler.user;
+package com.yue.chip.upms.assembler.user;
 
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;

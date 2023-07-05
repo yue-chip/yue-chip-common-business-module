@@ -3,17 +3,12 @@ package com.yue.chip.upms.infrastructure.po.role;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.role.RoleDefinition;
-import com.yue.chip.upms.enums.Scope;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SelectBeforeUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -23,7 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_role",indexes = {@Index(columnList = "name") })
+@Table(name = "t_role",indexes = {@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
 @SuperBuilder
 @NoArgsConstructor
 @Data
