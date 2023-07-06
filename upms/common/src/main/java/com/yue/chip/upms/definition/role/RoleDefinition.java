@@ -34,7 +34,7 @@ public class RoleDefinition extends BaseDefinition {
     @Schema(description = "备注")
     private String remark;
 
-    @Schema(description = "状态")
+    @Schema(description = "状态-(code:"+State.code+",version:"+State.version+")")
     @Builder.Default
     private State state = State.NORMAL;
 

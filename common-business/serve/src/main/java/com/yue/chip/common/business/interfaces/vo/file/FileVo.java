@@ -1,8 +1,6 @@
-package com.yue.chip.common.business.interfaces.vo;
+package com.yue.chip.common.business.interfaces.vo.file;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.common.business.definition.file.FileDefinition;
-import com.yue.chip.common.business.domain.aggregates.file.File;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

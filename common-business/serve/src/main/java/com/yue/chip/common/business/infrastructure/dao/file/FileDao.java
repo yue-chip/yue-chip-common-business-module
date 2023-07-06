@@ -1,4 +1,4 @@
-package com.yue.chip.common.business.infrastructure.dao;
+package com.yue.chip.common.business.infrastructure.dao.file;
 
 import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import com.yue.chip.core.persistence.curd.BaseDao;

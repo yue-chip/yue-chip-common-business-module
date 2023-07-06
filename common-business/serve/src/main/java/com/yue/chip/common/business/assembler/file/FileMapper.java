@@ -1,8 +1,9 @@
 package com.yue.chip.common.business.assembler.file;
 
+import com.yue.chip.common.business.definition.file.FileDefinition;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.infrastructure.po.file.FilePo;
-import com.yue.chip.common.business.interfaces.vo.FileVo;
+import com.yue.chip.common.business.interfaces.vo.file.FileVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -20,4 +21,8 @@ public interface FileMapper {
     public File toFile(FilePo filePo);
 
     public FileVo toFileVo(File file);
+
+    public FileDefinition toFileDefinition(FilePo filePo);
+
+    public FileDefinition toFileDefinition(File filePo);
 }

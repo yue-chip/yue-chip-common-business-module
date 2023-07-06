@@ -32,18 +32,18 @@ public class ResourcesDefinition extends BaseDefinition {
     @Schema(description = "资源名称")
     private String name;
 
-    @Schema(description = "作用域")
+    @Schema(description = "作用域-(code:"+Scope.code+",version:"+Scope.version+")")
     @Builder.Default
     private Scope scope = Scope.CONSOLE;
 
-    @Schema(description = "类型")
+    @Schema(description = "类型-(code:"+Type.code+",version:"+Type.version+")")
     @Builder.Default
     private Type type = Type.CATALOG;
 
     @Schema(description = "排序")
     private Integer sort;
 
-    @Schema(description = "状态")
+    @Schema(description = "状态-(code:"+State.code+",version:"+State.version+")")
     @Builder.Default
     private State state = State.NORMAL;
 

@@ -22,6 +22,10 @@ public enum Type implements IEnum {
 
     private final String desc;
 
+    public static final String code = "resourcesType";
+
+    public static final String version = "1";
+
     private Type(int key, String desc) {
         this.key = key;
         this.desc = desc;
