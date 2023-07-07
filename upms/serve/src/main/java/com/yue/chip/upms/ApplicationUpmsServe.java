@@ -3,6 +3,7 @@ package com.yue.chip.upms;
 import com.yue.chip.authentication.YueChipAuthenticationSecurityConfig;
 import com.yue.chip.core.persistence.BaseDaoFactoryBean;
 import com.yue.chip.security.SecurityConfig;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.apache.dubbo.config.spring.context.annotation.DubboComponentScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

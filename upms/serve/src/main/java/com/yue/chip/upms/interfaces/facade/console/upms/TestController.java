@@ -29,7 +29,7 @@ import java.util.Map;
 @RestController()
 @RequestMapping("/test")
 @Validated
-@Tag(name = "")
+@Tag(name = "测试")
 @Log
 public class TestController extends BaseControllerImpl implements BaseController {
 

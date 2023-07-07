@@ -46,4 +46,6 @@ public class EnumUtilController  extends BaseControllerImpl implements BaseContr
         return ResultData.builder().build();
     }
 
+
+
 }

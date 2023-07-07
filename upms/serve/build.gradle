@@ -39,7 +39,7 @@ dependencies {
     api project(':authentication')
     api 'yue.chip:yue-chip-serve-starter'
     api 'yue.chip:yue-chip-business-starter'
-    api 'yue.chip:yue-chip-security'
+//    api 'yue.chip:yue-chip-security'
 //    api "yue.chip:yue-chip-oauth2-resource-serve"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

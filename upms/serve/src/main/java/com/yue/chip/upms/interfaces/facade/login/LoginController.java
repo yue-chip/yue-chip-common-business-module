@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +35,7 @@ public class LoginController{
     @Resource
     private LoginService loginService;
 
-    @RequestMapping("/login1")
+    @PostMapping("/login1")
     @AuthorizationIgnore
     @Operation(summary = "登录", description = "登录")
     public IResultData<String> login(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username,
