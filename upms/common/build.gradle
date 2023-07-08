@@ -4,7 +4,7 @@ apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
     api platform(project(':dependencies'))
     implementation 'yue.chip:yue-chip-core'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'jakarta.platform:jakarta.jakartaee-api'
     implementation 'org.reflections:reflections:'
