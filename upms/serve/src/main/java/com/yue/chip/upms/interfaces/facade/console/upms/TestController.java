@@ -8,7 +8,6 @@ import com.yue.chip.core.ResultData;
 import com.yue.chip.core.controller.BaseController;
 import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import com.yue.chip.upms.application.service.UpmsApplication;
-import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
