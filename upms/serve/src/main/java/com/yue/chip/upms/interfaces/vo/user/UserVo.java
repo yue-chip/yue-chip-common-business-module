@@ -1,6 +1,5 @@
 package com.yue.chip.upms.interfaces.vo.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
