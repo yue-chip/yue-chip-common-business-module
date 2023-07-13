@@ -2,6 +2,7 @@ package com.yue.chip.upms.application.service.impl;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.crypto.SecureUtil;
+import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.definition.user.UserDefinition;
@@ -11,11 +12,14 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.skywalking.apm.toolkit.trace.Tag;
 import org.apache.skywalking.apm.toolkit.trace.Tags;
@@ -46,8 +50,9 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Resource
     private UserMapper userMapper;
 
-    @Resource
-    private PasswordEncoder passwordEncoder;
+
+    @DubboReference
+    private FileExposeService fileExposeService;
 
     @Override
     @Transactional(rollbackFor = {Throwable.class})
@@ -103,12 +108,22 @@ public class UpmsApplicationImpl implements UpmsApplication {
     }
 
     @Override
-    public void saveUser(User user) {
+    public void saveUser(@NotNull UserAddOrUpdateDto userAddOrUpdateDto) {
         //检查用户是否存在
+        User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
         Assert.isFalse(user.checkUsernameIsExist(),"该账号已存在");
         //保存用户
-        user.setPassword(passwordEncoder.encode(SecureUtil.md5(user.getPassword())));
-        upmsRepository.saveUser(userMapper.toUserPo(user));
+        User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
+        //保存头像
+        fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhoto());
+    }
+
+    @Override
+    public void updateUser(UserAddOrUpdateDto userAddOrUpdateDto) {
+        //修改用户
+        upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
+        //保存头像
+        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhoto());
     }
 
     @Override

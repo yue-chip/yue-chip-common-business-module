@@ -7,8 +7,9 @@ import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.util.StringUtils;
 
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -39,5 +40,42 @@ public class FileExposeServiceImpl implements FileExposeService {
             return optional.get().getUrl();
         }
         return "";
+    }
+
+    @Override
+    public Map<Long, String> getUrl(Long tableId, String fileFieldName,String tableName) {
+        if (Objects.isNull(tableId) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {
+            return Collections.EMPTY_MAP;
+        }
+        List<File> list = fileRepository.find(tableId, fileFieldName, tableName);
+        Map<Long, String> urls = new HashMap<>();
+        if (Objects.nonNull(list)) {
+            list.forEach(file -> {
+                urls.put(file.getId(), file.getUrl());
+            });
+        }
+        return urls;
+    }
+
+    @Override
+    public String getUrlSingle(Long tableId, String fileFieldName, String tableName) {
+        Map<Long, String> fileMap = getUrl(tableId, fileFieldName, tableName);
+        if (fileMap.size()>0) {
+            Long id = (Long) fileMap.keySet().toArray()[0];
+            return fileMap.get(id);
+        }
+        return "";
+    }
+
+    @Override
+    public void save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
+        fileRepository.save(tableId, tableName, fileFieldName, fileIds);
+    }
+
+    @Override
+    public void save(Long tableId, String tableName, String fileFieldName, Long fileId) {
+        List<Long> fileIds = new ArrayList<>();
+        fileIds.add(fileId);
+        save(tableId,fileFieldName,tableName,fileIds);
     }
 }

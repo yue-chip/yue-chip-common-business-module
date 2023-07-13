@@ -7,5 +7,5 @@ import com.yue.chip.core.persistence.curd.BaseDao;
  * @author Mr.Liu
  * @date 2023/6/13 下午4:32
  */
-public interface FileDao extends BaseDao<FilePo> {
+public interface FileDao extends BaseDao<FilePo> ,FileDaoEx{
 }

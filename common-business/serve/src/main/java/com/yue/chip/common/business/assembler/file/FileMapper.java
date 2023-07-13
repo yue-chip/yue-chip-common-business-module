@@ -8,6 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * @author Mr.Liu
  * @date 2023/7/5 下午5:00
@@ -19,6 +21,8 @@ public interface FileMapper {
     public FilePo toFilePo(File file);
 
     public File toFile(FilePo filePo);
+
+    public List<File> toFile(List<FilePo> filePoList);
 
     public FileVo toFileVo(File file);
 

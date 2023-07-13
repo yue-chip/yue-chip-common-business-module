@@ -1,5 +1,6 @@
 package com.yue.chip.upms.interfaces.facade.console.upms;
 
+import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
@@ -37,6 +38,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.extern.java.Log;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,6 +70,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @Resource
     private UserMapper userMapper;
+
 
     @GetMapping("/currentUser/permissions")
     @Operation(summary = "权限-获取当前用户的权限(菜单，资源)", description = "权限-获取当前用户的权限(菜单，资源)")
@@ -252,7 +255,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @PostMapping("/user/add")
     @Operation(description = "用户-新增用户",summary = "用户-新增用户")
     public IResultData saveUser(@RequestBody @Validated({Validator.Insert.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
-        upmsApplication.saveUser(userMapper.toUser(userAddOrUpdateDto));
+        upmsApplication.saveUser(userAddOrUpdateDto);
         return ResultData.builder().build();
 
     }
@@ -268,7 +271,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
     @PutMapping("/user/update")
     @Operation(description = "用户-修改用户",summary = "用户-修改用户")
     public IResultData updateUser(@RequestBody @Validated({Validator.Update.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
-        upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
+        upmsApplication.updateUser(userAddOrUpdateDto);
         return ResultData.builder().build();
     }
 

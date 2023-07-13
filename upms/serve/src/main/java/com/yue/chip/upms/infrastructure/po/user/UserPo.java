@@ -22,12 +22,14 @@ import java.time.LocalDate;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_user",indexes = {@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
+@Table(name = UserPo.TABLE_NAME,indexes = {@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
 @SuperBuilder
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @Comment("用户")
 public class UserPo extends UserDefinition {
+
+    public static final String TABLE_NAME = "t_user";
 
     @Override
     @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '密码'")

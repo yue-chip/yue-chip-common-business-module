@@ -1,8 +1,11 @@
 package com.yue.chip.upms.infrastructure.repository.upms.impl;
 
+import cn.hutool.crypto.SecureUtil;
+import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -27,9 +30,11 @@ import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -57,6 +62,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private RoleMapper roleMapper;
     @Resource
     private ResourcesMapper resourcesMapper;
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<User> findUserByUsername(String username) {
@@ -270,6 +277,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
 //    @CachePut(value = User.CACHE_KEY,key = "#userPo.id")
     public User saveUser(UserPo userPo) {
+        userPo.setPassword(passwordEncoder.encode(SecureUtil.md5(userPo.getPassword())));
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);
     }

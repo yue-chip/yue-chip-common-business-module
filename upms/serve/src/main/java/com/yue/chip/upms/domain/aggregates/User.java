@@ -1,11 +1,13 @@
 package com.yue.chip.upms.domain.aggregates;
 
 import com.yue.chip.annotation.YueChipDDDEntity;
+import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import jakarta.annotation.Resource;
 import lombok.Builder;
@@ -13,11 +15,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.apache.dubbo.config.annotation.DubboReference;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -32,7 +32,10 @@ import java.util.Optional;
 public class User extends UserDefinition {
 
     @Resource
-    private  static UpmsRepository upmsRepository;
+    private static UpmsRepository upmsRepository;
+
+    @DubboReference
+    private static FileExposeService fileExposeService;
 
     @Builder.Default
     private RoleMapper roleMapper = RoleMapper.INSTANCE;
@@ -79,6 +82,20 @@ public class User extends UserDefinition {
     public List<ResourcesTreeListVo> getResourcesTree() {
         List<ResourcesTreeListVo> list = upmsRepository.findResourcesToTreeList(getId(),0L, Scope.CONSOLE);
         return list;
+    }
+
+    @Override
+    public String getProfilePhotoUrl() {
+        return fileExposeService.getUrlSingle(getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME);
+    }
+
+    @Override
+    public Long getProfilePhoto() {
+        Map<Long,String> fileMap = fileExposeService.getUrl(getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME);
+        if (fileMap.size()>0) {
+            return (Long) fileMap.keySet().toArray()[0];
+        }
+        return null;
     }
 
 }

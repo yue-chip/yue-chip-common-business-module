@@ -1,13 +1,11 @@
 package com.yue.chip.upms.application.service;
 
-import com.yue.chip.upms.definition.user.UserDefinition;
-import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.apache.catalina.LifecycleState;
 
 import java.util.List;
 
@@ -43,9 +41,15 @@ public interface UpmsApplication {
 
     /**
      * 保存用户
-     * @param user
+     * @param userAddOrUpdateDto
      */
-    public void saveUser(@NotNull User user);
+    public void saveUser(@NotNull UserAddOrUpdateDto userAddOrUpdateDto);
+
+    /**
+     * 修改用户
+     * @param userAddOrUpdateDto
+     */
+    public void updateUser(@NotNull UserAddOrUpdateDto userAddOrUpdateDto);
 
     /**
      * 删除用户
