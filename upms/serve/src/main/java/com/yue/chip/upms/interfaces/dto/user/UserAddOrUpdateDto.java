@@ -25,6 +25,9 @@ public class UserAddOrUpdateDto extends UserDefinition {
     @Schema(description = "密码")
     private String passwordI;
 
+    @Schema(description = "头像id")
+    private Long profilePhoto;
+
     @Override
     @NotNull(message = "id不能为空",groups = {Validator.Update.class})
     public Long getId() {
@@ -42,6 +45,8 @@ public class UserAddOrUpdateDto extends UserDefinition {
     public String getName() {
         return super.getName();
     }
+
+
 
 //    @Override
 //    @NotNull(message = "version不能为空",groups = {Validator.Update.class})

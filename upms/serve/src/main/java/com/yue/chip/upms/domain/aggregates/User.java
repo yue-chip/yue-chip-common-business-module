@@ -84,12 +84,10 @@ public class User extends UserDefinition {
         return list;
     }
 
-    @Override
     public String getProfilePhotoUrl() {
         return fileExposeService.getUrlSingle(getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME);
     }
 
-    @Override
     public Long getProfilePhoto() {
         Map<Long,String> fileMap = fileExposeService.getUrl(getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME);
         if (fileMap.size()>0) {

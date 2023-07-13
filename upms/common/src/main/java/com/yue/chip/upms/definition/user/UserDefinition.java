@@ -44,18 +44,6 @@ public class UserDefinition extends BaseDefinition {
     @Schema(description = "姓名")
     private String name;
 
-    @Schema(description = "头像id")
-//    @Getter(AccessLevel.NONE)
-//    @Setter(AccessLevel.NONE)
-    @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
-    private Long profilePhoto;
-
-    @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
-    @Schema(description = "头像url")
-//    @Getter(AccessLevel.NONE)
-//    @Setter(AccessLevel.NONE)
-    private String profilePhotoUrl;
-
     @Schema(description = "出生日期")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonSerialize(using = LocalDateSerializer.class)

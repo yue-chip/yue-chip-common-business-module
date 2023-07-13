@@ -50,12 +50,6 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
-    @Column(columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '头像id'")
-    public Long getProfilePhoto() {
-        return super.getProfilePhoto();
-    }
-
-    @Override
     @Column(columnDefinition = "datetime NULL COMMENT '生日'")
     public LocalDate getBirthday() {
         return super.getBirthday();
