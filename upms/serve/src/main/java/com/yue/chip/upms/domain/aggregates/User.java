@@ -22,7 +22,7 @@ import java.util.*;
 /**
  * @author Mr.Liu
  * @date 2023/1/12 下午2:11
- * @description 用户聚合根
+ * @description 用户聚合根 此聚合根非彼聚合根 意思意思
  */
 @Data
 @EqualsAndHashCode(callSuper=true)
