@@ -33,7 +33,7 @@ public class Role extends RoleDefinition {
     private  static UpmsRepository upmsRepository;
 
     /**
-     *  资源
+     *  资源 - 值对象(此值对象非彼值对象) 意思意思
      */
     private List<Resources> resources;
 

@@ -44,7 +44,7 @@ public class User extends UserDefinition {
     private ResourcesMapper resourcesMapper = ResourcesMapper.INSTANCE;
 
     /**
-     * 角色
+     * 角色 - 值对象(此值对象非彼值对象) 意思意思
      */
     private List<Role> roles;
 
