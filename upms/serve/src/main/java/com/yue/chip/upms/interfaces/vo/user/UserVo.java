@@ -17,10 +17,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class UserVo extends UserDefinition {
-
-    @Schema(description = "头像id")
-    private Long profilePhoto;
-
-    @Schema(description = "头像url")
-    private String profilePhotoUrl;
+    
 }

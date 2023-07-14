@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 /**
  * @author Mr.Liu
  * @date 2023/1/12 下午2:02
- * @description ResourcesDefinition
+ * @description Resources 字段的定义 避免在聚合实体entity，dto，vo，po……等bean 进行重复定义
  */
 @Data
 @Schema(description = "资源")

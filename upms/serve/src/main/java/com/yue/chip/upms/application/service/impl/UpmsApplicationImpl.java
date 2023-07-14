@@ -115,7 +115,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         //保存用户
         User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存头像
-        fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhoto());
+        fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhotoId());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         //修改用户
         upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存头像
-        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhoto());
+        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhotoId());
     }
 
     @Override

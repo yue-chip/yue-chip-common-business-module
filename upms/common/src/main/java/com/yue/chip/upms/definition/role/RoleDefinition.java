@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 /**
  * @author Mr.Liu
  * @date 2023/1/12 下午1:56
- * @description RoleDefinition
+ * @description Role字段的定义 避免在聚合实体entity，dto，vo，po……等bean 进行重复定义
  */
 @Data
 @Schema(description = "角色")
