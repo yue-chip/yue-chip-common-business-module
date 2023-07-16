@@ -6,10 +6,13 @@ import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Mr.Liu
@@ -73,9 +76,11 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
-    public void save(Long tableId, String tableName, String fileFieldName, Long fileId) {
-        List<Long> fileIds = new ArrayList<>();
-        fileIds.add(fileId);
+    public void save(Long tableId, String tableName, String fileFieldName, @NotNull Long... fileId) {
+        if (Objects.isNull(fileId)) {
+            return;
+        }
+        List<Long> fileIds = Stream.of(fileId).collect(Collectors.toList());
         save(tableId,fileFieldName,tableName,fileIds);
     }
 }
