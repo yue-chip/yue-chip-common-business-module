@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class Role extends RoleDefinition {
         if (Objects.nonNull(this.resources)) {
             return this.resources;
         }
+        Assert.notNull(getId(),"id不能为空");
         List<Resources> list = upmsRepository.findResourcesByRoleId(getId());
         return list;
     }
@@ -63,6 +65,7 @@ public class Role extends RoleDefinition {
      * @return
      */
     public List<Long> getResourcesIdForFront(){
+        Assert.notNull(getId(),"id不能为空");
         List<Resources> list = upmsRepository.findResourcesByRoleId(getId());
         List<Long> returnList = new ArrayList<>();
         list.forEach(resources -> {
@@ -86,6 +89,7 @@ public class Role extends RoleDefinition {
      * @return
      */
     public List<User> getUser() {
+        Assert.notNull(getId(),"id不能为空");
         List<User> list = upmsRepository.findUserByRoleId(getId());
         return list;
     }
@@ -104,6 +108,7 @@ public class Role extends RoleDefinition {
     }
 
     public Boolean checkNameIsExist() {
+        Assert.hasText(getName(),"名称不能为空");
         Optional<Role> optional = upmsRepository.findRoleByName(getName());
         if (optional.isPresent()) {
             if (Objects.nonNull(getId()) && optional.get().getId().equals(getId())){

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class Resources extends ResourcesDefinition {
      * @return
      */
     public Boolean checkCodeIsExist() {
+        Assert.hasText(getCode(),"编码不能为空");
         Optional<Resources> optional =  upmsRepository.findResourcesByCode(getCode());
         if (optional.isPresent()) {
             return checkIsExist(optional.get(), getId());
@@ -47,6 +49,8 @@ public class Resources extends ResourcesDefinition {
      * @return
      */
     public Boolean checkNameIsExist() {
+        Assert.hasText(getName(),"名称不能为空");
+        Assert.notNull(getParentId(),"父节点id不能为空");
         Optional<Resources> optional =  upmsRepository.findResourcesByNameAndParentId(getName(),getParentId());
         if (optional.isPresent()) {
             return checkIsExist(optional.get(), getId());
@@ -59,6 +63,7 @@ public class Resources extends ResourcesDefinition {
      * @return
      */
     public Boolean checkUrlIsExist() {
+        Assert.hasText(getUrl(),"url不能为空");
         Optional<Resources> optional =  upmsRepository.findResourcesByUrl(getUrl());
         if (optional.isPresent()) {
             return checkIsExist(optional.get(), getId());
@@ -67,10 +72,12 @@ public class Resources extends ResourcesDefinition {
     }
 
     public Optional<Resources> getParent() {
+        Assert.notNull(getParentId(),"父节点id不能为空");
         return upmsRepository.findResourcesById(getParentId());
     }
 
     public List<Resources> getChildren() {
+        Assert.notNull(getId(),"id不能为空");
         return upmsRepository.findResourcesByParentId(getId());
     }
 

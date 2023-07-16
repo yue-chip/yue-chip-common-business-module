@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.util.Assert;
 
 import java.util.*;
 
@@ -49,6 +50,7 @@ public class User extends UserDefinition {
     private List<Role> roles;
 
     public Boolean checkUsernameIsExist() {
+        Assert.hasText(getUsername(),"帐号不能为空");
         Optional<User> optional = upmsRepository.findUserByUsername(getUsername());
         return optional.isPresent();
     }
@@ -57,6 +59,7 @@ public class User extends UserDefinition {
         if (Objects.nonNull(this.roles)) {
             return this.roles;
         }
+        Assert.notNull(getId(),"id不能为空");
         List<Role> list = upmsRepository.findRoleByUserId(getId());
         return list;
     }
@@ -80,17 +83,20 @@ public class User extends UserDefinition {
      * @return
      */
     public List<ResourcesTreeListVo> getResourcesTree() {
+        Assert.notNull(getId(),"id不能为空");
         List<ResourcesTreeListVo> list = upmsRepository.findResourcesToTreeList(getId(),0L, Scope.CONSOLE);
         return list;
     }
 
     @Override
     public String getProfilePhotoUrl() {
+        Assert.notNull(getId(),"id不能为空");
         return fileExposeService.getUrlSingle(getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME);
     }
 
     @Override
     public Long getProfilePhotoId() {
+        Assert.notNull(getId(),"id不能为空");
         Map<Long,String> fileMap = fileExposeService.getUrl(getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME);
         if (fileMap.size()>0) {
             return (Long) fileMap.keySet().toArray()[0];
