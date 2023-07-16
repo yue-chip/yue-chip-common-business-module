@@ -34,7 +34,7 @@ public class FileRepositoryImpl implements FileRepository {
     private FileMapper fileMapper;
 
     @Override
-    public File add(@NotNull FilePo file) {
+    public File add(FilePo file) {
         file = fileDao.save(file);
         return fileMapper.toFile(file);
     }
@@ -57,6 +57,7 @@ public class FileRepositoryImpl implements FileRepository {
         return fileMapper.toFile(list);
     }
 
+    @Override
     public void save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
         fileRelationalDao.deleteByTableIdAndTableNameAndFileFieldName(tableId, tableName, fileFieldName);
         if (Objects.nonNull(tableId) && Objects.nonNull(tableName) && Objects.nonNull(fileFieldName) && Objects.nonNull(fileIds)) {
