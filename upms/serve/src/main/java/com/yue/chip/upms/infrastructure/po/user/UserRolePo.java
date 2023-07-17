@@ -33,12 +33,12 @@ public class UserRolePo extends BaseEntity {
 
     private Long roleId;
 
-    @Column(name = "user_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '用户id'")
+    @Column(name = "user_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '用户id-不能为空'")
     public Long getUserId() {
         return this.userId;
     }
 
-    @Column(name = "role_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id'")
+    @Column(name = "role_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id-不能为空'")
     public Long getRoleId() {
         return this.roleId;
     }
