@@ -4,13 +4,13 @@ ext {
 
 dependencies {
     constraints {
-        api "yue.chip:yue-chip-core:${yueChipVersion}"
-        api "yue.chip:yue-chip-business-starter:${yueChipVersion}"
-        api "yue.chip:yue-chip-interface-expose-impl-starter:${yueChipVersion}"
-        api "yue.chip:yue-chip-interface-expose-starter:${yueChipVersion}"
-        api "yue.chip:yue-chip-serve-starter:${yueChipVersion}"
-        api "yue.chip:yue-chip-security:${yueChipVersion}"
-        api "yue.chip:yue-chip-oauth2-resource-serve:${yueChipVersion}"
+        api "yue.chip:yue-chip-core:${yueChipPlatformVersion}"
+        api "yue.chip:yue-chip-business-starter:${yueChipPlatformVersion}"
+        api "yue.chip:yue-chip-interface-expose-impl-starter:${yueChipPlatformVersion}"
+        api "yue.chip:yue-chip-interface-expose-starter:${yueChipPlatformVersion}"
+        api "yue.chip:yue-chip-serve-starter:${yueChipPlatformVersion}"
+        api "yue.chip:yue-chip-security:${yueChipPlatformVersion}"
+        api "yue.chip:yue-chip-oauth2-resource-serve:${yueChipPlatformVersion}"
     }
 
 }
