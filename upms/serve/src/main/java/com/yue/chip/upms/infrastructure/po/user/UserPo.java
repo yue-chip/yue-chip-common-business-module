@@ -32,19 +32,19 @@ public class UserPo extends UserDefinition {
     public static final String TABLE_NAME = "t_user";
 
     @Override
-    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '密码'")
+    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '密码-不能为空'")
     public String getPassword() {
         return super.getPassword();
     }
 
     @Override
-    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '登录帐号'")
+    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '登录帐号-不能为空'")
     public String getUsername() {
         return super.getUsername();
     }
 
     @Override
-    @Column(name = "name", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '姓名'")
+    @Column(name = "name", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '姓名-不能为空'")
     public String getName() {
         return super.getName();
     }

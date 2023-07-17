@@ -28,25 +28,25 @@ public class RolePo extends RoleDefinition {
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    @Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)'")
+    @Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)-不能为空'")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '编码'")
+    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '编码-不能为空'")
     public String getCode() {
         return super.getCode();
     }
 
     @Override
-    @Column(name = "name", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '名称'")
+    @Column(name = "name", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '名称-不能为空'")
     public String getName() {
         return super.getName();
     }
 
     @Override
-    @Column(columnDefinition = "bit(1) NULL COMMENT '是否默认角色（0：否，1：是）默认角色不能删除'")
+    @Column(columnDefinition = "bit(1) NULL COMMENT '是否默认角色（0：否，1：是）默认角色不能删除-不能为空'")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }

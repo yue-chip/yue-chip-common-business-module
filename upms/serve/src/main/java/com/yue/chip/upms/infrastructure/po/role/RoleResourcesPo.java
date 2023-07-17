@@ -35,12 +35,12 @@ public class RoleResourcesPo extends BaseEntity {
     public RoleResourcesPo() {
     }
 
-    @Column(name = "role_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id'")
+    @Column(name = "role_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id-不能为空'")
     public Long getRoleId() {
         return roleId;
     }
 
-    @Column(name = "resources_id",  columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '菜单资源id'")
+    @Column(name = "resources_id",  columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '菜单资源id-不能为空'")
     public Long getResourcesId() {
         return resourcesId;
     }

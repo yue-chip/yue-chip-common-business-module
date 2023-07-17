@@ -39,40 +39,40 @@ public class ResourcesPo extends ResourcesDefinition {
     }
 
     @Override
-    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '编码'")
+    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '编码-不能为空'")
     public String getCode() {
         return super.getCode();
     }
 
     @Override
-    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '名称'")
+    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '名称-不能为空'")
     public String getName() {
         return super.getName();
     }
 
     @Override
     @Convert(converter = Scope.ScopeConverter.class)
-    @Column(columnDefinition = "int NULL COMMENT '作用域(0:app,1:后台,2:前端,3:微信)'")
+    @Column(columnDefinition = "int NULL COMMENT '作用域(0:app,1:后台,2:前端,3:微信)-不能为空'")
     public Scope getScope() {
         return super.getScope();
     }
 
     @Override
     @Convert(converter = Type.TypeConverter.class)
-    @Column(columnDefinition = "int NULL COMMENT '类型(0:目录,1:菜单,2:功能)'")
+    @Column(columnDefinition = "int NULL COMMENT '类型(0:目录,1:菜单,2:功能)-不能为空'")
     public Type getType() {
         return super.getType();
     }
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    @Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)'")
+    @Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)-不能为空'")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column(columnDefinition = "bit(1) NULL COMMENT '是否默认菜单资源,默认资源不能删除'")
+    @Column(columnDefinition = "bit(1) NULL COMMENT '是否默认菜单资源,默认资源不能删除-不能为空'")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }
