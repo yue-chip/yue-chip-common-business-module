@@ -19,6 +19,6 @@ public class UserRoleAddDto {
     private Long roleId;
 
 
-    @Schema(description = "用户id")
+    @Schema(description = "用户id-全量，先删后增")
     private Long[] userIds;
 }
