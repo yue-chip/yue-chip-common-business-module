@@ -27,7 +27,7 @@
                   <template #icon><PlusOutlined /></template>
                   添加
                 </a-button>
-                <a-button type="danger" @click="del(selectedRowKeys)">
+                <a-button type="primary" danger @click="del(selectedRowKeys)">
                   <template #icon><DeleteOutlined /></template>
                   删除
                 </a-button>
@@ -64,10 +64,8 @@
   import {useRouter} from 'vue-router'
   import { SearchOutlined,PlusOutlined,DeleteOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-  import {message,Card,Modal,Select,Form,Col,FormItem,Input,Space,Button,TableProps} from "ant-design-vue";
+  import {TableProps} from "ant-design-vue";
   import qs from "qs";
-  import "ant-design-vue/es/message/style/index.css"
-  import "ant-design-vue/es/modal/style/index.css"
   const _this:any = getCurrentInstance();
   const router=useRouter();
   let loading = ref(false);
@@ -134,7 +132,7 @@
 
 
 
-  function del(id:string){
+  function del(id:string[]){
     if (!id || id.length === 0) {
       message.error("请选择要删除的数据！")
       return;

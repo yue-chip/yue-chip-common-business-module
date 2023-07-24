@@ -1,8 +1,10 @@
 package com.yue.chip.upms.application.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.common.business.expose.file.FileExposeService;
+import com.yue.chip.exception.BusinessException;
 import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.definition.user.UserDefinition;
@@ -83,7 +85,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         Optional<Role> optional = upmsRepository.findRoleById(roleId);
         if (optional.isPresent()){
             Role role = optional.get();
-            Assert.isFalse(role.getIsDefault(),"默认角色不能删除");
+            Assert.isFalse(role.getIsDefault(),() -> {return new BusinessException("默认角色不能删除");});
             //删除角色与用户的关联关系
             upmsRepository.deleteUserRole(roleId);
             //删除角色与资源的关联关系
@@ -99,7 +101,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         Optional<Resources> optional = upmsRepository.findResourcesById(resourcesId);
         if (optional.isPresent()){
             Resources resources = optional.get();
-            Assert.isFalse(resources.getIsDefault(),"默认资源不能删除");
+            Assert.isFalse(resources.getIsDefault(),() -> {return new BusinessException("默认资源不能删除");});
             //删除资源与角色的关联关系
             upmsRepository.deleteRoleResourcesByResourcesId(resourcesId);
             //删除资源
@@ -111,7 +113,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     public void saveUser(@NotNull UserAddOrUpdateDto userAddOrUpdateDto) {
         //检查用户是否存在
         User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
-        Assert.isFalse(user.checkUsernameIsExist(),"该账号已存在");
+        Assert.isFalse(user.checkUsernameIsExist(), () -> {return new BusinessException("该帐号已存在");});
         //保存用户
         User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存头像

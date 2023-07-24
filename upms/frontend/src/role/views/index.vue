@@ -2,7 +2,7 @@
   <div>
     <a-card >
       <a-form ref="from" :model="searchModel" :labelCol="{span: 3,offset:0}" >
-        <a-row >
+        <a-row :gutter="24">
           <a-col :span="6">
             <a-form-item label="名称" name="name" ref="name" >
               <a-input placeholder="请输入名称" v-model:value="searchModel.name" />
@@ -18,7 +18,7 @@
           <a-col :span="6">
           </a-col>
         </a-row>
-        <a-row style="height: 20px;">
+        <a-row :gutter="24" style="height: 20px;">
           <a-col :span="24" style="text-align:right;">
             <a-form-item>
               <a-space :size="5">
@@ -119,9 +119,7 @@
   import {ref, onActivated,getCurrentInstance} from 'vue'
   import { SearchOutlined,PlusOutlined,UserAddOutlined,FilterOutlined,DeleteOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-  import {message,Card,Modal,Select,Tree,Form,Col,FormItem,Input,Space,Button,SelectOption} from "ant-design-vue";
   import qs from "qs";
-  import "ant-design-vue/es/message/style/index.css"
   const _this:any = getCurrentInstance();
   let loading = ref(false);
   let searchModel = ref({pageSize:10,pageNumber:1});

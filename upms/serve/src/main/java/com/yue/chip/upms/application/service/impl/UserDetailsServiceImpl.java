@@ -1,4 +1,4 @@
-package com.yue.chip.upms.application.expose.impl.user;
+package com.yue.chip.upms.application.service.impl;
 
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
@@ -25,7 +25,7 @@ import java.util.Optional;
  * @author Mr.Liu
  * @date 2023/2/16 下午1:50
  */
-@DubboService(interfaceClass = UserDetailsService.class)
+//@DubboService(interfaceClass = UserDetailsService.class)
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

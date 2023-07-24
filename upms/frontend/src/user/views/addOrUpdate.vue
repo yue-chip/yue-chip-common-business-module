@@ -39,9 +39,6 @@
   import {useRouter,useRoute} from 'vue-router'
   import { RollbackOutlined,SaveOutlined,UndoOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-  import {message,Card,Form,Col,FormItem,Input,Space,Button,InputPassword} from "ant-design-vue";
-  import "ant-design-vue/es/message/style/index.css"
-
   const router=useRouter();
   const route = useRoute();
   const _this:any = getCurrentInstance();
