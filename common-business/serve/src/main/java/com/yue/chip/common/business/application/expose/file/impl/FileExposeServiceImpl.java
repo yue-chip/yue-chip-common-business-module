@@ -76,7 +76,7 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
-    public void save(Long tableId, String tableName, String fileFieldName, @NotNull Long... fileId) {
+    public void save(Long tableId, String tableName, String fileFieldName, Long... fileId) {
         if (Objects.isNull(fileId)) {
             return;
         }
