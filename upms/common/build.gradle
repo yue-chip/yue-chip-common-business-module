@@ -2,7 +2,7 @@ apply from: this.rootProject.file('javaLibrary.gradle')
 archivesBaseName = 'yue-chip-upms-common'
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
-    api platform(project(':dependencies'))
+    api platform("yue.chip:starter:${yueChipPlatformVersion}")
     implementation 'yue.chip:yue-chip-core'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'

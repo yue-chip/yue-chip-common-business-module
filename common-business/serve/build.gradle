@@ -20,6 +20,7 @@ bootJar {
 }
 dependencies {
     api project(':interface-expose')
+    api platform("yue.chip:starter:${yueChipPlatformVersion}")
     api 'yue.chip:yue-chip-serve-starter'
     api 'yue.chip:yue-chip-business-starter'
     api 'yue.chip:yue-chip-security'
