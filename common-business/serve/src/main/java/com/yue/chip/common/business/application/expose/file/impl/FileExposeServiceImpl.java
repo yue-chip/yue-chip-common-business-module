@@ -80,7 +80,7 @@ public class FileExposeServiceImpl implements FileExposeService {
         if (Objects.isNull(fileId)) {
             return;
         }
-        List<Long> fileIds = Stream.of(fileId).collect(Collectors.toList());
+        List<Long> fileIds = Stream.of(fileId).filter(id -> Objects.nonNull(id)).collect(Collectors.toList());
         save(tableId,fileFieldName,tableName,fileIds);
     }
 }

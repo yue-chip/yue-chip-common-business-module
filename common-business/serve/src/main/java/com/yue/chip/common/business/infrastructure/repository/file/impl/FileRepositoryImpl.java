@@ -63,7 +63,7 @@ public class FileRepositoryImpl implements FileRepository {
         fileRelationalDao.deleteByTableIdAndTableNameAndFileFieldName(tableId, tableName, fileFieldName);
         if (Objects.nonNull(tableId) && Objects.nonNull(tableName) && Objects.nonNull(fileFieldName) && Objects.nonNull(fileIds)) {
             List<FileRelationalPo> list = new ArrayList<>();
-            fileIds.forEach(fileId ->{
+            fileIds.stream().filter(id->Objects.nonNull(id)).forEach(fileId ->{
                 FileRelationalPo fileRelationalPo = FileRelationalPo.builder()
                         .fileFieldName(fileFieldName)
                         .fileId(fileId)

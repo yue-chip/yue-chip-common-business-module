@@ -64,6 +64,7 @@ public interface FileExposeService {
      * @param fileFieldName 关联表的字段名称(如:头像,照片,合同……) 被关联表中实际不存在该字段
      * @param fileId 文件id
      */
+    @Deprecated //Tri协议下会有问题  似乎是没法反序列化Long...
     public void save(@NotNull Long tableId, @NotBlank String tableName, @NotBlank String fileFieldName,@NotNull @Size(min = 1) Long... fileId);
 
 }

@@ -124,7 +124,8 @@
 
 <script setup lang="ts">
   import {ref, onActivated,getCurrentInstance} from 'vue'
-  import { SearchOutlined,PlusOutlined,DeleteOutlined } from '@ant-design/icons-vue';
+  import { SearchOutlined,PlusOutlined,DeleteOutlined,EditOutlined } from '@ant-design/icons-vue';
+  import { message } from 'ant-design-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   const _this:any = getCurrentInstance();
   let visible = ref<boolean>(false);

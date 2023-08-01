@@ -3,6 +3,8 @@ import vue from '@vitejs/plugin-vue'
 import {join,resolve} from 'path'
 // @ts-ignore
 import viteCompression from 'vite-plugin-compression';
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
+import Components from 'unplugin-vue-components/vite';
 import fs from "fs";
 const project_pages = {};
 const entryPath = resolve(__dirname, "./src");
@@ -25,7 +27,8 @@ export default defineConfig(({ mode }) => {
     root: 'src',
     plugins: [
       vue(),
-      viteCompression({verbose: true,disable: false,threshold: 10240,algorithm: "gzip",ext: ".gz",})
+      viteCompression({verbose: true,disable: false,threshold: 10240,algorithm: "gzip",ext: ".gz",},),
+      Components({resolvers: [AntDesignVueResolver({importStyle: false,}),],}),
     ],
     server: {
       hmr: { overlay :false},
