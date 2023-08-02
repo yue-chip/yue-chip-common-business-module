@@ -23,7 +23,7 @@
               <template #icon><UndoOutlined /></template>
               重置
             </a-button>
-            <a-button type="danger" v-bind:disabled="backDisabled" @click="back">
+            <a-button type="dashed" v-bind:disabled="backDisabled" @click="back">
               <template #icon><RollbackOutlined /></template>
               返回
             </a-button>

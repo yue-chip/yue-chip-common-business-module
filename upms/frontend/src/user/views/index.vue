@@ -47,7 +47,7 @@
                 <template #icon><EditOutlined /></template>
                 修改
               </a-button>
-              <a-button v-if="record.username !== 'admin'" size="small" type="danger" @click="del(record.id)">
+              <a-button v-if="record.username !== 'admin'" size="small" type="dashed" @click="del(record.id)">
                 <template #icon><DeleteOutlined /></template>
                 删除
               </a-button>
@@ -87,7 +87,7 @@
       title: '操作',
       key: "operation",
       fixed: 'right',
-      width: '150px',
+      width: '155px',
     },
   ]
   let dataList = ref([]);

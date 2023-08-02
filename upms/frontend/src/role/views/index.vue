@@ -58,7 +58,7 @@
                 <template #icon><UserAddOutlined /></template>
                 人员
               </a-button>
-              <a-button v-if="record.isDefault === false" size="small" type="danger" @click="del(record.id)">
+              <a-button v-if="record.isDefault === false" size="small" type="dashed" @click="del(record.id)">
                 <template #icon><DeleteOutlined /></template>
                 删除
               </a-button>
