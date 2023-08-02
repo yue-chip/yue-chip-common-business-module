@@ -3,7 +3,7 @@
   "private": false,
   "version": "1.0.0",
   "scripts": {
-    "dev": "vite --mode dev",
+    "dev": "vite --mode dev & node ./registerGateway.js",
     "build": "vite build --mode pro",
     "preview": "vite preview"
   },
