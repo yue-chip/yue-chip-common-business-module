@@ -20,6 +20,9 @@ public class FileDefinition extends BaseDefinition {
 
     private static final long serialVersionUID = -2124525197256620973L;
 
+    public static final String CACHE_KEY_URL_SINGLE = "urlSingle";
+    public static final String CACHE_KEY_URL_MULTIPLE = "urlMultiple";
+
     @Schema(description = "原始文件名")
     protected String originalFileName;
 

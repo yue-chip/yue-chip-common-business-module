@@ -32,6 +32,7 @@ import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -271,11 +272,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public IPageResultData<List<UserVo>> userList(String name, Pageable pageable) {
         Page<UserPo> page = userDao.find(name,null,pageable);
-        return (IPageResultData<List<UserVo>>) PageResultData.convert(page,userMapper.toUserListVo(page.getContent()));
+        List<User> listUser = userMapper.toUserList(page.getContent());
+        return (IPageResultData<List<UserVo>>) PageResultData.convert(page,userMapper.toUserListVo(listUser));
     }
 
     @Override
-//    @CachePut(value = User.CACHE_KEY,key = "#userPo.id")
     public User saveUser(UserPo userPo) {
         userPo.setPassword(passwordEncoder.encode(SecureUtil.md5(userPo.getPassword())));
         userPo = userDao.save(userPo);
@@ -283,6 +284,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    //    @CachePut(value = User.CACHE_KEY,key = "#userPo.id")
     @CacheEvict(value = User.CACHE_KEY, key = "#userPo.id")
     public void updateUser(UserPo userPo) {
         userDao.update(userPo);

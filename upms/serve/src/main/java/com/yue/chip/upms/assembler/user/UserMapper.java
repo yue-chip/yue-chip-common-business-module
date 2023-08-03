@@ -23,7 +23,9 @@ public interface UserMapper {
 
     public User toUser(UserPo userPo);
 
-    public List<UserVo> toUserListVo(List<UserPo> list);
+//    public List<UserVo> toUserListVo(List<UserPo> list);
+
+    public List<UserVo> toUserListVo(List<User> list);
 
     public List<User> toUserList(List<UserPo> list);
 
@@ -33,6 +35,8 @@ public interface UserMapper {
     public UserPo toUserPo(UserAddOrUpdateDto userAddOrUpdateDto);
 
     public User toUser(UserAddOrUpdateDto userAddOrUpdateDto);
+
+    public UserVo toUserVo(UserPo userPo);
 
     public UserVo toUserVo(User user);
 }

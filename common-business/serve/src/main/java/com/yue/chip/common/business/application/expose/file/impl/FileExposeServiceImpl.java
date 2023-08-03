@@ -8,6 +8,8 @@ import com.yue.chip.common.business.expose.file.FileExposeService;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -71,6 +73,7 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
+    @CacheEvict(value = {FileDefinition.CACHE_KEY_URL_MULTIPLE,FileDefinition.CACHE_KEY_URL_SINGLE},key = "#tableId" + "-"+"#fileFieldName"+"-"+"#tableName")
     public void save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
         fileRepository.save(tableId, tableName, fileFieldName, fileIds);
     }

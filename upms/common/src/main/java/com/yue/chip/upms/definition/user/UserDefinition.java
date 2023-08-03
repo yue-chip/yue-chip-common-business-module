@@ -31,7 +31,7 @@ public class UserDefinition extends BaseDefinition {
     /**
      * redis key 获取缓存对象用该key就好
      */
-    public static final String CACHE_KEY = "user-";
+    public static final String CACHE_KEY = "user";
 
     /**
      * 存放于 FileRelationalPo(t_file_relational)表中的字段名 头像  任何表的文件关联都方在 common-business 微服务的 t_file_relational 表

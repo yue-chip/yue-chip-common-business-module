@@ -1,5 +1,6 @@
 package com.yue.chip.upms.interfaces.facade.console.upms;
 
+import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
@@ -9,6 +10,7 @@ import com.yue.chip.core.controller.BaseController;
 import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -17,6 +19,7 @@ import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
@@ -70,6 +73,9 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @Resource
     private UserMapper userMapper;
+
+    @DubboReference
+    private FileExposeService fileExposeService;
 
 
     @GetMapping("/currentUser/permissions")
@@ -247,6 +253,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @GetMapping("/user/list")
     @Operation(description = "用户-用户列表",summary = "用户-用户列表")
+    @AuthorizationIgnore
     public IPageResultData<List<UserVo>> userList(@Parameter(description = "姓名",name="name")String name, YueChipPage page) {
         IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(name,page);
         return pageResultData;

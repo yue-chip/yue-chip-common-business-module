@@ -4,6 +4,7 @@ import com.yue.chip.common.business.definition.file.FileDefinition;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ public interface FileExposeService {
      * @param fileFieldName 关联表的字段名称(如:头像,照片,合同……) 被关联表中实际不存在该字段
      * @return fileId 和 url 的映射关系
      */
+    @Cacheable(value = FileDefinition.CACHE_KEY_URL_MULTIPLE,key = "#tableId + '-' + #fileFieldName + '-' +#tableName")
     public Map<Long,String> getUrl(@NotNull Long tableId,@NotBlank String fileFieldName,@NotBlank String tableName);
 
     /**
@@ -45,6 +47,7 @@ public interface FileExposeService {
      * @param fileFieldName 关联表的字段名称(如:头像,照片,合同……) 被关联表中实际不存在该字段
      * @return fileId 和 url 的映射关系
      */
+    @Cacheable(value = FileDefinition.CACHE_KEY_URL_SINGLE,key = "#tableId + '-' + #fileFieldName + '-' +#tableName")
     public String getUrlSingle(@NotNull Long tableId,@NotBlank String fileFieldName,@NotBlank String tableName);
 
     /**
