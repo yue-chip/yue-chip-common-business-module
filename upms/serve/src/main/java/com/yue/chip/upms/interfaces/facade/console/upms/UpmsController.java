@@ -253,7 +253,7 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @GetMapping("/user/list")
     @Operation(description = "用户-用户列表",summary = "用户-用户列表")
-    @AuthorizationIgnore
+//    @AuthorizationIgnore
     public IPageResultData<List<UserVo>> userList(@Parameter(description = "姓名",name="name")String name, YueChipPage page) {
         IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(name,page);
         return pageResultData;
