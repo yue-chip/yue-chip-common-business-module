@@ -18,7 +18,10 @@ import lombok.experimental.SuperBuilder;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.util.Assert;
 
+import javax.sql.DataSource;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * @author Mr.Liu
@@ -98,7 +101,7 @@ public class User extends UserDefinition {
     public Long getProfilePhotoId() {
         Assert.notNull(getId(),"id不能为空");
         Map<Long,String> fileMap = fileExposeService.getUrl(getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME);
-        if (fileMap.size()>0) {
+        if (Objects.nonNull(fileMap) && fileMap.size()>0) {
             Object obj = fileMap.keySet().toArray()[0];
             if (obj instanceof Long) {
                 return (Long) obj;

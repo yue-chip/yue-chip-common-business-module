@@ -78,4 +78,10 @@ public class UserPo extends UserDefinition {
     public boolean isEnabled() {
         return super.isEnabled();
     }
+
+    @Override
+    @Column(columnDefinition = "bigint DEFAULT 1 COMMENT '租户id'")
+    public Long getTenantId() {
+        return super.getTenantId();
+    }
 }

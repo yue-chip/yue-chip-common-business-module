@@ -65,6 +65,11 @@ public class UserDefinition extends BaseDefinition {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate birthday;
 
+    @Schema(description = "租户id")
+    @Builder.Default
+    @JsonIgnore
+    private Long tenantId = 1L;
+
     private  boolean accountNonExpired;
 
     private  boolean accountNonLocked;

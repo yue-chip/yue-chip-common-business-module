@@ -6,13 +6,13 @@ import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,7 +48,7 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
-    public Map<Long, String> getUrl(Long tableId, String fileFieldName,String tableName) {
+    public Map<Long, String> getUrl(Long tableId, String fileFieldName, String tableName) {
         if (Objects.isNull(tableId) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {
             return Collections.EMPTY_MAP;
         }

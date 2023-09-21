@@ -42,3 +42,6 @@ spring:
           - data-id: redis.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: GLOBAL_GROUP
+logging:
+  level:
+    root: info

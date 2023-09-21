@@ -5,10 +5,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Future;
 
 /**
  * @author Mr.Liu
@@ -32,22 +34,24 @@ public interface FileExposeService {
 
     /**
      * 根据表id和表名称查找多个文件url
-     * @param tableId 关联表的id
-     * @param tableName 关联表的id
+     *
+     * @param tableId       关联表的id
+     * @param tableName     关联表的id
      * @param fileFieldName 关联表的字段名称(如:头像,照片,合同……) 被关联表中实际不存在该字段
      * @return fileId 和 url 的映射关系
      */
-    @Cacheable(value = FileDefinition.CACHE_KEY_URL_MULTIPLE,key = "#tableId + '-' + #fileFieldName + '-' +#tableName")
-    public Map<Long,String> getUrl(@NotNull Long tableId,@NotBlank String fileFieldName,@NotBlank String tableName);
+//    @Cacheable(value = FileDefinition.CACHE_KEY_URL_MULTIPLE,key = "#tableId + '-' + #fileFieldName + '-' +#tableName")
+    public Map<Long,String> getUrl(@NotNull Long tableId, @NotBlank String fileFieldName, @NotBlank String tableName);
 
     /**
      * 根据表id和表名称查找单个文件url
-     * @param tableId 关联表的id
-     * @param tableName 关联表的id
+     *
+     * @param tableId       关联表的id
+     * @param tableName     关联表的id
      * @param fileFieldName 关联表的字段名称(如:头像,照片,合同……) 被关联表中实际不存在该字段
      * @return fileId 和 url 的映射关系
      */
-    @Cacheable(value = FileDefinition.CACHE_KEY_URL_SINGLE,key = "#tableId + '-' + #fileFieldName + '-' +#tableName")
+//    @Cacheable(value = FileDefinition.CACHE_KEY_URL_SINGLE,key = "#tableId + '-' + #fileFieldName + '-' +#tableName")
     public String getUrlSingle(@NotNull Long tableId,@NotBlank String fileFieldName,@NotBlank String tableName);
 
     /**

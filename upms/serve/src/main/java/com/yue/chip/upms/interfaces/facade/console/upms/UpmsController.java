@@ -42,9 +42,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.extern.java.Log;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.data.annotation.Reference;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,10 +75,6 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @Resource
     private UserMapper userMapper;
-
-    @DubboReference
-    private FileExposeService fileExposeService;
-
 
     @GetMapping("/currentUser/permissions")
     @Operation(summary = "权限-获取当前用户的权限(菜单，资源)", description = "权限-获取当前用户的权限(菜单，资源)")
@@ -253,7 +251,6 @@ public class UpmsController extends BaseControllerImpl implements BaseController
 
     @GetMapping("/user/list")
     @Operation(description = "用户-用户列表",summary = "用户-用户列表")
-//    @AuthorizationIgnore
     public IPageResultData<List<UserVo>> userList(@Parameter(description = "姓名",name="name")String name, YueChipPage page) {
         IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(name,page);
         return pageResultData;

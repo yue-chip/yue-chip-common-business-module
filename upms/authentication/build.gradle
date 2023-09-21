@@ -5,7 +5,7 @@ archivesBaseName = 'yue-chip-upms-authentication'
 apply from: this.rootProject.file('javaLibrary.gradle')
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
-    api platform("yue.chip:starter:${yueChipPlatformVersion}")
+    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}")
     implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     implementation 'yue.chip:yue-chip-core'
     api 'yue.chip:yue-chip-security'

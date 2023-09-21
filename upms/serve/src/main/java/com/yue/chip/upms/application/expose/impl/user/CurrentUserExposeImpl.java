@@ -1,9 +1,9 @@
 package com.yue.chip.upms.application.expose.impl.user;
 
 import com.yue.chip.core.ICurrentUser;
+import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
-import com.yue.chip.upms.assembler.user.UserMapper;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -33,7 +33,7 @@ public class CurrentUserExposeImpl implements ICurrentUser<User> {
             User user = optional.get();
             Map<String, Object> map = new HashMap<>();
             map.put("id",user.getId());
-//            map.put("tenantId",user.getTenantId());
+            map.put("tenantId",user.getTenantId());
             return map;
         }
         return null;

@@ -61,7 +61,7 @@ public class LoginServiceImpl implements LoginService {
         });
         YueChipAuthenticationToken token = new YueChipAuthenticationToken(username, authoritiesList);
         SecurityContextHolder.getContext().setAuthentication(token);
-        YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),authoritiesList);
+        YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantId(),authoritiesList);
         YueChipRedisTokenStoreUtil.store(userDetails,token.getToken());
         return token.getToken();
     }

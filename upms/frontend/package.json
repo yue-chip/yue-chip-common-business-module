@@ -30,6 +30,6 @@
     "vue-tsc": "^1.0.24"
   },
   "publishConfig": {
-    "registry": "http://192.168.8.213:32129/repository/hosted-repository-npm/"
+    "registry": "http://127.0.0.1:8081/repository/hosted-repository-npm/"
   }
 }
