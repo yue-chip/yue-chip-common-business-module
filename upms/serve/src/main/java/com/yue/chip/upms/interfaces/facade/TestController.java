@@ -1,4 +1,4 @@
-package com.yue.chip.upms.interfaces.facade.console.upms;
+package com.yue.chip.upms.interfaces.facade;
 
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.IPageResultData;
@@ -34,11 +34,11 @@ import java.util.Map;
  * @date 2023/3/17 上午10:45
  */
 @RestController()
-@RequestMapping("/test")
+@RequestMapping()
 @Validated
 @Tag(name = "测试")
 @Log
-public class TestController extends BaseControllerImpl implements BaseController {
+public class TestController  {
 
     @Resource
     private UpmsApplication upmsApplication;

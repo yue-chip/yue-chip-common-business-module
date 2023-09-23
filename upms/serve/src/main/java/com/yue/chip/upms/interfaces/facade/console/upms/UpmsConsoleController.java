@@ -1,16 +1,11 @@
 package com.yue.chip.upms.interfaces.facade.console.upms;
 
-import com.yue.chip.annotation.AuthorizationIgnore;
-import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.YueChipPage;
-import com.yue.chip.core.controller.BaseController;
-import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.application.service.UpmsApplication;
-import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -19,7 +14,6 @@ import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
-import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
@@ -41,12 +35,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.extern.java.Log;
-import org.apache.dubbo.config.annotation.DubboReference;
-import org.springframework.data.annotation.Reference;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,12 +45,12 @@ import java.util.Optional;
  * @author Mr.Liu
  * @date 2023/3/7 下午2:28
  */
-@RestController("upmsConsoleController")
+@RestController()
 @RequestMapping("/console")
 @Validated
 @Tag(name = "角色&用户&资源-pc端后台")
 @Log
-public class UpmsController extends BaseControllerImpl implements BaseController {
+public class UpmsConsoleController {
 
     @Resource
     private UpmsRepository upmsRepository;

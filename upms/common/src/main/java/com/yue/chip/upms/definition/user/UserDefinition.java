@@ -66,9 +66,8 @@ public class UserDefinition extends BaseDefinition {
     private LocalDate birthday;
 
     @Schema(description = "租户id")
-    @Builder.Default
     @JsonIgnore
-    private Long tenantId = 1L;
+    private Long tenantId;
 
     private  boolean accountNonExpired;
 

@@ -31,7 +31,7 @@ import java.util.*;
 @Validated
 @Tag(name = "文件")
 @Log
-public class FileController extends BaseControllerImpl implements BaseController {
+public class FileController  {
 
     @Resource
     private FileService fileService;

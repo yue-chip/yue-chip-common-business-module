@@ -68,7 +68,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public Optional<User> findUserByUsername(String username) {
-        Optional<UserPo> optional = userDao.find(username);
+        Optional<UserPo> optional = userDao.findFirstByUsername(username);
         if (optional.isPresent()) {
             User user = userMapper.toUser(optional.get());
             return Optional.ofNullable(user);

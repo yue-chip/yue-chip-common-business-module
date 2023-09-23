@@ -1,3 +1,3 @@
-NODE_ENV=development
+NODE_ENV=production
 VITE_BASEURL=""
 VITE_BASEAPI="/api"

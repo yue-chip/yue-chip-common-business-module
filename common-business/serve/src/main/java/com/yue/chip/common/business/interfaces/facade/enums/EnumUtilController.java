@@ -31,7 +31,7 @@ import java.util.Optional;
 @Validated
 @Tag(name = "枚举")
 @Log
-public class EnumUtilController  extends BaseControllerImpl implements BaseController {
+public class EnumUtilController   {
 
     @Resource
     private EnumUtilRepository enumUtilRepository;

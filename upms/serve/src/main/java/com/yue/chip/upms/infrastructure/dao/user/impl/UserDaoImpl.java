@@ -30,35 +30,35 @@ public class UserDaoImpl implements UserDaoEx {
     @Autowired
     private DataSource dataSource;
 
-    @Override
-    public Optional<UserPo> find(String username) {
-        QueryRunner queryRunner = new QueryRunner(dataSource);
-        try {
-            UserPo userPo = queryRunner.query("select * from t_user where username = ? limit 0,1 ", new ResultSetHandler<UserPo>() {
-                @Override
-                public UserPo handle(ResultSet rs) throws SQLException {
-                    if (rs.next()) {
-                        UserPo userPo = UserPo.builder()
-                                .username(rs.getString("username"))
-                                .id(rs.getLong("id"))
-                                .name(rs.getString("name"))
-                                .password(rs.getString("password"))
-//                                .version(rs.getLong("version"))
-                                .tenantId(rs.getLong("tenant_id"))
-                                .build();
-                        return userPo;
-                    }
-                    return null;
-                }
-            }, new Object[]{username});
-//            UserPo userPo = queryRunner.query("select * from t_user where username = ? limit 0,1 ",new BeanHandler<UserPo>(UserPo.class),new Object[]{username});
-            return Optional.ofNullable(userPo);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            BusinessException.throwException("查询用户失败");
-        }
-        return Optional.empty();
-    }
+//    @Override
+//    public Optional<UserPo> find(String username) {
+//        QueryRunner queryRunner = new QueryRunner(dataSource);
+//        try {
+//            UserPo userPo = queryRunner.query("select * from t_user where username = ? limit 0,1 ", new ResultSetHandler<UserPo>() {
+//                @Override
+//                public UserPo handle(ResultSet rs) throws SQLException {
+//                    if (rs.next()) {
+//                        UserPo userPo = UserPo.builder()
+//                                .username(rs.getString("username"))
+//                                .id(rs.getLong("id"))
+//                                .name(rs.getString("name"))
+//                                .password(rs.getString("password"))
+////                                .version(rs.getLong("version"))
+//                                .tenantId(rs.getLong("tenant_id"))
+//                                .build();
+//                        return userPo;
+//                    }
+//                    return null;
+//                }
+//            }, new Object[]{username});
+////            UserPo userPo = queryRunner.query("select * from t_user where username = ? limit 0,1 ",new BeanHandler<UserPo>(UserPo.class),new Object[]{username});
+//            return Optional.ofNullable(userPo);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            BusinessException.throwException("查询用户失败");
+//        }
+//        return Optional.empty();
+//    }
 
     @Override
     public Page<UserPo> find(String name, String username, Pageable pageable) {

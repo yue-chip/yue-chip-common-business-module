@@ -4,7 +4,7 @@
       <a-form ref="from" :model="searchModel" :label-col="{span: 4,offset:0}" >
         <a-row >
           <a-col :span="6">
-            <a-form-item label="姓名" name="name" ref="name" >
+            <a-form-item label="姓名2" name="name" ref="name" >
               <a-input placeholder="请输入姓名" v-model:value="searchModel.name" />
             </a-form-item>
           </a-col>
