@@ -6,11 +6,13 @@ spring:
     allow-circular-references: true
   nacos:
     group: XIAO-WEI-GROUP
-    host: 192.168.0.145:8848
+    host: 192.168.11.145:8848
     namespace: 1706918c-e809-426a-b633-e351101ed09d
 #    group: YUE-CHIP-GROUP
 #    host: 192.168.177.129:8848
 #    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
+    password: naocs
+    username: naocs
   application:
     name: upms
   cloud:
@@ -20,8 +22,8 @@ spring:
         file-extension: yaml
         namespace: ${spring.nacos.namespace}
         group: ${spring.nacos.group}
-        password: naocs
-        username: naocs
+        username: ${spring.nacos.username}
+        password: ${spring.nacos.password}
         extension-configs:
           - data-id: common.${spring.cloud.nacos.config.file-extension}
             refresh: true
