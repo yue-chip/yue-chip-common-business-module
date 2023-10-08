@@ -10,12 +10,14 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.yue.chip.core.BaseDefinition;
+import com.yue.chip.core.common.enums.State;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Transient;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * user 字段的定义 避免在聚合实体entity，dto，vo，po……等bean 进行重复定义
@@ -59,11 +61,22 @@ public class UserDefinition extends BaseDefinition {
     @Schema(description = "姓名")
     private String name;
 
-    @Schema(description = "出生日期")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDate birthday;
+    @Schema(description = "联系电话")
+    private String phoneNumber;
+
+    @Schema(description = "状态")
+    private State state;
+
+    @Schema(description = "是否接收短信通知")
+    @Builder.Default
+    private Boolean isSms = false;
+
+    @Schema(description = "是否接收紧急呼叫")
+    @Builder.Default
+    private Boolean isCall = false;
+
+    @Schema(description = "最后登录时间")
+    private LocalDateTime lastLoginTime;
 
     @Schema(description = "租户id")
     @JsonIgnore

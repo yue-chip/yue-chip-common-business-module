@@ -8,5 +8,4 @@ import com.sun.jna.platform.unix.X11;
  */
 public interface TestApplicationService {
 
-    public void testStateMachine();
 }

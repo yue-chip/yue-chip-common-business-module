@@ -14,4 +14,11 @@ public interface UpmsDomainService {
      * @param resourcesIds
      */
     public void roleResources(@NotNull Long roleId, Long[] resourcesIds);
+
+    /**
+     * 绑定用户与组织机构的关联关系
+     * @param userId
+     * @param organizationalId
+     */
+    public void userOrganizational(@NotNull Long userId,Long organizationalId);
 }

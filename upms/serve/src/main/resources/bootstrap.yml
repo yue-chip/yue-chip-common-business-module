@@ -6,13 +6,13 @@ spring:
     allow-circular-references: true
   nacos:
     group: XIAO-WEI-GROUP
-    host: 192.168.11.145:8848
+    host: 192.168.2.145:8848
     namespace: 1706918c-e809-426a-b633-e351101ed09d
 #    group: YUE-CHIP-GROUP
 #    host: 192.168.177.129:8848
 #    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
-    password: naocs
-    username: naocs
+    password: nacos
+    username: nacos
   application:
     name: upms
   cloud:

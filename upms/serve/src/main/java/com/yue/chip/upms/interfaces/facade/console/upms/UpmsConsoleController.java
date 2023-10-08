@@ -6,14 +6,19 @@ import com.yue.chip.core.ResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
+import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
@@ -54,6 +59,9 @@ public class UpmsConsoleController {
 
     @Resource
     private UpmsRepository upmsRepository;
+
+    @Resource
+    private OrganizationalRepository organizationalRepository;
 
     @Resource
     private UpmsApplication upmsApplication;
@@ -282,5 +290,21 @@ public class UpmsConsoleController {
     public IResultData<Boolean> updateUser(@NotNull(message = "账号不能为空")@Parameter(description = "账号",name="username",required = true)String username) {
         return ResultData.builder().data(User.builder().username(username).build().checkUsernameIsExist()).build();
     }
+
+    @PostMapping("/organization/add")
+    @Operation(description = "添加组织机构",summary = "添加组织机构")
+    public IResultData addOrganization(@RequestBody @Validated({Validator.Insert.class}) OrganizationalAddDto organizationalAddDto) {
+        upmsApplication.saveOrganizational(organizationalAddDto);
+        return ResultData.builder().build();
+    }
+
+    @PutMapping("/organization/update")
+    @Operation(description = "修改组织机构",summary = "修改组织机构")
+    public IResultData updateOrganization(@RequestBody @Validated({Validator.Update.class}) OrganizationalUpdateDto organizationalUpdateDto) {
+        upmsApplication.updateOrganizational(organizationalUpdateDto);
+        return ResultData.builder().build();
+    }
+
+
 
 }

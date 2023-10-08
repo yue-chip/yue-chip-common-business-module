@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @Schema
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
-@JsonIgnoreProperties(ignoreUnknown = true,value = {"isDelete","createUserId","updateUserId","tenantId","createDateTime","updateDateTime"})
+@JsonIgnoreProperties(ignoreUnknown = true,value = {"createUserId","updateUserId","createDateTime","updateDateTime"})
 public class RoleUpdateDto extends RoleAUDto{
 
     @Schema(description = "id",requiredMode = Schema.RequiredMode.REQUIRED)

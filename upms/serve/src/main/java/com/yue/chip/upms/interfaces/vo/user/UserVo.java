@@ -17,5 +17,11 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class UserVo extends UserDefinition {
+
+    @Schema(description = "组织机构名称")
+    private String organizationalName;
+
+    @Schema(description = "组织机构id")
+    private String organizationalId;
     
 }

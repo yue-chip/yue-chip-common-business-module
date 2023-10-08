@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.po.user;
 
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import jakarta.persistence.*;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author Mr.Liu
@@ -50,9 +52,33 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
-    @Column(columnDefinition = "datetime NULL COMMENT '生日'")
-    public LocalDate getBirthday() {
-        return super.getBirthday();
+    @Convert(converter = State.StateConverter.class)
+    @Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)-不能为空'")
+    public State getState() {
+        return super.getState();
+    }
+
+    @Override
+    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '联系电话'")
+    public String getPhoneNumber() {
+        return super.getPhoneNumber();
+    }
+
+    @Override
+    @Column(columnDefinition = "bit(1) NULL COMMENT '是否接收短信通知'")
+    public Boolean getIsSms() {
+        return super.getIsSms();
+    }
+
+    @Override
+    @Column(columnDefinition = "bit(1) NULL COMMENT '是否接收紧急呼叫'")
+    public Boolean getIsCall() {
+        return super.getIsCall();
+    }
+
+    @Override
+    public LocalDateTime getLastLoginTime() {
+        return super.getLastLoginTime();
     }
 
     @Override

@@ -22,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 @Schema
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
-@JsonIgnoreProperties(ignoreUnknown = true,value = {"id","version","isDelete","createUserId","updateUserId","tenantId","createDateTime","updateDateTime"})
+@JsonIgnoreProperties(ignoreUnknown = true,value = {"id","createUserId","updateUserId","createDateTime","updateDateTime"})
 public class ResourcesAddDto extends ResourcesAUDto {
 
 

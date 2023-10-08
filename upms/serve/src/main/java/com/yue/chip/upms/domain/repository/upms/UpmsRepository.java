@@ -5,6 +5,7 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
@@ -34,6 +35,13 @@ public interface UpmsRepository {
      * @return
      */
     public Optional<User> findUserByUsername(@NotBlank String username);
+
+    /**
+     * 根据登录帐号查询微信登录用户
+     * @param username
+     * @return
+     */
+    public Optional<UserWeixin> findUserWeixinByUsername(@NotBlank String username);
 
     /**
      * 根据用户id查询用户
@@ -266,5 +274,7 @@ public interface UpmsRepository {
      * @param id
      */
     public void deleteUser(@NotNull Long id);
+
+
 
 }

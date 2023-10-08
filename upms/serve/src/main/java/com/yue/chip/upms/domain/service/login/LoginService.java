@@ -9,10 +9,19 @@ import jakarta.validation.constraints.NotBlank;
 public interface LoginService {
 
     /**
-     *
+     * pc 登录
      * @param username
      * @param password
      * @return
      */
     public String login(@NotBlank String username,@NotBlank String password);
+
+    /**
+     * 微信登录
+     * @param username
+     * @param password
+     * @return
+     */
+    @Deprecated
+    public String weixinLogin(@NotBlank String username,@NotBlank String password);
 }

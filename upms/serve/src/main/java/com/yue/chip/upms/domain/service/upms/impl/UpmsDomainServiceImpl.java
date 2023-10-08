@@ -1,9 +1,12 @@
 package com.yue.chip.upms.domain.service.upms.impl;
 
+import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.Resources;
+import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.enums.Scope;
+import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,9 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
 
     @Resource
     private UpmsRepository upmsRepository;
+
+    @Resource
+    private OrganizationalRepository organizationalRepository;
 
     @Override
     public void roleResources(Long roleId, Long[] resourcesIds) {
@@ -44,6 +50,19 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
                 list.add(roleResourcesPo);
             });
             upmsRepository.saveAllRoleResources(list);
+        }
+    }
+
+    @Override
+    public void userOrganizational(Long userId, Long organizationalId) {
+        organizationalRepository.deleteOrganizationalUser(userId);
+        if (Objects.nonNull(organizationalId)) {
+            organizationalRepository.saveOrganizationalUser(
+                    OrganizationalUserPo.builder()
+                    .organizationalId(organizationalId)
+                    .userId(userId)
+                    .build()
+            );
         }
     }
 

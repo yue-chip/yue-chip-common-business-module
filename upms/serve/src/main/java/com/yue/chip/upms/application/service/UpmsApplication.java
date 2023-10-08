@@ -1,5 +1,7 @@
 package com.yue.chip.upms.application.service;
 
+import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
+import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
@@ -56,6 +58,18 @@ public interface UpmsApplication {
      * @param ids
      */
     public void deleteUser(@NotNull @Size(min = 1) List<Long> ids);
+
+    /**
+     * 添加组织架构
+     * @param organizationalAddDto
+     */
+    public void saveOrganizational(@NotNull OrganizationalAddDto organizationalAddDto);
+
+    /**
+     * 需改组织机构
+     * @param organizationalUpdateDto
+     */
+    public void updateOrganizational(@NotNull OrganizationalUpdateDto organizationalUpdateDto);
 
     public UserVo test(String name);
 

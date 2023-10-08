@@ -5,19 +5,14 @@ import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;
-import com.yue.chip.core.controller.BaseController;
-import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import com.yue.chip.upms.application.service.TestApplicationService;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import com.yue.chip.upms.state.machine.test.Events;
-import com.yue.chip.upms.state.machine.test.States;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.statemachine.StateMachine;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -83,15 +78,6 @@ public class TestController  {
 //        List<User> list = new PodamFactoryImpl().manufacturePojo(List.class, User.class);
         return PageResultData.builder().data(new PodamFactoryImpl().manufacturePojo(List.class,UserVo.class)).build();
 
-    }
-
-    @GetMapping("/state/machine")
-//    @PreAuthorize("@aps.hasPermission('ADD')")
-    @AuthorizationIgnore
-    @Operation(summary = "测试-状态机", description = "测试-状态机")
-    public IResultData testStateMachine(){
-        testApplicationService.testStateMachine();
-        return ResultData.builder().build();
     }
 
 }

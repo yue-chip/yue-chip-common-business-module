@@ -5,6 +5,7 @@ import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
+import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
@@ -41,11 +42,19 @@ public class User extends UserDefinition {
     @DubboReference
     private static FileExposeService fileExposeService;
 
+    @Resource
+    private static OrganizationalRepository organizationalRepository;
+
     @Builder.Default
     private RoleMapper roleMapper = RoleMapper.INSTANCE;
 
     @Builder.Default
     private ResourcesMapper resourcesMapper = ResourcesMapper.INSTANCE;
+
+    /**
+     * 组织架构
+     */
+    private Organizational organizational;
 
     /**
      * 角色 - 值对象(此值对象非彼值对象) 意思意思
@@ -112,4 +121,12 @@ public class User extends UserDefinition {
         return null;
     }
 
+    public Organizational getOrganizational() {
+        Assert.notNull(getId(),"id不能为空");
+        Optional<Organizational> optional = organizationalRepository.findByUserId(getId());
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        return null;
+    }
 }

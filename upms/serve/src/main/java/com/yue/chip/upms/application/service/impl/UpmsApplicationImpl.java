@@ -7,14 +7,19 @@ import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
+import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
+import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
@@ -48,11 +53,17 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Resource
     private UpmsRepository upmsRepository;
 
+    @Resource
+    private OrganizationalRepository organizationalRepository;
+
     @DubboReference()
     private TestExpose testExpose;
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private OrganizationalMapper organizationalMapper;
 
 
     @DubboReference
@@ -119,6 +130,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
         Assert.isFalse(user.checkUsernameIsExist(), () -> {return new BusinessException("该帐号已存在");});
         //保存用户
         User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
+        //保存用户与组织架构的关联关系
+        upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
         //保存头像
         fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()) );
     }
@@ -128,6 +141,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
     public void updateUser(UserAddOrUpdateDto userAddOrUpdateDto) {
         //修改用户
         upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
+        //保存用户与组织架构的关联关系
+        upmsDomainService.userOrganizational(userAddOrUpdateDto.getId(),userAddOrUpdateDto.getOrganizationalId());
         //保存头像
         fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()));
     }
@@ -141,8 +156,39 @@ public class UpmsApplicationImpl implements UpmsApplication {
                 upmsRepository.deleteUserRoleByUserId(id);
                 //删除用户
                 upmsRepository.deleteUser(id);
+                //删除用户与组织机构的关联关系
+                upmsDomainService.userOrganizational(id,null);
             });
         }
+    }
+
+    @Override
+    public void saveOrganizational(OrganizationalAddDto organizationalAddDto) {
+        //检查结构名称是否存在
+        Boolean nameIsExist = Organizational.builder()
+                .parentId(organizationalAddDto.getParentId())
+                .name(organizationalAddDto.getName())
+                .build()
+                .checkNameIsExist();
+        if (nameIsExist) {
+            BusinessException.throwException("该机构名称已经存在");
+        }
+        organizationalRepository.saveOrganizational(organizationalMapper.toOrganizationalPo(organizationalAddDto));
+    }
+
+    @Override
+    public void updateOrganizational(OrganizationalUpdateDto organizationalUpdateDto) {
+        //检查结构名称是否存在
+        Boolean nameIsExist = Organizational.builder()
+                .parentId(organizationalUpdateDto.getParentId())
+                .name(organizationalUpdateDto.getName())
+                .id(organizationalUpdateDto.getId())
+                .build()
+                .checkNameIsExist();
+        if (nameIsExist) {
+            BusinessException.throwException("该机构名称已经存在");
+        }
+        organizationalRepository.updateOrganizational(organizationalMapper.toOrganizationalPo(organizationalUpdateDto));
     }
 
     @Override

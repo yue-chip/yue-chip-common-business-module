@@ -25,6 +25,8 @@ public interface UserMapper {
 
 //    public List<UserVo> toUserListVo(List<UserPo> list);
 
+    @Mappings({@Mapping(target = "organizationalName",source = "organizational.name"),
+            @Mapping(target = "organizationalId",source = "organizational.id")})
     public List<UserVo> toUserListVo(List<User> list);
 
     public List<User> toUserList(List<UserPo> list);

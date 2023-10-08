@@ -47,7 +47,7 @@ public interface FileRepository {
      * @param tableName
      * @param fileIds
      */
-    public void save(@NotNull Long tableId,@NotBlank String fileFieldName,@NotBlank String tableName, @NotNull @Size(min = 1) List<Long> fileIds);
+    public void save(@NotNull Long tableId, @NotBlank String fileFieldName, @NotBlank String tableName, @NotNull @Size(min = 1) List<Long> fileIds);
 
 
 }

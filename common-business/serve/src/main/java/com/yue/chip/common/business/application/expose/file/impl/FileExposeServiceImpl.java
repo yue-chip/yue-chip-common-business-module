@@ -8,11 +8,9 @@ import com.yue.chip.common.business.expose.file.FileExposeService;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,17 +71,19 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
-    @CacheEvict(value = {FileDefinition.CACHE_KEY_URL_MULTIPLE,FileDefinition.CACHE_KEY_URL_SINGLE},key = "#tableId" + "-"+"#fileFieldName"+"-"+"#tableName")
-    public void save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
+//    @CacheEvict(value = {FileDefinition.CACHE_KEY_URL_MULTIPLE,FileDefinition.CACHE_KEY_URL_SINGLE},key = "#tableId" + "-"+"#fileFieldName"+"-"+"#tableName")
+    public List<Long> save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
         fileRepository.save(tableId, tableName, fileFieldName, fileIds);
+        return fileIds;
     }
 
     @Override
-    public void save(Long tableId, String tableName, String fileFieldName, Long... fileId) {
+    public List<Long> save(Long tableId, String tableName, String fileFieldName, Long... fileId) {
         if (Objects.isNull(fileId)) {
-            return;
+            return Collections.EMPTY_LIST;
         }
         List<Long> fileIds = Stream.of(fileId).filter(id -> Objects.nonNull(id)).collect(Collectors.toList());
         save(tableId,fileFieldName,tableName,fileIds);
+        return fileIds;
     }
 }

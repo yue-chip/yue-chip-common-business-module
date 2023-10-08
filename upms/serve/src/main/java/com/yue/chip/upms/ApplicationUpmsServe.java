@@ -1,5 +1,8 @@
 package com.yue.chip.upms;
 
+import com.alibaba.nacos.api.PropertyKeyConst;
+import com.alibaba.nacos.api.config.ConfigFactory;
+import com.alibaba.nacos.api.naming.NamingFactory;
 import com.yue.chip.authentication.YueChipAuthenticationSecurityConfig;
 import com.yue.chip.core.persistence.BaseDaoFactoryBean;
 import com.yue.chip.security.SecurityConfig;
@@ -14,6 +17,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import java.util.Properties;
 
 @SpringBootApplication (exclude = {SecurityConfig.class})
 @ComponentScan(basePackages = "com.yue.chip.**")
@@ -33,5 +38,7 @@ public class ApplicationUpmsServe {
          */
         SpringApplication.run(ApplicationUpmsServe.class, args);
     }
+
+
 
 }
