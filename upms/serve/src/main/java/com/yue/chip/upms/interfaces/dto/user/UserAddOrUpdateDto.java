@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=true)
 public class UserAddOrUpdateDto extends UserDefinition {
 
-    @NotBlank(message = "组织机构ID不能为空",groups = {Validator.Insert.class,Validator.Update.class})
+//    @NotBlank(message = "组织机构ID不能为空",groups = {Validator.Insert.class,Validator.Update.class})
     @Schema(description = "组织机构ID")
     private Long organizationalId;
 
@@ -42,13 +42,13 @@ public class UserAddOrUpdateDto extends UserDefinition {
     }
 
     @Override
-    @NotBlank(message = "姓名不能为空",groups = {Validator.Update.class,Validator.Insert.class})
+//    @NotBlank(message = "姓名不能为空",groups = {Validator.Update.class,Validator.Insert.class})
     public String getName() {
         return super.getName();
     }
 
     @Override
-    @NotBlank(message = "电话号码不能为空",groups = {Validator.Update.class,Validator.Insert.class})
+//    @NotBlank(message = "电话号码不能为空",groups = {Validator.Update.class,Validator.Insert.class})
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }

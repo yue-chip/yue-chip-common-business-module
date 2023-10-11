@@ -29,8 +29,16 @@ import java.util.Optional;
 public class Organizational extends OrganizationalDefinition {
 
     @Resource
-    private OrganizationalRepository organizationalRepository;
+    private static OrganizationalRepository organizationalRepository;
 
+    /**
+     * 负责人
+     */
+    private User leader;
+
+    /**
+     * 组织机构下面的成员
+     */
     private List<User> users;
 
     public Boolean checkNameIsExist() {
@@ -49,5 +57,10 @@ public class Organizational extends OrganizationalDefinition {
     public List<User> getUsers() {
         // TODO
         return users;
+    }
+
+    public User getLeader() {
+        // TODO
+        return leader;
     }
 }

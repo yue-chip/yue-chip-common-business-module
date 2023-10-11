@@ -13,6 +13,7 @@ import com.yue.chip.core.BaseDefinition;
 import com.yue.chip.core.common.enums.State;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -68,12 +69,10 @@ public class UserDefinition extends BaseDefinition {
     private State state;
 
     @Schema(description = "是否接收短信通知")
-    @Builder.Default
-    private Boolean isSms = false;
+    private Boolean isSms;
 
     @Schema(description = "是否接收紧急呼叫")
-    @Builder.Default
-    private Boolean isCall = false;
+    private Boolean isCall;
 
     @Schema(description = "最后登录时间")
     private LocalDateTime lastLoginTime;

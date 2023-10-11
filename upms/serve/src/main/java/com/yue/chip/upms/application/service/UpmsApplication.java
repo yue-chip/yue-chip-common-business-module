@@ -71,6 +71,12 @@ public interface UpmsApplication {
      */
     public void updateOrganizational(@NotNull OrganizationalUpdateDto organizationalUpdateDto);
 
+    /**
+     * 删除组织机构
+     * @param ids
+     */
+    public void deleteOrganizational(@NotNull @Size(min = 1) List<Long> ids);
+
     public UserVo test(String name);
 
 }

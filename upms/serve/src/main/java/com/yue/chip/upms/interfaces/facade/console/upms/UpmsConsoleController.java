@@ -6,6 +6,7 @@ import com.yue.chip.core.ResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
@@ -26,6 +27,8 @@ import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
+import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
+import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesVo;
@@ -72,6 +75,8 @@ public class UpmsConsoleController {
     @Resource
     private ResourcesMapper resourcesMapper;
 
+    @Resource
+    private OrganizationalMapper organizationalMapper;
     @Resource
     private UserMapper userMapper;
 
@@ -291,20 +296,44 @@ public class UpmsConsoleController {
         return ResultData.builder().data(User.builder().username(username).build().checkUsernameIsExist()).build();
     }
 
-    @PostMapping("/organization/add")
-    @Operation(description = "添加组织机构",summary = "添加组织机构")
-    public IResultData addOrganization(@RequestBody @Validated({Validator.Insert.class}) OrganizationalAddDto organizationalAddDto) {
+    @PostMapping("/organizational/add")
+    @Operation(description = "组织机构-添加组织机构",summary = "组织机构-添加组织机构")
+    public IResultData addOrganizational(@RequestBody @Validated({Validator.Insert.class}) OrganizationalAddDto organizationalAddDto) {
         upmsApplication.saveOrganizational(organizationalAddDto);
         return ResultData.builder().build();
     }
 
-    @PutMapping("/organization/update")
-    @Operation(description = "修改组织机构",summary = "修改组织机构")
-    public IResultData updateOrganization(@RequestBody @Validated({Validator.Update.class}) OrganizationalUpdateDto organizationalUpdateDto) {
+    @PutMapping("/organizational/update")
+    @Operation(description = "组织机构-修改组织机构",summary = "组织机构-修改组织机构")
+    public IResultData updateOrganizational(@RequestBody @Validated({Validator.Update.class}) OrganizationalUpdateDto organizationalUpdateDto) {
         upmsApplication.updateOrganizational(organizationalUpdateDto);
         return ResultData.builder().build();
     }
 
+    @DeleteMapping("/organizational/delete")
+    @Operation(description = "组织机构-删除组织机构",summary = "组织机构-删除组织机构")
+    public IResultData deleteOrganizational(@Size(min = 1,message = "要删除的数据不能为空") @Parameter(description = "组织机构id",name="ids",required = true)@RequestParam("ids")List<Long> ids) {
+        upmsApplication.deleteOrganizational(ids);
+        return ResultData.builder().build();
+    }
 
+    @GetMapping("/organizational/tree/list")
+    @Operation(description = "组织机构-树形结构列表",summary = "组织机构-树形结构列表")
+    public IResultData<List<OrganizationalTreeListVo>> organizationalTreeList(){
+        return ResultData.builder().data(organizationalRepository.findTree(0L)).build();
+    }
 
+    @GetMapping("/organizational/tree/select")
+    @Operation(description = "组织机构-树形结构下拉框选择",summary = "组织机构-树形结构下拉框选择")
+    public IResultData<List<OrganizationalTreeListVo>> organizationalTreeSelect(){
+        List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree(0L);
+        return ResultData.builder().data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
+    }
+
+    @GetMapping("/organizational/details")
+    @Operation(description = "组织机构-组织机构详情",summary = "组织机构-组织机构详情")
+    public IResultData<OrganizationalVo> organizationalDetails(@NotNull(message = "组织机构id不能为空") @Parameter(description = "组织机构id",name="id",required = true)Long id) {
+        Optional<Organizational> optional = organizationalRepository.findById(id);
+        return ResultData.builder().data(optional.isPresent()?organizationalMapper.toOrganizationalVo(optional.get()):null).build();
+    }
 }

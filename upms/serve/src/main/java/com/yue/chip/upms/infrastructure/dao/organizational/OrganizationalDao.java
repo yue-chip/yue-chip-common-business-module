@@ -5,6 +5,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,4 +22,11 @@ public interface OrganizationalDao extends BaseDao<OrganizationalPo> ,Organizati
      * @return
      */
     public Optional<OrganizationalPo> findFirstByParentIdAndName(@NotNull Long parentId, @NotBlank String name);
+
+    /**
+     * 根据父节点id查询子节点
+     * @param parentId
+     * @return
+     */
+    public List<OrganizationalPo> findAllByParentId(@NotNull Long parentId);
 }

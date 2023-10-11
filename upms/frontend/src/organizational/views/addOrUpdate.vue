@@ -1,17 +1,24 @@
 <template>
   <a-card class="card" :bordered="false">
     <a-form ref="from" :rules="rules" :model="addOrUpdateModel" layout="horizontal" :label-col="{ span:4,offset:0 }" :wrapper-col="{ span: 16,offset:0 }" >
-      <a-form-item label="账号" name="username" ref="username" >
-        <a-input placeholder="请输入账号" v-bind:disabled="usernameDisabled" v-model:value="addOrUpdateModel.username" />
+      <a-form-item label="机构名称" name="name" ref="name" >
+        <a-input placeholder="请输入机构名称" v-model:value="addOrUpdateModel.name" />
       </a-form-item>
-      <a-form-item  label="密码" name="pass" ref="pass" >
-        <a-input-password v-bind:disabled="passwordDisabled" v-model:value="addOrUpdateModel.pass" />
+      <a-form-item label="上级机构" name="parentId" ref="parentId" >
+        <a-input v-model:value="addOrUpdateModel.parentId" />
+        <a-tree-select
+          v-model:value="addOrUpdateModel.parentId"
+          style="width: 100%"
+          :tree-data="treeData"
+          tree-checkable
+          allow-clear
+          :show-checked-strategy="SHOW_PARENT"
+          placeholder="请选择上级节点"
+          tree-node-filter-prop="label"
+        />
       </a-form-item>
-      <a-form-item label="姓名" name="name" ref="name" >
-        <a-input placeholder="请输入姓名" v-model:value="addOrUpdateModel.name" />
-      </a-form-item>
-      <a-form-item label="电话号码" name="phoneNumber" ref="phoneNumber" >
-        <a-input placeholder="请输入姓名" v-model:value="addOrUpdateModel.phoneNumber" />
+      <a-form-item label="排序" name="sort" ref="sort" >
+        <a-input-number  v-model:value="addOrUpdateModel.sort" :min="0" :max="99999" />
       </a-form-item>
     </a-form>
     <a-row >
@@ -41,31 +48,34 @@
   import {ref, onMounted, getCurrentInstance} from 'vue'
   import {useRouter,useRoute} from 'vue-router'
   import { RollbackOutlined,SaveOutlined,UndoOutlined } from '@ant-design/icons-vue';
+  import type { TreeSelectProps } from 'ant-design-vue';
+  import { TreeSelect } from 'ant-design-vue';
   import { message } from 'ant-design-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   const router=useRouter();
   const route = useRoute();
   const _this:any = getCurrentInstance();
+  const SHOW_PARENT = TreeSelect.SHOW_PARENT;
   let saveButtonDisabled = ref(false);
   let resetDisabled = ref(false);
   let backDisabled = ref(false);
   let addOrUpdateModel = ref({});
-  let passwordDisabled = ref(false);
-  let usernameDisabled = ref(false);
+  let treeData: TreeSelectProps['treeData'] = [];
   import {Md5} from 'ts-md5';
   const rules:any={
-    username:[{required:true,message:"请输入账号",trigger:'blur'}],
-    pass:[{required:true,message:"请输入密码",trigger:'blur'}],
-    name:[{required:true,message:"请输入姓名",trigger:'blur'}],
+    name:[{required:true,message:"请输入机构名称",trigger:'blur'}],
+    sort:[{required:true,message:"请输入机构排序",trigger:'blur'}],
   };
 
   onMounted(() => {
     const id = route.query.id;
     if (id) {
-      rules.pass[0].required=false;
-      // rules.username[0].required=false;
-      passwordDisabled.value=true;
-      usernameDisabled.value=true;
+      axios.axiosGet("/upms/console/organizational/tree/select",{params: {id:id}},
+        (data:any)=>{
+          if (data.status === 200 ) {
+            treeData = data.data;
+          }
+        },null,null)
       getInfo(id);
     }
   });
@@ -84,7 +94,7 @@
   }
 
   function getInfo(id: string ){
-    axios.axiosGet("/upms/console/user/details",{params: {id:id}},
+    axios.axiosGet("/upms/console/organizational/details",{params: {id:id}},
       (data:any)=>{
         if (data.status === 200 ) {
           addOrUpdateModel.value = data.data;
@@ -100,16 +110,14 @@
     }
     _this.ctx.$refs.from.validate().then(() => {
       if (addOrUpdateModel.value.id) {
-        axios.axiosPut("/upms/console/user/update",addOrUpdateModel.value,
+        axios.axiosPut("/upms/console/organizational/update",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
               message.info(data.message);
             }
           },null,null)
       }else {
-        addOrUpdateModel.value.passwordI = Md5.hashStr(addOrUpdateModel.value.pass);
-        addOrUpdateModel.value.pass = null;
-        axios.axiosPost("/upms/console/user/add",addOrUpdateModel.value,
+        axios.axiosPost("/upms/console/organizational/add",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
               message.info(data.message);

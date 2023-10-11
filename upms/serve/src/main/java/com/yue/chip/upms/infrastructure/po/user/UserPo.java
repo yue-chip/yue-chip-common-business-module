@@ -53,7 +53,7 @@ public class UserPo extends UserDefinition {
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    @Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)-不能为空'")
+    @Column(columnDefinition = "int NULL DEFAULT 1 COMMENT '状态(0:禁用,1:正常)-不能为空'")
     public State getState() {
         return super.getState();
     }
@@ -65,13 +65,13 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
-    @Column(columnDefinition = "bit(1) NULL COMMENT '是否接收短信通知'")
+    @Column(columnDefinition = "bit(1) NULL DEFAULT 0 COMMENT '是否接收短信通知'")
     public Boolean getIsSms() {
         return super.getIsSms();
     }
 
     @Override
-    @Column(columnDefinition = "bit(1) NULL COMMENT '是否接收紧急呼叫'")
+    @Column(columnDefinition = "bit(1) NULL DEFAULT 0 COMMENT '是否接收紧急呼叫'")
     public Boolean getIsCall() {
         return super.getIsCall();
     }

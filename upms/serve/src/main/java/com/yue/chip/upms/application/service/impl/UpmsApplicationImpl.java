@@ -17,6 +17,7 @@ import com.yue.chip.upms.domain.repository.organizational.OrganizationalReposito
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalUserDao;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
@@ -189,6 +190,17 @@ public class UpmsApplicationImpl implements UpmsApplication {
             BusinessException.throwException("该机构名称已经存在");
         }
         organizationalRepository.updateOrganizational(organizationalMapper.toOrganizationalPo(organizationalUpdateDto));
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Throwable.class})
+    public void deleteOrganizational(List<Long> ids) {
+        ids.forEach(id ->{
+            //删除用户组织机构的关联关系
+            organizationalRepository.deleteOrganizationalUserByOrganizationalId(id);
+            //删除组织机构
+            organizationalRepository.deleteOrganizationalById(id);
+        });
     }
 
     @Override

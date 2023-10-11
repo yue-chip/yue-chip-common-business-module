@@ -3,9 +3,11 @@ package com.yue.chip.upms.domain.repository.organizational;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,10 +26,24 @@ public interface OrganizationalRepository {
     public Optional<Organizational> findByUserId(@NotNull Long userId);
 
     /**
+     * 根据ID查询关联的组织机构
+     *
+     * @param userId
+     * @return
+     */
+    public Optional<Organizational> findById(@NotNull Long id);
+
+    /**
      * 删除用户与组织机构的关联关系
      * @param userId
      */
-    public void deleteOrganizationalUser(@NotNull Long userId);
+    public void deleteOrganizationalByUserId(@NotNull Long userId);
+
+    /**
+     * 删除用户与组织机构的关联关系
+     * @param organizationalId
+     */
+    public void deleteOrganizationalUserByOrganizationalId(@NotNull Long organizationalId);
 
     /**
      * 保存用户与组织架构的关联关系
@@ -42,6 +58,12 @@ public interface OrganizationalRepository {
     public void saveOrganizational(@NotNull OrganizationalPo organizational);
 
     /**
+     * 删除祖籍机构
+     * @param id
+     */
+    public void deleteOrganizationalById(@NotNull Long id);
+
+    /**
      * 修改组织机构
      * @param organizational
      */
@@ -54,4 +76,11 @@ public interface OrganizationalRepository {
      * @return
      */
     public Optional<Organizational> findByParentIdAndName(@NotNull Long parentId, @NotBlank String name);
+
+    /**
+     * 查询树形结构
+     * @param parentId
+     * @return
+     */
+    public List<OrganizationalTreeListVo> findTree(@NotNull Long parentId);
 }
