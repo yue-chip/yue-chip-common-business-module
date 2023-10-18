@@ -1,23 +1,22 @@
 package com.yue.chip.upms.infrastructure.repository.organizational.impl;
 
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalDao;
-import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalGroupDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalUserDao;
-import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalUserWeixinDao;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
-import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -99,15 +98,22 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public List<OrganizationalTreeListVo> findTree(Long parentId) {
+    public List<OrganizationalTreeListVo> findTree(Long parentId,State state) {
         List<OrganizationalTreeListVo> treeListVos = new ArrayList<OrganizationalTreeListVo>();
-        List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
+        List<OrganizationalPo> list = new ArrayList<>();
+        if (Objects.nonNull(state)) {
+            list = organizationalDao.findAllByParentIdAndState(parentId,state);
+        }else {
+            list = organizationalDao.findAllByParentId(parentId);
+        }
         treeListVos = organizationalMapper.toOrganizationalTreeListVo(list);
         treeListVos.forEach(organizationalTreeListVo -> {
-            organizationalTreeListVo.setChildren(findTree(organizationalTreeListVo.getId()));
-            Optional<User> optional = upmsRepository.findUserById(organizationalTreeListVo.getLeaderId());
-            if (optional.isPresent()) {
-                organizationalTreeListVo.setLeaderName(optional.get().getName());
+            organizationalTreeListVo.setChildren(findTree(organizationalTreeListVo.getId(),state));
+            if (Objects.nonNull(organizationalTreeListVo.getLeaderId())) {
+                Optional<User> optional = upmsRepository.findUserById(organizationalTreeListVo.getLeaderId());
+                if (optional.isPresent()) {
+                    organizationalTreeListVo.setLeaderName(optional.get().getName());
+                }
             }
         });
         return treeListVos;

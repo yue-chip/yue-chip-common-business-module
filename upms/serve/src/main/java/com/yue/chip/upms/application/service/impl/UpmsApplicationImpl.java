@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.common.business.expose.file.FileExposeService;
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
@@ -174,6 +175,9 @@ public class UpmsApplicationImpl implements UpmsApplication {
         if (nameIsExist) {
             BusinessException.throwException("该机构名称已经存在");
         }
+        //设置默认状态
+        organizationalAddDto.setState(State.NORMAL);
+        //保存
         organizationalRepository.saveOrganizational(organizationalMapper.toOrganizationalPo(organizationalAddDto));
     }
 

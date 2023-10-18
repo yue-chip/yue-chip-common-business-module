@@ -65,6 +65,7 @@
     {
       title: '机构名称',
       dataIndex: 'name',
+      fixed: 'left',
       key: 'name',
     },
     {
@@ -96,7 +97,7 @@
       title: '操作',
       key: "operation",
       fixed: 'right',
-      width: '155px',
+      width: '280px',
     },
   ]
   let dataList = ref([]);

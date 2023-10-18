@@ -4,6 +4,7 @@ import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
@@ -28,6 +29,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
+import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeSelectVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
@@ -320,13 +322,13 @@ public class UpmsConsoleController {
     @GetMapping("/organizational/tree/list")
     @Operation(description = "组织机构-树形结构列表",summary = "组织机构-树形结构列表")
     public IResultData<List<OrganizationalTreeListVo>> organizationalTreeList(){
-        return ResultData.builder().data(organizationalRepository.findTree(0L)).build();
+        return ResultData.builder().data(organizationalRepository.findTree(0L, null)).build();
     }
 
     @GetMapping("/organizational/tree/select")
     @Operation(description = "组织机构-树形结构下拉框选择",summary = "组织机构-树形结构下拉框选择")
-    public IResultData<List<OrganizationalTreeListVo>> organizationalTreeSelect(){
-        List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree(0L);
+    public IResultData<List<OrganizationalTreeSelectVo>> organizationalTreeSelect(){
+        List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree(0L,State.NORMAL);
         return ResultData.builder().data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
     }
 

@@ -1,5 +1,6 @@
 package com.yue.chip.upms.domain.repository.organizational;
 
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
@@ -82,5 +83,5 @@ public interface OrganizationalRepository {
      * @param parentId
      * @return
      */
-    public List<OrganizationalTreeListVo> findTree(@NotNull Long parentId);
+    public List<OrganizationalTreeListVo> findTree(@NotNull Long parentId, @NotNull State state);
 }

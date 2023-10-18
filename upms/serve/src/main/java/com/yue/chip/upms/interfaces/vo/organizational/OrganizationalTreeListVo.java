@@ -1,5 +1,6 @@
 package com.yue.chip.upms.interfaces.vo.organizational;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -19,6 +20,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
+@JsonIgnoreProperties(
+        ignoreUnknown = true,
+        value = { "updateDateTime", "createUserId", "updateUserId"}
+)
 public class OrganizationalTreeListVo extends OrganizationalDefinition {
 
     @Schema(description = "负责人姓名")

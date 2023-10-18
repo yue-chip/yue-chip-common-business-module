@@ -4,13 +4,16 @@
       <a-form-item label="机构名称" name="name" ref="name" >
         <a-input placeholder="请输入机构名称" v-model:value="addOrUpdateModel.name" />
       </a-form-item>
+      <a-form-item label="紧急联系电话" name="phoneNumber" ref="phoneNumber" >
+        <a-input placeholder="请输入紧急联系电话" v-model:value="addOrUpdateModel.phoneNumber" />
+      </a-form-item>
+
       <a-form-item label="上级机构" name="parentId" ref="parentId" >
-        <a-input v-model:value="addOrUpdateModel.parentId" />
         <a-tree-select
           v-model:value="addOrUpdateModel.parentId"
+          tree-data-simple-mode
           style="width: 100%"
           :tree-data="treeData"
-          tree-checkable
           allow-clear
           :show-checked-strategy="SHOW_PARENT"
           placeholder="请选择上级节点"
@@ -60,24 +63,25 @@
   let resetDisabled = ref(false);
   let backDisabled = ref(false);
   let addOrUpdateModel = ref({});
-  let treeData: TreeSelectProps['treeData'] = [];
+  let treeData: TreeSelectProps['treeData'] = ref([]);
   import {Md5} from 'ts-md5';
   const rules:any={
     name:[{required:true,message:"请输入机构名称",trigger:'blur'}],
     sort:[{required:true,message:"请输入机构排序",trigger:'blur'}],
+    phoneNumber:[{required:true,message:"请输入紧急联系电话",trigger:'blur'}],
   };
 
   onMounted(() => {
     const id = route.query.id;
     if (id) {
-      axios.axiosGet("/upms/console/organizational/tree/select",{params: {id:id}},
-        (data:any)=>{
-          if (data.status === 200 ) {
-            treeData = data.data;
-          }
-        },null,null)
-      getInfo(id);
+       getInfo(id);
     }
+    axios.axiosGet("/upms/console/organizational/tree/select",{params: {id:id}},
+      (data:any)=>{
+        if (data.status === 200 ) {
+          treeData.value = data.data;
+        }
+      },null,null)
   });
 
   function back():void{
@@ -93,7 +97,7 @@
     }
   }
 
-  function getInfo(id: string ){
+  async function getInfo(id: string ){
     axios.axiosGet("/upms/console/organizational/details",{params: {id:id}},
       (data:any)=>{
         if (data.status === 200 ) {

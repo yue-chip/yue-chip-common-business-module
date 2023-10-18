@@ -36,10 +36,14 @@ public interface OrganizationalMapper {
     public List<OrganizationalTreeListVo> toOrganizationalTreeListVo(List<OrganizationalPo> list);
 
     @Mappings({@Mapping(target = "label",source = "name"),
+            @Mapping(target = "title",source = "name"),
+            @Mapping(target = "pId",source = "parentId"),
             @Mapping(target = "value",source = "id")})
     public List<OrganizationalTreeSelectVo> toOrganizationalTreeSelectVo(List<OrganizationalTreeListVo> list);
 
     @Mappings({@Mapping(target = "label",source = "name"),
+            @Mapping(target = "title",source = "name"),
+            @Mapping(target = "pId",source = "parentId"),
             @Mapping(target = "value",source = "id")})
     public OrganizationalTreeSelectVo toOrganizationalTreeSelectVo(OrganizationalTreeListVo organizationalTreeListVo);
 
