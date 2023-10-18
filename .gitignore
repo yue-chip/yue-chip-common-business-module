@@ -22,7 +22,7 @@ yarn-error.log*
 selenium-debug.log
 {{/e2e}}
 
-
+frontend/registerGateway.js
 # Editor directories and files
 .idea
 .vscode

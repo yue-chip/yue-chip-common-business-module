@@ -71,7 +71,7 @@
     </a-card>
 
     <a-modal width="800px" v-model:visible="visible" title="添加/修改资源" cancelText="取消" okText="保存" :destroyOnClose="true" :mask="true" :maskClosable="false" @cancel="cancel" @ok="save">
-      <a-form ref="from" :rules="rules" :model="addOrUpdateModel" :labelCol="{span: 5,offset:0}" >
+      <a-form ref="fromAddOrUpdate" :rules="rules" :model="addOrUpdateModel" :labelCol="{span: 5,offset:0}" >
         <a-row >
           <a-col :span="12">
             <a-form-item label="作用域" name="scope" ref="scope" >
@@ -294,7 +294,8 @@
   }
 
   function save(){
-    _this.ctx.$refs.from.validate().then(() => {
+
+    _this.ctx.$refs.fromAddOrUpdate.validate().then(() => {
       if (addOrUpdateModel.value.id) {
         axios.axiosPut("/upms/console/resources/update", addOrUpdateModel.value,
           (data: any) => {
