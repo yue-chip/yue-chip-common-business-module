@@ -200,11 +200,20 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Transactional(rollbackFor = {Throwable.class})
     public void deleteOrganizational(List<Long> ids) {
         ids.forEach(id ->{
-            //删除用户组织机构的关联关系
-            organizationalRepository.deleteOrganizationalUserByOrganizationalId(id);
-            //删除组织机构
-            organizationalRepository.deleteOrganizationalById(id);
+            deleteOrganizational(id);
+            //删除所有的子部门
+            List<Organizational> listChildren = organizationalRepository.findAllChildren(id);
+            listChildren.forEach(organizational -> {
+                deleteOrganizational(organizational.getId());
+            });
         });
+    }
+
+    private void deleteOrganizational(Long id) {
+        //删除用户组织机构的关联关系
+        organizationalRepository.deleteOrganizationalUserByOrganizationalId(id);
+        //删除组织机构
+        organizationalRepository.deleteOrganizationalById(id);
     }
 
     @Override

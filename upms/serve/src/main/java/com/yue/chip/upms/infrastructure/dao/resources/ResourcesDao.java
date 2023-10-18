@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 public interface ResourcesDao extends BaseDao<ResourcesPo>, ResourcesDaoEx {
 
-    public List<ResourcesPo> findByParentIdAndScopeOrderBySortDesc(@NotNull Long parentId,@NotNull Scope scope);
+    public List<ResourcesPo> findByParentIdAndScopeOrderBySortAsc(@NotNull Long parentId, @NotNull Scope scope);
 
     public Optional<ResourcesPo> findFirstByCode(@NotBlank String code);
 

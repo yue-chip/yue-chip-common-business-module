@@ -102,9 +102,9 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         List<OrganizationalTreeListVo> treeListVos = new ArrayList<OrganizationalTreeListVo>();
         List<OrganizationalPo> list = new ArrayList<>();
         if (Objects.nonNull(state)) {
-            list = organizationalDao.findAllByParentIdAndState(parentId,state);
+            list = organizationalDao.findAllByParentIdAndStateOrderBySortAsc(parentId,state);
         }else {
-            list = organizationalDao.findAllByParentId(parentId);
+            list = organizationalDao.findAllByParentIdOrderBySortAsc(parentId);
         }
         treeListVos = organizationalMapper.toOrganizationalTreeListVo(list);
         treeListVos.forEach(organizationalTreeListVo -> {
@@ -117,5 +117,24 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
             }
         });
         return treeListVos;
+    }
+
+    @Override
+    public List<Organizational> findAllChildren(Long parentId) {
+        List<Organizational> returnList = new ArrayList<>();
+        List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
+        list.forEach(organizationalPo -> {
+            returnList.add(organizationalMapper.toOrganizational(organizationalPo));
+            findAllChildren(organizationalPo.getId(),returnList);
+        });
+        return returnList;
+    }
+
+    private void findAllChildren(Long parentId,List<Organizational> organizationals) {
+        List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
+        list.forEach(organizationalPo -> {
+            organizationals.add(organizationalMapper.toOrganizational(organizationalPo));
+            findAllChildren(organizationalPo.getId(),organizationals);
+        });
     }
 }

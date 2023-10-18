@@ -84,4 +84,11 @@ public interface OrganizationalRepository {
      * @return
      */
     public List<OrganizationalTreeListVo> findTree(@NotNull Long parentId, @NotNull State state);
+
+    /**
+     * 查村所有的子部门
+     * @param parentId
+     * @return
+     */
+    public List<Organizational> findAllChildren(@NotNull Long parentId);
 }

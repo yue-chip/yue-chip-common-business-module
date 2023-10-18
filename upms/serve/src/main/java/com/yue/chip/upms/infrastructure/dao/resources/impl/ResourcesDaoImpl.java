@@ -33,7 +33,7 @@ public class ResourcesDaoImpl implements ResourcesDaoEx {
         StringBuffer sb = new StringBuffer(" select re from ResourcesPo re " +
                 "join RoleResourcesPo ro on re.id = ro.resourcesId " +
                 "join UserRolePo ur on ro.roleId = ur.roleId " +
-                "where ur.userId = :userId and re.parentId = :parentId and re.scope = :scope order by sort desc");
+                "where ur.userId = :userId and re.parentId = :parentId and re.scope = :scope order by sort asc");
         Map<String, Object> para = new HashMap<>();
         para.put("userId",userId);
         para.put("parentId",parentId);

@@ -29,10 +29,17 @@ public interface OrganizationalDao extends BaseDao<OrganizationalPo> ,Organizati
      * @param parentId
      * @return
      */
-    public List<OrganizationalPo> findAllByParentIdAndState(@NotNull Long parentId,@NotNull State state);
+    public List<OrganizationalPo> findAllByParentIdAndStateOrderBySortAsc(@NotNull Long parentId,@NotNull State state);
 
     /**
      * 根据父节点id查询子节点
+     * @param parentId
+     * @return
+     */
+    public List<OrganizationalPo> findAllByParentIdOrderBySortAsc(@NotNull Long parentId);
+
+    /**
+     * 查询子部门
      * @param parentId
      * @return
      */
