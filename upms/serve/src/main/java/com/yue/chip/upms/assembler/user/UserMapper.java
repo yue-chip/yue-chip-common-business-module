@@ -40,5 +40,6 @@ public interface UserMapper {
 
     public UserVo toUserVo(UserPo userPo);
 
+    @Mappings({@Mapping(target = "organizationalId",source = "organizational.id")})
     public UserVo toUserVo(User user);
 }

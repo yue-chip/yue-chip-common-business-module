@@ -26,7 +26,7 @@ public class OrganizationalDaoImpl implements OrganizationalDaoEx {
             return Optional.empty();
         }
         StringBuffer sb = new StringBuffer();
-        sb.append(" select o from OrganizationalPo o join OrganizationalUserPo ou on o.id=ou.organizationalId  where ou.userId = :userId limit 0,1");
+        sb.append(" select o from OrganizationalPo o join OrganizationalUserPo ou on o.id=ou.organizationalId  where ou.userId = :userId ");
         Map<String,Object> para = new HashMap<>();
         para.put("userId",userId);
         List<OrganizationalPo> list = (List<OrganizationalPo>) baseDao.findAll(sb.toString(),para);

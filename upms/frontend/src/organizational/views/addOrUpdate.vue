@@ -52,8 +52,7 @@
   import {useRouter,useRoute} from 'vue-router'
   import { RollbackOutlined,SaveOutlined,UndoOutlined } from '@ant-design/icons-vue';
   import type { TreeSelectProps } from 'ant-design-vue';
-  import { TreeSelect } from 'ant-design-vue';
-  import { message } from 'ant-design-vue';
+  import { TreeSelect,message } from 'ant-design-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   const router=useRouter();
   const route = useRoute();

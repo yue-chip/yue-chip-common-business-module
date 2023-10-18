@@ -10,6 +10,18 @@
       <a-form-item label="姓名" name="name" ref="name" >
         <a-input placeholder="请输入姓名" v-model:value="addOrUpdateModel.name" />
       </a-form-item>
+      <a-form-item label="所属机构" name="organizationalId" ref="organizationalId" >
+        <a-tree-select
+          v-model:value="addOrUpdateModel.organizationalId"
+          tree-data-simple-mode
+          style="width: 100%"
+          :tree-data="treeData"
+          allow-clear
+          :show-checked-strategy="SHOW_PARENT"
+          placeholder="请选择所属机构"
+          tree-node-filter-prop="label"
+        />
+      </a-form-item>
       <a-form-item label="电话号码" name="phoneNumber" ref="phoneNumber" >
         <a-input placeholder="请输入姓名" v-model:value="addOrUpdateModel.phoneNumber" />
       </a-form-item>
@@ -41,7 +53,8 @@
   import {ref, onMounted, getCurrentInstance} from 'vue'
   import {useRouter,useRoute} from 'vue-router'
   import { RollbackOutlined,SaveOutlined,UndoOutlined } from '@ant-design/icons-vue';
-  import { message } from 'ant-design-vue';
+  import type { TreeSelectProps } from 'ant-design-vue';
+  import { TreeSelect,message } from 'ant-design-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   const router=useRouter();
   const route = useRoute();
@@ -52,6 +65,8 @@
   let addOrUpdateModel = ref({});
   let passwordDisabled = ref(false);
   let usernameDisabled = ref(false);
+  const SHOW_PARENT = TreeSelect.SHOW_PARENT;
+  let treeData: TreeSelectProps['treeData'] = ref([]);
   import {Md5} from 'ts-md5';
   const rules:any={
     username:[{required:true,message:"请输入账号",trigger:'blur'}],
@@ -68,6 +83,12 @@
       usernameDisabled.value=true;
       getInfo(id);
     }
+    axios.axiosGet("/upms/console/organizational/tree/select",{params: {id:id}},
+      (data:any)=>{
+        if (data.status === 200 ) {
+          treeData.value = data.data;
+        }
+      },null,null)
   });
 
   function back():void{
@@ -83,7 +104,7 @@
     }
   }
 
-  function getInfo(id: string ){
+  async function getInfo(id: string ){
     axios.axiosGet("/upms/console/user/details",{params: {id:id}},
       (data:any)=>{
         if (data.status === 200 ) {
