@@ -125,9 +125,10 @@
 <script setup lang="ts">
   import {ref, onActivated,getCurrentInstance} from 'vue'
   import { SearchOutlined,PlusOutlined,DeleteOutlined,EditOutlined } from '@ant-design/icons-vue';
-  import {Modal,message} from "ant-design-vue";
+  import {Modal,message,FormInstance} from "ant-design-vue";
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   const _this:any = getCurrentInstance();
+  const fromAddOrUpdate = ref<FormInstance>();
   let visible = ref<boolean>(false);
   let permissionsVisible = ref<boolean>(false);
   const searchModel = ref({scope:"CONSOLE"})
@@ -294,8 +295,7 @@
   }
 
   function save(){
-
-    _this.ctx.$refs.fromAddOrUpdate.validate().then(() => {
+    fromAddOrUpdate.value.validateFields().then(() => {
       if (addOrUpdateModel.value.id) {
         axios.axiosPut("/upms/console/resources/update", addOrUpdateModel.value,
           (data: any) => {
