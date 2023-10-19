@@ -160,6 +160,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
                 upmsRepository.deleteUser(id);
                 //删除用户与组织机构的关联关系
                 upmsDomainService.userOrganizational(id,null);
+                //删除机构负责人
+                organizationalRepository.deleteLeader(id);
             });
         }
     }

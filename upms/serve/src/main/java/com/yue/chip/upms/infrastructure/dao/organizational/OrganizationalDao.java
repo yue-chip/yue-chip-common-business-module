@@ -5,6 +5,10 @@ import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,4 +48,26 @@ public interface OrganizationalDao extends BaseDao<OrganizationalPo> ,Organizati
      * @return
      */
     public List<OrganizationalPo> findAllByParentId(@NotNull Long parentId);
+
+    /**
+     * 更新机构负责人
+     *
+     * @param organizationalId
+     * @param leaderId
+     * @return
+     */
+    @Modifying
+    @Transactional
+    @Query("update OrganizationalPo set leaderId = :leaderId where id = :id ")
+    public int updateLeader(@NotNull @Param("id") Long organizationalId,@Param("leaderId")  Long leaderId);
+
+    /**
+     * 删除机构负责人
+     * @param leaderId
+     * @return
+     */
+    @Modifying
+    @Transactional
+    @Query("update OrganizationalPo set leaderId = null where leaderId = :leaderId ")
+    public int deleteLeader(@NotNull @Param("leaderId")   Long leaderId);
 }

@@ -92,4 +92,11 @@ public interface OrganizationalRepository {
      */
     public List<Organizational> findAllChildren(@NotNull Long parentId);
 
+    /**
+     * 更新机构负责人
+     *
+     * @param userId
+     */
+    public void deleteLeader(Long userId);
+
 }

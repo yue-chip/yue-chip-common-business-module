@@ -130,6 +130,11 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         return returnList;
     }
 
+    @Override
+    public void deleteLeader(Long userId) {
+        organizationalDao.deleteLeader(userId);
+    }
+
     private void findAllChildren(Long parentId,List<Organizational> organizationals) {
         List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
         list.forEach(organizationalPo -> {
