@@ -25,7 +25,7 @@
       <a-table rowKey="id"  :columns="columns" :data-source="dataList"  :loading="loading" :scroll="{ y: 440 }" >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.key === 'state'">
-<!--            <a-switch @change="updateState(record.id,record.key)" v-model:checked="record.key===1" checked-children="正常" un-checked-children="禁用" />-->
+            <a-switch v-model:checked="record.state.key===1" checked-children="正常" un-checked-children="禁用" />
           </template>
           <template v-if="column.key === 'operation'">
             <a-space :size="5">
@@ -63,7 +63,7 @@
   let selectedRowKeys:string[] = [];
   const columns = [
     {
-      title: '机构名称',
+      title: '机构名称11',
       dataIndex: 'name',
       fixed: 'left',
       key: 'name',
@@ -75,7 +75,7 @@
     },
     {
       title: '状态',
-      dataIndex: ['state','desc'],
+      // dataIndex: ['state','desc'],
       key: 'state',
     },
     {
