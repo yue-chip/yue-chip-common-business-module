@@ -226,7 +226,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
 //                .code(UUID.randomUUID().toString())
 //                .build();
 //        upmsRepository.saveRole(roleAddDto);
-        UserDefinition userDefinition = testExpose.test1("");
+//        UserDefinition userDefinition = testExpose.test1("");
         return UserVo.builder().name("张三").build();
     }
 

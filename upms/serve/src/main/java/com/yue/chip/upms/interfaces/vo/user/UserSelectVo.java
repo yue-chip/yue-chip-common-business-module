@@ -14,16 +14,14 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @Schema(description = "用户")
-@EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true,value = {"updateDateTime","password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId"})
-public class UserVo extends UserDefinition {
+public class UserSelectVo {
 
-    @Schema(description = "组织机构名称")
-    private String organizationalName;
+    @Schema(description = "用户id")
+    private String value;
 
-    @Schema(description = "组织机构id")
-    private Long organizationalId;
+    @Schema(description = "用户姓名")
+    private String label;
     
 }

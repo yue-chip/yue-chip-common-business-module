@@ -77,6 +77,7 @@
   let loading = ref(false);
   let searchModel = ref({pageSize:10,pageNumber:1});
   let selectedRowKeys:string[] = [];
+
   const columns = [
     {
       title: '姓名',

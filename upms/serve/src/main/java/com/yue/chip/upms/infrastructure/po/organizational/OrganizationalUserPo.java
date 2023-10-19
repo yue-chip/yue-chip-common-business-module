@@ -37,9 +37,4 @@ public class OrganizationalUserPo extends OrganizationalUserDefinition {
         return super.getOrganizationalId();
     }
 
-    @Override
-    @Column(columnDefinition = "bit(1) NULL COMMENT '是否负责人'")
-    public Boolean getIsManager() {
-        return super.getIsManager();
-    }
 }

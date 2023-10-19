@@ -1,5 +1,7 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
+import com.yue.chip.core.common.enums.State;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,5 +40,14 @@ public interface UserDaoEx {
      * @return
      */
     public List<UserPo> findByRoleId(@NotNull Long roleId);
+
+    /**
+     * 根据机构获取用户
+     *
+     * @param organizationalId
+     * @param state
+     * @return
+     */
+    public List<UserPo> findUserByOrganizationalId(@NotNull Long organizationalId, @NotNull State state);
 
 }

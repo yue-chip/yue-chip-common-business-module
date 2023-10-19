@@ -1,20 +1,16 @@
 package com.yue.chip.upms.infrastructure.dao.user.impl;
 
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
-import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.BeanHandler;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -85,6 +81,20 @@ public class UserDaoImpl implements UserDaoEx {
         sb.append(" select u from UserPo u join UserRolePo ur on u.id = ur.userId where ur.roleId = :roleId");
         Map<String,Object> para = new HashMap<>();
         para.put("roleId",roleId);
+        return (List<UserPo>) baseDao.findAll(sb.toString(),para);
+    }
+
+    @Override
+    public List<UserPo> findUserByOrganizationalId(Long organizationalId, @NotNull State state) {
+        if (Objects.isNull(organizationalId)) {
+            return Collections.EMPTY_LIST;
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u join OrganizationalUserPo ou on u.id = ou.userId join OrganizationalPo o on ou.organizationalId = o.id" +
+                "  where ou.organizationalId = :organizationalId and o.state = :state ");
+        Map<String,Object> para = new HashMap<>();
+        para.put("organizationalId",organizationalId);
+        para.put("state",state);
         return (List<UserPo>) baseDao.findAll(sb.toString(),para);
     }
 }

@@ -29,7 +29,7 @@ public interface OrganizationalRepository {
     /**
      * 根据ID查询关联的组织机构
      *
-     * @param userId
+     * @param id
      * @return
      */
     public Optional<Organizational> findById(@NotNull Long id);
@@ -91,4 +91,5 @@ public interface OrganizationalRepository {
      * @return
      */
     public List<Organizational> findAllChildren(@NotNull Long parentId);
+
 }

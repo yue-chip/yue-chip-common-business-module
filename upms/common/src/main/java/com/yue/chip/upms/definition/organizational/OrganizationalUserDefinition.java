@@ -24,7 +24,4 @@ public class OrganizationalUserDefinition extends BaseDefinition {
 
     @Schema(description = "机构id")
     private Long organizationalId;
-
-    @Schema(description = "是否负责人")
-    private Boolean isManager;
 }

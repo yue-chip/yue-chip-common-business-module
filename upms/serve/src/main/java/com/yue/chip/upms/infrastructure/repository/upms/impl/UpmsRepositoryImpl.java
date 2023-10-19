@@ -4,6 +4,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.assembler.user.UserWeixinMapper;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
@@ -99,6 +100,12 @@ public class UpmsRepositoryImpl implements UpmsRepository {
             return Optional.ofNullable(userMapper.toUser(optional.get()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<User> findUserByOrganizationalId(Long organizationalId) {
+        List<UserPo> list = userDao.findUserByOrganizationalId(organizationalId, State.NORMAL );
+        return userMapper.toUser(list);
     }
 
     @Override

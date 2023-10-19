@@ -25,7 +25,7 @@
       <a-table rowKey="id"  :columns="columns" :data-source="dataList"  :loading="loading" :scroll="{ y: 440 }" >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.key === 'state'">
-            <a-switch v-model:checked="record.stateTmp" checked-children="正常" un-checked-children="禁用" />
+            <a-switch  @change="stateChange(record.id,record.stateTmp,record.phoneNumber,record.name,record.parentId)" v-model:checked="record.stateTmp" checked-children="正常" un-checked-children="禁用" />
           </template>
           <template v-if="column.key === 'operation'">
             <a-space :size="5">
@@ -33,7 +33,7 @@
                 <template #icon><EditOutlined /></template>
                 修改
               </a-button>
-              <a-button size="small" >
+              <a-button @click="showLeaderForm(record)" size="small" >
                 <template #icon><EditOutlined /></template>
                 设置负责人
               </a-button>
@@ -46,6 +46,19 @@
         </template>
       </a-table>
     </a-card>
+
+    <a-modal width="500px" v-model:visible="visible" title="部门负责人" cancelText="取消" okText="保存" :destroyOnClose="true" :mask="true" :maskClosable="false" @cancel="cancel" @ok="update">
+      <a-form ref="leaderForm"  :model="addOrUpdateModel" :labelCol="{span: 0,offset:0}" >
+        <a-row >
+          <a-col :span="24">
+            <a-form-item label="负责人" name="scope" ref="scope" >
+              <a-select :options="options" allowClear v-model:value="addOrUpdateModel.leaderId" >
+              </a-select>
+            </a-form-item>
+          </a-col>
+        </a-row>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
@@ -61,9 +74,12 @@
   let loading = ref(false);
   let searchModel = ref({pageSize:10,pageNumber:1});
   let selectedRowKeys:string[] = [];
+  let visible = ref<boolean>(false);
+  let addOrUpdateModel = ref({})
+  let options:any[] = ref<any>([]);
   const columns = [
     {
-      title: '机构名称333',
+      title: '机构名称',
       dataIndex: 'name',
       fixed: 'left',
       key: 'name',
@@ -75,6 +91,7 @@
     },
     {
       title: '状态',
+      // dataIndex: ['state','desc'],
       key: 'state',
     },
     {
@@ -150,16 +167,44 @@
     });
   }
 
-  function updateState(id: string,state: any){
-    axios.axiosPut("/upms/console/organizational/update",{"id":id,"state":state},
-      (data:any)=>{
-        if (data.status === 200 ) {
-          message.info(data.message);
-          search();
-        }
-      },null,null)
+  function stateChange(id: string,stateTmp: any,phoneNumber:string,name:string,parentId:number){
+    let state = stateTmp?1:0;
+    axios.axiosPut("/upms/console/organizational/update",{"id":id,"state":state,phoneNumber:phoneNumber,name:name,parentId:parentId},
+        (data:any)=>{
+          if (data.status === 200 ) {
+            message.info(data.message);
+            search();
+          }
+        },null,null)
   }
 
+  function showLeaderForm(data:any) {
+    if (!data.stateTmp) {
+      message.warn("该机构被禁用，禁止操作")
+      return;
+    }
+    addOrUpdateModel.value = data;
+    visible.value=true;
+    axios.axiosGet("/upms/console/organizational/user/select/list",{params: {organizationalId:data.id}},(data:any)=>{
+      options.value = data.data;
+      loading.value=false;
+    },null,null)
+  }
+
+  function cancel(){
+    visible.value = false;
+    addOrUpdateModel.value=[];
+  }
+
+  function update(){
+    axios.axiosPut("/upms/console/organizational/update", addOrUpdateModel.value,(data:any)=>{
+      if (data.status === 200) {
+        message.info(data.message);
+        cancel();
+        search();
+      }
+    },null,null)
+  }
 
 </script>
 

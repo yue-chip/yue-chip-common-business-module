@@ -123,6 +123,9 @@ public class User extends UserDefinition {
 
     public Organizational getOrganizational() {
         Assert.notNull(getId(),"id不能为空");
+        if (Objects.nonNull(organizational)) {
+            return this.organizational;
+        }
         Optional<Organizational> optional = organizationalRepository.findByUserId(getId());
         if (optional.isPresent()) {
             return optional.get();

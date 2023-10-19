@@ -71,7 +71,7 @@
   };
 
   onMounted(() => {
-    const id = route.query.id;
+    const id:string = route.query.id;
     if (id) {
        getInfo(id);
     }
@@ -79,9 +79,33 @@
       (data:any)=>{
         if (data.status === 200 ) {
           treeData.value = data.data;
+          for(let item of treeData.value) {
+            let selectable:boolean;
+            let disabled:boolean;
+            if (item.value === id) {
+              selectable = item.selectable = false;
+              disabled = item.disabled = true;
+            }
+            for(let children of item.children) {
+              setSelectable(id,children,selectable,disabled);
+            }
+          }
         }
       },null,null)
   });
+
+  function setSelectable(id:string,node:any,selectable:boolean,disabled:boolean) {
+    if (selectable !=undefined && disabled !=undefined) {
+      node.selectable = selectable;
+      node.disabled = disabled;
+    }else if (node.value === id){
+      selectable = node.selectable = false;
+      disabled = node.disabled = true;
+    }
+    for(let item of node.children) {
+      setSelectable(id,item,selectable,disabled);
+    }
+  }
 
   function back():void{
     router.go(-1);
@@ -101,6 +125,9 @@
       (data:any)=>{
         if (data.status === 200 ) {
           addOrUpdateModel.value = data.data;
+          if (addOrUpdateModel.value.parentId === '0'){
+            addOrUpdateModel.value.parentId = null;
+          }
         }
       },null,null)
   }

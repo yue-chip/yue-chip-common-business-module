@@ -332,6 +332,12 @@ public class UpmsConsoleController {
         return ResultData.builder().data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
     }
 
+    @GetMapping("/organizational/user/select/list")
+    @Operation(description = "组织机构-获取机构下的用户",summary = "组织机构-获取机构下的用户")
+    public IResultData<List<UserVo>> organizationalUserList(@NotNull(message = "机构id不能为空") @Parameter(description = "组织机构id",name="ids",required = true)Long organizationalId){
+        return ResultData.builder().data(userMapper.toUserSelectVo(upmsRepository.findUserByOrganizationalId(organizationalId))).build();
+    }
+
     @GetMapping("/organizational/details")
     @Operation(description = "组织机构-组织机构详情",summary = "组织机构-组织机构详情")
     public IResultData<OrganizationalVo> organizationalDetails(@NotNull(message = "组织机构id不能为空") @Parameter(description = "组织机构id",name="id",required = true)Long id) {

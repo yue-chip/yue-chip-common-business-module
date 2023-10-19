@@ -3,6 +3,7 @@ package com.yue.chip.upms.assembler.user;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
+import com.yue.chip.upms.interfaces.vo.user.UserSelectVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,11 +24,21 @@ public interface UserMapper {
 
     public User toUser(UserPo userPo);
 
+    public List<User> toUser(List<UserPo> userPos);
+
 //    public List<UserVo> toUserListVo(List<UserPo> list);
 
     @Mappings({@Mapping(target = "organizationalName",source = "organizational.name"),
             @Mapping(target = "organizationalId",source = "organizational.id")})
     public List<UserVo> toUserListVo(List<User> list);
+
+    @Mappings({@Mapping(target = "label",source = "name"),
+            @Mapping(target = "value",source = "id")})
+    public List<UserSelectVo> toUserSelectVo(List<User> list);
+
+    @Mappings({@Mapping(target = "label",source = "name"),
+            @Mapping(target = "value",source = "id")})
+    public UserSelectVo toUserSelectVo(User user);
 
     public List<User> toUserList(List<UserPo> list);
 
@@ -40,6 +51,7 @@ public interface UserMapper {
 
     public UserVo toUserVo(UserPo userPo);
 
-    @Mappings({@Mapping(target = "organizationalId",source = "organizational.id")})
+    @Mappings({@Mapping(target = "organizationalName",source = "organizational.name"),
+            @Mapping(target = "organizationalId",source = "organizational.id")})
     public UserVo toUserVo(User user);
 }
