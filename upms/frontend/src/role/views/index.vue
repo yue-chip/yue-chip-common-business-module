@@ -117,7 +117,7 @@
 
 <script setup lang="ts">
   import {ref, onActivated,getCurrentInstance} from 'vue'
-  import {message} from "ant-design-vue";
+  import {message,Modal} from "ant-design-vue";
   import { SearchOutlined,PlusOutlined,UserAddOutlined,FilterOutlined,DeleteOutlined ,EditOutlined} from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   import qs from "qs";

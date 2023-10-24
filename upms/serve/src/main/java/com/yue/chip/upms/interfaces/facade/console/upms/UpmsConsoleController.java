@@ -45,6 +45,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,7 +60,7 @@ import java.util.Optional;
 @RequestMapping("/console")
 @Validated
 @Tag(name = "角色&用户&资源-pc端后台")
-@Log
+@Slf4j
 public class UpmsConsoleController {
 
     @Resource

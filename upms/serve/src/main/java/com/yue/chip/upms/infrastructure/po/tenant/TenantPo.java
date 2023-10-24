@@ -18,7 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_tenant",indexes = {@Index(columnList = "role_id"),@Index(columnList = "resources_id") })
+@Table(name = "t_tenant",indexes = {@Index(columnList = "manager"),@Index(columnList = "phoneNumber") })
 @Data
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
