@@ -75,7 +75,7 @@
         <a-row >
           <a-col :span="12">
             <a-form-item label="作用域" name="scope" ref="scope" >
-              <a-select disabled  v-model:value="addOrUpdateModel.scope" >
+              <a-select v-model:value="addOrUpdateModel.scope" >
                 <a-select-option value="APP">APP</a-select-option>
                 <a-select-option value="CONSOLE">后台</a-select-option>
                 <a-select-option value="FRONT">前端</a-select-option>
