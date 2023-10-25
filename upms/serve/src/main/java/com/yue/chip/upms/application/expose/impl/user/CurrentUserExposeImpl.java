@@ -7,6 +7,7 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Optional;
  * @create: 2020-02-20 20:32
  */
 @DubboService(interfaceClass = ICurrentUser.class)
+@Service
 public class CurrentUserExposeImpl implements ICurrentUser<User> {
 
     @Resource

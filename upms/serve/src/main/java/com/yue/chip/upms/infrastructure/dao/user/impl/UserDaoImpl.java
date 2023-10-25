@@ -69,6 +69,7 @@ public class UserDaoImpl implements UserDaoEx {
             sb.append(" and u.username like :username ");
             para.put("name","%"+username+"%");
         }
+        sb.append(" and u.username <> 'superadmin' ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 

@@ -16,7 +16,7 @@ import org.hibernate.annotations.Comment;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_enum_util",indexes = {@Index(columnList = "version")})
+@Table(name = "t_enum_util",indexes = {@Index(columnList = "code,version",unique=true)})
 @SuperBuilder
 @NoArgsConstructor
 @Comment("保存所有微服务的枚举值，用于前端生成select下拉框")
@@ -24,7 +24,7 @@ public class EnumUtilPo extends EnumUtilDefinition {
 
     @Override
 
-    @Column(unique = true, name = "code",columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '编码'")
+    @Column( name = "code",columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '编码'")
     public String getCode() {
         return super.getCode();
     }

@@ -26,7 +26,7 @@ import java.util.Optional;
 public class Tenant extends TenantDefinition {
 
     @Resource
-    private TenantRepository tenantRepository;
+    private static TenantRepository tenantRepository;
 
     public Boolean checkNameIsExist() {
         Assert.hasText(getName(),"名称不能为空");

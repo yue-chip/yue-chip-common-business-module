@@ -19,10 +19,7 @@ import lombok.experimental.SuperBuilder;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.util.Assert;
 
-import javax.sql.DataSource;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * @author Mr.Liu
