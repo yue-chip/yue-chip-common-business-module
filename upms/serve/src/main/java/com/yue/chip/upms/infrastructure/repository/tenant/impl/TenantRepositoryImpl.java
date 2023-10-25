@@ -65,4 +65,18 @@ public class TenantRepositoryImpl implements TenantRepository {
         }
         return Optional.empty();
     }
+
+    @Override
+    public void updateTenantState(State state, Long id) {
+        TenantPo tenantPo = TenantPo.builder()
+                .state(state)
+                .id(id)
+                .build();
+        tenantDao.update(tenantPo);
+    }
+
+    @Override
+    public void updateOtherDataBase(State state, Long tenantNumber) {
+        tenantDao.updateOtherDataBase(state,tenantNumber);
+    }
 }

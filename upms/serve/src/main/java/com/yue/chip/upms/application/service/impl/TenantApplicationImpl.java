@@ -34,11 +34,18 @@ public class TenantApplicationImpl implements TenantApplication {
     private TenantMapper tenantMapper;
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public void delete(List<Long> ids) {
-
+        ids.forEach(id->{
+            //删除租户
+            tenantRepository.delete(id);
+            //更新其它租户数据中的租户状态
+            tenantRepository.updateOtherDataBase(State.DISABLE,id);
+        });
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public TenantPo save(TenantAddDTO tenantAddDTO) {
         //判断租户名称时候存在
         if (Tenant.builder().name(tenantAddDTO.getName()).build().checkNameIsExist()) {

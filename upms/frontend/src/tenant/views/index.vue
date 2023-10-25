@@ -37,7 +37,7 @@
                   <template #icon><PlusOutlined /></template>
                   添加
                 </a-button>
-                <a-button type="danger" @click="">
+                <a-button type="primary" danger @click="del(selectedRowKeys)">
                   <template #icon><DeleteOutlined /></template>
                   删除
                 </a-button>
@@ -49,7 +49,7 @@
     </a-card>
 
     <a-card>
-      <a-table rowKey="id" :columns="columns" :data-source="dataList" :pagination="pagination" :loading="loading" :scroll="{ y: 440 }" >
+      <a-table rowKey="id" :row-selection="rowSelection" :columns="columns" :data-source="dataList" :pagination="pagination" :loading="loading" :scroll="{ y: 440 }" >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.key === 'operation'">
             <a-space :size="5">
@@ -57,7 +57,7 @@
                 <template #icon><EditOutlined /></template>
                 修改
               </a-button>
-              <a-button size="small" type="dashed" @click="del(record.id)">
+              <a-button size="small" type="primary" danger @click="del(record.id)">
                 <template #icon><DeleteOutlined /></template>
                 删除
               </a-button>
@@ -93,7 +93,7 @@
 
 <script setup lang="ts">
   import {ref, onActivated,getCurrentInstance} from 'vue'
-  import {message,Modal} from "ant-design-vue";
+  import {message, Modal, TableProps} from "ant-design-vue";
   import { SearchOutlined,PlusOutlined,UserAddOutlined,FilterOutlined,DeleteOutlined ,EditOutlined} from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   import qs from "qs";
@@ -102,6 +102,7 @@
   let searchModel = ref({pageSize:10,pageNumber:1});
   let visible = ref<boolean>(false);
   let addOrUpdateModel = ref({})
+  let selectedRowKeys:string[] = [];
   const rules:any={
     name:[{required:true,message:"请输入租户名称",trigger:'blur'}],
     manager:[{required:true,message:"请输入名称",trigger:'blur'}],
@@ -148,9 +149,16 @@
       onChange:(pageNumber: number, pageSize: number)=>{ searchModel.value.pageSize=pageSize ;searchModel.value.pageNumber=pageNumber ;search()},
   });
 
+  const rowSelection: TableProps['rowSelection'] = {
+    onChange: (_selectedRowKeys: string[], _selectedRows: any[]) => {
+      selectedRowKeys = _selectedRowKeys;
+    }
+  };
+
   onActivated(() => {
     search();
   });
+
 
   function search(){
     loading.value=true;
@@ -213,6 +221,10 @@
   }
 
   function del(id:string){
+    if (!id || id.length === 0) {
+      message.error("请选择要删除的数据！")
+      return;
+    }
     Modal.confirm({
       title: '是否要删除该数据?(错误的操作会带来灾难性的后果)',
       // content: '',
@@ -220,7 +232,11 @@
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        axios.axiosDelete("/upms/console/tenant/delete",{params:{id:id}},(data:any)=>{
+        const params = {params:{ids:id},
+          paramsSerializer: (params: any) => {
+            return qs.stringify(params, { indices: false })
+          }};
+        axios.axiosDelete("/upms/console/tenant/delete",params,(data:any)=>{
           if (data.status === 200 ) {
             message.info(data.message);
             search();

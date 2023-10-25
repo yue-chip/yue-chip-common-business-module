@@ -12,7 +12,7 @@ import java.util.Optional;
  * @author Mr.Liu
  * @date 2023/7/6 上午11:27
  */
-public interface EnumUtilDao extends BaseDao<EnumUtilPo> {
+public interface EnumUtilDao extends BaseDao<EnumUtilPo> ,EnumUtilDaoEx{
 
     /**
      * 根据编码和版本号删除
@@ -30,4 +30,5 @@ public interface EnumUtilDao extends BaseDao<EnumUtilPo> {
      * @return
      */
     public Optional<EnumUtilPo> findFirstByCodeAndVersion(@NotBlank String code,@NotBlank String version);
+
 }

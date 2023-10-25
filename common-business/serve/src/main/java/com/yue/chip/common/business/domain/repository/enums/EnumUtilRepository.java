@@ -26,9 +26,8 @@ public interface EnumUtilRepository {
      * 保存枚举
      *
      * @param enumUtilPos
-     * @return
      */
-    public List<EnumUtil> save(@NotNull @Size(min = 1) List<EnumUtilPo> enumUtilPos);
+    public void save(@NotNull @Size(min = 1) List<EnumUtilPo> enumUtilPos);
 
     /**
      * 根据编码和版本查询枚举

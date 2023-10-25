@@ -42,6 +42,7 @@ public class RoleDaoImpl implements RoleDaoEx {
             sb.append(" and r.code like :code ");
             para.put("code","%"+code+"%");
         }
+        sb.append(" and r.code <> 'superadmin' ");
         return (Page<RolePo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 

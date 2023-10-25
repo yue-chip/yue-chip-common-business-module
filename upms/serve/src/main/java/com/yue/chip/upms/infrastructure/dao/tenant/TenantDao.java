@@ -1,9 +1,11 @@
 package com.yue.chip.upms.infrastructure.dao.tenant;
 
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Optional;
 
@@ -20,4 +22,6 @@ public interface TenantDao extends BaseDao<TenantPo>,TenantDaoEx {
      * @return
      */
     public Optional<TenantPo> findFirstByName(@NotBlank String name);
+
+
 }

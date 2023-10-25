@@ -1,5 +1,6 @@
 package com.yue.chip.upms.domain.repository.tenant;
 
+import com.sun.jna.platform.win32.WinDef;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
@@ -55,4 +56,18 @@ public interface TenantRepository {
      * @return
      */
     public Optional<Tenant> findByName(@NotBlank String name);
+
+    /**
+     * 更新租户状态
+     * @param state
+     * @param id
+     */
+    public void updateTenantState(@NotNull State state, @NotNull Long id);
+
+    /**
+     * 更新其它租户数据库中的租户状态
+     * @param state
+     * @param tenantNumber
+     */
+    public void updateOtherDataBase(@NotNull State state, @NotNull Long tenantNumber);
 }

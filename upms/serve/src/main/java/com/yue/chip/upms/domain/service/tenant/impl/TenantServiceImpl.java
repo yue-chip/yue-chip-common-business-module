@@ -1,5 +1,6 @@
 package com.yue.chip.upms.domain.service.tenant.impl;
 
+import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.tenant.TenantConstant;
 import com.yue.chip.upms.domain.service.tenant.CreateSql;
 import com.yue.chip.upms.domain.service.tenant.TenantService;
@@ -7,6 +8,7 @@ import com.yue.chip.upms.infrastructure.dao.tenant.TenantDao;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -29,6 +31,9 @@ public class TenantServiceImpl implements TenantService {
     @Resource
     private DataSource dataSource;
 
+    @Resource
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void createTenantDatabase(Long tenantNumber) {
         Connection connection = null;
@@ -44,9 +49,11 @@ public class TenantServiceImpl implements TenantService {
             //创建表
             createTenantTable(connection,tenantNumber);
             connection.commit();
+            connection.close();
         } catch (SQLException e) {
             try {
                 connection.rollback();
+                connection.close();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -63,14 +70,27 @@ public class TenantServiceImpl implements TenantService {
             Statement stat =  dataSource.getConnection().createStatement();
             connection.setAutoCommit(false);
             stat.execute("use upms".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-            stat.executeUpdate("inster t_tenant_state(`state`) values (1);");
+            stat.executeUpdate("INSERT INTO  t_tenant_state(`state`) values (1);");
+            stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_id`,`state`) values ('superadmin','"+passwordEncoder.encode(SecureUtil.md5("superadmin"))+"','superadmin',"+tenantNumber+",1);");
+            stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_id`,`state`) values ('admin','"+passwordEncoder.encode(SecureUtil.md5("admin"))+"','admin',"+tenantNumber+",1);");
+            stat.executeUpdate("INSERT INTO  t_resources(`code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url`) select `code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url` from upms.t_resources where code not in ( 'TENANT','MENU');");
+            stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('superadmin','1','超级管理员',','1');");
+            stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('admin','1','管理员',','1');");
+            stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select r.id, re.id from t_role r join t_resources re where r.code ='admin';");
+            stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select r.id, re.id from t_role r join t_resources re where r.code ='superadmin';");
 
-            stat.executeUpdate("inster t_user(`state`) values (1);");
+            stat.execute("use security".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+            stat.executeUpdate("INSERT INTO  alarm_category(`gate`,`name`,`state`,`message_type`) select 1, `name`,`state`,`message_type` from security.alarm_category;");
+
+            stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+            stat.executeUpdate("INSERT INTO  t_enum_util(`code`,`value`,`verion`) select `code`,`value`,`verion` from commom.t_enum_util;");
             stat.close();
             connection.commit();
+            connection.close();
         } catch (SQLException e) {
             try {
                 connection.rollback();
+                connection.close();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -100,7 +120,7 @@ public class TenantServiceImpl implements TenantService {
         CreateSql.execute(dataSource, connection, "upms", "t_user", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "upms", "t_user_role", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "upms", "t_user_weixin", tenantNumber,new CreateSql.TempBean().setInsert(false));
-        CreateSql.execute(dataSource, connection, "security", "alarm_category", tenantNumber,new CreateSql.TempBean());
+        CreateSql.execute(dataSource, connection, "security", "alarm_category", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "alarm_event", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "alarm_handle", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "car", tenantNumber,new CreateSql.TempBean().setInsert(false));

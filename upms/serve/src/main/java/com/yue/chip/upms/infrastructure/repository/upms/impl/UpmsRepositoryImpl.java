@@ -31,6 +31,7 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
@@ -303,6 +304,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public User saveUser(UserPo userPo) {
         userPo.setPassword(passwordEncoder.encode(SecureUtil.md5(userPo.getPassword())));
+        userPo.setTenantId(CurrentUserUtil.getCurrentUserTenantId(true));
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);
     }

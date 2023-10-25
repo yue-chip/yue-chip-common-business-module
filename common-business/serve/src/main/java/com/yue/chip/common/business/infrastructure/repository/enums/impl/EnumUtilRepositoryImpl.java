@@ -24,6 +24,8 @@ public class EnumUtilRepositoryImpl implements EnumUtilRepository {
     @Resource
     private EnumUtilMapper enumUtilMapper;
 
+
+
     @Override
     public EnumUtil save(EnumUtilPo enumUtilPo) {
         if (StringUtils.hasText(enumUtilPo.getCode()) && StringUtils.hasText(enumUtilPo.getVersion())) {
@@ -34,15 +36,16 @@ public class EnumUtilRepositoryImpl implements EnumUtilRepository {
     }
 
     @Override
-    public List<EnumUtil> save(List<EnumUtilPo> enumUtilPos) {
+    public void save(List<EnumUtilPo> enumUtilPos) {
         if (Objects.isNull(enumUtilPos) || enumUtilPos.size() == 0) {
-            return Collections.emptyList();
+            return ;
         }
-        List<EnumUtil> returnList = new ArrayList<>();
         enumUtilPos.forEach(enumUtilPo -> {
-            returnList.add(save(enumUtilPo));
+            //保存枚举
+            save(enumUtilPo);
+            //保存到其它租户数据库中的枚举
+            enumUtilDao.saveOtherTenantEnum(enumUtilPo);
         });
-        return returnList;
     }
 
     @Override

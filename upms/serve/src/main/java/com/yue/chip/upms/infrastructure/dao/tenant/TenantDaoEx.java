@@ -5,6 +5,7 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -27,5 +28,12 @@ public interface TenantDaoEx {
      * @return
      */
     public Page<TenantPo> list(String name, String manager, State state, String phoneNumber, YueChipPage pageable);
+
+    /**
+     * 更新其它租户数据库中的租户状态
+     * @param state
+     * @param tenantNumber
+     */
+    public void updateOtherDataBase(@NotNull State state, @NotNull Long tenantNumber);
 
 }
