@@ -95,12 +95,12 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, onActivated,getCurrentInstance} from 'vue'
-  import {message, Modal, TableProps} from "ant-design-vue";
+  import {ref, onActivated} from 'vue'
+  import {FormInstance, message, Modal, TableProps} from "ant-design-vue";
   import { SearchOutlined,PlusOutlined,UserAddOutlined,FilterOutlined,DeleteOutlined ,EditOutlined} from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   import qs from "qs";
-  const _this:any = getCurrentInstance();
+  const fromAddOrUpdate = ref<FormInstance>();
   let loading = ref(false);
   let searchModel = ref({pageSize:10,pageNumber:1});
   let visible = ref<boolean>(false);
@@ -199,7 +199,7 @@
   }
 
   function save(){
-    _this.ctx.$refs.from.validate().then(() => {
+    fromAddOrUpdate.value.validateFields().then(() => {
       if (addOrUpdateModel.value.id) {
         axios.axiosPut("/upms/console/tenant/update",addOrUpdateModel.value,
           (data:any)=>{

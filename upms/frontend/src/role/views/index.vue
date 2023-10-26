@@ -69,7 +69,7 @@
     </a-card>
 
     <a-modal width="800px" v-model:visible="visible" title="添加/修改角色" cancelText="取消" okText="保存" :destroyOnClose="true" :mask="true" :maskClosable="false" @cancel="cancel" @ok="save">
-      <a-form ref="from" :rules="rules" :model="addOrUpdateModel" :labelCol="{span: 3,offset:0}" >
+      <a-form ref="fromAddOrUpdate" :rules="rules" :model="addOrUpdateModel" :labelCol="{span: 3,offset:0}" >
         <a-row >
           <a-col :span="12">
             <a-form-item label="名称" name="name" ref="name">
@@ -116,12 +116,11 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, onActivated,getCurrentInstance} from 'vue'
-  import {message,Modal} from "ant-design-vue";
+  import {ref, onActivated} from 'vue'
+  import {FormInstance, message, Modal} from "ant-design-vue";
+  const fromAddOrUpdate = ref<FormInstance>();
   import { SearchOutlined,PlusOutlined,UserAddOutlined,FilterOutlined,DeleteOutlined ,EditOutlined} from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-  import qs from "qs";
-  const _this:any = getCurrentInstance();
   let loading = ref(false);
   let searchModel = ref({pageSize:10,pageNumber:1});
   let permissionsVisible = ref<boolean>(false);
@@ -205,7 +204,7 @@
   }
 
   function save(){
-    _this.ctx.$refs.from.validate().then(() => {
+    fromAddOrUpdate.value.validateFields().then(() => {
       if (addOrUpdateModel.value.id) {
         axios.axiosPut("/upms/console/role/update",addOrUpdateModel.value,
           (data:any)=>{
