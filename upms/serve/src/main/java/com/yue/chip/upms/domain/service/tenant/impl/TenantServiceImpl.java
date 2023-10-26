@@ -77,8 +77,8 @@ public class TenantServiceImpl implements TenantService {
 //            stat.executeUpdate("INSERT INTO  t_resources(`code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url`) select `code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url` from upms.t_resources where code not in ( 'TENANT','MENU');");
             stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('superadmin',1,'超级管理员','',1);");
             stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('admin',1,'管理员','',1);");
-            stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select r.id, re.id from t_role r join t_resources re where r.code ='admin';");
-            stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select r.id, re.id from t_role r join t_resources re where r.code ='superadmin';");
+            stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select re.id, r.id from t_role r join t_resources re where r.code ='admin';");
+            stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select re.id, r.id from t_role r join t_resources re where r.code ='superadmin';");
             stat.executeUpdate("INSERT INTO  t_user_role(`user_id`,`role_id`) select u.id, r.id from t_role r join t_user u where r.code ='admin' and u.username ='admin';");
             stat.executeUpdate("INSERT INTO  t_user_role(`user_id`,`role_id`) select u.id, r.id from t_role r join t_user u where r.code ='superadmin' and u.username ='superadmin';");
 
