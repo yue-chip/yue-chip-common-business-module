@@ -71,7 +71,7 @@
     </a-card>
 
     <a-modal width="800px" v-model:visible="visible" title="添加/修改租户" cancelText="取消" okText="保存" :destroyOnClose="true" :mask="true" :maskClosable="false" @cancel="cancel" @ok="save">
-      <a-form ref="from" :rules="rules" :model="addOrUpdateModel" :labelCol="{span: 3,offset:0}" >
+      <a-form ref="fromAddOrUpdate" :rules="rules" :model="addOrUpdateModel" :labelCol="{span: 3,offset:0}" >
         <a-row >
           <a-col :span="24">
             <a-form-item label="名称" name="name" ref="name">
