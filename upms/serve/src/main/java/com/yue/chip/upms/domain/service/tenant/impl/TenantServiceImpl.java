@@ -84,6 +84,7 @@ public class TenantServiceImpl implements TenantService {
 
             stat.execute("use security".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
             stat.executeUpdate("INSERT INTO  alarm_category(`gate`,`name`,`state`,`message_type`) select 1, `name`,`state`,`message_type` from security.alarm_category;");
+            stat.executeUpdate("INSERT INTO  device_category(`name`) select  `name` from security.device_category;");
 
             stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
             stat.executeUpdate("INSERT INTO  t_enum_util(`code`,`value`,`version`) select `code`,`value`,`version` from common.t_enum_util;");
