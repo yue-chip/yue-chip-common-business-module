@@ -74,7 +74,7 @@ public class TenantServiceImpl implements TenantService {
             stat.executeUpdate("INSERT INTO  t_tenant_state(`state`) values (1);");
             stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_id`,`state`) values ('superadmin','"+passwordEncoder.encode(SecureUtil.md5("superadmin"))+"','superadmin',"+tenantNumber+",1);");
             stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_id`,`state`) values ('admin','"+passwordEncoder.encode(SecureUtil.md5("admin"))+"','admin',"+tenantNumber+",1);");
-            stat.executeUpdate("INSERT INTO  t_resources(`code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url`) select `code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url` from upms.t_resources where code not in ( 'TENANT','MENU');");
+//            stat.executeUpdate("INSERT INTO  t_resources(`code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url`) select `code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url` from upms.t_resources where code not in ( 'TENANT','MENU');");
             stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('superadmin',1,'超级管理员','',1);");
             stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('admin',1,'管理员','',1);");
             stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select r.id, re.id from t_role r join t_resources re where r.code ='admin';");
@@ -118,7 +118,7 @@ public class TenantServiceImpl implements TenantService {
         CreateSql.execute(dataSource, connection, "upms", "t_organizational_group", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "upms", "t_organizational_user", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "upms", "t_organizational_user_weixin", tenantNumber,new CreateSql.TempBean().setInsert(false));
-        CreateSql.execute(dataSource, connection, "upms", "t_resources", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "upms", "t_resources", tenantNumber,new CreateSql.TempBean());
         CreateSql.execute(dataSource, connection, "upms", "t_role", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "upms", "t_role_resources", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "upms", "t_tenant", tenantNumber,new CreateSql.TempBean().setInsert(false));

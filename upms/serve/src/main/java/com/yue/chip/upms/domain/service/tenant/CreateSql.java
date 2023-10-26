@@ -17,6 +17,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Objects;
+
 /**
  * @author Mr.Liu
  * @description: TODO
@@ -53,8 +55,12 @@ public class CreateSql {
         }
         // 看配置，是否需要insert语句
         if (tempBean.insert) {
+            String where = "";
             // INSERT INTO
-            List<Entity> dataEntityList = db.query("SELECT * FROM " + database.concat(".").concat(tableName));
+            if (Objects.equals(tableName,"t_resources")) {
+                where = " where code not in ( 'TENANT','MENU')";
+            }
+            List<Entity> dataEntityList = db.query("SELECT * FROM " + database.concat(".").concat(tableName).concat(where));
             for (Entity dataEntity : dataEntityList) {
                 StrBuilder field = StrBuilder.create();
                 StrBuilder data = StrBuilder.create();
