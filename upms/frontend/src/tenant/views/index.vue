@@ -113,9 +113,14 @@
   };
   const columns = [
     {
+      title: '租户编码',
+      dataIndex: 'id',
+      fixed: 'left',
+      key: 'id',
+    },
+    {
       title: '租户名称',
       dataIndex: 'name',
-      fixed: 'left',
       key: 'name',
     },
     {
