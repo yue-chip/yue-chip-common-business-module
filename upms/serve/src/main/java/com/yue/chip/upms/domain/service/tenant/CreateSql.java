@@ -58,7 +58,7 @@ public class CreateSql {
             String where = "";
             // INSERT INTO
             if (Objects.equals(tableName,"t_resources")) {
-                where = " where code not in ( 'TENANT','MENU')";
+                where = " where code not in ( 'TENANT','MENU','DEVICEMODEL')";
             }
             List<Entity> dataEntityList = db.query("SELECT * FROM " + database.concat(".").concat(tableName).concat(where));
             for (Entity dataEntity : dataEntityList) {
