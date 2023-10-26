@@ -1,11 +1,11 @@
 package com.yue.chip.upms.domain.repository.tenant;
 
-import com.sun.jna.platform.win32.WinDef;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
+import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -70,4 +70,19 @@ public interface TenantRepository {
      * @param tenantNumber
      */
     public void updateOtherDataBase(@NotNull State state, @NotNull Long tenantNumber);
+
+    /**
+     * 查询当前租户状态
+     *
+     * @return
+     */
+    public Optional<TenantStatePo> findFirst();
+
+    /**
+     * 获取租户详情
+     *
+     * @param id
+     * @return
+     */
+    public Optional<TenantVo> details(@NotNull Long id);
 }

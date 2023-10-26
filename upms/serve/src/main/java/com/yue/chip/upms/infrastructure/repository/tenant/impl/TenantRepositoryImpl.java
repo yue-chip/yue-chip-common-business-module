@@ -10,6 +10,7 @@ import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDao;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantStateDao;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
+import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
@@ -38,7 +39,7 @@ public class TenantRepositoryImpl implements TenantRepository {
     @Override
     public IPageResultData<List<TenantVo>> list(String name, String manager, State state, String phoneNumber, YueChipPage pageable) {
         Page<TenantPo> page = tenantDao.list(name,manager,state,phoneNumber,pageable);
-        IPageResultData pageResultData = PageResultData.convert(page,tenantMapper.toTenant(page.getContent()));
+        IPageResultData pageResultData = PageResultData.convert(page,tenantMapper.toTenantVo(page.getContent()));
         return pageResultData;
     }
 
@@ -78,5 +79,23 @@ public class TenantRepositoryImpl implements TenantRepository {
     @Override
     public void updateOtherDataBase(State state, Long tenantNumber) {
         tenantDao.updateOtherDataBase(state,tenantNumber);
+    }
+
+    @Override
+    public Optional<TenantStatePo> findFirst() {
+        List<TenantStatePo> list = tenantStateDao.findAll();
+        if (list.size()>0){
+            return Optional.ofNullable(list.get(0));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<TenantVo> details(Long id) {
+        Optional<TenantPo> optional = tenantDao.findById(id);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(tenantMapper.toTenantVo(optional.get()));
+        }
+        return Optional.empty();
     }
 }

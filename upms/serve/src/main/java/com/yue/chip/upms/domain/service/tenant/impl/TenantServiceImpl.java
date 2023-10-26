@@ -2,6 +2,7 @@ package com.yue.chip.upms.domain.service.tenant.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.tenant.TenantConstant;
+import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.domain.service.tenant.CreateSql;
 import com.yue.chip.upms.domain.service.tenant.TenantService;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDao;
@@ -74,8 +75,8 @@ public class TenantServiceImpl implements TenantService {
             stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_id`,`state`) values ('superadmin','"+passwordEncoder.encode(SecureUtil.md5("superadmin"))+"','superadmin',"+tenantNumber+",1);");
             stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_id`,`state`) values ('admin','"+passwordEncoder.encode(SecureUtil.md5("admin"))+"','admin',"+tenantNumber+",1);");
             stat.executeUpdate("INSERT INTO  t_resources(`code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url`) select `code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url` from upms.t_resources where code not in ( 'TENANT','MENU');");
-            stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('superadmin','1','超级管理员',','1');");
-            stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('admin','1','管理员',','1');");
+            stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('superadmin',1,'超级管理员','',1);");
+            stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('admin',1,'管理员','',1);");
             stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select r.id, re.id from t_role r join t_resources re where r.code ='admin';");
             stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select r.id, re.id from t_role r join t_resources re where r.code ='superadmin';");
 
@@ -83,18 +84,21 @@ public class TenantServiceImpl implements TenantService {
             stat.executeUpdate("INSERT INTO  alarm_category(`gate`,`name`,`state`,`message_type`) select 1, `name`,`state`,`message_type` from security.alarm_category;");
 
             stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-            stat.executeUpdate("INSERT INTO  t_enum_util(`code`,`value`,`verion`) select `code`,`value`,`verion` from commom.t_enum_util;");
-            stat.close();
+            stat.executeUpdate("INSERT INTO  t_enum_util(`code`,`value`,`version`) select `code`,`value`,`version` from common.t_enum_util;");
             connection.commit();
+            stat.close();
             connection.close();
         } catch (SQLException e) {
             try {
+                e.printStackTrace();
                 connection.rollback();
                 connection.close();
             } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+                ex.printStackTrace();
+                BusinessException.throwException("创建租户失败");
             }
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            BusinessException.throwException("创建租户失败");
         }
 
     }

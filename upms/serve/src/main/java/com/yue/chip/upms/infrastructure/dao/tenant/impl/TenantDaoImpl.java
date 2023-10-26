@@ -4,6 +4,7 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.core.tenant.TenantConstant;
+import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDaoEx;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
@@ -66,7 +67,8 @@ public class TenantDaoImpl implements TenantDaoEx {
             stat.close();
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            BusinessException.throwException("删除/更新租户状态失败");
         }
     }
 }

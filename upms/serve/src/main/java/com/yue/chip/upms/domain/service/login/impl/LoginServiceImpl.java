@@ -1,14 +1,17 @@
 package com.yue.chip.upms.domain.service.login.impl;
 
 import com.yue.chip.authentication.YueChipAuthenticationToken;
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.aggregates.UserWeixin;
+import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
+import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,11 +44,16 @@ public class LoginServiceImpl implements LoginService {
     private UpmsRepository upmsRepository;
 
     @Resource
+    private TenantRepository tenantRepository;
+
+    @Resource
     private PasswordEncoder passwordEncoder;
 
 
     @Override
     public String login(String username, String password) {
+        //检查租户状态
+        checkTenantState();
         Optional<User> optional = upmsRepository.findUserByUsername(username);
         if (optional.isEmpty()) {
             BusinessException.throwException("该账号不存在");
@@ -59,6 +67,8 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String weixinLogin(String username, String password) {
+        //检查租户状态
+        checkTenantState();
         Optional<UserWeixin> optional = upmsRepository.findUserWeixinByUsername(username);
         if (optional.isEmpty()) {
             BusinessException.throwException("该账号不存在");
@@ -82,5 +92,17 @@ public class LoginServiceImpl implements LoginService {
         YueChipUserDetails userDetails = new YueChipUserDetails(id,username,password,tenantId,authoritiesList);
         YueChipRedisTokenStoreUtil.store(userDetails,token.getToken());
         return token.getToken();
+    }
+
+    private void checkTenantState() {
+        Optional<TenantStatePo> optional = tenantRepository.findFirst();
+        if (optional.isEmpty()) {
+            BusinessException.throwException("该租户状态不可用");
+        }else {
+            TenantStatePo tenantStatePo = optional.get();
+            if (Objects.equals(tenantStatePo.getState(), State.DISABLE)) {
+                BusinessException.throwException("该租户状态不可用");
+            }
+        }
     }
 }

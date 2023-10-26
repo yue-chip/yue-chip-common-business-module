@@ -11,6 +11,7 @@ import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantAddDTO;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantUpdateDTO;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +65,26 @@ public class TenantApplicationImpl implements TenantApplication {
 
     @Override
     public void update(TenantUpdateDTO tenantUpdateDTO) {
+        //判断租户名称时候存在
+        Tenant tenant = Tenant.builder()
+                .name(tenantUpdateDTO.getName())
+                .id(tenantUpdateDTO.getId())
+                .build();
+        if (tenant.checkNameIsExist()) {
+            BusinessException.throwException("该租户名称已存在");
+        }
+        tenantRepository.update(tenantMapper.toTenantPo(tenantUpdateDTO));
+    }
 
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void update(@NotNull Long id, State state) {
+        TenantPo tenantPo = TenantPo.builder()
+                        .state(state)
+                        .id(id)
+                        .build();
+        tenantRepository.update(tenantPo);
+        //更新其它租户数据中的租户状态
+        tenantRepository.updateOtherDataBase(state,id);
     }
 }

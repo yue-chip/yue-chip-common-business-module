@@ -51,6 +51,9 @@
     <a-card>
       <a-table rowKey="id" :row-selection="rowSelection" :columns="columns" :data-source="dataList" :pagination="pagination" :loading="loading" :scroll="{ y: 440 }" >
         <template #bodyCell="{ column, text, record }">
+          <template v-if="column.key === 'state'">
+            <a-switch  @change="stateChange(record.id,record.stateTmp)" v-model:checked="record.stateTmp" checked-children="正常" un-checked-children="禁用" />
+          </template>
           <template v-if="column.key === 'operation'">
             <a-space :size="5">
               <a-button size="small" @click="details(record.id)">
@@ -185,7 +188,6 @@
       (data:any)=>{
         if (data.status === 200 ) {
           addOrUpdateModel.value = data.data;
-          addOrUpdateModel.value.state = data.data.state.name;
           visible.value = true;
         }
       },null,null)
@@ -248,6 +250,17 @@
     });
   }
 
+  function stateChange(id: string,stateTmp: any){
+    let state = stateTmp?1:0;
+    axios.service.put('/upms/console/tenant/update/state', {"id":id,"state":state}, { headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' }})
+      .then((data:any) => {
+        if (data.status === 200 ) {
+          message.info(data.message);
+        }
+        search();
+      })
+      .catch(() => {});
+  }
 
 </script>
 

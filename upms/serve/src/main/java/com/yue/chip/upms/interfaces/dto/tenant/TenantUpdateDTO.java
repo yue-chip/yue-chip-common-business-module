@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.tenant.TenantDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,12 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 public class TenantUpdateDTO extends TenantDefinition {
+
+    @Override
+    @NotNull(message = "id不能为空")
+    public Long getId() {
+        return super.getId();
+    }
 
     @Override
     @NotBlank(message = "机构名称不能为空")

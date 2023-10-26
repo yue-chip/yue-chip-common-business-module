@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.event.PaintEvent;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -54,7 +55,7 @@ public class TenantConsoleController {
 
     @GetMapping("/list")
     @Operation(description = "租户-租户列表",summary = "租户-租户列表")
-    public IPageResultData<List<TenantVo>> roleList(@Parameter(description = "名称",name = "name")String name,
+    public IPageResultData<List<TenantVo>> list(@Parameter(description = "名称",name = "name")String name,
                                                     @Parameter(description = "负责人",name = "manager") String manager,
                                                     @Parameter(description = "状态",name = "state") State state,
                                                     @Parameter(description = "联系电话",name = "phoneNumber") String phoneNumber,
@@ -71,8 +72,16 @@ public class TenantConsoleController {
 
     @Operation(description = "租户-修改租户",summary = "租户-修改租户")
     @PutMapping("/update")
-    public IResultData add(@RequestBody @Validated TenantUpdateDTO tenantUpdateDTO){
-        tenantRepository.update(tenantMapper.toTenantPo(tenantUpdateDTO));
+    public IResultData update(@RequestBody @Validated TenantUpdateDTO tenantUpdateDTO){
+        tenantApplication.update(tenantUpdateDTO);
+        return ResultData.builder().build();
+    }
+
+    @Operation(description = "租户-修改租户状态",summary = "租户-修改租户状态")
+    @PutMapping("/update/state")
+    public IResultData updateState(@Parameter(description = "状态",name = "状态",required = true) @NotNull(message = "状态不能为空") State state,
+                                   @Parameter(description = "id",name = "id",required = true) @NotNull(message = "id不能为空") Long id){
+        tenantApplication.update(id,state);
         return ResultData.builder().build();
     }
 
@@ -81,6 +90,13 @@ public class TenantConsoleController {
     public IResultData roleDelete(@Size(min = 1,message = "请选择要删除的租户") @Parameter(description = "租户id",name = "id",required = true)@RequestParam("ids") List<Long> ids){
         tenantApplication.delete(ids);
         return ResultData.builder().build();
+    }
+
+    @GetMapping("/details")
+    @Operation(description = "租户-租户详情",summary = "租户-租户详情")
+    public IResultData<TenantVo> details(@Parameter(description = "修改需要传id，新增则不需要传",name = "id") @NotNull(message = "id不能为空")Long id) {
+        Optional<TenantVo> optional = tenantRepository.details(id);
+        return ResultData.builder().data(optional.isEmpty()?null:optional.get()).build();
     }
 
     @Operation(description = "租户-判断租户名称是否存在",summary = "租户-判断租户名称是否存在")

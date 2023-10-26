@@ -4,6 +4,7 @@ import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantAddDTO;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantUpdateDTO;
+import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -22,9 +23,13 @@ public interface TenantMapper {
 
     public Tenant toTenant(TenantPo tenantPo);
 
+    public TenantVo toTenantVo(TenantPo tenantPo);
+
     public TenantPo toTenantPo(TenantAddDTO tenantAddDTO);
 
     public TenantPo toTenantPo(TenantUpdateDTO tenantUpdateDTO);
+
+    public List<TenantVo> toTenantVo(List<TenantPo> list);
 
     public List<Tenant> toTenant(List<TenantPo> list);
 }
