@@ -61,7 +61,7 @@ public class TenantDaoImpl implements TenantDaoEx {
     public void updateOtherDataBase(State state, Long tenantNumber) {
         try {
             Connection connection =dataSource.getConnection();
-            Statement stat =  dataSource.getConnection().createStatement();
+            Statement stat =  connection.createStatement();
             stat.execute("use upms".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
             stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
             stat.close();
