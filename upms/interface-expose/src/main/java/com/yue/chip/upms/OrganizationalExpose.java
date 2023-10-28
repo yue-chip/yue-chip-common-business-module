@@ -1,5 +1,6 @@
 package com.yue.chip.upms;
 
+import com.yue.chip.core.Optional;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,5 +17,5 @@ public interface OrganizationalExpose {
      * @param id
      * @return
      */
-    public OrganizationalExposeVo findById(@NotNull Long id);
+    public Optional< OrganizationalExposeVo> findById(@NotNull Long id);
 }

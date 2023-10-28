@@ -1,5 +1,6 @@
 package com.yue.chip.upms.application.expose.impl.organizational;
 
+import com.yue.chip.core.Optional;
 import com.yue.chip.upms.OrganizationalExpose;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.domain.aggregates.Organizational;
@@ -8,7 +9,6 @@ import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 
-import java.util.Optional;
 
 /**
  * @author xianming.chen
@@ -25,11 +25,11 @@ public class OrganizationalExposeImpl implements OrganizationalExpose {
     private OrganizationalMapper organizationalMapper;
 
     @Override
-    public OrganizationalExposeVo findById(Long id) {
-        Optional<Organizational> optional = organizationalRepository.findById(id);
+    public Optional<OrganizationalExposeVo> findById(Long id) {
+        java.util.Optional<Organizational> optional = organizationalRepository.findById(id);
         if (optional.isPresent()) {
-            return organizationalMapper.toOrganizationalExposVo(optional.get());
+            return Optional.ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
         }
-        return null;
+        return Optional.empty();
     }
 }
