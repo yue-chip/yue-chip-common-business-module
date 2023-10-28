@@ -8,7 +8,6 @@ import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,11 +23,6 @@ public class OrganizationalExposeImpl implements OrganizationalExpose {
 
     @Resource
     private OrganizationalMapper organizationalMapper;
-
-    @Override
-    public List<OrganizationalExposeVo> list() {
-        return organizationalMapper.toOrganizationalExposeVoList(organizationalRepository.findAllChildren(0l));
-    }
 
     @Override
     public OrganizationalExposeVo findById(Long id) {

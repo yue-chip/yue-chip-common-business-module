@@ -6,4 +6,10 @@ dependencies {
     api project(':common')
     api 'yue.chip:yue-chip-interface-expose-starter'
     implementation 'jakarta.platform:jakarta.jakartaee-api'
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    testCompileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 }

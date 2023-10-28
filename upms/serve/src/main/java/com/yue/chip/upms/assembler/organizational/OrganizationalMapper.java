@@ -50,8 +50,6 @@ public interface OrganizationalMapper {
 
     public OrganizationalVo toOrganizationalVo(Organizational organizational);
 
-    public List<OrganizationalExposeVo> toOrganizationalExposeVoList(List<Organizational> organizationalList);
-
     public OrganizationalExposeVo toOrganizationalExposVo(Organizational organizational);
 
 

@@ -2,6 +2,7 @@ package com.yue.chip.upms.interfaces.vo.organizational;
 
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
