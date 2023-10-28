@@ -1,14 +1,13 @@
 package com.yue.chip.upms.assembler.organizational;
 
-import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
-import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeSelectVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalVo;
+import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -50,4 +49,10 @@ public interface OrganizationalMapper {
     public OrganizationalTreeListVo toOrganizationalTreeListVo(OrganizationalPo organizationalPo);
 
     public OrganizationalVo toOrganizationalVo(Organizational organizational);
+
+    public List<OrganizationalExposeVo> toOrganizationalExposeVoList(List<Organizational> organizationalList);
+
+    public OrganizationalExposeVo toOrganizationalExposVo(Organizational organizational);
+
+
 }
