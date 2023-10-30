@@ -5,9 +5,15 @@ import com.yue.chip.upms.OrganizationalExpose;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
+import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -31,5 +37,18 @@ public class OrganizationalExposeImpl implements OrganizationalExpose {
             return Optional.ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<OrganizationalExposeVo> findByIdList(Set<Long> ids) {
+        List<OrganizationalPo> byIdList = organizationalRepository.findByIdList(ids);
+        List<OrganizationalExposeVo> list = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(byIdList)) {
+            byIdList.forEach(po -> {
+                OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
+                list.add(organizationalExposeVo);
+            });
+        }
+        return list;
     }
 }

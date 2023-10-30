@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Mr.Liu
@@ -70,4 +71,6 @@ public interface OrganizationalDao extends BaseDao<OrganizationalPo> ,Organizati
     @Transactional
     @Query("update OrganizationalPo set leaderId = null where leaderId = :leaderId ")
     public int deleteLeader(@NotNull @Param("leaderId")   Long leaderId);
+
+    public List<OrganizationalPo> findAllByIdIn(Set<Long> Ids);
 }
