@@ -5,6 +5,7 @@ import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
+import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -52,6 +53,12 @@ public interface UpmsApplication {
      * @param userAddOrUpdateDto
      */
     public void updateUser(@NotNull UserAddOrUpdateDto userAddOrUpdateDto);
+
+    /**
+     * 修改用户密码
+     * @param userUpdatePasswordDto
+     */
+    public void updateUserPassword(@NotNull UserUpdatePasswordDto userUpdatePasswordDto);
 
     /**
      * 删除用户

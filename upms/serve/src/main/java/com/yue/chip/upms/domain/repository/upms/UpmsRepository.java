@@ -66,6 +66,13 @@ public interface UpmsRepository {
     public List<User> findUserByRoleId(@NotNull Long roleId);
 
     /**
+     * 修改用户密码
+     * @param userId
+     * @param password
+     */
+    public void updateUserPassword(@NotNull Long userId,@NotBlank String password);
+
+    /**
      * 根据角色删除用户与角色的绑定关系
      * @param roleId
      * @return

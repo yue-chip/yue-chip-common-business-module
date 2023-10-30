@@ -78,12 +78,19 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
-    public List<Long> save(Long tableId, String tableName, String fileFieldName, Long... fileId) {
-        if (Objects.isNull(fileId)) {
-            return Collections.EMPTY_LIST;
-        }
-        List<Long> fileIds = Stream.of(fileId).filter(id -> Objects.nonNull(id)).collect(Collectors.toList());
-        save(tableId,fileFieldName,tableName,fileIds);
-        return fileIds;
+    public List<Long> save(Long tableId, String tableName, String fileFieldName, Long fileId) {
+        List<Long> fileIds = new ArrayList<>();
+        fileIds.add(fileId);
+        return save(tableId, tableName, fileFieldName, fileIds);
     }
+//
+//    @Override
+//    public List<Long> save(Long tableId, String tableName, String fileFieldName, Long... fileId) {
+//        if (Objects.isNull(fileId)) {
+//            return Collections.EMPTY_LIST;
+//        }
+//        List<Long> fileIds = Stream.of(fileId).filter(id -> Objects.nonNull(id)).collect(Collectors.toList());
+//        save(tableId,fileFieldName,tableName,fileIds);
+//        return fileIds;
+//    }
 }

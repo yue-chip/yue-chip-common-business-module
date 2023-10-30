@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -78,6 +79,23 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("密码错误");
         }
         return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getUsername(),userWeixin.getPassword(),userWeixin.getTenantId());
+    }
+
+    @Override
+    public void loginOut() {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (Objects.nonNull(requestAttributes)) {
+            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+            if (Objects.nonNull(request)) {
+                Object obj = request.getHeader("token");
+                if (Objects.nonNull(obj)) {
+                    String token = String.valueOf(obj);
+                    if (StringUtils.hasText(token)) {
+                        YueChipRedisTokenStoreUtil.clean(token);
+                    }
+                }
+            }
+        }
     }
 
     private String authority(List<Resources> resourcesList,Long id, String username ,String password,Long tenantId) {

@@ -100,13 +100,13 @@ public class User extends UserDefinition {
     @Override
     public String getProfilePhotoUrl() {
         Assert.notNull(getId(),"id不能为空");
-        return fileExposeService.getUrlSingle(getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME);
+        return fileExposeService.getUrlSingle(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
     }
 
     @Override
     public Long getProfilePhotoId() {
         Assert.notNull(getId(),"id不能为空");
-        Map<Long,String> fileMap = fileExposeService.getUrl(getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME);
+        Map<Long,String> fileMap = fileExposeService.getUrl(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
         if (Objects.nonNull(fileMap) && fileMap.size()>0) {
             Object obj = fileMap.keySet().toArray()[0];
             if (obj instanceof Long) {

@@ -41,7 +41,6 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
             }
             for (Long tenantNumber:tenantNumbers){
                 try {
-                    System.out.println(tenantNumber);
                     stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
                     PreparedStatement delete = connection.prepareStatement("delete from t_enum_util where code =? and version = ?");
                     delete.setString(1, enumUtilPo.getCode());

@@ -24,4 +24,9 @@ public interface LoginService {
      */
     @Deprecated
     public String weixinLogin(@NotBlank String username,@NotBlank String password);
+
+    /**
+     * 退出登录
+     */
+    public void loginOut();
 }

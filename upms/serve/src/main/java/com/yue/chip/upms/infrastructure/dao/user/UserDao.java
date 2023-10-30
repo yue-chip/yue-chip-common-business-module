@@ -6,6 +6,10 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -30,4 +34,14 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @return
      */
     public Optional<UserPo> findFirstByUsername(@NotBlank String username);
+
+    /**
+     * 修改用户密码
+     * @param id
+     * @param password
+     */
+    @Modifying
+    @Query("update UserPo set password=:password where id =:id ")
+    @Transactional
+    public void updatePassword(@NotNull @Param("id") Long id, @NotBlank @Param("password") String password);
 }

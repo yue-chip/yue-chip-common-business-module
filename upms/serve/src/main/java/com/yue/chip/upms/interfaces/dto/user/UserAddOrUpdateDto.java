@@ -53,9 +53,4 @@ public class UserAddOrUpdateDto extends UserDefinition {
         return super.getPhoneNumber();
     }
 
-    //    @Override
-//    @NotNull(message = "version不能为空",groups = {Validator.Update.class})
-//    public Long getVersion() {
-//        return super.getVersion();
-//    }
 }

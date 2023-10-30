@@ -28,6 +28,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
+import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeSelectVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalVo;
@@ -90,6 +91,13 @@ public class UpmsConsoleController {
         User user = User.builder().id(CurrentUserUtil.getCurrentUserId()).build();
         ResultData resultData = ResultData.builder().data(user.getResourcesTree()).build();
         return resultData;
+    }
+
+    @GetMapping("/current/user/details")
+    @Operation(summary = "用户-获取当前登录用户信息", description = "用户-获取当前登录用户信息")
+    public IResultData<UserVo> userDetails(){
+        Optional<User> optional = upmsRepository.findUserById(CurrentUserUtil.getCurrentUserId(true));
+        return ResultData.builder().data(optional.isPresent()?userMapper.toUserVo(optional.get()):null).build();
     }
 
     @GetMapping("/role/list")
@@ -276,13 +284,19 @@ public class UpmsConsoleController {
     public IResultData<UserVo> userDetails(@NotNull(message = "用户id不能为空") @Parameter(description = "用户id",name="id",required = true)Long id) {
         Optional<User> optional = upmsRepository.findUserById(id);
         return ResultData.builder().data(optional.isPresent()?userMapper.toUserVo(optional.get()):null).build();
-
     }
 
     @PutMapping("/user/update")
     @Operation(description = "用户-修改用户",summary = "用户-修改用户")
     public IResultData updateUser(@RequestBody @Validated({Validator.Update.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
         upmsApplication.updateUser(userAddOrUpdateDto);
+        return ResultData.builder().build();
+    }
+
+    @PutMapping("/user/update/password")
+    @Operation(description = "用户-修改用户密码",summary = "用户-修改用户密码")
+    public IResultData updateUserPassword(@RequestBody @Validated UserUpdatePasswordDto userUpdatePasswordDto) {
+        upmsApplication.updateUserPassword(userUpdatePasswordDto);
         return ResultData.builder().build();
     }
 

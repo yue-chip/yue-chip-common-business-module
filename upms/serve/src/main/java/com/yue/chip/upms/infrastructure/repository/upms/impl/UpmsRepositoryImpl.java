@@ -116,6 +116,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public void updateUserPassword(Long userId, String password) {
+        userDao.updatePassword(userId,password);
+    }
+
+    @Override
     public int deleteUserRole(Long roleId) {
         return userRoleDao.deleteByRoleId(roleId);
     }

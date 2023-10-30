@@ -25,7 +25,9 @@ import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
+import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.utils.CurrentUserUtil;
 import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -67,9 +69,11 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Resource
     private OrganizationalMapper organizationalMapper;
 
-
     @DubboReference
     private FileExposeService fileExposeService;
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(rollbackFor = {Throwable.class})
@@ -141,12 +145,21 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Override
     @GlobalTransactional(rollbackFor = {Exception.class})
     public void updateUser(UserAddOrUpdateDto userAddOrUpdateDto) {
+        //更新头像
+        if (Objects.nonNull(userAddOrUpdateDto.getProfilePhotoId())) {
+            fileExposeService.save(userAddOrUpdateDto.getId(),UserPo.TABLE_NAME,UserPo.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhotoId());
+        }
         //修改用户
         upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系
         upmsDomainService.userOrganizational(userAddOrUpdateDto.getId(),userAddOrUpdateDto.getOrganizationalId());
         //保存头像
         fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()));
+    }
+
+    @Override
+    public void updateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
+        upmsRepository.updateUserPassword(CurrentUserUtil.getCurrentUserId(),passwordEncoder.encode(SecureUtil.md5(userUpdatePasswordDto.getPassword())));
     }
 
     @Override

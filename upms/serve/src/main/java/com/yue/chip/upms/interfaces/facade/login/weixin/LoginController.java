@@ -11,6 +11,7 @@ import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ import java.util.Map;
  * @date 2023/5/25 上午11:43
  */
 @RestController("weixinLoginController")
-@RequestMapping()
+@RequestMapping("/weixin")
 @Validated
 @Tag(name = "微信登录")
 @Log
@@ -32,7 +33,7 @@ public class LoginController {
     @Resource
     private LoginService loginService;
 
-    @PostMapping("/weixin/login")
+    @PostMapping("/login")
     @AuthorizationIgnore
     @Operation(summary = "登录", description = "登录")
     public IResultData<String> login(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username,
@@ -41,6 +42,14 @@ public class LoginController {
         Map<String,String> map = new HashMap<>();
         map.put("token",token);
         return ResultData.builder().data(map).build();
+    }
+
+    @GetMapping("/login/out")
+    @AuthorizationIgnore
+    @Operation(summary = "退出登录", description = "退出登录")
+    public IResultData<String> loginOut() {
+        loginService.loginOut();
+        return ResultData.builder().build();
     }
 
 }

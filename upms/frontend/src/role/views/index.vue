@@ -118,9 +118,9 @@
 <script setup lang="ts">
   import {ref, onActivated} from 'vue'
   import {FormInstance, message, Modal} from "ant-design-vue";
-  const fromAddOrUpdate = ref<FormInstance>();
   import { SearchOutlined,PlusOutlined,UserAddOutlined,FilterOutlined,DeleteOutlined ,EditOutlined} from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
+  const fromAddOrUpdate = ref<FormInstance>();
   let loading = ref(false);
   let searchModel = ref({pageSize:10,pageNumber:1});
   let permissionsVisible = ref<boolean>(false);
