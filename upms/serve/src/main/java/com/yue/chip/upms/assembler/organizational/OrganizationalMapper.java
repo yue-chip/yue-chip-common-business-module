@@ -52,5 +52,5 @@ public interface OrganizationalMapper {
 
     public OrganizationalExposeVo toOrganizationalExposVo(Organizational organizational);
 
-
+    public OrganizationalExposeVo toOrganizationalExposeVo(OrganizationalPo organizationalPo);
 }

@@ -1,14 +1,20 @@
 package com.yue.chip.upms.application.expose.impl.organizational;
 
+import com.yue.chip.core.Optional;
 import com.yue.chip.upms.OrganizationalExpose;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
+import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 
 /**
  * @author xianming.chen
@@ -25,11 +31,24 @@ public class OrganizationalExposeImpl implements OrganizationalExpose {
     private OrganizationalMapper organizationalMapper;
 
     @Override
-    public OrganizationalExposeVo findById(Long id) {
-        Optional<Organizational> optional = organizationalRepository.findById(id);
+    public Optional<OrganizationalExposeVo> findById(Long id) {
+        java.util.Optional<Organizational> optional = organizationalRepository.findById(id);
         if (optional.isPresent()) {
-            return organizationalMapper.toOrganizationalExposVo(optional.get());
+            return Optional.ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
         }
-        return null;
+        return Optional.empty();
+    }
+
+    @Override
+    public List<OrganizationalExposeVo> findByIdList(Set<Long> ids) {
+        List<OrganizationalPo> byIdList = organizationalRepository.findByIdList(ids);
+        List<OrganizationalExposeVo> list = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(byIdList)) {
+            byIdList.forEach(po -> {
+                OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
+                list.add(organizationalExposeVo);
+            });
+        }
+        return list;
     }
 }

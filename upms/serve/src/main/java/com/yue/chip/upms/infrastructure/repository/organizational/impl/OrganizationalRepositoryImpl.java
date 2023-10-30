@@ -14,10 +14,7 @@ import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -133,6 +130,12 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     @Override
     public void deleteLeader(Long userId) {
         organizationalDao.deleteLeader(userId);
+    }
+
+    @Override
+    public List<OrganizationalPo> findByIdList(Set<Long> ids) {
+        List<OrganizationalPo> allByIdIn = organizationalDao.findAllByIdIn(ids);
+        return allByIdIn;
     }
 
     private void findAllChildren(Long parentId,List<Organizational> organizationals) {

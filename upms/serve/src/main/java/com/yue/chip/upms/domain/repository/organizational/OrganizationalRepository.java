@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Mr.Liu
@@ -98,5 +99,12 @@ public interface OrganizationalRepository {
      * @param userId
      */
     public void deleteLeader(Long userId);
+
+    /**
+     * 查询机构id数组信息
+     * @param ids
+     * @return
+     */
+    public List<OrganizationalPo> findByIdList(Set<Long> ids);
 
 }
