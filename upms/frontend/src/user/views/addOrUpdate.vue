@@ -114,7 +114,7 @@
   }
 
   function save(){
-    buttonDisbled(true,true,true);
+    buttonDisabled(true,true,true);
     const id = route.query.id;
     if (id) {
       addOrUpdateModel.value.id = id;
@@ -137,10 +137,10 @@
             }
           },null,null)
       }
-    }).catch((err: any) => {}).finally(()=>{buttonDisbled(false,false,false)});
+    }).catch((err: any) => {}).finally(()=>{buttonDisabled(false,false,false)});
   }
 
-  function buttonDisbled(save:boolean,reset:boolean,back:boolean){
+  function buttonDisabled(save:boolean,reset:boolean,back:boolean){
     saveButtonDisabled.value = save;
     resetDisabled.value = reset;
     backDisabled.value =back;
