@@ -11,7 +11,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Mr.Liu
@@ -44,4 +46,12 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
     @Query("update UserPo set password=:password where id =:id ")
     @Transactional
     public void updatePassword(@NotNull @Param("id") Long id, @NotBlank @Param("password") String password);
+
+    /**
+     * 根据ids查询所有用户
+     * @param userIds
+     * @return
+     */
+    List<UserPo> findAllByIdIn(Set<Long> userIds);
+
 }
