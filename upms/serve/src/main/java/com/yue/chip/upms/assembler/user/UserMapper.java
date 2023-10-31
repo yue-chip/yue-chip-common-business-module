@@ -5,6 +5,7 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.vo.user.UserSelectVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -54,4 +55,6 @@ public interface UserMapper {
     @Mappings({@Mapping(target = "organizationalName",source = "organizational.name"),
             @Mapping(target = "organizationalId",source = "organizational.id")})
     public UserVo toUserVo(User user);
+
+    UserExposeVo toUserExposeVo(UserPo userPo);
 }
