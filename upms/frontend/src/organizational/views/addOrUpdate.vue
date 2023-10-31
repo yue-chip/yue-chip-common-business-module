@@ -48,15 +48,15 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, onMounted, getCurrentInstance} from 'vue'
+  import {ref, onMounted} from 'vue'
   import {useRouter,useRoute} from 'vue-router'
   import { RollbackOutlined,SaveOutlined,UndoOutlined } from '@ant-design/icons-vue';
   import type { TreeSelectProps } from 'ant-design-vue';
-  import { TreeSelect,message } from 'ant-design-vue';
+  import { TreeSelect,message ,FormInstance} from 'ant-design-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   const router=useRouter();
   const route = useRoute();
-  const _this:any = getCurrentInstance();
+  const from = ref<FormInstance>();
   const SHOW_PARENT = TreeSelect.SHOW_PARENT;
   let saveButtonDisabled = ref(false);
   let resetDisabled = ref(false);
@@ -113,7 +113,7 @@
 
   function reset(){
     addOrUpdateModel.value = {};
-    _this.ctx.$refs.from.resetFields();
+    from.value.resetFields();
     const id = route.query.id;
     if (id) {
       getInfo(id);
@@ -138,7 +138,7 @@
     if (id) {
       addOrUpdateModel.value.id = id;
     }
-    _this.ctx.$refs.from.validate().then(() => {
+    from.value.validateFields().then(() => {
       if (addOrUpdateModel.value.id) {
         axios.axiosPut("/upms/console/organizational/update",addOrUpdateModel.value,
           (data:any)=>{

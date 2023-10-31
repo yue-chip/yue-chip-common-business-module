@@ -97,7 +97,7 @@
 
   function reset(){
     addOrUpdateModel.value = {};
-    _this.ctx.$refs.from.resetFields();
+    from.value.resetFields();
     const id = route.query.id;
     if (id) {
       getInfo(id);
