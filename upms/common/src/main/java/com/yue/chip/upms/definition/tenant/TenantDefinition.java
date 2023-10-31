@@ -23,7 +23,7 @@ public class TenantDefinition extends BaseDefinition {
     @Schema(description = "租户名称")
     private String name;
 
-    @Schema(description = "租户状态")
+    @Schema(description = "租户状态(code:"+State.code+",version:"+State.version+")")
     private State state;
 
     @Schema(description = "负责人")

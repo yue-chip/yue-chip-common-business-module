@@ -15,7 +15,9 @@
           </a-col>
           <a-col :span="6">
             <a-form-item label="状态" name="state" ref="state" >
-              <a-input placeholder="请选择状态" v-model:value="searchModel.state" />
+              <a-select v-model:value="searchModel.state" allowClear>
+                <a-select-option v-for="(state, index) in stateList" :value="state.key">{{state.desc}}</a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
           <a-col :span="6">
@@ -106,6 +108,8 @@
   let visible = ref<boolean>(false);
   let addOrUpdateModel = ref({})
   let selectedRowKeys:string[] = [];
+  let dataList = ref([]);
+  let stateList = ref([]);
   const rules:any={
     name:[{required:true,message:"请输入租户名称",trigger:'blur'}],
     manager:[{required:true,message:"请输入名称",trigger:'blur'}],
@@ -149,7 +153,6 @@
       width: '160px',
     },
   ]
-  let dataList = ref([]);
 
   const pagination = ref({
       current: searchModel.value.pageNumber?searchModel.value.pageNumber:1,
@@ -165,6 +168,9 @@
 
   onActivated(() => {
     search();
+    axios.axiosGet("/common/enum",{params: {"code":"state","version":"1"}},(data:any)=>{
+      stateList.value =eval("(" + data.data.value + ")") ;
+    },null,null)
   });
 
 

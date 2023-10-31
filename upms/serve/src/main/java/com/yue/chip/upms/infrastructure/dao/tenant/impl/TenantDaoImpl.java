@@ -44,11 +44,11 @@ public class TenantDaoImpl implements TenantDaoEx {
         }
         if (StringUtils.hasText(manager)) {
             sb.append(" and t.manager like :manager ");
-            para.put("name","%"+manager+"%");
+            para.put("manager","%"+manager+"%");
         }
         if (StringUtils.hasText(phoneNumber)) {
             sb.append(" and t.phoneNumber like :phoneNumber ");
-            para.put("name","%"+phoneNumber+"%");
+            para.put("phoneNumber","%"+phoneNumber+"%");
         }
         if (Objects.nonNull(state)) {
             sb.append(" and t.state = :state ");
