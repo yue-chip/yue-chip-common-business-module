@@ -51,4 +51,17 @@ public class OrganizationalExposeImpl implements OrganizationalExpose {
         }
         return list;
     }
+
+    @Override
+    public List<OrganizationalExposeVo> findAll() {
+        List<OrganizationalPo> organizationalPoList = organizationalRepository.findAll();
+        List<OrganizationalExposeVo> list = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(organizationalPoList)) {
+            organizationalPoList.forEach(po -> {
+                OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
+                list.add(organizationalExposeVo);
+            });
+        }
+        return list;
+    }
 }

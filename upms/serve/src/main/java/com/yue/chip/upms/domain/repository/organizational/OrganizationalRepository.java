@@ -107,4 +107,5 @@ public interface OrganizationalRepository {
      */
     public List<OrganizationalPo> findByIdList(Set<Long> ids);
 
+    public List<OrganizationalPo> findAll();
 }

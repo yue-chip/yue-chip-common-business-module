@@ -28,4 +28,6 @@ public interface OrganizationalExpose {
      * @return
      */
     public List<OrganizationalExposeVo> findByIdList(Set<Long> ids);
+
+    public List<OrganizationalExposeVo> findAll();
 }
