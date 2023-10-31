@@ -19,6 +19,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class UserUpdatePasswordDto{
 
+    @Schema(description = "用户id,不传则修改当前登录用户的密码")
+    private Long userId;
+
     @Schema(description = "密码(md5编码)")
     @NotBlank(message = "密码不能为空")
     private String password;

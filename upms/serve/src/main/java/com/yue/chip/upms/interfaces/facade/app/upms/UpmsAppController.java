@@ -11,6 +11,7 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
+import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeSelectVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
@@ -69,6 +70,13 @@ public class UpmsAppController {
     @Operation(description = "用户-修改用户",summary = "用户-修改用户")
     public IResultData updateUser(@RequestBody @Validated({Validator.Update.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
         upmsApplication.updateUser(userAddOrUpdateDto);
+        return ResultData.builder().build();
+    }
+
+    @PutMapping("/user/update/password")
+    @Operation(description = "用户-修改用户密码",summary = "用户-修改用户密码")
+    public IResultData updateUserPassword(@RequestBody @Validated UserUpdatePasswordDto userUpdatePasswordDto) {
+        upmsApplication.updateUserPassword(userUpdatePasswordDto);
         return ResultData.builder().build();
     }
 }
