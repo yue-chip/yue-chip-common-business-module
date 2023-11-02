@@ -1,5 +1,6 @@
 package com.yue.chip.upms.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,5 +16,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true,value = {"createDateTime","updateDateTime","createUserId","updateUserId"
+        ,"profilePhotoId","profilePhotoUrl","password","state","isSms","isCall","lastLoginTime"})
 public class UserExposeVo extends UserDefinition {
 }
