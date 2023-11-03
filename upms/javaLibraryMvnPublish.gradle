@@ -22,7 +22,7 @@ publishing {
         }
     }
     repositories {
-        mavenLocal()
+//        mavenLocal()
         maven {
             allowInsecureProtocol true
             url = mavenSnapshots

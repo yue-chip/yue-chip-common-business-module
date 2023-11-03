@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import com.tencentcloudapi.sms.v20210111.SmsClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class TencentSmsServiceImpl implements SmsService {
     private SmsClient client;
 
     @Override
-    public Boolean sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, String message, List<String> phoneNumbers) {
+    public Boolean sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank Object message, List<String> phoneNumbers) {
         /* 实例化一个请求对象，根据调用的接口和实际情况，可以进一步设置请求参数
          * 您可以直接查询SDK源码确定接口有哪些属性可以设置
          * 属性可能是基本类型，也可能引用了另一个数据结构
@@ -59,7 +60,7 @@ public class TencentSmsServiceImpl implements SmsService {
         req.setTemplateId(templateCode);
 
         /* 模板参数: 模板参数的个数需要与 TemplateId 对应模板的变量个数保持一致，若无模板参数，则设置为空 */
-        req.setTemplateParamSet(message.split("^"));
+        req.setTemplateParamSet(converterMessage(message));
 
         /* 下发手机号码，采用 E.164 标准，+[国家或地区码][手机号]
          * 示例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号 */
@@ -89,5 +90,17 @@ public class TencentSmsServiceImpl implements SmsService {
             throw new RuntimeException(e);
         }
         return true;
+    }
+
+    private String[] converterMessage(Object message) {
+        String[] messageArray = new String[]{};
+        if (message instanceof ArrayList<?>) {
+            messageArray = (String[]) ((ArrayList)message).toArray();
+        }else if (message instanceof String[]) {
+            messageArray = (String[]) message;
+        }else if (message instanceof String) {
+            messageArray = ((String) message).split("^");
+        }
+        return messageArray;
     }
 }
