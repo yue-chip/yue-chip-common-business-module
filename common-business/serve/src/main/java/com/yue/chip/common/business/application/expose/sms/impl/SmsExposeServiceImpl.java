@@ -16,10 +16,8 @@ import java.util.List;
  */
 @DubboService(interfaceClass = SmsExposeService.class)
 public class SmsExposeServiceImpl implements SmsExposeService {
-
     @Resource
     private SmsService smsService;
-
 
     @Override
     public Boolean sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, String message, String phoneNumber) {

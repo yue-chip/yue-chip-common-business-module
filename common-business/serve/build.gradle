@@ -20,12 +20,14 @@ bootJar {
 }
 dependencies {
     api project(':interface-expose')
-    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}")
+    api platform("yue.chip:starter:${yueChipPlatformVersion}")
     api 'yue.chip:yue-chip-serve-starter'
     api 'yue.chip:yue-chip-business-starter'
     api 'yue.chip:yue-chip-security'
     api 'io.minio:minio'
-    api "com.aliyun:dysmsapi20170525"
+    api ("com.aliyun:dysmsapi20170525") {
+        exclude group: "org.slf4j"
+    }
     api "com.tencentcloudapi:tencentcloud-sdk-java-sms"
 //    api "yue.chip:yue-chip-oauth2-resource-serve"
 //    implementation 'org.springframework.boot:spring-boot-devtools'

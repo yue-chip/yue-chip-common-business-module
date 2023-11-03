@@ -1,7 +1,6 @@
 package com.yue.chip.common.business;
 
 import com.yue.chip.core.persistence.BaseDaoFactoryBean;
-import com.yue.chip.security.SecurityConfig;
 import org.apache.dubbo.config.spring.context.annotation.DubboComponentScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
