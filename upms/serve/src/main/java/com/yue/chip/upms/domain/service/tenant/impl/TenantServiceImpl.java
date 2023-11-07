@@ -136,12 +136,20 @@ public class TenantServiceImpl implements TenantService {
         CreateSql.execute(dataSource, connection, "security", "device", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "device_category", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "device_product", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "security", "drill", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "facility", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "facility_category", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "security", "fire_patrol", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "fire_station", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "fire_station_category", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "security", "intermediary", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "iot_data", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "security", "maintenance", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "security", "patrol_event", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "security", "patrol_place", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "place", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "security", "store", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "security", "train", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "user_message", tenantNumber,new CreateSql.TempBean().setInsert(false));
 
     }
