@@ -99,7 +99,7 @@ public class TencentSmsServiceImpl implements SmsService {
         }else if (message instanceof String[]) {
             messageArray = (String[]) message;
         }else if (message instanceof String) {
-            messageArray = ((String) message).split("^");
+            messageArray = ((String) message).split("\\^");
         }
         return messageArray;
     }
