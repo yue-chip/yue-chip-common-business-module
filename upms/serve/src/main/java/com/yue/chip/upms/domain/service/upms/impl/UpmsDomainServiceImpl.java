@@ -1,5 +1,6 @@
 package com.yue.chip.upms.domain.service.upms.impl;
 
+import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
@@ -53,6 +54,14 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
 
     @Override
     public void userOrganizational(Long userId, Long organizationalId) {
+        Optional<Organizational> optional = organizationalRepository.findByUserId(userId);
+        if (optional.isPresent()) {
+            Organizational organizational = optional.get();
+            if (!Objects.equals(organizationalId,organizational.getId()) ){
+                //清楚机构负责人
+                organizationalRepository.deleteLeader(userId);
+            }
+        }
         organizationalRepository.deleteOrganizationalByUserId(userId);
         if (Objects.nonNull(organizationalId)) {
             organizationalRepository.saveOrganizationalUser(
