@@ -6,7 +6,7 @@ allprojects {
     version = projectVersion
     apply plugin: 'maven-publish'
     repositories {
-        mavenLocal()
+//        mavenLocal()
         maven { allowInsecureProtocol true; url mavenRepository }
         mavenCentral()
     }

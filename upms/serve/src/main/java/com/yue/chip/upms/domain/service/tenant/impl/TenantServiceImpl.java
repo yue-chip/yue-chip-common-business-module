@@ -68,7 +68,7 @@ public class TenantServiceImpl implements TenantService {
         Connection connection = null;
         try {
             connection =dataSource.getConnection();
-            Statement stat =  dataSource.getConnection().createStatement();
+            Statement stat =  connection.createStatement();
             connection.setAutoCommit(false);
             stat.execute("use upms".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
             stat.executeUpdate("INSERT INTO  t_tenant_state(`state`) values (1);");

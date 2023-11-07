@@ -1,7 +1,7 @@
-package com.yue.chip.upms;
+package com.yue.chip.organizational;
 
 import com.yue.chip.core.Optional;
-import com.yue.chip.upms.vo.OrganizationalExposeVo;
+import com.yue.chip.organizational.vo.OrganizationalExposeVo;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Set;
  * @description: TODO
  * @date 2023-10-28
  */
-public interface OrganizationalExpose {
+public interface OrganizationalExposeService {
 
     /**
      * 根据id查询机构

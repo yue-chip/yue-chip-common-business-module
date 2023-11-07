@@ -1,12 +1,12 @@
 package com.yue.chip.upms.application.expose.impl.organizational;
 
 import com.yue.chip.core.Optional;
-import com.yue.chip.upms.OrganizationalExpose;
+import com.yue.chip.organizational.OrganizationalExposeService;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
-import com.yue.chip.upms.vo.OrganizationalExposeVo;
+import com.yue.chip.organizational.vo.OrganizationalExposeVo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.CollectionUtils;
@@ -21,8 +21,8 @@ import java.util.Set;
  * @description: TODO
  * @date 2023-10-28
  */
-@DubboService(interfaceClass = OrganizationalExpose.class )
-public class OrganizationalExposeImpl implements OrganizationalExpose {
+@DubboService(interfaceClass = OrganizationalExposeService.class )
+public class OrganizationalExposeServiceImpl implements OrganizationalExposeService {
 
     @Resource
     private OrganizationalRepository organizationalRepository;

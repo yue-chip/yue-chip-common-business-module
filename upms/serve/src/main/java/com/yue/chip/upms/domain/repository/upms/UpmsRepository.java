@@ -15,6 +15,7 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -50,6 +51,20 @@ public interface UpmsRepository {
      * @return
      */
     public Optional<User> findUserById(@NotNull Long id);
+
+    /**
+     * 根据用户id查询用户
+     * @param userIds
+     * @return
+     */
+    List<User> findUserByIds(@NotNull @Size(min = 1) List<Long> userIds);
+
+    /**
+     * 根据机构id查询用户
+     * @param organizationalIds
+     * @return
+     */
+    public List<User> findUserByOrganizationalId(@NotNull @Size(min = 1)List<Long> organizationalIds);
 
     /**
      * 根据机构获取用户

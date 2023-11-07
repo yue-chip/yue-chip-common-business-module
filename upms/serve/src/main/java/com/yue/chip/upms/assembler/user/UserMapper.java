@@ -56,5 +56,7 @@ public interface UserMapper {
             @Mapping(target = "organizationalId",source = "organizational.id")})
     public UserVo toUserVo(User user);
 
-    UserExposeVo toUserExposeVo(UserPo userPo);
+    UserExposeVo toUserExposeVo(User userPo);
+
+    List<UserExposeVo> toUserExposeVo(List<User> userList);
 }

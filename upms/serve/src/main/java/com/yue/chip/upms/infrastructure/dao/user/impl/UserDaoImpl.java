@@ -98,4 +98,18 @@ public class UserDaoImpl implements UserDaoEx {
         para.put("state",state);
         return (List<UserPo>) baseDao.findAll(sb.toString(),para);
     }
+
+    @Override
+    public List<UserPo> findUserByOrganizationalId(List<Long> organizationalIds, State state) {
+        if (Objects.isNull(organizationalIds) || organizationalIds.size() ==0) {
+            return Collections.EMPTY_LIST;
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u join OrganizationalUserPo ou on u.id = ou.userId join OrganizationalPo o on ou.organizationalId = o.id" +
+                "  where ou.organizationalId in :organizationalId and o.state = :state ");
+        Map<String,Object> para = new HashMap<>();
+        para.put("organizationalId",organizationalIds);
+        para.put("state",state);
+        return (List<UserPo>) baseDao.findAll(sb.toString(),para);
+    }
 }

@@ -5,6 +5,7 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -49,5 +50,14 @@ public interface UserDaoEx {
      * @return
      */
     public List<UserPo> findUserByOrganizationalId(@NotNull Long organizationalId, @NotNull State state);
+
+    /**
+     * 根据机构获取用户
+     *
+     * @param organizationalIds
+     * @param state
+     * @return
+     */
+    public List<UserPo> findUserByOrganizationalId(@NotNull @Size(min = 1) List<Long> organizationalIds, @NotNull State state);
 
 }

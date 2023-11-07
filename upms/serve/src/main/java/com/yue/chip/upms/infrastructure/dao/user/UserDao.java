@@ -5,6 +5,7 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -52,6 +53,6 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @param userIds
      * @return
      */
-    List<UserPo> findAllByIdIn(Set<Long> userIds);
+    List<UserPo> findAllByIdIn(@NotNull @Size(min = 1) List<Long> userIds);
 
 }
