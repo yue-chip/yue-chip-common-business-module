@@ -53,4 +53,6 @@ public interface OrganizationalMapper {
     public OrganizationalExposeVo toOrganizationalExposVo(Organizational organizational);
 
     public OrganizationalExposeVo toOrganizationalExposeVo(OrganizationalPo organizationalPo);
+
+    public List<OrganizationalExposeVo> toOrganizationalExposeVo(List<Organizational> organizationalList);
 }

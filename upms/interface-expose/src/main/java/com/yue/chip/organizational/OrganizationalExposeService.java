@@ -30,4 +30,24 @@ public interface OrganizationalExposeService {
     public List<OrganizationalExposeVo> findByIdList(Set<Long> ids);
 
     public List<OrganizationalExposeVo> findAll();
+
+    /**
+     * 获取所有节点数据
+     * @return
+     */
+    public List<OrganizationalExposeVo> findAllChildrenByOrganizationalId(Long organizationalId);
+
+    /**
+     * 根据用户获取所在机构和所有子节点
+     * @param userId
+     * @return
+     */
+    public List<OrganizationalExposeVo> findAllChildrenByUserId(Long userId);
+
+    /**
+     * 根据当前用户获取所在机构和所有子节点
+     * @return
+     */
+    public List<OrganizationalExposeVo> findAllChildrenByCurrentUserId();
+
 }

@@ -7,13 +7,12 @@ import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.organizational.vo.OrganizationalExposeVo;
+import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -63,5 +62,27 @@ public class OrganizationalExposeServiceImpl implements OrganizationalExposeServ
             });
         }
         return list;
+    }
+
+    @Override
+    public List<OrganizationalExposeVo> findAllChildrenByOrganizationalId(Long organizationalId) {
+        return organizationalMapper.toOrganizationalExposeVo(organizationalRepository.findAllChildren(organizationalId));
+    }
+
+    @Override
+    public List<OrganizationalExposeVo> findAllChildrenByUserId(Long userId) {
+        if (Objects.isNull(userId)) {
+            return Collections.EMPTY_LIST;
+        }
+        java.util.Optional<Organizational> optional = organizationalRepository.findByUserId(userId);
+        if (optional.isPresent()) {
+            return findAllChildrenByOrganizationalId(optional.get().getId());
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<OrganizationalExposeVo> findAllChildrenByCurrentUserId() {
+        return findAllChildrenByUserId(CurrentUserUtil.getCurrentUserId(true));
     }
 }
