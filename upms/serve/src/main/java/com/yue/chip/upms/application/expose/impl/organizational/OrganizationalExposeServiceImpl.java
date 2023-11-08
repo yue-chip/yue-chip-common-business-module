@@ -85,4 +85,15 @@ public class OrganizationalExposeServiceImpl implements OrganizationalExposeServ
     public List<OrganizationalExposeVo> findAllChildrenByCurrentUserId() {
         return findAllChildrenByUserId(CurrentUserUtil.getCurrentUserId(true));
     }
+
+    @Override
+    public Set<Long> findAllChildrenOrganizationalIds(Long parentId) {
+        Set<Long> childrenIds = new HashSet<>();
+        List<Organizational> allChildren = organizationalRepository.findAllChildren(parentId);
+        if (!CollectionUtils.isEmpty(allChildren)) {
+            Set<Long> ids = allChildren.stream().map(Organizational::getId).collect(Collectors.toSet());
+            childrenIds.addAll(ids);
+        }
+        return childrenIds;
+    }
 }
