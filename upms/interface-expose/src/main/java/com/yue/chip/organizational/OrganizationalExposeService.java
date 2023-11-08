@@ -50,6 +50,8 @@ public interface OrganizationalExposeService {
      */
     public List<OrganizationalExposeVo> findAllChildrenByCurrentUserId();
 
-
     public Set<Long> findAllChildrenOrganizationalIds(Long parentId);
+
+    public List<OrganizationalExposeVo> findChildrenOrganizationalIds(Long parentId);
+
 }

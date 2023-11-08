@@ -2,6 +2,7 @@ package com.yue.chip.upms.application.expose.impl.upms;
 
 import com.yue.chip.upms.UpmsExposeService;
 import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.vo.UserExposeVo;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -31,6 +32,12 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     @Override
     public List<UserExposeVo> findAllByOrganizationalId(List<Long> organizationalIds) {
         return userMapper.toUserExposeVo(upmsRepository.findUserByOrganizationalId(organizationalIds));
+    }
+
+    @Override
+    public List<UserExposeVo> findAllByNameOrPhoneNumber(String nameOrPhoneNumber) {
+        List<User> list = upmsRepository.findAllByNameOrPhoneNumber(nameOrPhoneNumber);
+        return userMapper.toUserExposeVo(list);
     }
 
 

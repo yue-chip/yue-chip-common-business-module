@@ -97,4 +97,17 @@ public class OrganizationalExposeServiceImpl implements OrganizationalExposeServ
         }
         return childrenIds;
     }
+
+    @Override
+    public List<OrganizationalExposeVo> findChildrenOrganizationalIds(Long parentId) {
+        List<OrganizationalExposeVo> list = new ArrayList<>();
+        List<OrganizationalPo> children = organizationalRepository.findChildren(parentId);
+        if (!CollectionUtils.isEmpty(children)) {
+            children.forEach(po -> {
+                OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
+                list.add(organizationalExposeVo);
+            });
+        }
+        return list;
+    }
 }

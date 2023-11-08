@@ -26,4 +26,6 @@ public interface UpmsExposeService {
      */
     List<UserExposeVo> findAllByOrganizationalId(List<Long> organizationalIds);
 
+    List<UserExposeVo> findAllByNameOrPhoneNumber(String nameOrPhoneNumber);
+
 }
