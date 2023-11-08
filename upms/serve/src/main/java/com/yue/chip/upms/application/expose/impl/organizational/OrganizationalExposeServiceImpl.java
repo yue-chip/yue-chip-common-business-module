@@ -13,6 +13,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
