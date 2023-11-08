@@ -121,7 +121,14 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     public List<OrganizationalTreeListVo> findTree1(State state) {
         Optional<Organizational> optional = findByUserId(CurrentUserUtil.getCurrentUserId());
         if (optional.isPresent()) {
-            return findTree(optional.get().getParentId(),state);
+            List<OrganizationalTreeListVo> list = findTree(optional.get().getParentId(),state);
+            List<OrganizationalTreeListVo> returList = new ArrayList<>();
+            for (OrganizationalTreeListVo organizationalTreeListVo : list) {
+                if (Objects.equals(organizationalTreeListVo.getId(),optional.get().getId())) {
+                    returList.add(organizationalTreeListVo);
+                }
+            }
+            return returList;
         }
         return Collections.EMPTY_LIST;
     }
