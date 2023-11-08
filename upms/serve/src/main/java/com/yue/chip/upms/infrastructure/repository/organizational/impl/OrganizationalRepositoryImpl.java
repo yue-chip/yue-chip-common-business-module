@@ -11,6 +11,7 @@ import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalUserDao
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
+import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
@@ -114,6 +115,15 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
             }
         });
         return treeListVos;
+    }
+
+    @Override
+    public List<OrganizationalTreeListVo> findTree1(State state) {
+        Optional<Organizational> optional = findByUserId(CurrentUserUtil.getCurrentUserId());
+        if (optional.isPresent()) {
+            return findTree(optional.get().getParentId(),state);
+        }
+        return Collections.EMPTY_LIST;
     }
 
     @Override
