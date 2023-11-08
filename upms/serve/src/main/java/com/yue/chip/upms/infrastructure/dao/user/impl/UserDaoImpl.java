@@ -113,15 +113,4 @@ public class UserDaoImpl implements UserDaoEx {
         return (List<UserPo>) baseDao.findAll(sb.toString(),para);
     }
 
-    @Override
-    public List<UserPo> findAllByNameOrPhoneNumber(String nameOrPhoneNumber) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(" select u from UserPo u where 1=1 ");
-        Map<String, Object> para = new HashMap<>();
-        if (StringUtils.hasText(nameOrPhoneNumber)) {
-            sb.append(" and (u.name like :nameOrPhoneNumber or u.phoneNumber like :nameOrPhoneNumber ) ");
-            para.put("nameOrPhoneNumber", "%" + nameOrPhoneNumber + "%");
-        }
-        return (List<UserPo>) baseDao.findAll(sb.toString(),para);
-    }
 }

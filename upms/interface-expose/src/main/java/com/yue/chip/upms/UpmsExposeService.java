@@ -3,6 +3,7 @@ package com.yue.chip.upms;
 import com.yue.chip.core.Optional;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
@@ -20,14 +21,14 @@ public interface UpmsExposeService {
      * @param userIds
      * @return
      */
-    List<UserExposeVo> findAllUserByIdIn(List<Long> userIds);
+    List<UserExposeVo> findUserAllByIdIn(List<Long> userIds);
 
     /**
      * 根据机构id查询用户
      * @param organizationalIds
      * @return
      */
-    List<UserExposeVo> findAllUserByOrganizationalId(List<Long> organizationalIds);
+    List<UserExposeVo> findUserAllByOrganizationalId(List<Long> organizationalIds);
 
 
     /**
@@ -69,6 +70,8 @@ public interface UpmsExposeService {
 
     public Set<Long> findOrganizationalAllChildrenOrganizationalIds(Long parentId);
 
-    List<UserExposeVo> findAllByNameOrPhoneNumber(String nameOrPhoneNumber);
+    List<UserExposeVo> findUserAllByNameOrPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber);
+
+    public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(Long parentId);
 
 }

@@ -1,12 +1,17 @@
 package com.yue.chip.upms.application.expose.impl.upms;
 
 import com.yue.chip.upms.UpmsExposeService;
+import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
+import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
+import jakarta.validation.constraints.NotBlank;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.CollectionUtils;
 
@@ -35,22 +40,22 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     private OrganizationalMapper organizationalMapper;
 
     @Override
-    public List<UserExposeVo> findAllUserByIdIn(List<Long> userIds) {
+    public List<UserExposeVo> findUserAllByIdIn(List<Long> userIds) {
         return userMapper.toUserExposeVo(upmsRepository.findUserByIds(userIds)) ;
     }
 
     @Override
-    public List<UserExposeVo> findAllUserByOrganizationalId(List<Long> organizationalIds) {
+    public List<UserExposeVo> findUserAllByOrganizationalId(List<Long> organizationalIds) {
         return userMapper.toUserExposeVo(upmsRepository.findUserByOrganizationalId(organizationalIds));
     }
 
     @Override
-    public Optional<OrganizationalExposeVo> findOrganizationalById(Long id) {
+    public com.yue.chip.core.Optional<OrganizationalExposeVo> findOrganizationalById(Long id) {
         java.util.Optional<Organizational> optional = organizationalRepository.findById(id);
         if (optional.isPresent()) {
-            return Optional.ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
+            return com.yue.chip.core.Optional.ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
         }
-        return Optional.empty();
+        return com.yue.chip.core.Optional.empty();
     }
 
     @Override
@@ -117,10 +122,22 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         return childrenIds;
     }
     @Override
-    public List<UserExposeVo> findAllByNameOrPhoneNumber(String nameOrPhoneNumber) {
-        List<User> list = upmsRepository.findAllByNameOrPhoneNumber(nameOrPhoneNumber);
+    public List<UserExposeVo> findUserAllByNameOrPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber) {
+        List<User> list = upmsRepository.findAllByNameOrPhoneNumber(name,phoneNumber);
         return userMapper.toUserExposeVo(list);
     }
 
+    @Override
+    public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(Long parentId) {
+        List<OrganizationalExposeVo> list = new ArrayList<>();
+        List<OrganizationalPo> children = organizationalRepository.findChildren(parentId);
+        if (!CollectionUtils.isEmpty(children)) {
+            children.forEach(po -> {
+                OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
+                list.add(organizationalExposeVo);
+            });
+        }
+        return list;
+    }
 
 }

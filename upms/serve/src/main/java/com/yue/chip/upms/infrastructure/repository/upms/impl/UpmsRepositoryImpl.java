@@ -342,8 +342,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public List<User> findAllByNameOrPhoneNumber(String nameOrPhoneNumber) {
-        List<UserPo> allByNameOrPhoneNumber = userDao.findAllByNameOrPhoneNumber(nameOrPhoneNumber);
+    public List<User> findAllByNameOrPhoneNumber(String name,String phoneNumber) {
+        List<UserPo> allByNameOrPhoneNumber = userDao.findAllByNameOrPhoneNumber(name,phoneNumber);
         List<User> userList = userMapper.toUserList(allByNameOrPhoneNumber);
         return userList;
     }

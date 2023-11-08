@@ -60,5 +60,4 @@ public interface UserDaoEx {
      */
     public List<UserPo> findUserByOrganizationalId(@NotNull @Size(min = 1) List<Long> organizationalIds, @NotNull State state);
 
-    List<UserPo> findAllByNameOrPhoneNumber(String nameOrPhoneNumber);
 }
