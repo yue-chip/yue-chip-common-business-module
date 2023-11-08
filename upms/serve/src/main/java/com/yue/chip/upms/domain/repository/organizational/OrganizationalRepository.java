@@ -108,4 +108,6 @@ public interface OrganizationalRepository {
     public List<OrganizationalPo> findByIdList(Set<Long> ids);
 
     public List<OrganizationalPo> findAll();
+
+    public List<OrganizationalPo> findChildren(@NotNull Long parentId);
 }

@@ -341,6 +341,13 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         userDao.deleteById(id);
     }
 
+    @Override
+    public List<User> findAllByNameOrPhoneNumber(String nameOrPhoneNumber) {
+        List<UserPo> allByNameOrPhoneNumber = userDao.findAllByNameOrPhoneNumber(nameOrPhoneNumber);
+        List<User> userList = userMapper.toUserList(allByNameOrPhoneNumber);
+        return userList;
+    }
+
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {
         if (optional.isPresent()) {
             return Optional.ofNullable(resourcesMapper.toResources(optional.get()));

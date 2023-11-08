@@ -144,6 +144,12 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         return organizationalPoList;
     }
 
+    @Override
+    public List<OrganizationalPo> findChildren(Long parentId) {
+        List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
+        return list;
+    }
+
     private void findAllChildren(Long parentId,List<Organizational> organizationals) {
         List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
         list.forEach(organizationalPo -> {

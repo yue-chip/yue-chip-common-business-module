@@ -1,32 +1,28 @@
-package com.yue.chip.upms.application.expose.impl.upms;
+package com.yue.chip.upms.application.expose.impl.organizational;
 
-import com.yue.chip.upms.UpmsExposeService;
-import com.yue.chip.upms.assembler.user.UserMapper;
-import com.yue.chip.upms.domain.aggregates.User;
-import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.core.Optional;
+import com.yue.chip.organizational.OrganizationalExposeService;
+import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
+import com.yue.chip.upms.domain.aggregates.Organizational;
+import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
-import com.yue.chip.upms.vo.UserExposeVo;
+import com.yue.chip.organizational.vo.OrganizationalExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
+import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 /**
  * @author xianming.chen
  * @description: TODO
  * @date 2023-10-28
  */
-@DubboService(interfaceClass = UpmsExposeService.class)
-public class UpmsExposeServiceImpl implements UpmsExposeService {
-
-    @Resource
-    private UserMapper userMapper;
-
-    @Resource
-    private UpmsRepository upmsRepository;
+@DubboService(interfaceClass = OrganizationalExposeService.class )
+public class OrganizationalExposeServiceImpl implements OrganizationalExposeService {
 
     @Resource
     private OrganizationalRepository organizationalRepository;
@@ -35,17 +31,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     private OrganizationalMapper organizationalMapper;
 
     @Override
-    public List<UserExposeVo> findAllUserByIdIn(List<Long> userIds) {
-        return userMapper.toUserExposeVo(upmsRepository.findUserByIds(userIds)) ;
-    }
-
-    @Override
-    public List<UserExposeVo> findAllUserByOrganizationalId(List<Long> organizationalIds) {
-        return userMapper.toUserExposeVo(upmsRepository.findUserByOrganizationalId(organizationalIds));
-    }
-
-    @Override
-    public Optional<OrganizationalExposeVo> findOrganizationalById(Long id) {
+    public Optional<OrganizationalExposeVo> findById(Long id) {
         java.util.Optional<Organizational> optional = organizationalRepository.findById(id);
         if (optional.isPresent()) {
             return Optional.ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
@@ -54,7 +40,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public List<OrganizationalExposeVo> findOrganizationalByIdList(Set<Long> ids) {
+    public List<OrganizationalExposeVo> findByIdList(Set<Long> ids) {
         List<OrganizationalPo> byIdList = organizationalRepository.findByIdList(ids);
         List<OrganizationalExposeVo> list = new ArrayList<>();
         if (!CollectionUtils.isEmpty(byIdList)) {
@@ -67,7 +53,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public List<OrganizationalExposeVo> findOrganizationalAll() {
+    public List<OrganizationalExposeVo> findAll() {
         List<OrganizationalPo> organizationalPoList = organizationalRepository.findAll();
         List<OrganizationalExposeVo> list = new ArrayList<>();
         if (!CollectionUtils.isEmpty(organizationalPoList)) {
@@ -80,34 +66,29 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByOrganizationalId(Long organizationalId) {
-        List<Organizational> list = organizationalRepository.findAllChildren(organizationalId);
-        java.util.Optional<Organizational> optional = organizationalRepository.findById(organizationalId);
-        if (optional.isPresent()) {
-            list.add(optional.get());
-        }
-        return organizationalMapper.toOrganizationalExposeVo(list);
+    public List<OrganizationalExposeVo> findAllChildrenByOrganizationalId(Long organizationalId) {
+        return organizationalMapper.toOrganizationalExposeVo(organizationalRepository.findAllChildren(organizationalId));
     }
 
     @Override
-    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByUserId(Long userId) {
+    public List<OrganizationalExposeVo> findAllChildrenByUserId(Long userId) {
         if (Objects.isNull(userId)) {
             return Collections.EMPTY_LIST;
         }
         java.util.Optional<Organizational> optional = organizationalRepository.findByUserId(userId);
         if (optional.isPresent()) {
-            return findOrganizationalAllChildrenByOrganizationalId(optional.get().getId());
+            return findAllChildrenByOrganizationalId(optional.get().getId());
         }
         return Collections.EMPTY_LIST;
     }
 
     @Override
-    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByCurrentUserId() {
-        return findOrganizationalAllChildrenByUserId(CurrentUserUtil.getCurrentUserId(true));
+    public List<OrganizationalExposeVo> findAllChildrenByCurrentUserId() {
+        return findAllChildrenByUserId(CurrentUserUtil.getCurrentUserId(true));
     }
 
     @Override
-    public Set<Long> findOrganizationalAllChildrenOrganizationalIds(Long parentId) {
+    public Set<Long> findAllChildrenOrganizationalIds(Long parentId) {
         Set<Long> childrenIds = new HashSet<>();
         List<Organizational> allChildren = organizationalRepository.findAllChildren(parentId);
         if (!CollectionUtils.isEmpty(allChildren)) {
@@ -116,11 +97,17 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         }
         return childrenIds;
     }
+
     @Override
-    public List<UserExposeVo> findAllByNameOrPhoneNumber(String nameOrPhoneNumber) {
-        List<User> list = upmsRepository.findAllByNameOrPhoneNumber(nameOrPhoneNumber);
-        return userMapper.toUserExposeVo(list);
+    public List<OrganizationalExposeVo> findChildrenOrganizationalIds(Long parentId) {
+        List<OrganizationalExposeVo> list = new ArrayList<>();
+        List<OrganizationalPo> children = organizationalRepository.findChildren(parentId);
+        if (!CollectionUtils.isEmpty(children)) {
+            children.forEach(po -> {
+                OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
+                list.add(organizationalExposeVo);
+            });
+        }
+        return list;
     }
-
-
 }

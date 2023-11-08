@@ -304,4 +304,6 @@ public interface UpmsRepository {
      */
     public void deleteUser(@NotNull Long id);
 
+
+    List<User> findAllByNameOrPhoneNumber(String nameOrPhoneNumber);
 }
