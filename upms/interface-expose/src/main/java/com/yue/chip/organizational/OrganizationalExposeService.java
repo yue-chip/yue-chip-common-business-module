@@ -30,4 +30,6 @@ public interface OrganizationalExposeService {
     public List<OrganizationalExposeVo> findByIdList(Set<Long> ids);
 
     public List<OrganizationalExposeVo> findAll();
+
+    public Set<Long> findAllChildrenOrganizationalIds(Long parentId);
 }

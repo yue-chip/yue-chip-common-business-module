@@ -12,8 +12,10 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -63,5 +65,16 @@ public class OrganizationalExposeServiceImpl implements OrganizationalExposeServ
             });
         }
         return list;
+    }
+
+    @Override
+    public Set<Long> findAllChildrenOrganizationalIds(Long parentId) {
+        Set<Long> childrenIds = new HashSet<>();
+        List<Organizational> allChildren = organizationalRepository.findAllChildren(parentId);
+        if (!CollectionUtils.isEmpty(allChildren)) {
+            Set<Long> ids = allChildren.stream().map(Organizational::getId).collect(Collectors.toSet());
+            childrenIds.addAll(ids);
+        }
+        return childrenIds;
     }
 }
