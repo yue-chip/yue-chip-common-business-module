@@ -1,13 +1,22 @@
 package com.yue.chip.upms.application.expose.impl.upms;
 
+import com.yue.chip.core.Optional;
+import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.UpmsExposeService;
+import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.domain.aggregates.Organizational;
+import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.vo.UserExposeVo;
+import com.yue.chip.utils.CurrentUserUtil;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author xianming.chen
@@ -23,15 +32,93 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     @Resource
     private UpmsRepository upmsRepository;
 
+    @Resource
+    private OrganizationalRepository organizationalRepository;
+
+    @Resource
+    private OrganizationalMapper organizationalMapper;
+
     @Override
-    public List<UserExposeVo> findAllByIdIn(List<Long> userIds) {
+    public List<UserExposeVo> findAllUserByIdIn(List<Long> userIds) {
         return userMapper.toUserExposeVo(upmsRepository.findUserByIds(userIds)) ;
     }
 
     @Override
-    public List<UserExposeVo> findAllByOrganizationalId(List<Long> organizationalIds) {
+    public List<UserExposeVo> findAllUserByOrganizationalId(List<Long> organizationalIds) {
         return userMapper.toUserExposeVo(upmsRepository.findUserByOrganizationalId(organizationalIds));
     }
 
+    @Override
+    public Optional<OrganizationalExposeVo> findOrganizationalById(Long id) {
+        java.util.Optional<Organizational> optional = organizationalRepository.findById(id);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<OrganizationalExposeVo> findOrganizationalByIdList(Set<Long> ids) {
+        List<OrganizationalPo> byIdList = organizationalRepository.findByIdList(ids);
+        List<OrganizationalExposeVo> list = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(byIdList)) {
+            byIdList.forEach(po -> {
+                OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
+                list.add(organizationalExposeVo);
+            });
+        }
+        return list;
+    }
+
+    @Override
+    public List<OrganizationalExposeVo> findOrganizationalAll() {
+        List<OrganizationalPo> organizationalPoList = organizationalRepository.findAll();
+        List<OrganizationalExposeVo> list = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(organizationalPoList)) {
+            organizationalPoList.forEach(po -> {
+                OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
+                list.add(organizationalExposeVo);
+            });
+        }
+        return list;
+    }
+
+    @Override
+    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByOrganizationalId(Long organizationalId) {
+        List<Organizational> list = organizationalRepository.findAllChildren(organizationalId);
+        java.util.Optional<Organizational> optional = organizationalRepository.findById(organizationalId);
+        if (optional.isPresent()) {
+            list.add(optional.get());
+        }
+        return organizationalMapper.toOrganizationalExposeVo(list);
+    }
+
+    @Override
+    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByUserId(Long userId) {
+        if (Objects.isNull(userId)) {
+            return Collections.EMPTY_LIST;
+        }
+        java.util.Optional<Organizational> optional = organizationalRepository.findByUserId(userId);
+        if (optional.isPresent()) {
+            return findOrganizationalAllChildrenByOrganizationalId(optional.get().getId());
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByCurrentUserId() {
+        return findOrganizationalAllChildrenByUserId(CurrentUserUtil.getCurrentUserId(true));
+    }
+
+    @Override
+    public Set<Long> findOrganizationalAllChildrenOrganizationalIds(Long parentId) {
+        Set<Long> childrenIds = new HashSet<>();
+        List<Organizational> allChildren = organizationalRepository.findAllChildren(parentId);
+        if (!CollectionUtils.isEmpty(allChildren)) {
+            Set<Long> ids = allChildren.stream().map(Organizational::getId).collect(Collectors.toSet());
+            childrenIds.addAll(ids);
+        }
+        return childrenIds;
+    }
 
 }

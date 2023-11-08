@@ -1,4 +1,4 @@
-package com.yue.chip.organizational.vo;
+package com.yue.chip.upms.vo;
 
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
 import lombok.Data;
