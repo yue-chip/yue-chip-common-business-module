@@ -1,10 +1,6 @@
 package com.yue.chip.common.business.expose.sms;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
-import java.util.List;
 
 /**
  * @author Mr.Liu
@@ -21,9 +17,8 @@ public interface SmsExposeService {
      * @param templateCode 短信模板编码
      * @param message      短信内容 啊里云短信：{"code":"123456"},腾讯短信-用^隔开：刘方^123456
      * @param phoneNumber  手机号码 腾讯短信：示例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号
-     * @return
      */
-    public Boolean sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank String message, @NotBlank String phoneNumber);
+    public void sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank String message, @NotBlank String phoneNumber);
 
 //    /**
 //     * 发送短信

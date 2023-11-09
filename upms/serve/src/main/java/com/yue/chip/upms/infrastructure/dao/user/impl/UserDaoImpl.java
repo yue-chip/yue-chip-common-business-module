@@ -110,7 +110,8 @@ public class UserDaoImpl implements UserDaoEx {
         Map<String,Object> para = new HashMap<>();
         para.put("organizationalId",organizationalIds);
         para.put("state",state);
-        return (List<UserPo>) baseDao.findAll(sb.toString(),para);
+        List<UserPo> list = (List<UserPo>) baseDao.findAll(sb.toString(),para);
+        return list;
     }
 
 }

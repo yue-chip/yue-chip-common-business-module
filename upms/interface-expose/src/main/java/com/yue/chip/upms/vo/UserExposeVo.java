@@ -16,7 +16,5 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true,value = {"createDateTime","updateDateTime","createUserId","updateUserId"
-        ,"profilePhotoId","profilePhotoUrl","password","state","isSms","isCall","lastLoginTime"})
 public class UserExposeVo extends UserDefinition {
 }

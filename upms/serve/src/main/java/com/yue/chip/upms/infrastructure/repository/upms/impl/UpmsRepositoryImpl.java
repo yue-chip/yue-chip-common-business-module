@@ -114,7 +114,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public List<User> findUserByOrganizationalId(List<Long> organizationalIds) {
         List<UserPo> userPoList = userDao.findUserByOrganizationalId(organizationalIds,State.NORMAL);
-        return userMapper.toUser(userPoList);
+        List<User> list = userMapper.toUser(userPoList);
+        return list;
     }
 
     @Override
