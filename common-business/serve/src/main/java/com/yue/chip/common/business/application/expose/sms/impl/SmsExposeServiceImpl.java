@@ -22,11 +22,12 @@ public class SmsExposeServiceImpl implements SmsExposeService {
     @Override
     public Boolean sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank String message, String phoneNumber) {
         List<String> phoneNumbers = Arrays.asList(phoneNumber);
-        return sendSms(appId, signName, templateCode, message, phoneNumbers);
-    }
-
-    @Override
-    public Boolean sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank String message, List<String> phoneNumbers) {
+//        return sendSms(appId, signName, templateCode, message, phoneNumbers);
         return smsService.sendSms(appId, signName, templateCode, message, phoneNumbers);
     }
+
+//    @Override
+//    public Boolean sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank String message, List<String> phoneNumbers) {
+//        return smsService.sendSms(appId, signName, templateCode, message, phoneNumbers);
+//    }
 }
