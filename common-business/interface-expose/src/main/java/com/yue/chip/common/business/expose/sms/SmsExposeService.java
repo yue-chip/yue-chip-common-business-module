@@ -23,7 +23,7 @@ public interface SmsExposeService {
      * @param phoneNumber  手机号码 腾讯短信：示例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号
      * @return
      */
-    public Boolean sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank Object message, @NotBlank String phoneNumber);
+    public Boolean sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank String message, @NotBlank String phoneNumber);
 
     /**
      * 发送短信
@@ -35,5 +35,5 @@ public interface SmsExposeService {
      * @param phoneNumbers 手机号码 示例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号
      * @return
      */
-    public Boolean sendSms(@NotBlank String appId, @NotBlank String signName,@NotBlank String templateCode, @NotBlank Object message,@NotNull @Size(min = 1) List<String> phoneNumbers);
+    public Boolean sendSms(@NotBlank String appId, @NotBlank String signName,@NotBlank String templateCode, @NotBlank String message,@NotNull @Size(min = 1) List<String> phoneNumbers);
 }
