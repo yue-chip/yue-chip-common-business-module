@@ -42,7 +42,7 @@ dependencies {
     api 'yue.chip:yue-chip-business-starter'
     api "yue.chip:yue-chip-common-business-interface-expose:${commonBusinessVersion}"
 //    api 'yue.chip:yue-chip-security'
-//    api "yue.chip:yue-chip-oauth2-resource-serve"
+//    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
     api "org.springframework.statemachine:spring-statemachine-starter"
     api "org.springframework.statemachine:spring-statemachine-data-redis"

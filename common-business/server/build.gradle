@@ -27,7 +27,7 @@ dependencies {
     api 'io.minio:minio'
 //    api 'com.aliyun:dysmsapi20170525'
     api 'com.tencentcloudapi:tencentcloud-sdk-java-sms'
-//    api "yue.chip:yue-chip-oauth2-resource-serve"
+//    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly "org.mapstruct:mapstruct"
