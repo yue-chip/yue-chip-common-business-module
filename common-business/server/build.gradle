@@ -2,7 +2,7 @@ plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'application'
 }
-archivesBaseName = 'yue-chip-common-business-serve'
+archivesBaseName = 'yue-chip-common-business-server'
 apply plugin: 'org.springframework.boot'
 apply from: this.rootProject.file('javaLibrary.gradle')
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')

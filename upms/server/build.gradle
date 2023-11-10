@@ -3,7 +3,7 @@ plugins {
     id 'application'
 //    id 'org.graalvm.buildtools.native' version "${nativeVersion}"
 }
-archivesBaseName = 'yue-chip-upms-serve'
+archivesBaseName = 'yue-chip-upms-server'
 apply plugin: 'org.springframework.boot'
 apply from: this.rootProject.file('javaLibrary.gradle')
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
