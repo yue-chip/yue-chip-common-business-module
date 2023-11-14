@@ -148,7 +148,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public Page<OrganizationalExposeVo> organizationalExposeVoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
         Page<OrganizationalPo> page = organizationalRepository.organizationalPoPage(organizationalList, yueChipPage);
         List<OrganizationalExposeVo> organizationalExposeVoList = organizationalMapper.toOrganizationalExposeVoList(page.getContent());
-        return new PageImpl<OrganizationalExposeVo>(organizationalExposeVoList, page.getPageable(),page.getTotalElements());
+        Page<OrganizationalExposeVo> returnPage = new PageImpl<OrganizationalExposeVo>(organizationalExposeVoList, page.getPageable(),page.getTotalElements());
+        return returnPage;
     }
 
 }
