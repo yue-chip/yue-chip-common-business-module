@@ -1,9 +1,8 @@
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'application'
-//    id 'org.graalvm.buildtools.native' version "${nativeVersion}"
 }
-archivesBaseName = 'yue-chip-upms-serve'
+archivesBaseName = 'yue-chip-common-business-server'
 apply plugin: 'org.springframework.boot'
 apply from: this.rootProject.file('javaLibrary.gradle')
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
@@ -15,38 +14,22 @@ configurations {
         extendsFrom testAnnotationProcessor
     }
 }
-mainClassName = 'com.yue.chip.upms.ApplicationUpmsServe'
-//graalvmNative {
-//    binaries {
-//        main {
-//            verbose = true
-//            fallback = true
-//            buildArgs.add('-H:+ReportExceptionStackTraces')
-//            buildArgs.add('--no-fallback')
-//            buildArgs.add('--report-unsupported-elements-at-runtime')
-//            buildArgs.add('--allow-incomplete-classpath')
-//            buildArgs.add('--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback.classic.Logger,java.net.Inet4Address')
-//            buildArgs.add('--trace-class-initialization=org.slf4j.LoggerFactory,ch.qos.logback.classic.Logger,java.net.Inet4Address')
-//            buildArgs.add('--trace-object-instantiation=java.net.Inet4Address')
-//        }
-//    }
-//}
+mainClassName = 'com.yue.chip.common.business.ApplicationCommonBusinessServe'
 bootJar {
     enabled true
 }
 dependencies {
     api project(':interface-expose')
-    api project(':authentication')
     api platform("yue.chip:starter:${yueChipPlatformVersion}")
     api 'yue.chip:yue-chip-serve-starter'
     api 'yue.chip:yue-chip-business-starter'
-    api "yue.chip:yue-chip-common-business-interface-expose:${commonBusinessVersion}"
-//    api 'yue.chip:yue-chip-security'
-//    api "yue.chip:yue-chip-oauth2-resource-serve"
+    api 'yue.chip:yue-chip-security'
+    api 'io.minio:minio'
+//    api 'com.aliyun:dysmsapi20170525'
+    api 'com.tencentcloudapi:tencentcloud-sdk-java-sms'
+//    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
-    api "org.springframework.statemachine:spring-statemachine-starter"
-    api "org.springframework.statemachine:spring-statemachine-data-redis"
-    api "org.springframework.statemachine:spring-statemachine-data-jpa"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"
