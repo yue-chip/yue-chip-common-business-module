@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.repository.organizational.impl;
 
+import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.domain.aggregates.Organizational;
@@ -13,6 +14,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -165,6 +167,12 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     public List<OrganizationalPo> findChildren(Long parentId) {
         List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
         return list;
+    }
+
+    @Override
+    public Page<OrganizationalPo> organizationalPoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
+        Page<OrganizationalPo> organizationalPos = organizationalDao.organizationalPoPage(organizationalList, yueChipPage);
+        return organizationalPos;
     }
 
     private void findAllChildren(Long parentId,List<Organizational> organizationals) {

@@ -1,10 +1,12 @@
 package com.yue.chip.upms;
 
 import com.yue.chip.core.Optional;
+import com.yue.chip.core.YueChipPage;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Set;
@@ -73,5 +75,7 @@ public interface UpmsExposeService {
     List<UserExposeVo> findUserAllByNameOrPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber);
 
     public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(Long parentId);
+
+    public Page<OrganizationalExposeVo> organizationalExposeVoPage(List<Long> organizationalList, YueChipPage yueChipPage);
 
 }

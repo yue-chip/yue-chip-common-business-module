@@ -1,5 +1,6 @@
 package com.yue.chip.upms.domain.repository.organizational;
 
+import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
@@ -7,6 +8,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -118,4 +120,6 @@ public interface OrganizationalRepository {
     public List<OrganizationalPo> findAll();
 
     public List<OrganizationalPo> findChildren(@NotNull Long parentId);
+
+    public Page<OrganizationalPo> organizationalPoPage(List<Long> organizationalList, YueChipPage yueChipPage);
 }
