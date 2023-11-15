@@ -8,6 +8,7 @@ import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDaoEx;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
@@ -62,7 +63,8 @@ public class TenantDaoImpl implements TenantDaoEx {
         try {
             Connection connection =dataSource.getConnection();
             Statement stat =  connection.createStatement();
-            stat.execute("use upms".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+            String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
+            stat.execute("use ".concat(dataBaseName));
             stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
             stat.close();
             connection.close();
@@ -71,4 +73,6 @@ public class TenantDaoImpl implements TenantDaoEx {
             BusinessException.throwException("删除/更新租户状态失败");
         }
     }
+
+
 }
