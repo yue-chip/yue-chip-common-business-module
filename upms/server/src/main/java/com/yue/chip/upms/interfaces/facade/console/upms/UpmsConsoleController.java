@@ -309,7 +309,7 @@ public class UpmsConsoleController {
 
     @GetMapping("/user/is/exist")
     @Operation(description = "用户-判断账号是否存在",summary = "用户-判断账号是否存在")
-    public IResultData<Boolean> updateUser(@NotNull(message = "账号不能为空")@Parameter(description = "账号",name="username",required = true)String username) {
+    public IResultData<Boolean> userIsExist(@NotNull(message = "账号不能为空")@Parameter(description = "账号",name="username",required = true)String username) {
         return ResultData.builder().data(User.builder().username(username).build().checkUsernameIsExist()).build();
     }
 
