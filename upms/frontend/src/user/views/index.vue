@@ -100,11 +100,11 @@
       dataIndex: 'organizationalName',
       key: 'organizationalName',
     },
-    {
-      title: '状态',
-      dataIndex: ['state','desc'],
-      key: ['state','name'],
-    },
+    // {
+    //   title: '状态',
+    //   dataIndex: ['state','desc'],
+    //   key: ['state','name'],
+    // },
     {
       title: '接收短信通知',
       key: "isSms",
