@@ -82,7 +82,7 @@ public class TencentSmsServiceImpl implements SmsService {
          * 返回的 res 是一个 SendSmsResponse 类的实例，与请求对象对应 */
         try {
             SendSmsResponse res = client.SendSms(req);
-            log.info("发送结果：".concat(new ObjectMapper().writeValueAsString(res.getSendStatusSet())));
+            log.info("sms发送结果：".concat(new ObjectMapper().writeValueAsString(res.getSendStatusSet())));
         } catch (TencentCloudSDKException e) {
             e.printStackTrace();
             BusinessException.throwException("发送失败："+e.getMessage());

@@ -55,3 +55,6 @@ spring:
           - data-id: sms.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: GLOBAL_GROUP
+          - data-id: call.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: GLOBAL_GROUP

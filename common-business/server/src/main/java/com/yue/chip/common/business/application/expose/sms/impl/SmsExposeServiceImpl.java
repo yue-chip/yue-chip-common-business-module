@@ -20,14 +20,13 @@ public class SmsExposeServiceImpl implements SmsExposeService {
     private SmsService smsService;
 
     @Override
-    public void sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank String message, String phoneNumber) {
+    public void sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank Object message, String phoneNumber) {
         List<String> phoneNumbers = Arrays.asList(phoneNumber);
-//        return sendSms(appId, signName, templateCode, message, phoneNumbers);
-        smsService.sendSms(appId, signName, templateCode, message, phoneNumbers);
+        sendSms(appId, signName, templateCode, message, phoneNumbers);
     }
 
-//    @Override
-//    public Boolean sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank String message, List<String> phoneNumbers) {
-//        return smsService.sendSms(appId, signName, templateCode, message, phoneNumbers);
-//    }
+    @Override
+    public void sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank Object message, List<String> phoneNumbers) {
+        smsService.sendSms(appId, signName, templateCode, message, phoneNumbers);
+    }
 }
