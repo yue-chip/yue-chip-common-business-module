@@ -1,24 +1,20 @@
 package com.yue.chip.upms.interfaces.facade.console.upms;
 
-import com.yue.chip.core.IPageResultData;
-import com.yue.chip.core.IResultData;
-import com.yue.chip.core.ResultData;
-import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.*;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
-import com.yue.chip.upms.domain.aggregates.Organizational;
-import com.yue.chip.upms.domain.aggregates.Resources;
-import com.yue.chip.upms.domain.aggregates.Role;
-import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.domain.aggregates.*;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
-import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.interfaces.dto.organizational.GridAddDto;
+import com.yue.chip.upms.interfaces.dto.organizational.GridUpdateDto;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
@@ -29,6 +25,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
+import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeSelectVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalVo;
@@ -45,7 +42,6 @@ import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -83,6 +79,9 @@ public class UpmsConsoleController {
     private OrganizationalMapper organizationalMapper;
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private GridMapper gridMapper;
 
     @GetMapping("/currentUser/permissions")
     @Operation(summary = "权限-获取当前用户的权限(菜单，资源)", description = "权限-获取当前用户的权限(菜单，资源)")
@@ -365,5 +364,39 @@ public class UpmsConsoleController {
     public IResultData<OrganizationalVo> organizationalDetails(@NotNull(message = "组织机构id不能为空") @Parameter(description = "组织机构id",name="id",required = true)Long id) {
         Optional<Organizational> optional = organizationalRepository.findById(id);
         return ResultData.builder().data(optional.isPresent()?organizationalMapper.toOrganizationalVo(optional.get()):null).build();
+    }
+
+    @PostMapping("/grid/add")
+    @Operation(description = "网格-添加网格",summary = "网格-添加网格")
+    public IResultData addGrid(@RequestBody GridAddDto gridAddDto) {
+        organizationalRepository.saveGrid(gridMapper.toGridPo(gridAddDto));
+        return ResultData.builder().build();
+    }
+
+    @GetMapping("/grid/list")
+    @Operation(description = "网格-网格列表",summary = "网格-网格列表")
+    public IPageResultData<List<GridVo>> gridList(@NotNull(message = "机构id不能为空") Long organizationalId,String name,String userName,YueChipPage yueChipPage) {
+        return (IPageResultData) organizationalRepository.listGrid(organizationalId, name, userName, yueChipPage);
+    }
+
+    @PutMapping("/grid/update")
+    @Operation(description = "网格-修改网格",summary = "网格-修改网格")
+    public IResultData updateGrid(@RequestBody GridUpdateDto gridUpdateDto) {
+        organizationalRepository.saveGrid(gridMapper.toGridPo(gridUpdateDto));
+        return ResultData.builder().build();
+    }
+
+    @DeleteMapping("/grid/delete")
+    @Operation(description = "网格-删除网格",summary = "网格-删除网格")
+    public IResultData deleteGrid(@Size(min = 1,message = "要删除的数据不能为空") @Parameter(description = "网格id",name="ids",required = true)@RequestParam("ids")List<Long> ids) {
+        organizationalRepository.deleteGrid(ids);
+        return ResultData.builder().build();
+    }
+
+    @GetMapping("/grid/details")
+    @Operation(description = "网格-网格详情",summary = "网格-网格详情")
+    public IResultData<GridVo> GridDetails(@NotNull(message = "网格id不能为空") @Parameter(description = "网格id",name="id",required = true)Long id) {
+        Optional<Grid> optional = organizationalRepository.gridDetails(id);
+        return ResultData.builder().data(optional.isPresent()?gridMapper.toGridVo(optional.get()):null).build();
     }
 }

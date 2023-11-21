@@ -1,6 +1,8 @@
 package com.yue.chip.upms.interfaces.vo.organizational;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,6 +28,7 @@ import java.util.Objects;
         ignoreUnknown = true,
         value = { "updateDateTime", "createUserId", "updateUserId"}
 )
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrganizationalTreeListVo extends OrganizationalDefinition {
 
     @Schema(description = "负责人姓名")

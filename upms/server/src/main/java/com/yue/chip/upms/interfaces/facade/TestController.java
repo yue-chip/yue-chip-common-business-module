@@ -89,7 +89,7 @@ public class TestController  {
     @Operation(summary = "测试-接口mock测试1", description = "测试-接口mock测试1")
     public IPageResultData<List<UserVo>> testMock1(String name){
 //        return PageResultData.builder().data(JMockData.mock(new TypeReference<List<UserVo>>(){})).build();
-//        List<User> list = new PodamFactoryImpl().manufacturePojo(List.class, User.class);
+//        List<User> listGrid = new PodamFactoryImpl().manufacturePojo(List.class, User.class);
         return PageResultData.builder().data(new PodamFactoryImpl().manufacturePojo(List.class,UserVo.class)).build();
 
     }

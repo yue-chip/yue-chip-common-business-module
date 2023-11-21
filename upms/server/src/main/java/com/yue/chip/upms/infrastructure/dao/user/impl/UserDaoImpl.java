@@ -114,4 +114,18 @@ public class UserDaoImpl implements UserDaoEx {
         return list;
     }
 
+    @Override
+    public List<UserPo> findUserByGridId(Long gridId) {
+        if (Objects.isNull(gridId)) {
+            return Collections.EMPTY_LIST;
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u join GridPo g on u.id = g.userId " +
+                "  where g.id in :gridId");
+        Map<String,Object> para = new HashMap<>();
+        para.put("gridId",gridId);
+        List<UserPo> list = (List<UserPo>) baseDao.findAll(sb.toString(),para);
+        return list;
+    }
+
 }

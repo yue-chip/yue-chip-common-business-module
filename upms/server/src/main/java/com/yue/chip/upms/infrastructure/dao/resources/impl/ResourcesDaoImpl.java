@@ -52,8 +52,8 @@ public class ResourcesDaoImpl implements ResourcesDaoEx {
 //                "where ro.roleId = :roleId ");
 //        Map<String, Object> para = new HashMap<>();
 //        para.put("roleId",roleId);
-//        List<ResourcesPo> list = (List<ResourcesPo>) baseDao.findAll(sb.toString(),para);
-//        return list;
+//        List<ResourcesPo> listGrid = (List<ResourcesPo>) baseDao.findAll(sb.toString(),para);
+//        return listGrid;
         QueryRunner queryRunner = new QueryRunner(dataSource);
         try {
             StringBuilder sb = new StringBuilder();

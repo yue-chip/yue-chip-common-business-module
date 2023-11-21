@@ -2,6 +2,7 @@ package com.yue.chip.upms;
 
 import com.yue.chip.core.Optional;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.upms.vo.GridExposeVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
@@ -77,5 +78,12 @@ public interface UpmsExposeService {
     public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(Long parentId);
 
     public Page<OrganizationalExposeVo> organizationalExposeVoPage(List<Long> organizationalList, YueChipPage yueChipPage);
+
+    /**
+     * 获取机构下的网格
+     * @param organizationalId
+     * @return
+     */
+    public List<GridExposeVo> findByOrganizationalId(@NotNull Long organizationalId);
 
 }

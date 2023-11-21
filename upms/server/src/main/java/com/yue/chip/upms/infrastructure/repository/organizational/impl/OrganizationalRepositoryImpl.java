@@ -2,19 +2,25 @@ package com.yue.chip.upms.infrastructure.repository.organizational.impl;
 
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
+import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.infrastructure.dao.organizational.GridDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalUserDao;
+import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -37,7 +43,13 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     private OrganizationalMapper organizationalMapper;
 
     @Resource
+    private GridMapper gridMapper;
+
+    @Resource
     private UpmsRepository upmsRepository;
+
+    @Resource
+    private GridDao gridDao;
 
 
     @Override
@@ -116,7 +128,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
                 }
             }
         });
-        return treeListVos;
+        return treeListVos.size()>0?treeListVos:null;
     }
 
     @Override
@@ -173,6 +185,57 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     public Page<OrganizationalPo> organizationalPoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
         Page<OrganizationalPo> organizationalPos = organizationalDao.organizationalPoPage(organizationalList, yueChipPage);
         return organizationalPos;
+    }
+
+    @Override
+    public void saveGrid(GridPo gridPo) {
+        gridDao.save(gridPo);
+    }
+
+    @Override
+    public void updateGrid(GridPo gridPo) {
+        gridDao.update(gridPo);
+    }
+
+    @Override
+    public void deleteGrid(List<Long> ids) {
+        if (Objects.nonNull(ids) && ids.size()>0) {
+            ids.forEach(id->{
+                gridDao.deleteById(id);
+            });
+        }
+    }
+
+    @Override
+    public void deleteGridByUserId(Long userId) {
+        gridDao.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public void deleteGridByOrganizationalId(Long organizationalId) {
+        gridDao.deleteAllByOrganizationalId(organizationalId);
+    }
+
+    @Override
+    public Optional<Grid> gridDetails(Long id) {
+        Optional<GridPo> optional = gridDao.findById(id);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(gridMapper.toGrid(optional.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Page<GridVo> listGrid(Long organizationalId, String name, String userName, YueChipPage yueChipPage) {
+        Page<GridPo> page = gridDao.List(organizationalId,name,userName,yueChipPage);
+        List<Grid> list = gridMapper.toGrid(page.getContent());
+        return new PageImpl<GridVo>(gridMapper.toGridVo(list),page.getPageable(),page.getTotalElements());
+    }
+
+    @Override
+    public List<Grid> listGrid(Long organizationalId) {
+        List<GridPo> list = gridDao.findAllByOrganizationalId(organizationalId);
+        return gridMapper.toGrid(list);
     }
 
     private void findAllChildren(Long parentId,List<Organizational> organizationals) {

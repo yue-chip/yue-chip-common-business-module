@@ -16,6 +16,18 @@ export const router = createRouter({
       component: () => import('../views/addOrUpdate.vue'),
       meta: {keepAlive: false }
     },
+    {
+      path: '/grid',
+      name: 'gridIndex',
+      component: () => import('../views/grid.vue'),
+      meta: {keepAlive: true }
+    },
+    {
+      path: '/gridAddOrUpdate',
+      name: 'gridAddOrUpdate',
+      component: () => import('../views/addOrUpdate.vue'),
+      meta: {keepAlive: false }
+    },
   ],
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),

@@ -1,16 +1,13 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -59,5 +56,13 @@ public interface UserDaoEx {
      * @return
      */
     public List<UserPo> findUserByOrganizationalId(@NotNull @Size(min = 1) List<Long> organizationalIds, @NotNull State state);
+
+    /**
+     * 根据网格id查寻用户
+     *
+     * @param gridId
+     * @return
+     */
+    public List<UserPo> findUserByGridId(@NotNull Long gridId);
 
 }

@@ -177,6 +177,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
                 upmsDomainService.userOrganizational(id,null);
                 //删除机构负责人
                 organizationalRepository.deleteLeader(id);
+                //删除网格管理员
+                organizationalRepository.deleteGridByUserId(id);
             });
         }
     }
@@ -231,6 +233,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
         organizationalRepository.deleteOrganizationalUserByOrganizationalId(id);
         //删除组织机构
         organizationalRepository.deleteOrganizationalById(id);
+        //删除机构下的网格
+        organizationalRepository.deleteGridByOrganizationalId(id);
     }
 
     @Override

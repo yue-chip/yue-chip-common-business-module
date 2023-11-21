@@ -2,12 +2,16 @@ package com.yue.chip.upms.domain.repository.organizational;
 
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.aggregates.Organizational;
+import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -115,11 +119,67 @@ public interface OrganizationalRepository {
      * @param ids
      * @return
      */
-    public List<OrganizationalPo> findByIdList(Set<Long> ids);
+    public List<OrganizationalPo> findByIdList(@NotNull @Size(min = 0) Set<Long> ids);
 
     public List<OrganizationalPo> findAll();
 
     public List<OrganizationalPo> findChildren(@NotNull Long parentId);
 
-    public Page<OrganizationalPo> organizationalPoPage(List<Long> organizationalList, YueChipPage yueChipPage);
+    public Page<OrganizationalPo> organizationalPoPage(@NotNull @Size(min = 0) List<Long> organizationalList, @NotNull YueChipPage yueChipPage);
+
+    /**
+     * 新增网格
+     * @param gridPo
+     */
+    public void saveGrid(@NotNull GridPo gridPo);
+
+    /**
+     * 修改网格
+     * @param gridPo
+     */
+    public void updateGrid(@NotNull GridPo gridPo);
+
+    /**
+     * 删除网格
+     * @param ids
+     */
+    public void deleteGrid(@NotNull @Size(min = 0) List<Long> ids);
+
+    /**
+     * 根据用户id删除网格
+     * @param userId
+     */
+    public void deleteGridByUserId(@NotNull Long userId);
+
+    /**
+     * 根据机构id删除网格
+     * @param organizationalId
+     */
+    public void deleteGridByOrganizationalId(@NotNull Long organizationalId);
+
+    /**
+     * 详情
+     *
+     * @param id
+     * @return
+     */
+    public Optional<Grid> gridDetails(@NotNull Long id);
+
+    /**
+     * 列表
+     *
+     * @param organizationalId
+     * @param name
+     * @param userName
+     * @param yueChipPage
+     * @return
+     */
+    Page<GridVo> listGrid(@NotNull Long organizationalId, String name, String userName, YueChipPage yueChipPage);
+
+    /**
+     * 根据机构id查寻网格
+     * @param organizationalId
+     * @return
+     */
+    List<Grid> listGrid(@NotNull Long organizationalId);
 }

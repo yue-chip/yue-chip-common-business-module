@@ -27,7 +27,7 @@ public interface UserMapper {
 
     public List<User> toUser(List<UserPo> userPos);
 
-//    public List<UserVo> toUserListVo(List<UserPo> list);
+//    public List<UserVo> toUserListVo(List<UserPo> listGrid);
 
     @Mappings({@Mapping(target = "organizationalName",source = "organizational.name"),
             @Mapping(target = "organizationalId",source = "organizational.id")})

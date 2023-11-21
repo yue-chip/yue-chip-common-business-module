@@ -1,6 +1,5 @@
 package com.yue.chip.upms.infrastructure.repository.upms.impl;
 
-import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
@@ -31,7 +30,6 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -40,7 +38,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -109,6 +106,15 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public List<User> findUserByIds(List<Long> userIds) {
         List<UserPo> userPoList = userDao.findAllByIdIn(userIds);
         return userMapper.toUser(userPoList);
+    }
+
+    @Override
+    public Optional<User> findUserByGridId(Long gridId) {
+        List<UserPo> list = userDao.findUserByGridId(gridId);
+        if (list.size()>0) {
+            return Optional.ofNullable(userMapper.toUser(list.get(0)));
+        }
+        return Optional.empty();
     }
 
     @Override
