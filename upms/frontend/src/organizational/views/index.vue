@@ -38,7 +38,7 @@
                 设置负责人
               </a-button>
               <a-button v-if="record.children === undefined" @click="grid(record.id)" size="small" >
-                <template #icon><EditOutlined /></template>
+                <template #icon><MehOutlined /></template>
                 网格管理
               </a-button>
               <a-button v-if="record.username !== 'admin'" size="small" type="primary" danger @click="del(record.id)">
@@ -69,7 +69,7 @@
 <script setup lang="ts">
   import {ref, onActivated,getCurrentInstance} from 'vue'
   import {useRouter} from 'vue-router'
-  import { SearchOutlined,PlusOutlined,DeleteOutlined,EditOutlined,UserOutlined } from '@ant-design/icons-vue';
+  import { SearchOutlined,PlusOutlined,DeleteOutlined,EditOutlined,UserOutlined,MehOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   import {TableProps,Modal,message} from "ant-design-vue";
   import qs from "qs";
