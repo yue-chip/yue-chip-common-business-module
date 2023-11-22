@@ -1,6 +1,7 @@
 package com.yue.chip.upms.interfaces.vo.organizational;
 
 import com.yue.chip.upms.definition.organizational.GridDefinition;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -22,7 +23,8 @@ import java.util.List;
 @NoArgsConstructor
 public class GridVo extends GridDefinition {
 
-    @Schema(description = "网格管理员")
-    private List<UserVo> users;
-
+    /**
+     * 网格管理员
+     */
+    private UserVo user;
 }

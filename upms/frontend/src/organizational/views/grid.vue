@@ -95,10 +95,12 @@
   import {useRoute, useRouter} from 'vue-router'
   import { SearchOutlined,PlusOutlined,DeleteOutlined,EditOutlined,LeftOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-  import {TableProps,Modal,message} from "ant-design-vue";
+  import {TableProps, Modal, message, FormInstance} from "ant-design-vue";
+  import qs from "qs";
   const _this:any = getCurrentInstance();
   const router=useRouter();
   const route = useRoute();
+  const fromAddOrUpdate = ref<FormInstance>();
   let loading = ref(false);
   let searchModel = ref({pageSize:10,pageNumber:1});
   let selectedRowKeys:string[] = [];
@@ -115,13 +117,19 @@
     },
     {
       title: '网格员',
+      dataIndex: ['user','name'],
+      key: 'username',
+    },
+    {
+      title: '电话',
+      dataIndex: ['user','phoneNumber'],
       key: 'username',
     },
     {
       title: '操作',
       key: "operation",
       fixed: 'right',
-      width: '155px',
+      width: '160px',
     },
   ]
   let dataList = ref([]);
@@ -160,12 +168,13 @@
 
   function save(){
     visible.value = true;
-    from.value.validateFields().then(() => {
+    fromAddOrUpdate.value.validateFields().then(() => {
       if (addOrUpdateModel.value.id) {
         axios.axiosPut("/upms/console/grid/update",addOrUpdateModel.value,
           (data:any)=>{
             if (data.status === 200 ) {
               message.info(data.message);
+              cancel();
             }
           },null,null)
       }else {
@@ -174,6 +183,7 @@
           (data:any)=>{
             if (data.status === 200 ) {
               message.info(data.message);
+              cancel();
             }
           },null,null)
       }
@@ -181,7 +191,12 @@
   }
 
   function edit(id:string) {
-    router.push({ path: '/gridAddOrUpdate', query: { id: id }});
+    visible.value = true;
+    addOrUpdateModel.value = {};
+    showUserSelect();
+    axios.axiosGet("/upms/console/grid/details",{params: {id:id}},(data:any)=>{
+      addOrUpdateModel.value = data.data;
+    },null,null)
   }
 
   function del(id:string[]){
@@ -215,7 +230,11 @@
   function add() {
     visible.value = true;
     addOrUpdateModel.value = {};
-    axios.axiosGet("/upms/console/organizational/user/select/list",{params: {organizationalId:organizationalId}},(data:any)=>{
+    showUserSelect();
+  }
+
+  async function showUserSelect() {
+    await axios.axiosGet("/upms/console/organizational/user/select/list",{params: {organizationalId:organizationalId}},(data:any)=>{
       options.value = data.data;
     },null,null)
   }
@@ -223,6 +242,7 @@
   function cancel(){
     visible.value = false;
     addOrUpdateModel.value = {};
+    search();
   }
 
   function back(){

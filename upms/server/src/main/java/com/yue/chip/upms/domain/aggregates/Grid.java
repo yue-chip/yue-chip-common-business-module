@@ -1,9 +1,11 @@
 package com.yue.chip.upms.domain.aggregates;
 
 import com.yue.chip.annotation.YueChipDDDEntity;
+import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.definition.organizational.GridDefinition;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +34,9 @@ public class Grid extends GridDefinition {
 
     @Resource
     private static UpmsRepository upmsRepository;
+
+    @Resource
+    private static UserMapper userMapper;
 
     /**
      * 网格管理员
