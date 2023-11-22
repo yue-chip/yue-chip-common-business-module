@@ -26,7 +26,7 @@ public class GridDaoImpl implements GridDaoEx {
     @Override
     public Page<GridPo> List( Long organizationalId, String name, String userName, YueChipPage yueChipPage) {
         StringBuffer sql = new StringBuffer();
-        sql.append("select g from GridPo g join User u on g.userId = u.id where 1=1 ");
+        sql.append("select g from GridPo g join UserPo u on g.userId = u.id where 1=1 ");
         Map<String,Object> para = new HashMap<>();
         if (Objects.nonNull(organizationalId)) {
             sql.append(" and g.organizationalId = :organizationalId ");

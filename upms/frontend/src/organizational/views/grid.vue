@@ -1,6 +1,12 @@
 <template>
   <div>
     <a-card >
+      <a-button size="small" @click="back()">
+        <template #icon><LeftOutlined /></template>
+        返回
+      </a-button>
+    </a-card>
+    <a-card >
       <a-form ref="from" :model="searchModel" :label-col="{span: 4,offset:0}" >
         <a-row >
           <a-col :span="6">
@@ -62,15 +68,17 @@
 
 
 
-    <a-modal width="800px" v-model:visible="visible" title="添加/修改网格管理员" cancelText="取消" okText="保存" :destroyOnClose="true" :mask="true" :maskClosable="false" @cancel="cancel" @ok="save">
+    <a-modal width="500px" v-model:visible="visible" title="添加/修改网格管理员" cancelText="取消" okText="保存" :destroyOnClose="true" :mask="true" :maskClosable="false" @cancel="cancel" @ok="save">
       <a-form ref="fromAddOrUpdate" :rules="rules" :model="addOrUpdateModel" :labelCol="{span: 3,offset:0}" >
         <a-row >
-          <a-col :span="12">
+          <a-col :span="24">
             <a-form-item label="名称" name="name" ref="name">
               <a-input placeholder="请输入网格名称" v-model:value="addOrUpdateModel.name" />
             </a-form-item>
           </a-col>
-          <a-col :span="12">
+        </a-row>
+        <a-row >
+          <a-col :span="24">
             <a-form-item label="网格员" name="userId" ref="userId">
               <a-select :options="options" allowClear v-model:value="addOrUpdateModel.userId" >
               </a-select>
@@ -85,7 +93,7 @@
 <script setup lang="ts">
   import {ref, onActivated,getCurrentInstance} from 'vue'
   import {useRoute, useRouter} from 'vue-router'
-  import { SearchOutlined,PlusOutlined,DeleteOutlined,EditOutlined } from '@ant-design/icons-vue';
+  import { SearchOutlined,PlusOutlined,DeleteOutlined,EditOutlined,LeftOutlined } from '@ant-design/icons-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   import {TableProps,Modal,message} from "ant-design-vue";
   const _this:any = getCurrentInstance();
@@ -140,6 +148,7 @@
 
   function search(){
     loading.value=true;
+    searchModel.value.organizationalId = organizationalId;
     axios.axiosGet("/upms/console/grid/list",{params:searchModel.value},(data:any)=>{
       dataList.value = data.data;
       pagination.value.total = data.totalElements;
@@ -149,20 +158,31 @@
     },null,null)
   }
 
-  function add(){
+  function save(){
     visible.value = true;
-    addOrUpdateModel.value.organizationalId = organizationalId;
-    axios.axiosGet("/upms/console/organizational/user/select/list",{params: {organizationalId:organizationalId}},(data:any)=>{
-      options.value = data.data;
-    },null,null)
+    from.value.validateFields().then(() => {
+      if (addOrUpdateModel.value.id) {
+        axios.axiosPut("/upms/console/grid/update",addOrUpdateModel.value,
+          (data:any)=>{
+            if (data.status === 200 ) {
+              message.info(data.message);
+            }
+          },null,null)
+      }else {
+        addOrUpdateModel.value.organizationalId = organizationalId;
+        axios.axiosPost("/upms/console/grid/add",addOrUpdateModel.value,
+          (data:any)=>{
+            if (data.status === 200 ) {
+              message.info(data.message);
+            }
+          },null,null)
+      }
+    }).catch((err: any) => {}).finally(()=>{});
   }
 
   function edit(id:string) {
     router.push({ path: '/gridAddOrUpdate', query: { id: id }});
   }
-
-
-
 
   function del(id:string[]){
     if (!id || id.length === 0) {
@@ -192,6 +212,22 @@
     });
   }
 
+  function add() {
+    visible.value = true;
+    addOrUpdateModel.value = {};
+    axios.axiosGet("/upms/console/organizational/user/select/list",{params: {organizationalId:organizationalId}},(data:any)=>{
+      options.value = data.data;
+    },null,null)
+  }
+
+  function cancel(){
+    visible.value = false;
+    addOrUpdateModel.value = {};
+  }
+
+  function back(){
+    router.go(-1);
+  }
 
 </script>
 
