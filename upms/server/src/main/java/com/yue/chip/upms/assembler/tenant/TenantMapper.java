@@ -1,5 +1,6 @@
 package com.yue.chip.upms.assembler.tenant;
 
+import com.yue.chip.tenant.vo.TenantExposeVo;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantAddDTO;
@@ -32,4 +33,8 @@ public interface TenantMapper {
     public List<TenantVo> toTenantVo(List<TenantPo> list);
 
     public List<Tenant> toTenant(List<TenantPo> list);
+
+    public TenantExposeVo toTenantExposeVo(Tenant tenant);
+
+    public List<TenantExposeVo> toTenantExposeVo(List<Tenant> tenantList);
 }

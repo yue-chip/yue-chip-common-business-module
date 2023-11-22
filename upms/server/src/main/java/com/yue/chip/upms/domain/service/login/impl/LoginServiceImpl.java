@@ -15,15 +15,11 @@ import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
@@ -113,7 +109,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     private void checkTenantState() {
-        Optional<TenantStatePo> optional = tenantRepository.findFirst();
+        Optional<TenantStatePo> optional = tenantRepository.findTenantStateFirst();
         if (optional.isEmpty()) {
             BusinessException.throwException("该租户状态不可用");
         }else {

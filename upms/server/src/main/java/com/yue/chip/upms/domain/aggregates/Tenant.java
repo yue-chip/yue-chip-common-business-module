@@ -30,7 +30,7 @@ public class Tenant extends TenantDefinition {
 
     public Boolean checkNameIsExist() {
         Assert.hasText(getName(),"名称不能为空");
-        Optional<Tenant> optional = tenantRepository.findByName(getName());
+        Optional<Tenant> optional = tenantRepository.findTenantByName(getName());
         if (optional.isPresent()) {
             if (Objects.nonNull(getId()) && optional.get().getId().equals(getId())){
                 return false;

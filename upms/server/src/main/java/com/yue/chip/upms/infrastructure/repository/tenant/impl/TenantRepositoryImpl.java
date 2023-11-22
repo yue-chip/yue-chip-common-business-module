@@ -16,8 +16,7 @@ import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -44,27 +43,38 @@ public class TenantRepositoryImpl implements TenantRepository {
     }
 
     @Override
-    public TenantPo save(TenantPo tenantPo) {
+    public TenantPo saveTenant(TenantPo tenantPo) {
         return tenantDao.save(tenantPo);
     }
 
     @Override
-    public void update(TenantPo tenantPo) {
+    public void updateTenant(TenantPo tenantPo) {
         tenantDao.update(tenantPo);
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteTenant(Long id) {
         tenantDao.deleteById(id);
     }
 
     @Override
-    public Optional<Tenant> findByName(String name) {
+    public Optional<Tenant> findTenantByName(String name) {
         Optional<TenantPo> optional = tenantDao.findFirstByName(name);
         if (optional.isPresent()) {
             return Optional.ofNullable(tenantMapper.toTenant(optional.get()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<Tenant> findAllTenant(State state) {
+        List<TenantPo> list = new ArrayList();
+        if (Objects.nonNull(state)) {
+            list = tenantDao.findAllByState(state);
+        }else {
+            list = tenantDao.findAll();
+        }
+        return tenantMapper.toTenant(list);
     }
 
     @Override
@@ -82,7 +92,7 @@ public class TenantRepositoryImpl implements TenantRepository {
     }
 
     @Override
-    public Optional<TenantStatePo> findFirst() {
+    public Optional<TenantStatePo> findTenantStateFirst() {
         List<TenantStatePo> list = tenantStateDao.findAll();
         if (list.size()>0){
             return Optional.ofNullable(list.get(0));
@@ -91,7 +101,7 @@ public class TenantRepositoryImpl implements TenantRepository {
     }
 
     @Override
-    public Optional<TenantVo> details(Long id) {
+    public Optional<TenantVo> tenantDetails(Long id) {
         Optional<TenantPo> optional = tenantDao.findById(id);
         if (optional.isPresent()) {
             return Optional.ofNullable(tenantMapper.toTenantVo(optional.get()));

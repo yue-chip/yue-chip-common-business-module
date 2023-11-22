@@ -39,7 +39,7 @@ public class TenantApplicationImpl implements TenantApplication {
     public void delete(List<Long> ids) {
         ids.forEach(id->{
             //删除租户
-            tenantRepository.delete(id);
+            tenantRepository.deleteTenant(id);
             //更新其它租户数据中的租户状态
             tenantRepository.updateOtherDataBase(State.DISABLE,id);
         });
@@ -55,7 +55,7 @@ public class TenantApplicationImpl implements TenantApplication {
         //保存租户
         TenantPo tenantPo = tenantMapper.toTenantPo(tenantAddDTO);
         tenantPo.setState(State.NORMAL);
-        TenantPo entity = tenantRepository.save(tenantPo);
+        TenantPo entity = tenantRepository.saveTenant(tenantPo);
         //创建租户数据库
         tenantService.createTenantDatabase(entity.getId());
         //初始化数据
@@ -73,7 +73,7 @@ public class TenantApplicationImpl implements TenantApplication {
         if (tenant.checkNameIsExist()) {
             BusinessException.throwException("该租户名称已存在");
         }
-        tenantRepository.update(tenantMapper.toTenantPo(tenantUpdateDTO));
+        tenantRepository.updateTenant(tenantMapper.toTenantPo(tenantUpdateDTO));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class TenantApplicationImpl implements TenantApplication {
                         .state(state)
                         .id(id)
                         .build();
-        tenantRepository.update(tenantPo);
+        tenantRepository.updateTenant(tenantPo);
         //更新其它租户数据中的租户状态
         tenantRepository.updateOtherDataBase(state,id);
     }

@@ -166,7 +166,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
                         .roleId(roleId)
                         .build();
                 list.add(userRolePo);
-//                userRoleDao.save(userRolePo);
+//                userRoleDao.saveTenant(userRolePo);
             }
             userRoleDao.saveAll(list);
         }

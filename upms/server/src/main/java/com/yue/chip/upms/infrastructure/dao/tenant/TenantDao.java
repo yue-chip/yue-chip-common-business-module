@@ -7,6 +7,7 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,6 +23,13 @@ public interface TenantDao extends BaseDao<TenantPo>,TenantDaoEx {
      * @return
      */
     public Optional<TenantPo> findFirstByName(@NotBlank String name);
+
+    /**
+     * 查寻所有租户
+     * @param state
+     * @return
+     */
+    public List<TenantPo> findAllByState(@NotNull State state);
 
 
 }
