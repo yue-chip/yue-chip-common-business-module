@@ -162,4 +162,10 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         return gridMapper.toGridExposeVo(list);
     }
 
+    @Override
+    public List<GridExposeVo> findByGridId(Set<Long> gridId) {
+        List<Grid> list = organizationalRepository.findByGridId(gridId);
+        return gridMapper.toGridExposeVo(list);
+    }
+
 }

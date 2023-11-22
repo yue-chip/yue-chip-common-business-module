@@ -9,6 +9,7 @@ import org.bouncycastle.LICENSE;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Mr.Liu
@@ -38,4 +39,10 @@ public interface GridDao extends BaseDao<GridPo>, GridDaoEx {
      */
     public List<GridPo> findAllByOrganizationalId(@NotNull Long organizationalId);
 
+    /**
+     * 根据网格id查询网格
+     * @param gridId
+     * @return
+     */
+    List<GridPo> findAllByIdIn(@NotNull Set<Long> gridId);
 }

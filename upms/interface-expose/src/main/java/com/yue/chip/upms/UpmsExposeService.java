@@ -86,4 +86,10 @@ public interface UpmsExposeService {
      */
     public List<GridExposeVo> findByOrganizationalId(@NotNull Long organizationalId);
 
+    /**
+     * 根据网格id查询网格
+     * @param gridId
+     * @return
+     */
+    List<GridExposeVo> findByGridId(@NotNull Set<Long> gridId);
 }
