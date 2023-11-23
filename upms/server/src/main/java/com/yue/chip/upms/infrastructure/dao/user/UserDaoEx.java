@@ -75,4 +75,14 @@ public interface UserDaoEx {
      */
     Optional<UserPo> findByIdAndTenantNumber(@NotNull Long id, Long tenantNumber);
 
+
+    /**
+     * 根据网格id和租户编码查寻用户
+     *
+     * @param id
+     * @param tenantNumber
+     * @return
+     */
+    Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber);
+
 }

@@ -168,4 +168,35 @@ public class UserDaoImpl implements UserDaoEx {
         return Optional.empty();
     }
 
+    @Override
+    public Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber) {
+        AssertUtil.nonNull(id,"用户id不能为空");
+        try {
+            Connection connection =dataSource.getConnection();
+            Statement stat =  connection.createStatement();
+            String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
+            stat.execute("use ".concat(dataBaseName));
+            QueryRunner queryRunner = new QueryRunner();
+            UserPo userPo = queryRunner.query(connection, "select u.* from t_user u join t_grid g on u.id = g.user_id where g.id = ?  ", new ResultSetHandler<UserPo>() {
+                @Override
+                public UserPo handle(ResultSet rs) throws SQLException {
+                    while (rs.next()) {
+                        return UserPo.builder()
+                                .id(rs.getLong("id"))
+                                .name(rs.getString("name"))
+                                .phoneNumber(rs.getString("phone_number"))
+                                .build();
+                    }
+                    return null;
+                }
+            }, new Object[]{id});
+            stat.close();
+            connection.close();
+            return Optional.ofNullable(userPo);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
 }

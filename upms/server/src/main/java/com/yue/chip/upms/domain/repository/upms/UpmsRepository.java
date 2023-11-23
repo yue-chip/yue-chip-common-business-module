@@ -61,6 +61,15 @@ public interface UpmsRepository {
     Optional<User> findByIdAndTenantNumber(@NotNull Long id, Long tenantNumber);
 
     /**
+     * 根据网格id和租户编码查寻用户
+     *
+     * @param id
+     * @param tenantNumber
+     * @return
+     */
+    Optional<User> findByGridIdAndTenantNumber(@NotNull Long id, Long tenantNumber);
+
+    /**
      * 根据用户id查询用户
      * @param userIds
      * @return
