@@ -4,6 +4,7 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.upms.UpmsExposeService;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
+import com.yue.chip.upms.assembler.organizational.OrganizationalUserMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.aggregates.Organizational;
@@ -11,8 +12,10 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
+import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.vo.GridExposeVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
+import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.validation.constraints.NotBlank;
@@ -46,6 +49,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
 
     @Resource
     private GridMapper gridMapper;
+    @Resource
+    private OrganizationalUserMapper organizationalUserMapper;
 
     @Override
     public List<UserExposeVo> findUserAllByIdIn(List<Long> userIds) {
@@ -177,4 +182,9 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         return gridMapper.toGridExposeVo(list);
     }
 
+    @Override
+    public List<OrganizationalUserExposeVo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId) {
+        List<OrganizationalUserPo> list = organizationalRepository.findUserAllByOrganizationalIdAndUserIdIn(organizationalId, userId);
+        return organizationalUserMapper.toListOrganizationalUserExposeVo(list);
+    }
 }
