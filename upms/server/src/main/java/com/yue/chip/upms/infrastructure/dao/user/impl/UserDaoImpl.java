@@ -152,6 +152,8 @@ public class UserDaoImpl implements UserDaoEx {
                     while (rs.next()) {
                         return UserPo.builder()
                                 .id(rs.getLong("id"))
+                                .isSms(rs.getBoolean("is_sms"))
+                                .isCall(rs.getBoolean("is_call"))
                                 .name(rs.getString("name"))
                                 .phoneNumber(rs.getString("phone_number"))
                                 .build();
@@ -184,6 +186,8 @@ public class UserDaoImpl implements UserDaoEx {
                         return UserPo.builder()
                                 .id(rs.getLong("id"))
                                 .name(rs.getString("name"))
+                                .isSms(rs.getBoolean("is_sms"))
+                                .isCall(rs.getBoolean("is_call"))
                                 .phoneNumber(rs.getString("phone_number"))
                                 .build();
                     }
