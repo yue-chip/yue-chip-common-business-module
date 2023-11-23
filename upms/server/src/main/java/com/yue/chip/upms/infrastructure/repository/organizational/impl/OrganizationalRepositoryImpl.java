@@ -250,6 +250,12 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         return organizationalUserPoList;
     }
 
+    @Override
+    public List<Grid> findGridByName(String name) {
+        List<GridPo> list = gridDao.findAllByNameLike(name);
+        return gridMapper.toGrid(list);
+    }
+
     private void findAllChildren(Long parentId,List<Organizational> organizationals) {
         List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
         list.forEach(organizationalPo -> {

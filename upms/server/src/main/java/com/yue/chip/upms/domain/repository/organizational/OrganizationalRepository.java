@@ -199,4 +199,11 @@ public interface OrganizationalRepository {
      * @return
      */
     List<OrganizationalUserPo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId);
+
+    /**
+     * 通过名称查询网格
+     * @param name
+     * @return
+     */
+    List<Grid> findGridByName(String name);
 }

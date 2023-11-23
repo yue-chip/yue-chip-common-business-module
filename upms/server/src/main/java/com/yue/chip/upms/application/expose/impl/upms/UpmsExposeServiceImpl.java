@@ -196,4 +196,10 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         List<OrganizationalUserPo> list = organizationalRepository.findUserAllByOrganizationalIdAndUserIdIn(organizationalId, userId);
         return organizationalUserMapper.toListOrganizationalUserExposeVo(list);
     }
+
+    @Override
+    public List<GridExposeVo> findGridByName(String name) {
+        List<Grid> list = organizationalRepository.findGridByName(name);
+        return gridMapper.toGridExposeVo(list);
+    }
 }

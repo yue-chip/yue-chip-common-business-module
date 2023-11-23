@@ -45,4 +45,11 @@ public interface GridDao extends BaseDao<GridPo>, GridDaoEx {
      * @return
      */
     List<GridPo> findAllByIdIn(@NotNull Set<Long> gridId);
+
+    /**
+     * 根据名称模糊查询网格
+     * @param name
+     * @return
+     */
+    List<GridPo> findAllByNameLike(String name);
 }

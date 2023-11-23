@@ -117,4 +117,12 @@ public interface UpmsExposeService {
      * @return
      */
     List<OrganizationalUserExposeVo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId);
+
+    /**
+     * 根据网格名称模糊查询网格信息
+     * @param name
+     * @return
+     */
+    List<GridExposeVo> findGridByName(String name);
+
 }
