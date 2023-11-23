@@ -359,7 +359,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public List<User> findAllByNameOrPhoneNumber(String name,String phoneNumber) {
-        List<UserPo> allByNameOrPhoneNumber = userDao.findAllByNameOrPhoneNumber(name,phoneNumber);
+        List<UserPo> allByNameOrPhoneNumber = userDao.findAllByNameLikeOrPhoneNumberLike(name,phoneNumber);
         List<User> userList = userMapper.toUserList(allByNameOrPhoneNumber);
         return userList;
     }

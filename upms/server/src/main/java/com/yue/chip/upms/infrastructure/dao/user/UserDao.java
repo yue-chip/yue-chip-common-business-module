@@ -55,6 +55,12 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      */
     List<UserPo> findAllByIdIn(@NotNull @Size(min = 1) List<Long> userIds);
 
-    List<UserPo> findAllByNameOrPhoneNumber(String name,String phoneNumber);
+    /**
+     * 根据name或手机号模糊查询
+     * @param name
+     * @param phoneNumber
+     * @return
+     */
+    List<UserPo> findAllByNameLikeOrPhoneNumberLike(String name,String phoneNumber);
 
 }
