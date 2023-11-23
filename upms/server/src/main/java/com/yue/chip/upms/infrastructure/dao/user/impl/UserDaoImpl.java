@@ -13,6 +13,7 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
@@ -141,7 +142,7 @@ public class UserDaoImpl implements UserDaoEx {
     public Optional<UserPo> findByIdAndTenantNumber(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
         try {
-            Connection connection =dataSource.getConnection();
+            Connection connection = DataSourceUtils.getConnection(dataSource);
             Statement stat =  connection.createStatement();
             String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
             stat.execute("use ".concat(dataBaseName));
@@ -162,7 +163,7 @@ public class UserDaoImpl implements UserDaoEx {
                 }
             }, new Object[]{id});
             stat.close();
-            //connection.close();
+            DataSourceUtils.releaseConnection(connection,dataSource);
             return Optional.ofNullable(userPo);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -174,7 +175,7 @@ public class UserDaoImpl implements UserDaoEx {
     public Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
         try {
-            Connection connection =dataSource.getConnection();
+            Connection connection =DataSourceUtils.getConnection(dataSource);
             Statement stat =  connection.createStatement();
             String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
             stat.execute("use ".concat(dataBaseName));
@@ -195,7 +196,7 @@ public class UserDaoImpl implements UserDaoEx {
                 }
             }, new Object[]{id});
             stat.close();
-            //connection.close();
+            DataSourceUtils.releaseConnection(connection,dataSource);
             return Optional.ofNullable(userPo);
         } catch (SQLException e) {
             e.printStackTrace();

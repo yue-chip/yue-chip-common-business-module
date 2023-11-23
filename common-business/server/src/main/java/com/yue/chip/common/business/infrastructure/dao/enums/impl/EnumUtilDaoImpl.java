@@ -5,6 +5,7 @@ import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.core.tenant.TenantConstant;
 import jakarta.annotation.Resource;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.annotation.meta.When;
 import javax.sql.DataSource;
@@ -30,7 +31,7 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
         Connection connection = null;
         try {
             //创建数据库
-            connection = dataSource.getConnection();
+            connection = DataSourceUtils.getConnection(dataSource);
             connection.setAutoCommit(false);
             Statement stat = connection.createStatement();
             ResultSet resultSet = stat.executeQuery("select id from upms.t_tenant; ");
@@ -59,12 +60,12 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
             resultSet.close();
             stat.close();
             connection.commit();
-            //connection.close();
+            DataSourceUtils.releaseConnection(connection,dataSource);
         } catch (SQLException e) {
             e.printStackTrace();
             try {
                 connection.rollback();
-                //connection.close();
+                DataSourceUtils.releaseConnection(connection,dataSource);
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }

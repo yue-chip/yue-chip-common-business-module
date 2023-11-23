@@ -11,6 +11,7 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
@@ -61,13 +62,13 @@ public class TenantDaoImpl implements TenantDaoEx {
     @Override
     public void updateOtherDataBase(State state, Long tenantNumber) {
         try {
-            Connection connection =dataSource.getConnection();
+            Connection connection = DataSourceUtils.getConnection(dataSource);
             Statement stat =  connection.createStatement();
             String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
             stat.execute("use ".concat(dataBaseName));
             stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
             stat.close();
-            //connection.close();
+            DataSourceUtils.releaseConnection(connection,dataSource);
         } catch (SQLException e) {
             e.printStackTrace();
             BusinessException.throwException("删除/更新租户状态失败");

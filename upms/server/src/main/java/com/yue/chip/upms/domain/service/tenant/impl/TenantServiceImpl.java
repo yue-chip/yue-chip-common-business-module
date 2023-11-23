@@ -1,6 +1,7 @@
 package com.yue.chip.upms.domain.service.tenant.impl;
 
 import cn.hutool.crypto.SecureUtil;
+import com.alibaba.druid.util.DruidDataSourceUtils;
 import com.yue.chip.core.tenant.TenantConstant;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.domain.service.tenant.CreateSql;
@@ -9,6 +10,7 @@ import com.yue.chip.upms.infrastructure.dao.tenant.TenantDao;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,7 @@ public class TenantServiceImpl implements TenantService {
         Connection connection = null;
         try {
             //创建数据库
-            connection = dataSource.getConnection();
+            connection = DataSourceUtils.getConnection(dataSource);
             connection.setAutoCommit(false);
             Statement stat = connection.createStatement();
             stat.executeUpdate("create database common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
@@ -50,11 +52,11 @@ public class TenantServiceImpl implements TenantService {
             //创建表
             createTenantTable(connection,tenantNumber);
             connection.commit();
-            //connection.close();
+            DataSourceUtils.releaseConnection(connection,dataSource);
         } catch (SQLException e) {
             try {
                 connection.rollback();
-                //connection.close();
+                DataSourceUtils.releaseConnection(connection,dataSource);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -67,7 +69,7 @@ public class TenantServiceImpl implements TenantService {
     public void initTenantData(@NotNull Long tenantNumber) {
         Connection connection = null;
         try {
-            connection =dataSource.getConnection();
+            connection =DataSourceUtils.getConnection(dataSource);
             Statement stat =  connection.createStatement();
             connection.setAutoCommit(false);
             stat.execute("use upms".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
@@ -92,12 +94,12 @@ public class TenantServiceImpl implements TenantService {
             stat.executeUpdate("INSERT INTO  t_enum_util(`code`,`value`,`version`) select `code`,`value`,`version` from common.t_enum_util;");
             connection.commit();
             stat.close();
-            //connection.close();
+            DataSourceUtils.releaseConnection(connection,dataSource);
         } catch (SQLException e) {
             try {
                 e.printStackTrace();
                 connection.rollback();
-                //connection.close();
+                DataSourceUtils.releaseConnection(connection,dataSource);
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 BusinessException.throwException("创建租户失败");
