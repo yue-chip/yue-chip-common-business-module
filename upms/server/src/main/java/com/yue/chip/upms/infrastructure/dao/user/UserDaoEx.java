@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -64,5 +65,14 @@ public interface UserDaoEx {
      * @return
      */
     public List<UserPo> findUserByGridId(@NotNull Long gridId);
+
+    /**
+     * 根据用id和租户编码查寻用户
+     *
+     * @param id
+     * @param tenantNumber
+     * @return
+     */
+    Optional<UserPo> findByIdAndTenantNumber(@NotNull Long id, Long tenantNumber);
 
 }

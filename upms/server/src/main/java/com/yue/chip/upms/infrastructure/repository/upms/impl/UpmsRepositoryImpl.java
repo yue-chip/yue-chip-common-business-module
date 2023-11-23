@@ -103,6 +103,15 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public Optional<User> findByIdAndTenantNumber(Long id, Long tenantNumber) {
+        Optional<UserPo> optional = userDao.findByIdAndTenantNumber(id,tenantNumber);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(userMapper.toUser(optional.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public List<User> findUserByIds(List<Long> userIds) {
         List<UserPo> userPoList = userDao.findAllByIdIn(userIds);
         return userMapper.toUser(userPoList);

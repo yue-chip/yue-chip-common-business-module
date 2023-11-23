@@ -33,6 +33,14 @@ public interface UpmsExposeService {
      */
     List<UserExposeVo> findUserAllByOrganizationalId(List<Long> organizationalIds);
 
+    /**
+     * 根据用户id和租户编码查寻用户
+     * @param id
+     * @param tenantNumber
+     * @return
+     */
+    Optional<UserExposeVo> findByIdAndTenantNumber(@NotNull Long id,Long tenantNumber);
+
 
     /**
      * 根据id查询机构
