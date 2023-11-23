@@ -50,11 +50,11 @@ public class TenantServiceImpl implements TenantService {
             //创建表
             createTenantTable(connection,tenantNumber);
             connection.commit();
-            connection.close();
+            //connection.close();
         } catch (SQLException e) {
             try {
                 connection.rollback();
-                connection.close();
+                //connection.close();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -92,12 +92,12 @@ public class TenantServiceImpl implements TenantService {
             stat.executeUpdate("INSERT INTO  t_enum_util(`code`,`value`,`version`) select `code`,`value`,`version` from common.t_enum_util;");
             connection.commit();
             stat.close();
-            connection.close();
+            //connection.close();
         } catch (SQLException e) {
             try {
                 e.printStackTrace();
                 connection.rollback();
-                connection.close();
+                //connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 BusinessException.throwException("创建租户失败");

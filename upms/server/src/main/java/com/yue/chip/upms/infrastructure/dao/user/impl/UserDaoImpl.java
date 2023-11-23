@@ -162,7 +162,7 @@ public class UserDaoImpl implements UserDaoEx {
                 }
             }, new Object[]{id});
             stat.close();
-            connection.close();
+            //connection.close();
             return Optional.ofNullable(userPo);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -195,7 +195,7 @@ public class UserDaoImpl implements UserDaoEx {
                 }
             }, new Object[]{id});
             stat.close();
-            connection.close();
+            //connection.close();
             return Optional.ofNullable(userPo);
         } catch (SQLException e) {
             e.printStackTrace();

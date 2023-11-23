@@ -59,12 +59,12 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
             resultSet.close();
             stat.close();
             connection.commit();
-            connection.close();
+            //connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
             try {
                 connection.rollback();
-                connection.close();
+                //connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }

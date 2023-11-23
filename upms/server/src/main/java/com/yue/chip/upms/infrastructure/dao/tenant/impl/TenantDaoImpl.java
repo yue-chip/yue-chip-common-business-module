@@ -67,7 +67,7 @@ public class TenantDaoImpl implements TenantDaoEx {
             stat.execute("use ".concat(dataBaseName));
             stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
             stat.close();
-            connection.close();
+            //connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
             BusinessException.throwException("删除/更新租户状态失败");
