@@ -247,8 +247,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     @Override
     public List<OrganizationalUserPo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId) {
         List<OrganizationalUserPo> organizationalUserPoList = organizationalUserDao.findAllByOrganizationalIdAndUserIdIn(organizationalId, userId);
-
-        return null;
+        return organizationalUserPoList;
     }
 
     private void findAllChildren(Long parentId,List<Organizational> organizationals) {
