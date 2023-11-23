@@ -83,7 +83,7 @@ public class TenantServiceImpl implements TenantService {
             stat.executeUpdate("INSERT INTO  t_user_role(`user_id`,`role_id`) select u.id, r.id from t_role r join t_user u where r.code ='superadmin' and u.username ='superadmin';");
 
             stat.execute("use security".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-            stat.executeUpdate("INSERT INTO  alarm_category(`gate`,`name`,`state`,`message_type`) select 1, `name`,`state`,`message_type` from security.alarm_category;");
+            stat.executeUpdate("INSERT INTO  alarm_category(`gate`,`name`,`state`,`message_type`,`code`) select 1, `name`,`state`,`message_type`,`code` from security.alarm_category;");
             stat.executeUpdate("INSERT INTO  device_category(`name`) select  `name` from security.device_category;");
             stat.executeUpdate("INSERT INTO  fire_station_category(`name`) select  `name` from security.fire_station_category;");
 
@@ -128,6 +128,7 @@ public class TenantServiceImpl implements TenantService {
         CreateSql.execute(dataSource, connection, "upms", "t_user", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "upms", "t_user_role", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "upms", "t_user_weixin", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "upms", "t_grid", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "alarm_category", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "alarm_event", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "alarm_handle", tenantNumber,new CreateSql.TempBean().setInsert(false));
@@ -137,6 +138,7 @@ public class TenantServiceImpl implements TenantService {
         CreateSql.execute(dataSource, connection, "security", "device_category", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "device_product", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "drill", tenantNumber,new CreateSql.TempBean().setInsert(false));
+        CreateSql.execute(dataSource, connection, "security", "evaluation", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "facility", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "facility_category", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "fire_patrol", tenantNumber,new CreateSql.TempBean().setInsert(false));
