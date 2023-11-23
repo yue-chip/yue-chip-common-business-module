@@ -10,6 +10,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.vo.GridExposeVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -190,4 +191,12 @@ public interface OrganizationalRepository {
      * @return
      */
     List<Grid> findByGridId(@NotNull Set<Long> gridId);
+
+    /**
+     * 根据机构id和用户id查询机构下的消防管理员
+     * @param organizationalId
+     * @param userId
+     * @return
+     */
+    List<OrganizationalUserPo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId);
 }

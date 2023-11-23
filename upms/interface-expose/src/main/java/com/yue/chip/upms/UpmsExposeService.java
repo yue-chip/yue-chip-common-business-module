@@ -4,6 +4,7 @@ import com.yue.chip.core.Optional;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.upms.vo.GridExposeVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
+import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -100,4 +101,12 @@ public interface UpmsExposeService {
      * @return
      */
     List<GridExposeVo> findByGridId(@NotNull Set<Long> gridId);
+
+    /**
+     * 根据机构id和用户id查询机构下的消防管理员
+     * @param organizationalId
+     * @param userId
+     * @return
+     */
+    List<OrganizationalUserExposeVo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId);
 }
