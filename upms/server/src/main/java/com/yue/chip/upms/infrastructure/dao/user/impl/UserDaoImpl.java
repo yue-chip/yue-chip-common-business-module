@@ -8,6 +8,7 @@ import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
@@ -144,7 +146,19 @@ public class UserDaoImpl implements UserDaoEx {
             String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
             stat.execute("use ".concat(dataBaseName));
             QueryRunner queryRunner = new QueryRunner();
-            UserPo userPo = queryRunner.query(connection, "select * from t_user where id = ?  ",new BeanHandler<UserPo>(UserPo.class),new Object[]{id});
+            UserPo userPo = queryRunner.query(connection, "select * from t_user where id = ?  ", new ResultSetHandler<UserPo>() {
+                @Override
+                public UserPo handle(ResultSet rs) throws SQLException {
+                    while (rs.next()) {
+                        return UserPo.builder()
+                                .id(rs.getLong("id"))
+                                .name(rs.getString("name"))
+                                .phoneNumber(rs.getString("phone_number"))
+                                .build();
+                    }
+                    return null;
+                }
+            }, new Object[]{id});
             stat.close();
             connection.close();
             return Optional.ofNullable(userPo);
