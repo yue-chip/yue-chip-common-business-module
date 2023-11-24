@@ -9,15 +9,12 @@ import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -32,9 +29,6 @@ public class UserDaoImpl implements UserDaoEx {
 
     @Autowired
     public BaseDao<UserPo> baseDao;
-
-    @Autowired
-    private DataSource dataSource;
 
 //    @Override
 //    public Optional<UserPo> find(String username) {
@@ -141,67 +135,67 @@ public class UserDaoImpl implements UserDaoEx {
     @Override
     public Optional<UserPo> findByIdAndTenantNumber(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
-        try {
-            Connection connection = DataSourceUtils.getConnection(dataSource);
-            Statement stat =  connection.createStatement();
-            String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
-            stat.execute("use ".concat(dataBaseName));
-            QueryRunner queryRunner = new QueryRunner();
-            UserPo userPo = queryRunner.query(connection, "select * from t_user where id = ?  ", new ResultSetHandler<UserPo>() {
-                @Override
-                public UserPo handle(ResultSet rs) throws SQLException {
-                    while (rs.next()) {
-                        return UserPo.builder()
-                                .id(rs.getLong("id"))
-                                .isSms(rs.getBoolean("is_sms"))
-                                .isCall(rs.getBoolean("is_call"))
-                                .name(rs.getString("name"))
-                                .phoneNumber(rs.getString("phone_number"))
-                                .build();
+        Optional<UserPo> result =baseDao.getSession().doReturningWork(
+                new ReturningWork<Optional<UserPo>>() {
+                    @Override
+                    public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
+                        Statement stat =  connection.createStatement();
+                        String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
+                        stat.execute("use ".concat(dataBaseName));
+                        QueryRunner queryRunner = new QueryRunner();
+                        UserPo userPo = queryRunner.query(connection, "select * from t_user where id = ?  ", new ResultSetHandler<UserPo>() {
+                            @Override
+                            public UserPo handle(ResultSet rs) throws SQLException {
+                                while (rs.next()) {
+                                    return UserPo.builder()
+                                            .id(rs.getLong("id"))
+                                            .isSms(rs.getBoolean("is_sms"))
+                                            .isCall(rs.getBoolean("is_call"))
+                                            .name(rs.getString("name"))
+                                            .phoneNumber(rs.getString("phone_number"))
+                                            .build();
+                                }
+                                return null;
+                            }
+                        }, new Object[]{id});
+                        stat.close();
+                        return Optional.ofNullable(userPo);
                     }
-                    return null;
-                }
-            }, new Object[]{id});
-            stat.close();
-            DataSourceUtils.releaseConnection(connection,dataSource);
-            return Optional.ofNullable(userPo);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
+                });
+        return result;
     }
 
     @Override
     public Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
-        try {
-            Connection connection =DataSourceUtils.getConnection(dataSource);
-            Statement stat =  connection.createStatement();
-            String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
-            stat.execute("use ".concat(dataBaseName));
-            QueryRunner queryRunner = new QueryRunner();
-            UserPo userPo = queryRunner.query(connection, "select u.* from t_user u join t_grid g on u.id = g.user_id where g.id = ?  ", new ResultSetHandler<UserPo>() {
+        Optional<UserPo> result =baseDao.getSession().doReturningWork(
+            new ReturningWork<Optional<UserPo>>() {
                 @Override
-                public UserPo handle(ResultSet rs) throws SQLException {
-                    while (rs.next()) {
-                        return UserPo.builder()
-                                .id(rs.getLong("id"))
-                                .name(rs.getString("name"))
-                                .isSms(rs.getBoolean("is_sms"))
-                                .isCall(rs.getBoolean("is_call"))
-                                .phoneNumber(rs.getString("phone_number"))
-                                .build();
-                    }
-                    return null;
+                public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
+                    Statement stat =  connection.createStatement();
+                    String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
+                    stat.execute("use ".concat(dataBaseName));
+                    QueryRunner queryRunner = new QueryRunner();
+                    UserPo userPo = queryRunner.query(connection, "select u.* from t_user u join t_grid g on u.id = g.user_id where g.id = ?  ", new ResultSetHandler<UserPo>() {
+                        @Override
+                        public UserPo handle(ResultSet rs) throws SQLException {
+                            while (rs.next()) {
+                                return UserPo.builder()
+                                        .id(rs.getLong("id"))
+                                        .name(rs.getString("name"))
+                                        .isSms(rs.getBoolean("is_sms"))
+                                        .isCall(rs.getBoolean("is_call"))
+                                        .phoneNumber(rs.getString("phone_number"))
+                                        .build();
+                            }
+                            return null;
+                        }
+                    }, new Object[]{id});
+                    stat.close();
+                    return Optional.ofNullable(userPo);
                 }
-            }, new Object[]{id});
-            stat.close();
-            DataSourceUtils.releaseConnection(connection,dataSource);
-            return Optional.ofNullable(userPo);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
+            });
+        return result;
     }
 
 }

@@ -1,16 +1,14 @@
 package com.yue.chip.upms.domain.service.tenant.impl;
 
 import cn.hutool.crypto.SecureUtil;
-import com.alibaba.druid.util.DruidDataSourceUtils;
 import com.yue.chip.core.tenant.TenantConstant;
-import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.domain.service.tenant.CreateSql;
 import com.yue.chip.upms.domain.service.tenant.TenantService;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDao;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.hibernate.jdbc.ReturningWork;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,79 +37,58 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public void createTenantDatabase(Long tenantNumber) {
-        Connection connection = null;
-        try {
-            //创建数据库
-            connection = DataSourceUtils.getConnection(dataSource);
-            connection.setAutoCommit(false);
-            Statement stat = connection.createStatement();
-            stat.executeUpdate("create database common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-            stat.executeUpdate("create database upms".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-            stat.executeUpdate("create database security".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-            stat.close();
-            //创建表
-            createTenantTable(connection,tenantNumber);
-            connection.commit();
-            DataSourceUtils.releaseConnection(connection,dataSource);
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-                DataSourceUtils.releaseConnection(connection,dataSource);
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+        Object result =tenantDao.getSession().doReturningWork(
+            new ReturningWork<Boolean>() {
+                @Override
+                public Boolean execute(java.sql.Connection connection) throws SQLException {;
+                    Statement stat = connection.createStatement();
+                    stat.executeUpdate("create database common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+                    stat.executeUpdate("create database upms".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+                    stat.executeUpdate("create database security".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+                    stat.close();
+                    //创建表
+                    createTenantTable(connection,tenantNumber);
+                    return true;
+                }
             }
-            throw new RuntimeException(e);
-        }
-
+        );
     }
 
     @Override
     public void initTenantData(@NotNull Long tenantNumber) {
-        Connection connection = null;
-        try {
-            connection =DataSourceUtils.getConnection(dataSource);
-            Statement stat =  connection.createStatement();
-            connection.setAutoCommit(false);
-            stat.execute("use upms".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-            stat.executeUpdate("INSERT INTO  t_tenant_state(`state`) values (1);");
-            stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_id`,`state`,`is_call`,`is_sms`) values ('superadmin','"+passwordEncoder.encode(SecureUtil.md5("superadmin"))+"','superadmin',"+tenantNumber+",1,1,1);");
-            stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_id`,`state`,`is_call`,`is_sms`) values ('admin','"+passwordEncoder.encode(SecureUtil.md5("admin"))+"','admin',"+tenantNumber+",1,1,1);");
-//            stat.executeUpdate("INSERT INTO  t_resources(`code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url`) select `code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url` from upms.t_resources where code not in ( 'TENANT','MENU');");
-            stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('superadmin',1,'超级管理员','',1);");
-            stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('admin',1,'管理员','',1);");
-            stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select re.id, r.id from t_role r join t_resources re where r.code ='admin';");
-            stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select re.id, r.id from t_role r join t_resources re where r.code ='superadmin';");
-            stat.executeUpdate("INSERT INTO  t_user_role(`user_id`,`role_id`) select u.id, r.id from t_role r join t_user u where r.code ='admin' and u.username ='admin';");
-            stat.executeUpdate("INSERT INTO  t_user_role(`user_id`,`role_id`) select u.id, r.id from t_role r join t_user u where r.code ='superadmin' and u.username ='superadmin';");
+        Object result =tenantDao.getSession().doReturningWork(
+            new ReturningWork<Boolean>() {
+                @Override
+                public Boolean execute(java.sql.Connection connection) throws SQLException {
+                    Statement stat =  connection.createStatement();
+                    stat.execute("use upms".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+                    stat.executeUpdate("INSERT INTO  t_tenant_state(`state`) values (1);");
+                    stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_id`,`state`,`is_call`,`is_sms`) values ('superadmin','"+passwordEncoder.encode(SecureUtil.md5("superadmin"))+"','superadmin',"+tenantNumber+",1,1,1);");
+                    stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_id`,`state`,`is_call`,`is_sms`) values ('admin','"+passwordEncoder.encode(SecureUtil.md5("admin"))+"','admin',"+tenantNumber+",1,1,1);");
+//                  stat.executeUpdate("INSERT INTO  t_resources(`code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url`) select `code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url` from upms.t_resources where code not in ( 'TENANT','MENU');");
+                    stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('superadmin',1,'超级管理员','',1);");
+                    stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('admin',1,'管理员','',1);");
+                    stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select re.id, r.id from t_role r join t_resources re where r.code ='admin';");
+                    stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select re.id, r.id from t_role r join t_resources re where r.code ='superadmin';");
+                    stat.executeUpdate("INSERT INTO  t_user_role(`user_id`,`role_id`) select u.id, r.id from t_role r join t_user u where r.code ='admin' and u.username ='admin';");
+                    stat.executeUpdate("INSERT INTO  t_user_role(`user_id`,`role_id`) select u.id, r.id from t_role r join t_user u where r.code ='superadmin' and u.username ='superadmin';");
 
-            stat.execute("use security".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-            stat.executeUpdate("INSERT INTO  alarm_category(`gate`,`name`,`state`,`message_type`,`code`) select 1, `name`,`state`,`message_type`,`code` from security.alarm_category;");
-            stat.executeUpdate("INSERT INTO  device_category(`id`,`name`) select `id`,  `name` from security.device_category;");
-            stat.executeUpdate("INSERT INTO  device_product(`category_id`,`guide`,`name`,`token`,`master_key`,`access_platform`,`heartbeat_intervals`) select `category_id`,`guide`,`name`,`token`,`master_key`,`access_platform`,`heartbeat_intervals` from security.device_category;");
-            stat.executeUpdate("INSERT INTO  fire_station_category(`name`) select  `name` from security.fire_station_category;");
+                    stat.execute("use security".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+                    stat.executeUpdate("INSERT INTO  alarm_category(`gate`,`name`,`state`,`message_type`,`code`) select 1, `name`,`state`,`message_type`,`code` from security.alarm_category;");
+                    stat.executeUpdate("INSERT INTO  device_category(`id`,`name`) select `id`,  `name` from security.device_category;");
+                    stat.executeUpdate("INSERT INTO  device_product(`category_id`,`guide`,`name`,`token`,`master_key`,`access_platform`,`heartbeat_intervals`) select `category_id`,`guide`,`name`,`token`,`master_key`,`access_platform`,`heartbeat_intervals` from security.device_category;");
+                    stat.executeUpdate("INSERT INTO  fire_station_category(`name`) select  `name` from security.fire_station_category;");
 
-            stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-            stat.executeUpdate("INSERT INTO  t_enum_util(`code`,`value`,`version`) select `code`,`value`,`version` from common.t_enum_util;");
-            connection.commit();
-            stat.close();
-            DataSourceUtils.releaseConnection(connection,dataSource);
-        } catch (SQLException e) {
-            try {
-                e.printStackTrace();
-                connection.rollback();
-                DataSourceUtils.releaseConnection(connection,dataSource);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                BusinessException.throwException("创建租户失败");
+                    stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+                    stat.executeUpdate("INSERT INTO  t_enum_util(`code`,`value`,`version`) select `code`,`value`,`version` from common.t_enum_util;");
+                    stat.close();
+                    return true;
+                }
             }
-            e.printStackTrace();
-            BusinessException.throwException("创建租户失败");
-        }
-
+        );
     }
 
     private void createTenantTable(@NotNull Connection connection,@NotNull Long tenantNumber) throws SQLException {
-        Statement stat = connection.createStatement();
         CreateSql.execute(dataSource, connection, "common", "t_enum_util", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "common", "t_file", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "common", "t_file_relational", tenantNumber,new CreateSql.TempBean().setInsert(false));
@@ -156,7 +133,6 @@ public class TenantServiceImpl implements TenantService {
         CreateSql.execute(dataSource, connection, "security", "store", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "train", tenantNumber,new CreateSql.TempBean().setInsert(false));
         CreateSql.execute(dataSource, connection, "security", "user_message", tenantNumber,new CreateSql.TempBean().setInsert(false));
-
     }
 }
 

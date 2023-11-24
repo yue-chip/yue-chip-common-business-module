@@ -3,22 +3,23 @@ package com.yue.chip.upms.infrastructure.dao.tenant.impl;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
-import com.yue.chip.core.tenant.TenantConstant;
-import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDaoEx;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
-import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.hibernate.jdbc.ReturningWork;
 import org.springframework.data.domain.Page;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,9 +32,6 @@ public class TenantDaoImpl implements TenantDaoEx {
 
     @Resource
     private BaseDao<TenantPo> baseDao;
-
-    @Resource
-    private DataSource dataSource;
 
     @Override
     public Page<TenantPo> list(String name, String manager, State state, String phoneNumber, YueChipPage pageable) {
@@ -61,18 +59,35 @@ public class TenantDaoImpl implements TenantDaoEx {
 
     @Override
     public void updateOtherDataBase(State state, Long tenantNumber) {
-        try {
-            Connection connection = DataSourceUtils.getConnection(dataSource);
-            Statement stat =  connection.createStatement();
-            String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
-            stat.execute("use ".concat(dataBaseName));
-            stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
-            stat.close();
-            DataSourceUtils.releaseConnection(connection,dataSource);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            BusinessException.throwException("删除/更新租户状态失败");
-        }
+        Object result = baseDao.getSession().doReturningWork(
+            new ReturningWork<Boolean>() {
+                @Override
+                public Boolean execute(java.sql.Connection connection) throws SQLException {
+                    Statement stat =  connection.createStatement();
+                    String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
+                    stat.execute("use ".concat(dataBaseName));
+                    stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
+                    stat.close();
+                    return true;
+                }
+            });
+    }
+
+    @Override
+    public List<TenantPo> findAllByState(State state) {
+        List<TenantPo> result = baseDao.getSession().doReturningWork(
+            new ReturningWork<List<TenantPo>>() {
+                @Override
+                public List<TenantPo> execute(java.sql.Connection connection) throws SQLException {
+                    Statement stat =  connection.createStatement();
+                    stat.execute("use upms");
+                    QueryRunner queryRunner = new QueryRunner();
+                    List<TenantPo> list = queryRunner.query(connection, "select * from t_tenant where state = ?  ", new BeanListHandler<TenantPo>(TenantPo.class), new Object[]{state.getKey()});
+                    stat.close();
+                    return list;
+                }
+            });
+        return result;
     }
 
 

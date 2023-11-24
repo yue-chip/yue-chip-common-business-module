@@ -1,10 +1,12 @@
 package com.yue.chip.common.business.infrastructure.dao.enums.impl;
 
+import com.ibm.icu.impl.coll.BOCSU;
 import com.yue.chip.common.business.infrastructure.dao.enums.EnumUtilDaoEx;
 import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.core.tenant.TenantConstant;
 import jakarta.annotation.Resource;
+import org.hibernate.jdbc.ReturningWork;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.annotation.meta.When;
@@ -28,47 +30,38 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
 
     @Override
     public void saveOtherTenantEnum(EnumUtilPo enumUtilPo) {
-        Connection connection = null;
-        try {
-            //创建数据库
-            connection = DataSourceUtils.getConnection(dataSource);
-            connection.setAutoCommit(false);
-            Statement stat = connection.createStatement();
-            ResultSet resultSet = stat.executeQuery("select id from upms.t_tenant; ");
-            List<Long> tenantNumbers = new ArrayList<>();
-            while (resultSet.next()) {
-                Long tenantNumber = resultSet.getLong("id");
-                tenantNumbers.add(tenantNumber);
-            }
-            for (Long tenantNumber:tenantNumbers){
-                try {
-                    stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-                    PreparedStatement delete = connection.prepareStatement("delete from t_enum_util where code =? and version = ?");
-                    delete.setString(1, enumUtilPo.getCode());
-                    delete.setString(2, enumUtilPo.getVersion());
-                    delete.executeUpdate();
+        Object result =enumUtilPoBaseDao.getSession().doReturningWork(
+            new ReturningWork<Boolean>() {
+                @Override
+                public Boolean execute(java.sql.Connection connection) throws SQLException {
+                    Statement stat = connection.createStatement();
+                    ResultSet resultSet = stat.executeQuery("select id from upms.t_tenant; ");
+                    List<Long> tenantNumbers = new ArrayList<>();
+                    while (resultSet.next()) {
+                        Long tenantNumber = resultSet.getLong("id");
+                        tenantNumbers.add(tenantNumber);
+                    }
+                    for (Long tenantNumber:tenantNumbers){
+                        try {
+                            stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+                            PreparedStatement delete = connection.prepareStatement("delete from t_enum_util where code =? and version = ?");
+                            delete.setString(1, enumUtilPo.getCode());
+                            delete.setString(2, enumUtilPo.getVersion());
+                            delete.executeUpdate();
 
-                    PreparedStatement insert = connection.prepareStatement("INSERT INTO t_enum_util(`code`,`value`,`version`) values (?,?,?)");
-                    insert.setString(1, enumUtilPo.getCode());
-                    insert.setString(2, enumUtilPo.getValue());
-                    insert.setString(3, enumUtilPo.getVersion());
-                    insert.executeUpdate();
-                }catch (Exception ex) {
-                    ex.printStackTrace();
+                            PreparedStatement insert = connection.prepareStatement("INSERT INTO t_enum_util(`code`,`value`,`version`) values (?,?,?)");
+                            insert.setString(1, enumUtilPo.getCode());
+                            insert.setString(2, enumUtilPo.getValue());
+                            insert.setString(3, enumUtilPo.getVersion());
+                            insert.executeUpdate();
+                        }catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    resultSet.close();
+                    stat.close();
+                    return true;
                 }
-            }
-            resultSet.close();
-            stat.close();
-            connection.commit();
-            DataSourceUtils.releaseConnection(connection,dataSource);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                connection.rollback();
-                DataSourceUtils.releaseConnection(connection,dataSource);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
+            });
     }
 }

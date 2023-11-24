@@ -36,4 +36,11 @@ public interface TenantDaoEx {
      */
     public void updateOtherDataBase(@NotNull State state, @NotNull Long tenantNumber);
 
+    /**
+     * 查寻所有租户
+     * @param state
+     * @return
+     */
+    public List<TenantPo> findAllByState(@NotNull State state);
+
 }

@@ -27,7 +27,7 @@ public class TenantExposeServiceImpl implements TenantExposeService {
 
     @Override
     public List<TenantExposeVo> findAll() {
-        List<Tenant> list = tenantRepository.findAllTenant(null);
+        List<Tenant> list = tenantRepository.findAllTenant(State.NORMAL);
         return tenantMapper.toTenantExposeVo(list);
     }
 }

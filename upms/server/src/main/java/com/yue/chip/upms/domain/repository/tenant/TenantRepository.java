@@ -58,7 +58,7 @@ public interface TenantRepository {
     public Optional<Tenant> findTenantByName(@NotBlank String name);
 
     /**
-     * 查寻所有租户
+     * 查寻所有租户(特殊场景使用 jdbc查寻 禁止其它功能调用)
      * @param state
      * @return
      */

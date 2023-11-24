@@ -68,12 +68,7 @@ public class TenantRepositoryImpl implements TenantRepository {
 
     @Override
     public List<Tenant> findAllTenant(State state) {
-        List<TenantPo> list = new ArrayList();
-        if (Objects.nonNull(state)) {
-            list = tenantDao.findAllByState(state);
-        }else {
-            list = tenantDao.findAll();
-        }
+        List<TenantPo> list = tenantDao.findAllByState(state);
         return tenantMapper.toTenant(list);
     }
 
