@@ -78,6 +78,14 @@ public interface TenantRepository {
      */
     public void updateOtherDataBase(@NotNull State state, @NotNull Long tenantNumber);
 
+
+    /**
+     * 保存其它租户数据库中的租户状态
+     * @param state
+     * @param tenantNumber
+     */
+    public void insertOtherDataBase(@NotNull State state, @NotNull Long tenantNumber);
+
     /**
      * 查询当前租户状态
      *

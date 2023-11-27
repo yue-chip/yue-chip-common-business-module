@@ -22,7 +22,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Data
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
-@Comment("角色-资源关联表")
+@Comment("租户表")
 @NoArgsConstructor
 public class TenantPo extends TenantDefinition {
     @Override
@@ -48,5 +48,11 @@ public class TenantPo extends TenantDefinition {
     @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '负责人联系电话-不能为空'")
     public String getPhoneNumber() {
         return super.getPhoneNumber();
+    }
+
+    @Override
+    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '访问地址(xxx.xxx.com,120.102.25.45)-用户区分租户'")
+    public String getDomain() {
+        return super.getDomain();
     }
 }

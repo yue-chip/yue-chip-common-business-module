@@ -23,7 +23,7 @@
         />
       </a-form-item>
       <a-form-item label="电话号码" name="phoneNumber" ref="phoneNumber" >
-        <a-input placeholder="请输入姓名" v-model:value="addOrUpdateModel.phoneNumber" />
+        <a-input placeholder="请输入电话号码" v-model:value="addOrUpdateModel.phoneNumber" />
       </a-form-item>
     </a-form>
     <a-row >

@@ -60,6 +60,7 @@ public class TenantApplicationImpl implements TenantApplication {
         tenantService.createTenantDatabase(entity.getId());
         //初始化数据
         tenantService.initTenantData(entity.getId());
+        tenantRepository.insertOtherDataBase(State.NORMAL,entity.getId());
         return entity;
     }
 

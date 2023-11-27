@@ -368,7 +368,7 @@ public class UpmsConsoleController {
 
     @PostMapping("/grid/add")
     @Operation(description = "网格-添加网格",summary = "网格-添加网格")
-    public IResultData addGrid(@RequestBody GridAddDto gridAddDto) {
+    public IResultData addGrid(@RequestBody @Validated GridAddDto gridAddDto) {
         organizationalRepository.saveGrid(gridMapper.toGridPo(gridAddDto));
         return ResultData.builder().build();
     }
@@ -381,7 +381,7 @@ public class UpmsConsoleController {
 
     @PutMapping("/grid/update")
     @Operation(description = "网格-修改网格",summary = "网格-修改网格")
-    public IResultData updateGrid(@RequestBody GridUpdateDto gridUpdateDto) {
+    public IResultData updateGrid(@RequestBody @Validated GridUpdateDto gridUpdateDto) {
         organizationalRepository.saveGrid(gridMapper.toGridPo(gridUpdateDto));
         return ResultData.builder().build();
     }

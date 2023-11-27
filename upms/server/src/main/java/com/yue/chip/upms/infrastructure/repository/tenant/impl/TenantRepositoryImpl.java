@@ -15,6 +15,8 @@ import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -48,11 +50,13 @@ public class TenantRepositoryImpl implements TenantRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class},propagation = Propagation.REQUIRES_NEW)
     public void updateTenant(TenantPo tenantPo) {
         tenantDao.update(tenantPo);
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class},propagation = Propagation.REQUIRES_NEW)
     public void deleteTenant(Long id) {
         tenantDao.deleteById(id);
     }
@@ -84,6 +88,12 @@ public class TenantRepositoryImpl implements TenantRepository {
     @Override
     public void updateOtherDataBase(State state, Long tenantNumber) {
         tenantDao.updateOtherDataBase(state,tenantNumber);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class},propagation = Propagation.REQUIRES_NEW)
+    public void insertOtherDataBase(State state, Long tenantNumber) {
+        tenantDao.insertOtherDataBase(state,tenantNumber);
     }
 
     @Override

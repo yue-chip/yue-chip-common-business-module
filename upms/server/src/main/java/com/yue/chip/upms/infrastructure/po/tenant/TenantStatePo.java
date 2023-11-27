@@ -22,7 +22,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Data
 @Builder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
-@Comment("角色-资源关联表")
+@Comment("租户状态")
 @NoArgsConstructor
 @AllArgsConstructor
 public class TenantStatePo extends BaseEntity {

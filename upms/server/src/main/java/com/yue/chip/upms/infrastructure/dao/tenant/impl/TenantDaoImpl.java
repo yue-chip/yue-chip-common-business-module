@@ -74,6 +74,22 @@ public class TenantDaoImpl implements TenantDaoEx {
     }
 
     @Override
+    public void insertOtherDataBase(State state, Long tenantNumber) {
+        Object result = baseDao.getSession().doReturningWork(
+                new ReturningWork<Boolean>() {
+                    @Override
+                    public Boolean execute(java.sql.Connection connection) throws SQLException {
+                        Statement stat =  connection.createStatement();
+                        String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
+                        stat.execute("use ".concat(dataBaseName));
+                        stat.executeUpdate("insert t_tenant_state (state) values("+state.getKey()+")");
+                        stat.close();
+                        return true;
+                    }
+                });
+    }
+
+    @Override
     public List<TenantPo> findAllByState(State state) {
         List<TenantPo> result = baseDao.getSession().doReturningWork(
             new ReturningWork<List<TenantPo>>() {
