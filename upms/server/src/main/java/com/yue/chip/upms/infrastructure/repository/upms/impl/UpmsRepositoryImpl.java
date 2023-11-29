@@ -19,7 +19,7 @@ import com.yue.chip.upms.infrastructure.dao.role.RoleDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserRoleDao;
-import com.yue.chip.upms.infrastructure.dao.user.UserWeiXinDao;
+import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
@@ -52,9 +52,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private UserDao userDao;
 
     @Resource
-    private UserWeiXinDao userWeiXinDao;
-
-    @Resource
     private UserRoleDao userRoleDao;
     @Resource
     private RoleResourcesDao roleResourcesDao;
@@ -79,16 +76,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         if (optional.isPresent()) {
             User user = userMapper.toUser(optional.get());
             return Optional.ofNullable(user);
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<UserWeixin> findUserWeixinByUsername(String username) {
-        Optional<UserWeiXinPo> optional = userWeiXinDao.findFirstByUsername(username);
-        if (optional.isPresent()) {
-            UserWeixin userWeixin = userWeiXinMapper.toUserWeiXin(optional.get());
-            return Optional.ofNullable(userWeixin);
         }
         return Optional.empty();
     }

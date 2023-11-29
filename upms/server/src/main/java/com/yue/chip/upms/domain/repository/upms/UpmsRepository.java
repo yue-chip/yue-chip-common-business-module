@@ -37,13 +37,6 @@ public interface UpmsRepository {
     public Optional<User> findUserByUsername(@NotBlank String username);
 
     /**
-     * 根据登录帐号查询微信登录用户
-     * @param username
-     * @return
-     */
-    public Optional<UserWeixin> findUserWeixinByUsername(@NotBlank String username);
-
-    /**
      * 根据用户id查询用户
      *
      * @param id

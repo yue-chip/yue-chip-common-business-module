@@ -26,9 +26,6 @@ public class CurrentUserExposeImpl implements ICurrentUser<User> {
     @Resource
     private UpmsRepository upmsRepository;
 
-    @Resource
-    private UserMapper userMapper;
-
     @Override
     public Map<String, Object> findUserToMap(@NotBlank String username) {
         Optional<User> optional = upmsRepository.findUserByUsername(username);
