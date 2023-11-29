@@ -4,16 +4,16 @@ import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.upms.assembler.user.UserWeixinMapper;
+import com.yue.chip.upms.assembler.resources.ResourcesMapper;
+import com.yue.chip.upms.assembler.role.RoleMapper;
+import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
-import com.yue.chip.upms.assembler.resources.ResourcesMapper;
-import com.yue.chip.upms.assembler.role.RoleMapper;
-import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleResourcesDao;
@@ -26,8 +26,8 @@ import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
@@ -69,7 +69,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Resource
     private ResourcesMapper resourcesMapper;
     @Resource
-    private UserWeixinMapper userWeixinMapper;
+    private UserWeiXinMapper userWeiXinMapper;
     @Resource
     private PasswordEncoder passwordEncoder;
 
@@ -87,7 +87,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public Optional<UserWeixin> findUserWeixinByUsername(String username) {
         Optional<UserWeiXinPo> optional = userWeiXinDao.findFirstByUsername(username);
         if (optional.isPresent()) {
-            UserWeixin userWeixin = userWeixinMapper.toUserWeixin(optional.get());
+            UserWeixin userWeixin = userWeiXinMapper.toUserWeiXin(optional.get());
             return Optional.ofNullable(userWeixin);
         }
         return Optional.empty();

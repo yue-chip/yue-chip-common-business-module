@@ -5,13 +5,17 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
+import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
+import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.upms.infrastructure.repository.weixin.UserWeiXinRepositoryImpl;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,7 +48,13 @@ public class LoginServiceImpl implements LoginService {
     private TenantRepository tenantRepository;
 
     @Resource
+    private UserWeiXinRepository userWeiXinRepository;
+
+    @Resource
     private PasswordEncoder passwordEncoder;
+
+    @Resource
+    private UserWeiXinMapper userWeiXinMapper;
 
 
     @Override
@@ -63,18 +73,30 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String weixinLogin(String username, String password) {
-        //检查租户状态
-        checkTenantState();
-        Optional<UserWeixin> optional = upmsRepository.findUserWeixinByUsername(username);
+    public String login1(String phoneNumber, String openId) {
+        Optional<UserWeixin> optional = userWeiXinRepository.findByOpenIdAndPhoneNumber(openId,phoneNumber);
         if (optional.isEmpty()) {
-            BusinessException.throwException("该账号不存在");
+            Optional<UserWeixin> optional1 = userWeiXinRepository.findByOpenId(openId);
+            if (optional1.isEmpty()) {
+                UserWeiXinPo userWeiXinPo = userWeiXinRepository.saveUserWeiXin(
+                        UserWeiXinPo.builder()
+                                .openId(openId)
+                                .phoneNumber(phoneNumber)
+                                .build()
+                );
+                optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
+            }else {
+                UserWeiXinPo userWeiXinPo = userWeiXinMapper.toUserWeiXinPo(optional1.get());
+                userWeiXinPo.setPhoneNumber(phoneNumber);
+                userWeiXinRepository.updateUserWeiXin(userWeiXinPo);
+            }
+
+        }
+        if (optional.isEmpty()) {
+            throw new AuthenticationServiceException("用户鉴权失败！");
         }
         UserWeixin userWeixin = optional.get();
-        if (!passwordEncoder.matches(password,userWeixin.getPassword()) ) {
-            throw new AuthenticationServiceException("密码错误");
-        }
-        return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getUsername(),userWeixin.getPassword(),userWeixin.getTenantNumber());
+        return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getPhoneNumber(),"",userWeixin.getTenantNumber());
     }
 
     @Override

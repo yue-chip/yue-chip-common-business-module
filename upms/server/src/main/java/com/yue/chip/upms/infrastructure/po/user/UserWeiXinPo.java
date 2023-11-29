@@ -29,25 +29,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class UserWeiXinPo extends UserWeiXinDefinition {
 
     @Override
-    @Column(name = "password", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '密码-不能为空'")
-    public String getPassword() {
-        return super.getPassword();
+    @Column(unique = true, name = "open_id", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT 'open_id-不能为空'")
+    public String getOpenId() {
+        return super.getOpenId();
     }
 
     @Override
-    @Column(name = "user_name", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '登录帐号-不能为空'")
-    public String getUsername() {
-        return super.getUsername();
-    }
-
-    @Override
-    @Column(name = "name", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '姓名'")
-    public String getName() {
-        return super.getName();
-    }
-
-    @Override
-    @Column(name = "phone_number", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '联系电话'")
+    @Column(unique = true,name = "phone_number", columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '联系电话'")
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }
