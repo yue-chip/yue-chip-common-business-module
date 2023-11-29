@@ -348,7 +348,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public User saveUser(UserPo userPo) {
         userPo.setPassword(passwordEncoder.encode(userPo.getPassword()));
-        userPo.setTenantId(CurrentUserUtil.getCurrentUserTenantId(true));
+        userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);
     }

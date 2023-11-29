@@ -59,7 +59,7 @@ public class LoginServiceImpl implements LoginService {
         if (!passwordEncoder.matches(password,user.getPassword()) ) {
             throw new AuthenticationServiceException("密码错误");
         }
-        return authority(user.getResources(),user.getId(),user.getUsername(),user.getPassword(),user.getTenantId());
+        return authority(user.getResources(),user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class LoginServiceImpl implements LoginService {
         if (!passwordEncoder.matches(password,userWeixin.getPassword()) ) {
             throw new AuthenticationServiceException("密码错误");
         }
-        return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getUsername(),userWeixin.getPassword(),userWeixin.getTenantId());
+        return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getUsername(),userWeixin.getPassword(),userWeixin.getTenantNumber());
     }
 
     @Override
@@ -94,7 +94,7 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
-    private String authority(List<Resources> resourcesList,Long id, String username ,String password,Long tenantId) {
+    private String authority(List<Resources> resourcesList,Long id, String username ,String password,Long tenantNumber) {
         List<GrantedAuthority> authoritiesList = AuthorityUtils.createAuthorityList();
         resourcesList.forEach(resources -> {
             YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
@@ -103,7 +103,7 @@ public class LoginServiceImpl implements LoginService {
         });
         YueChipAuthenticationToken token = new YueChipAuthenticationToken(username, authoritiesList);
         SecurityContextHolder.getContext().setAuthentication(token);
-        YueChipUserDetails userDetails = new YueChipUserDetails(id,username,password,tenantId,authoritiesList);
+        YueChipUserDetails userDetails = new YueChipUserDetails(id,username,password, tenantNumber,authoritiesList);
         YueChipRedisTokenStoreUtil.store(userDetails,token.getToken());
         return token.getToken();
     }

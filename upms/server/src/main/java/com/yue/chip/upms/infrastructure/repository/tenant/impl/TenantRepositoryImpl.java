@@ -46,13 +46,20 @@ public class TenantRepositoryImpl implements TenantRepository {
 
     @Override
     public TenantPo saveTenant(TenantPo tenantPo) {
-        return tenantDao.save(tenantPo);
+        tenantPo = tenantDao.save(tenantPo);
+        tenantPo.setTenantNumber(tenantPo.getId());
+        return tenantPo;
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class},propagation = Propagation.REQUIRES_NEW)
     public void updateTenant(TenantPo tenantPo) {
         tenantDao.update(tenantPo);
+    }
+
+    @Override
+    public void updateTenantNumber(Long tenantId, Long tenantNumber) {
+        tenantDao.updateTenantNumber(tenantId,tenantNumber);
     }
 
     @Override

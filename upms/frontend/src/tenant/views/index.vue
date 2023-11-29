@@ -81,6 +81,11 @@
             </a-form-item>
           </a-col>
           <a-col :span="24">
+            <a-form-item label="简称" name="abbreviation" ref="abbreviation">
+              <a-input placeholder="请输入租户简称" v-model:value="addOrUpdateModel.abbreviation" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
             <a-form-item label="负责人" name="manager" ref="manager">
               <a-input placeholder="请输入负责人" v-model:value="addOrUpdateModel.manager" />
             </a-form-item>
@@ -88,6 +93,12 @@
           <a-col :span="24">
             <a-form-item label="联系电话" name="phoneNumber" ref="phoneNumber">
               <a-input placeholder="请输入负责人" v-model:value="addOrUpdateModel.phoneNumber" />
+            </a-form-item>
+          </a-col>
+
+          <a-col :span="24">
+            <a-form-item label="访问域名" name="domain" ref="domain" >
+              <a-input placeholder="请输入访问域名(www.baidu.com)" v-model:value="addOrUpdateModel.domain" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -112,8 +123,10 @@
   let stateList = ref([]);
   const rules:any={
     name:[{required:true,message:"请输入租户名称",trigger:'blur'}],
+    abbreviation:[{required:true,message:"请输入租户简称",trigger:'blur'}],
     manager:[{required:true,message:"请输入名称",trigger:'blur'}],
     phoneNumber:[{required:true,message:"请输入联系电话",trigger:'blur'}],
+    domain:[{required:true,message:"请输入访问域",trigger:'blur'}],
   };
   const columns = [
     {

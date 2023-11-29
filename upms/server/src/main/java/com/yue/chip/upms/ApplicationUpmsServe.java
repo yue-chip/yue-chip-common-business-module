@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.authentication.PasswordEncoderParser;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EntityScan({"com.yue.chip.upms.infrastructure.po.**"})
 @EnableJpaAuditing
 @EnableAsync
+@EnableScheduling
 public class ApplicationUpmsServe {
 
     public static void main ( String args[] ) throws Exception {

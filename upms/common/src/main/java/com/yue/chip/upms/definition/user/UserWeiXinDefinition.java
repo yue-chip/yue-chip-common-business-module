@@ -65,7 +65,7 @@ public class UserWeiXinDefinition extends BaseDefinition {
 
     @Schema(description = "租户id")
     @JsonIgnore
-    private Long tenantId;
+    private Long tenantNumber;
 
 
 }

@@ -18,10 +18,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -54,6 +51,8 @@ public class TenantDaoImpl implements TenantDaoEx {
             sb.append(" and t.state = :state ");
             para.put("state",state);
         }
+        sb.append(" and t.isDefault = false");
+
         return (Page<TenantPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
@@ -98,7 +97,25 @@ public class TenantDaoImpl implements TenantDaoEx {
                     Statement stat =  connection.createStatement();
                     stat.execute("use upms");
                     QueryRunner queryRunner = new QueryRunner();
-                    List<TenantPo> list = queryRunner.query(connection, "select * from t_tenant where state = ?  ", new BeanListHandler<TenantPo>(TenantPo.class), new Object[]{state.getKey()});
+                    List<TenantPo> list = queryRunner.query(connection, "select * from t_tenant where state = ?  ", new ResultSetHandler<List<TenantPo>>() {
+                        @Override
+                        public List<TenantPo> handle(ResultSet rs) throws SQLException {
+                            List<TenantPo> tenantPoList = new ArrayList<>();
+                            while (rs.next()) {
+                                tenantPoList.add(TenantPo.builder()
+                                        .manager(Objects.nonNull(rs.getObject("manager"))?rs.getString("manager"):null)
+                                        .id(rs.getLong("id"))
+                                        .isDefault(Objects.nonNull(rs.getObject("is_default"))?rs.getBoolean("is_default"):null)
+                                        .abbreviation(Objects.nonNull(rs.getObject("abbreviation"))?rs.getString("abbreviation"):null)
+                                        .domain(Objects.nonNull(rs.getObject("domain"))?rs.getString("domain"):null)
+                                        .phoneNumber(Objects.nonNull(rs.getObject("phone_number"))?rs.getString("phone_number"):null)
+                                        .name(Objects.nonNull(rs.getObject("name"))?rs.getString("name"):null)
+                                        .tenantNumber(Objects.nonNull(rs.getObject("tenant_number"))?rs.getLong("tenant_number"):null)
+                                        .build());
+                            }
+                            return tenantPoList;
+                        }
+                    }, new Object[]{state.getKey()});
                     stat.close();
                     return list;
                 }

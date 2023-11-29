@@ -53,8 +53,8 @@ public class UserWeiXinPo extends UserWeiXinDefinition {
     }
 
     @Override
-    @Column(columnDefinition = "bigint DEFAULT 1 COMMENT '租户id'")
-    public Long getTenantId() {
-        return super.getTenantId();
+    @Column(columnDefinition = "bigint DEFAULT 1 COMMENT '租户编码'")
+    public Long getTenantNumber() {
+        return super.getTenantNumber();
     }
 }

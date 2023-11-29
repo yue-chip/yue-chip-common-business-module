@@ -44,6 +44,13 @@ public interface TenantRepository {
     public void updateTenant(@NotNull TenantPo tenantPo);
 
     /**
+     * 更新租户编码
+     * @param tenantId
+     * @param tenantNumber
+     */
+    public void updateTenantNumber(@NotNull Long tenantId,@NotNull Long tenantNumber);
+
+    /**
      * 删除
      *
      * @param id
@@ -63,6 +70,7 @@ public interface TenantRepository {
      * @return
      */
     public List<Tenant> findAllTenant(@NotNull State state);
+
 
     /**
      * 更新租户状态

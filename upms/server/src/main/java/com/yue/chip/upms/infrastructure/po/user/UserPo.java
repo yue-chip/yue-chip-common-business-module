@@ -106,8 +106,8 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
-    @Column(columnDefinition = "bigint COMMENT '租户id'")
-    public Long getTenantId() {
-        return super.getTenantId();
+    @Column(columnDefinition = "bigint COMMENT '租户编码'")
+    public Long getTenantNumber() {
+        return super.getTenantNumber();
     }
 }

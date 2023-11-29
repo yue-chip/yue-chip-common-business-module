@@ -41,7 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return null;
         }
         User user = optional.get();
-        YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantId(),getUserGrantedAuthority(user.getRoles()));
+        YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
         return userDetails;
     }
     /**

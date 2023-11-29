@@ -45,4 +45,16 @@ public class TenantUpdateDTO extends TenantDefinition {
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }
+
+    @Override
+    @NotBlank(message = "租户名称简称不能为空")
+    public String getAbbreviation() {
+        return super.getAbbreviation();
+    }
+
+    @Override
+    @NotBlank(message = "访问域名不能为空")
+    public String getDomain() {
+        return super.getDomain();
+    }
 }

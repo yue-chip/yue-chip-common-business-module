@@ -52,15 +52,22 @@ public class TenantApplicationImpl implements TenantApplication {
         if (Tenant.builder().name(tenantAddDTO.getName()).build().checkNameIsExist()) {
             BusinessException.throwException("该租户名称已存在");
         }
+        //判断租户登录域存不存在
+        tenantService.checkDomainIsExist(null, tenantAddDTO.getDomain());
         //保存租户
         TenantPo tenantPo = tenantMapper.toTenantPo(tenantAddDTO);
         tenantPo.setState(State.NORMAL);
+        tenantPo.setIsDefault(false);
         TenantPo entity = tenantRepository.saveTenant(tenantPo);
+        tenantRepository.updateTenantNumber(entity.getId(),entity.getId());
         //创建租户数据库
         tenantService.createTenantDatabase(entity.getId());
         //初始化数据
         tenantService.initTenantData(entity.getId());
-        tenantRepository.insertOtherDataBase(State.NORMAL,entity.getId());
+        //租户信息保存到redis
+        tenantService.saveToRedis(tenantMapper.toTenant(entity));
+//        //保存租户状态用户登录校验
+//        tenantRepository.insertOtherDataBase(State.NORMAL,entity.getId());
         return entity;
     }
 
@@ -74,6 +81,9 @@ public class TenantApplicationImpl implements TenantApplication {
         if (tenant.checkNameIsExist()) {
             BusinessException.throwException("该租户名称已存在");
         }
+        //判断租户登录域存不存在
+        tenantService.checkDomainIsExist(tenantUpdateDTO.getId(), tenantUpdateDTO.getDomain());
+        //更新租户
         tenantRepository.updateTenant(tenantMapper.toTenantPo(tenantUpdateDTO));
     }
 

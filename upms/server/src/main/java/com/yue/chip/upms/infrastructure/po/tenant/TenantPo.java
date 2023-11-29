@@ -55,4 +55,22 @@ public class TenantPo extends TenantDefinition {
     public String getDomain() {
         return super.getDomain();
     }
+
+    @Override
+    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '租户名称-简称'")
+    public String getAbbreviation() {
+        return super.getAbbreviation();
+    }
+
+    @Override
+    @Column(updatable = false,columnDefinition = "int NULL DEFAULT 0 COMMENT '是否默认租户，默认租户不能删除(系统创建，不能手动添加)'")
+    public Boolean getIsDefault() {
+        return super.getIsDefault();
+    }
+
+    @Override
+    @Column(unique = true,updatable = false,columnDefinition = "bigint COMMENT '租户编码'")
+    public Long getTenantNumber() {
+        return super.getTenantNumber();
+    }
 }
