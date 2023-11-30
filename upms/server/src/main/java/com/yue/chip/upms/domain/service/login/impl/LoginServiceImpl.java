@@ -74,23 +74,20 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String login1(String phoneNumber, String openId) {
-        Optional<UserWeixin> optional = userWeiXinRepository.findByOpenIdAndPhoneNumber(openId,phoneNumber);
-        if (optional.isEmpty()) {
-            Optional<UserWeixin> optional1 = userWeiXinRepository.findByOpenId(openId);
-            if (optional1.isEmpty()) {
-                UserWeiXinPo userWeiXinPo = userWeiXinRepository.saveUserWeiXin(
-                        UserWeiXinPo.builder()
-                                .openId(openId)
-                                .phoneNumber(phoneNumber)
-                                .build()
-                );
-                optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
-            }else {
-                UserWeiXinPo userWeiXinPo = userWeiXinMapper.toUserWeiXinPo(optional1.get());
-                userWeiXinPo.setPhoneNumber(phoneNumber);
-                userWeiXinRepository.updateUserWeiXin(userWeiXinPo);
+        Optional<UserWeixin> optional;
+        if (!StringUtils.hasText(phoneNumber)){
+            optional = userWeiXinRepository.findByOpenId(openId);
+            if (optional.isEmpty()) {
+                throw new AuthenticationServiceException("用户鉴权失败！请输入手机号码");
             }
-
+        }else {
+            UserWeiXinPo userWeiXinPo = userWeiXinRepository.saveUserWeiXin(
+                    UserWeiXinPo.builder()
+                            .openId(openId)
+                            .phoneNumber(phoneNumber)
+                            .build()
+            );
+            optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
         }
         if (optional.isEmpty()) {
             throw new AuthenticationServiceException("用户鉴权失败！");
