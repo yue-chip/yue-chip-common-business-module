@@ -64,6 +64,13 @@ public class CallExposeServiceImpl implements CallExposeService {
     public Optional<QueryCallDetailByCallIdResponseBodyExposeVo> callResult(String callId, Long prodId, Long queryDate) {
         QueryCallDetailByCallIdRequest queryCallDetailByCallIdRequest = new QueryCallDetailByCallIdRequest();
         queryCallDetailByCallIdRequest
+//        产品ID。取值：
+//        11000000300006：语音通知。
+//        11010000138001：语音验证码。
+//        11000000300005：语音IVR向指定号码发起交互式语音通话。
+//        11000000300009：语音SIP。
+//        11030000180001：智能外呼
+//        https://help.aliyun.com/zh/vms/developer-reference/api-dyvmsapi-2017-05-25-querycalldetailbycallid
                 .setCallId(callId)
                 .setProdId(prodId)
                 .setQueryDate(queryDate);
@@ -72,14 +79,14 @@ public class CallExposeServiceImpl implements CallExposeService {
             QueryCallDetailByCallIdResponseBody queryCallDetailByCallIdResponseBody = queryCallDetailByCallIdResponse.getBody();
             log.info("call结果查寻：".concat(new ObjectMapper().writeValueAsString(queryCallDetailByCallIdResponseBody)));
             QueryCallDetailByCallIdResponseBodyExposeVo detail = new QueryCallDetailByCallIdResponseBodyExposeVo();
-            BeanUtils.copyProperties(queryCallDetailByCallIdResponse,detail);
+            BeanUtils.copyProperties(queryCallDetailByCallIdResponseBody,detail);
             return Optional.ofNullable(detail);
         } catch (Exception e) {
             log.info("call结果查寻失败");
             e.printStackTrace();
             BusinessException.throwException("call结果查寻失败："+e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     private String converterTtsParam(Object ttsParam) {

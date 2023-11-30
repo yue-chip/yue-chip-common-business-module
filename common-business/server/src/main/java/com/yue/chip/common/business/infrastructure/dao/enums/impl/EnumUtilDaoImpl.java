@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Mr.Liu
@@ -35,15 +36,15 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
                 @Override
                 public Boolean execute(java.sql.Connection connection) throws SQLException {
                     Statement stat = connection.createStatement();
-                    ResultSet resultSet = stat.executeQuery("select id from upms.t_tenant; ");
+                    ResultSet resultSet = stat.executeQuery("select tenant_number from upms.t_tenant; ");
                     List<Long> tenantNumbers = new ArrayList<>();
                     while (resultSet.next()) {
-                        Long tenantNumber = resultSet.getLong("id");
+                        Long tenantNumber = Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null;
                         tenantNumbers.add(tenantNumber);
                     }
                     for (Long tenantNumber:tenantNumbers){
                         try {
-                            stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
+                            stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(Objects.isNull(tenantNumber)?null:String.valueOf(tenantNumber)));
                             PreparedStatement delete = connection.prepareStatement("delete from t_enum_util where code =? and version = ?");
                             delete.setString(1, enumUtilPo.getCode());
                             delete.setString(2, enumUtilPo.getVersion());
