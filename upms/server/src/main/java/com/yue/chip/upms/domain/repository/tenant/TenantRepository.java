@@ -65,6 +65,13 @@ public interface TenantRepository {
     public Optional<Tenant> findTenantByName(@NotBlank String name);
 
     /**
+     * 根据租户编码获取租户
+     * @param tenantNumber
+     * @return
+     */
+    public Optional<Tenant> findTenantByTenantNumber(Long tenantNumber);
+
+    /**
      * 查寻所有租户(特殊场景使用 jdbc查寻 禁止其它功能调用)
      * @param state
      * @return
@@ -107,5 +114,5 @@ public interface TenantRepository {
      * @param id
      * @return
      */
-    public Optional<TenantVo> tenantDetails(@NotNull Long id);
+    public Optional<Tenant> tenantDetails(@NotNull Long id);
 }

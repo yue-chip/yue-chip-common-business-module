@@ -26,6 +26,8 @@ public interface TenantMapper {
 
     public TenantVo toTenantVo(TenantPo tenantPo);
 
+    public TenantVo toTenantVo(Tenant tenant);
+
     public TenantPo toTenantPo(TenantAddDTO tenantAddDTO);
 
     public TenantPo toTenantPo(TenantUpdateDTO tenantUpdateDTO);

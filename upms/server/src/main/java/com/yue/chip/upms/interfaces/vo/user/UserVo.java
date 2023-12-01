@@ -25,5 +25,16 @@ public class UserVo extends UserDefinition {
 
     @Schema(description = "组织机构id")
     private Long organizationalId;
-    
+
+    @Schema(description = "租户名称")
+    private String tenantName;
+
+    @Schema(description = "租户简称")
+    private String tenantAbbreviation;
+
+    @Schema(description = "租户编码")
+    private Long tenantNumber;
+
+    @Schema(description = "数字大屏名称")
+    private String bigScreenName;
 }

@@ -57,7 +57,7 @@ public class TenantPo extends TenantDefinition {
     }
 
     @Override
-    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '租户名称-简称'")
+    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '租户名称-简称-不能为空'")
     public String getAbbreviation() {
         return super.getAbbreviation();
     }
@@ -72,5 +72,11 @@ public class TenantPo extends TenantDefinition {
     @Column(unique = true,updatable = false,columnDefinition = "bigint COMMENT '租户编码'")
     public Long getTenantNumber() {
         return super.getTenantNumber();
+    }
+
+    @Override
+    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '数字大屏名称-不能为空'")
+    public String getBigScreenName() {
+        return super.getBigScreenName();
     }
 }

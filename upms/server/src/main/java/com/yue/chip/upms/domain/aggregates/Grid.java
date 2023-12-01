@@ -44,10 +44,13 @@ public class Grid extends GridDefinition {
     private User user;
 
     public User getUser() {
+        if (Objects.nonNull(user)) {
+            return this.user;
+        }
         if (Objects.isNull(getId())) {
             return null;
         }
         Optional<User> optional = upmsRepository.findUserByGridId(getId());
-        return optional.isPresent()?optional.get():null;
+        return optional.isPresent()?optional.get():User.builder().build();
     }
 }

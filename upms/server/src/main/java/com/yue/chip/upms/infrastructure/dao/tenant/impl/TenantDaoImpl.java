@@ -123,5 +123,46 @@ public class TenantDaoImpl implements TenantDaoEx {
         return result;
     }
 
+    @Override
+    public Optional<TenantPo> findTenantByTenantNumber(Long tenantNumber) {
+        TenantPo result = baseDao.getSession().doReturningWork(
+                new ReturningWork<TenantPo>() {
+                    @Override
+                    public TenantPo execute(java.sql.Connection connection) throws SQLException {
+                        Statement stat =  connection.createStatement();
+                        stat.execute("use upms");
+                        QueryRunner queryRunner = new QueryRunner();
+                        String sql = "select * from t_tenant where tenant_number = ?";
+                        Object[] params = new Object[]{tenantNumber};
+                        if (Objects.isNull(tenantNumber)) {
+                            sql = "select * from t_tenant where tenant_number is null ";
+                            params = new Object[]{};
+                        }
+                        TenantPo tenantPo = queryRunner.query(connection,sql , new ResultSetHandler<TenantPo>() {
+                            @Override
+                            public TenantPo handle(ResultSet rs) throws SQLException {
+                                while (rs.next()) {
+                                    return  TenantPo.builder()
+                                            .manager(Objects.nonNull(rs.getObject("manager"))?rs.getString("manager"):null)
+                                            .id(rs.getLong("id"))
+                                            .isDefault(Objects.nonNull(rs.getObject("is_default"))?rs.getBoolean("is_default"):null)
+                                            .abbreviation(Objects.nonNull(rs.getObject("abbreviation"))?rs.getString("abbreviation"):null)
+                                            .domain(Objects.nonNull(rs.getObject("domain"))?rs.getString("domain"):null)
+                                            .phoneNumber(Objects.nonNull(rs.getObject("phone_number"))?rs.getString("phone_number"):null)
+                                            .name(Objects.nonNull(rs.getObject("name"))?rs.getString("name"):null)
+                                            .tenantNumber(Objects.nonNull(rs.getObject("tenant_number"))?rs.getLong("tenant_number"):null)
+                                            .bigScreenName(Objects.nonNull(rs.getObject("big_screen_name"))?rs.getString("big_screen_name"):null)
+                                            .build();
+                                }
+                                return null;
+                            }
+                        }, params);
+                        stat.close();
+                        return tenantPo;
+                    }
+                });
+        return Optional.ofNullable(result);
+    }
+
 
 }

@@ -90,8 +90,11 @@ public class TenantConsoleController {
     @GetMapping("/details")
     @Operation(description = "租户-租户详情",summary = "租户-租户详情")
     public IResultData<TenantVo> details(@Parameter(description = "修改需要传id，新增则不需要传",name = "id") @NotNull(message = "id不能为空")Long id) {
-        Optional<TenantVo> optional = tenantRepository.tenantDetails(id);
-        return ResultData.builder().data(optional.isEmpty()?null:optional.get()).build();
+        Optional<Tenant> optional = tenantRepository.tenantDetails(id);
+        if (optional.isPresent()) {
+           return ResultData.builder().data(optional.isEmpty()?null:tenantMapper.toTenantVo(optional.get())).build();
+        }
+        return ResultData.builder().build();
     }
 
     @Operation(description = "租户-判断租户名称是否存在",summary = "租户-判断租户名称是否存在")

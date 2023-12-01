@@ -78,6 +78,15 @@ public class TenantRepositoryImpl implements TenantRepository {
     }
 
     @Override
+    public Optional<Tenant> findTenantByTenantNumber(Long tenantNumber) {
+        Optional<TenantPo> optional = tenantDao.findTenantByTenantNumber(tenantNumber);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(tenantMapper.toTenant(optional.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public List<Tenant> findAllTenant(State state) {
         List<TenantPo> list = tenantDao.findAllByState(state);
         return tenantMapper.toTenant(list);
@@ -113,10 +122,10 @@ public class TenantRepositoryImpl implements TenantRepository {
     }
 
     @Override
-    public Optional<TenantVo> tenantDetails(Long id) {
+    public Optional<Tenant> tenantDetails(Long id) {
         Optional<TenantPo> optional = tenantDao.findById(id);
         if (optional.isPresent()) {
-            return Optional.ofNullable(tenantMapper.toTenantVo(optional.get()));
+            return Optional.ofNullable(tenantMapper.toTenant(optional.get()));
         }
         return Optional.empty();
     }

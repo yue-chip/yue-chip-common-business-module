@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -49,5 +50,12 @@ public interface TenantDaoEx {
      * @return
      */
     public List<TenantPo> findAllByState(@NotNull State state);
+
+    /**
+     * 根据租户编码获取租户
+     * @param tenantNumber
+     * @return
+     */
+    Optional<TenantPo> findTenantByTenantNumber(Long tenantNumber);
 
 }

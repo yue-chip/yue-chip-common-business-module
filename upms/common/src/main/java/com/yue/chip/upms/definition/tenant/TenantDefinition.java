@@ -43,4 +43,7 @@ public class TenantDefinition extends BaseDefinition {
 
     @Schema(description = "租户编码")
     private Long tenantNumber;
+
+    @Schema(description = "数字大屏名称")
+    private String bigScreenName;
 }
