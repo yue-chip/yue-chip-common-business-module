@@ -28,7 +28,7 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @param id
      * @return
      */
-    @Cacheable(value = User.CACHE_KEY,key = "#id")
+//    @Cacheable(value = User.CACHE_KEY,key = "#id")
     public Optional<UserPo> findFirstById(@NotNull Long id);
 
     /**
