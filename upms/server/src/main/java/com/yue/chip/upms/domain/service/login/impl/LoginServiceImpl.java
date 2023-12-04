@@ -63,7 +63,7 @@ public class LoginServiceImpl implements LoginService {
         checkTenantState();
         Optional<User> optional = upmsRepository.findUserByUsername(username);
         if (optional.isEmpty()) {
-            BusinessException.throwException("该账号不存在");
+            throw new AuthenticationServiceException("该账号不存在");
         }
         User user = optional.get();
         if (!passwordEncoder.matches(password,user.getPassword()) ) {
@@ -75,12 +75,8 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public String login1(String phoneNumber, String openId) {
         Optional<UserWeixin> optional;
-        if (!StringUtils.hasText(phoneNumber)){
-            optional = userWeiXinRepository.findByOpenId(openId);
-            if (optional.isEmpty()) {
-                throw new AuthenticationServiceException("用户鉴权失败！请输入手机号码");
-            }
-        }else {
+        optional = userWeiXinRepository.findByOpenId(openId);
+        if (optional.isEmpty() && StringUtils.hasText(phoneNumber)) {
             UserWeiXinPo userWeiXinPo = userWeiXinRepository.saveUserWeiXin(
                     UserWeiXinPo.builder()
                             .openId(openId)
