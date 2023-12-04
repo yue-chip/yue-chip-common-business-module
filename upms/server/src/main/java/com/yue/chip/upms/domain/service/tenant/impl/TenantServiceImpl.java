@@ -4,14 +4,11 @@ import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.tenant.TenantConstant;
 import com.yue.chip.core.tenant.TenantUtil;
-import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.upms.domain.service.tenant.CreateSql;
 import com.yue.chip.upms.domain.service.tenant.TenantService;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDao;
-import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
-import com.yue.chip.utils.AssertUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +24,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Mr.Liu
@@ -127,25 +123,12 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Boolean checkDomainIsExist(Long id, String domain) {
-        AssertUtil.hasText(domain,"登录域不能为空");
-        List<TenantPo> list = tenantDao.findAll();
-        list.forEach(tenantPo -> {
-            String domain1 = tenantPo.getDomain();
-            if (StringUtils.hasText(domain1)) {
-                String[] strs = domain1.split(",");
-                for (String str : strs) {
-                    if (Objects.equals(domain,str)) {
-                        if (Objects.nonNull(id) && !Objects.equals(id,tenantPo.getId())) {
-                            BusinessException.throwException("该登录域已存在");
-                        }else {
-                            BusinessException.throwException("该登录域已存在");
-                        }
-                    }
-                }
-            }
-        });
-        return false;
+    public Boolean checkDomainIsExist(Long updateId, String domain) {
+        Boolean domainIsExist = Tenant.builder()
+                .id(updateId)
+                .domain(domain).build()
+                .checkDomainIsExist(updateId);
+        return domainIsExist;
     }
 
     private void createTenantTable(@NotNull Connection connection,@NotNull Long tenantNumber) throws SQLException {

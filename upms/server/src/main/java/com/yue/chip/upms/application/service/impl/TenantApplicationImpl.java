@@ -10,6 +10,7 @@ import com.yue.chip.upms.domain.service.tenant.TenantService;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantAddDTO;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantUpdateDTO;
+import com.yue.chip.utils.AssertUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
@@ -49,11 +50,9 @@ public class TenantApplicationImpl implements TenantApplication {
     @Transactional(rollbackFor = {Exception.class})
     public TenantPo save(TenantAddDTO tenantAddDTO) {
         //判断租户名称时候存在
-        if (Tenant.builder().name(tenantAddDTO.getName()).build().checkNameIsExist()) {
-            BusinessException.throwException("该租户名称已存在");
-        }
+        AssertUtil.isTrue(Tenant.builder().name(tenantAddDTO.getName()).build().checkNameIsExist(),"该租户名称已存在");
         //判断租户登录域存不存在
-        tenantService.checkDomainIsExist(null, tenantAddDTO.getDomain());
+        AssertUtil.isTrue(tenantService.checkDomainIsExist(null, tenantAddDTO.getDomain()),"该登录域已存在");
         //保存租户
         TenantPo tenantPo = tenantMapper.toTenantPo(tenantAddDTO);
         tenantPo.setState(State.NORMAL);
@@ -74,15 +73,9 @@ public class TenantApplicationImpl implements TenantApplication {
     @Override
     public void update(TenantUpdateDTO tenantUpdateDTO) {
         //判断租户名称时候存在
-        Tenant tenant = Tenant.builder()
-                .name(tenantUpdateDTO.getName())
-                .id(tenantUpdateDTO.getId())
-                .build();
-        if (tenant.checkNameIsExist()) {
-            BusinessException.throwException("该租户名称已存在");
-        }
+        AssertUtil.isTrue(Tenant.builder().id(tenantUpdateDTO.getId()).name(tenantUpdateDTO.getName()).build().checkNameIsExist(),"该租户名称已存在");
         //判断租户登录域存不存在
-        tenantService.checkDomainIsExist(tenantUpdateDTO.getId(), tenantUpdateDTO.getDomain());
+        AssertUtil.isTrue(tenantService.checkDomainIsExist(tenantUpdateDTO.getId(), tenantUpdateDTO.getDomain()),"该登录域已存在");
         //更新租户
         tenantRepository.updateTenant(tenantMapper.toTenantPo(tenantUpdateDTO));
     }

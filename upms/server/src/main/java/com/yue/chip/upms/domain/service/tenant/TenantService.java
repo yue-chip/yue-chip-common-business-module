@@ -38,9 +38,9 @@ public interface TenantService {
     /**
      * 判断租户登录域是否存在
      *
-     * @param id
+     * @param updateId
      * @param domain
      * @return
      */
-    public Boolean checkDomainIsExist(Long id,@NotBlank String domain);
+    public Boolean checkDomainIsExist(Long updateId, @NotBlank String domain);
 }

@@ -129,7 +129,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
     }
 
     @Override
-    @GlobalTransactional(rollbackFor = {Exception.class})
+//    @GlobalTransactional(rollbackFor = {Exception.class})
+    @Transactional(rollbackFor = {Exception.class})
     public void saveUser(@NotNull UserAddOrUpdateDto userAddOrUpdateDto) {
         //检查用户是否存在
         User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
@@ -143,7 +144,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
     }
 
     @Override
-    @GlobalTransactional(rollbackFor = {Exception.class})
+//    @GlobalTransactional(rollbackFor = {Exception.class})
+    @Transactional(rollbackFor = {Exception.class})
     public void updateUser(UserAddOrUpdateDto userAddOrUpdateDto) {
         //更新头像
         if (Objects.nonNull(userAddOrUpdateDto.getProfilePhotoId())) {

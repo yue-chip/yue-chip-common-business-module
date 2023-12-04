@@ -115,4 +115,10 @@ public interface TenantRepository {
      * @return
      */
     public Optional<Tenant> tenantDetails(@NotNull Long id);
+
+    /**
+     * 获取所有租户
+     * @return
+     */
+    public List<Tenant> findAll();
 }

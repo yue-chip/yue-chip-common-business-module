@@ -129,4 +129,10 @@ public class TenantRepositoryImpl implements TenantRepository {
         }
         return Optional.empty();
     }
+
+    @Override
+    public List<Tenant> findAll() {
+        List<TenantPo> list  = tenantDao.findAll();
+        return tenantMapper.toTenant(list);
+    }
 }
