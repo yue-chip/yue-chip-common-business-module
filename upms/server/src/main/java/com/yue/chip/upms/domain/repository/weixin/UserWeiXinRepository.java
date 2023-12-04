@@ -41,4 +41,12 @@ public interface UserWeiXinRepository {
      * @return
      */
     public void updateUserWeiXin(@NotNull UserWeiXinPo userWeiXinPo);
+
+    /**
+     * 根据id获取微信用户
+     * @param id
+     * @param tenantNumber
+     * @return
+     */
+    Optional<UserWeixin> findById(@NotNull Long id, @NotNull Long tenantNumber);
 }

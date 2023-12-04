@@ -56,4 +56,13 @@ public class UserWeiXinRepositoryImpl implements UserWeiXinRepository {
     public void updateUserWeiXin(UserWeiXinPo userWeiXinPo) {
         userWeiXinDao.update(userWeiXinPo);
     }
+
+    @Override
+    public Optional<UserWeixin> findById(Long id, Long tenantNumber) {
+        Optional<UserWeiXinPo> optional = userWeiXinDao.findById(id,tenantNumber);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(userWeiXinMapper.toUserWeiXin(optional.get()));
+        }
+        return Optional.empty();
+    }
 }

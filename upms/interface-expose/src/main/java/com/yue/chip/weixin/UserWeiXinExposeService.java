@@ -8,8 +8,10 @@ public interface UserWeiXinExposeService {
 
     /**
      * 根据id查寻微信用户
+     *
      * @param id
+     * @param tenantNumber
      * @return
      */
-    Optional<UserWeiXinExposeVo> findById(@NotNull Long id);
+    Optional<UserWeiXinExposeVo> findById(@NotNull Long id,@NotNull Long tenantNumber);
 }
