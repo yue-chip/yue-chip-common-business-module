@@ -2,7 +2,7 @@ package com.yue.chip.upms;
 
 import com.yue.chip.core.Optional;
 import com.yue.chip.core.YueChipPage;
-import com.yue.chip.upms.vo.GridExposeVo;
+import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
@@ -117,12 +117,5 @@ public interface UpmsExposeService {
      * @return
      */
     List<OrganizationalUserExposeVo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId);
-
-    /**
-     * 根据网格名称模糊查询网格信息
-     * @param name
-     * @return
-     */
-    List<GridExposeVo> findGridByName(String name);
 
 }

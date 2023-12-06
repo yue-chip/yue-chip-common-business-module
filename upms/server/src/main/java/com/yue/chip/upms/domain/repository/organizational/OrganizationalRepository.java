@@ -9,8 +9,6 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
-import com.yue.chip.upms.vo.GridExposeVo;
-import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -177,6 +175,17 @@ public interface OrganizationalRepository {
      * @return
      */
     Page<GridVo> listGrid(@NotNull Long organizationalId, String name, String userName, YueChipPage yueChipPage);
+
+    /**
+     * 分页列表
+     *
+     * @param organizationalIds
+     * @param name
+     * @param userName
+     * @param yueChipPage
+     * @return
+     */
+    Page<Grid> listGridQuery(@NotNull Set<Long> organizationalIds, String name, String userName, YueChipPage yueChipPage);
 
     /**
      * 根据机构id查寻网格

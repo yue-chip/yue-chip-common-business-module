@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Mr.Liu
@@ -31,6 +32,26 @@ public class GridDaoImpl implements GridDaoEx {
         if (Objects.nonNull(organizationalId)) {
             sql.append(" and g.organizationalId = :organizationalId ");
             para.put("organizationalId",organizationalId);
+        }
+        if (StringUtils.hasText(name)) {
+            sql.append(" and g.name like :name ");
+            para.put("name","%"+name+"%");
+        }
+        if (StringUtils.hasText(userName)) {
+            sql.append(" and u.name like :userName ");
+            para.put("userName","%"+userName+"%");
+        }
+        return (Page<GridPo>) baseDao.findNavigator(yueChipPage,sql.toString(),para);
+    }
+
+    @Override
+    public Page<GridPo> listGridQuery(Set<Long> organizationalIds, String name, String userName, YueChipPage yueChipPage) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("select g from GridPo g join UserPo u on g.userId = u.id where 1=1 ");
+        Map<String,Object> para = new HashMap<>();
+        if (Objects.nonNull(organizationalIds)) {
+            sql.append(" and g.organizationalId in :organizationalIds ");
+            para.put("organizationalIds",organizationalIds);
         }
         if (StringUtils.hasText(name)) {
             sql.append(" and g.name like :name ");

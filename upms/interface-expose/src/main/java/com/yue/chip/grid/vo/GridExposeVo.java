@@ -1,6 +1,7 @@
-package com.yue.chip.upms.vo;
+package com.yue.chip.grid.vo;
 
 import com.yue.chip.upms.definition.organizational.GridDefinition;
+import com.yue.chip.upms.vo.UserExposeVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

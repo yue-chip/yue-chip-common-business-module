@@ -13,7 +13,7 @@ import com.yue.chip.upms.domain.repository.organizational.OrganizationalReposito
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
-import com.yue.chip.upms.vo.GridExposeVo;
+import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
@@ -197,9 +197,4 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         return organizationalUserMapper.toListOrganizationalUserExposeVo(list);
     }
 
-    @Override
-    public List<GridExposeVo> findGridByName(String name) {
-        List<Grid> list = organizationalRepository.findGridByName(name);
-        return gridMapper.toGridExposeVo(list);
-    }
 }

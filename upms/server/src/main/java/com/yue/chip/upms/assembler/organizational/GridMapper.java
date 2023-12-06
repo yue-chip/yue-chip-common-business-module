@@ -5,10 +5,8 @@ import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.interfaces.dto.organizational.GridAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.GridUpdateDto;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
-import com.yue.chip.upms.vo.GridExposeVo;
+import com.yue.chip.grid.vo.GridExposeVo;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 

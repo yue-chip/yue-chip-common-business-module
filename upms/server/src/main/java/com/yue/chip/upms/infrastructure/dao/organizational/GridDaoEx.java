@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 
+import java.util.Set;
+
 /**
  * @author Mr.Liu
  * @description: TODO
@@ -23,4 +25,14 @@ public interface GridDaoEx {
      * @return
      */
     public Page<GridPo> List(@NotNull Long organizationalId,@NotBlank String name, @NotBlank String userName, @NotNull YueChipPage yueChipPage);
+    /**
+     * 列表
+     *
+     * @param organizationalIds
+     * @param name
+     * @param userName
+     * @param yueChipPage
+     * @return
+     */
+    public Page<GridPo> listGridQuery(@NotNull Set<Long> organizationalIds, @NotBlank String name, @NotBlank String userName, @NotNull YueChipPage yueChipPage);
 }

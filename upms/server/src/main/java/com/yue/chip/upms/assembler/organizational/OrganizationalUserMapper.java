@@ -1,8 +1,6 @@
 package com.yue.chip.upms.assembler.organizational;
 
-import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
-import com.yue.chip.upms.vo.GridExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
