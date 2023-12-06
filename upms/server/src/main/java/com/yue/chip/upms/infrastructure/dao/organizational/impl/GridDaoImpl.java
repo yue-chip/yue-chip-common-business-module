@@ -45,7 +45,7 @@ public class GridDaoImpl implements GridDaoEx {
     }
 
     @Override
-    public Page<GridPo> listGridQuery(Set<Long> organizationalIds, String name, String userName, YueChipPage yueChipPage) {
+    public Page<GridPo> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage) {
         StringBuffer sql = new StringBuffer();
         sql.append("select g from GridPo g join UserPo u on g.userId = u.id where 1=1 ");
         Map<String,Object> para = new HashMap<>();
@@ -56,10 +56,6 @@ public class GridDaoImpl implements GridDaoEx {
         if (StringUtils.hasText(name)) {
             sql.append(" and g.name like :name ");
             para.put("name","%"+name+"%");
-        }
-        if (StringUtils.hasText(userName)) {
-            sql.append(" and u.name like :userName ");
-            para.put("userName","%"+userName+"%");
         }
         return (Page<GridPo>) baseDao.findNavigator(yueChipPage,sql.toString(),para);
     }

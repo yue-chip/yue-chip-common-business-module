@@ -38,8 +38,8 @@ public class GridExposeServiceImpl implements GridExposeService {
     }
 
     @Override
-    public Page<GridExposeVo> listGridQuery(Set<Long> organizationalIds, String name, String userName, YueChipPage yueChipPage) {
-        Page<Grid> page = organizationalRepository.listGridQuery(organizationalIds, name, userName, yueChipPage);
+    public Page<GridExposeVo> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage) {
+        Page<Grid> page = organizationalRepository.listGridQuery(organizationalIds, name, yueChipPage);
         return new PageImpl<GridExposeVo>(gridMapper.toGridExposeVo(page.getContent()),page.getPageable(),page.getTotalElements());
     }
 }

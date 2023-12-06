@@ -26,13 +26,12 @@ public interface GridDaoEx {
      */
     public Page<GridPo> List(@NotNull Long organizationalId,@NotBlank String name, @NotBlank String userName, @NotNull YueChipPage yueChipPage);
     /**
-     * 列表
+     * 网格分页列表
      *
      * @param organizationalIds
      * @param name
-     * @param userName
      * @param yueChipPage
      * @return
      */
-    public Page<GridPo> listGridQuery(@NotNull Set<Long> organizationalIds, @NotBlank String name, @NotBlank String userName, @NotNull YueChipPage yueChipPage);
+    public Page<GridPo> listGridQuery(@NotNull Set<Long> organizationalIds, String name, YueChipPage yueChipPage);
 }
