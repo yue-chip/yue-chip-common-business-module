@@ -258,6 +258,12 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
+    public List<OrganizationalUserPo> findUserAllByUserIdIn(Set<Long> userId) {
+        List<OrganizationalUserPo> organizationalUserPoList = organizationalUserDao.findAllByUserIdIn(userId);
+        return organizationalUserPoList;
+    }
+
+    @Override
     public List<Grid> findGridByName(String name) {
         List<GridPo> list = gridDao.findAllByNameLike(name);
         return gridMapper.toGrid(list);
