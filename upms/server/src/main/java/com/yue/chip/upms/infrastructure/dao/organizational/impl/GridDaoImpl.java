@@ -7,6 +7,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public class GridDaoImpl implements GridDaoEx {
     }
 
     @Override
-    public Page<GridPo> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage) {
+    public Page<GridPo> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds) {
         StringBuffer sql = new StringBuffer();
         sql.append("select g from GridPo g join UserPo u on g.userId = u.id where 1=1 ");
         Map<String,Object> para = new HashMap<>();
@@ -56,6 +57,10 @@ public class GridDaoImpl implements GridDaoEx {
         if (StringUtils.hasText(name)) {
             sql.append(" and g.name like :name ");
             para.put("name","%"+name+"%");
+        }
+        if (!CollectionUtils.isEmpty(userIds)) {
+            sql.append(" and g.userId in :userIds ");
+            para.put("userIds",userIds);
         }
         return (Page<GridPo>) baseDao.findNavigator(yueChipPage,sql.toString(),para);
     }

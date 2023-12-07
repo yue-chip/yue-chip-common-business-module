@@ -27,5 +27,5 @@ public interface GridExposeService {
      * @return
      */
 
-    Page<GridExposeVo> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage);
+    Page<GridExposeVo> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds);
 }

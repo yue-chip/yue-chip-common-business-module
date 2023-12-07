@@ -184,7 +184,7 @@ public interface OrganizationalRepository {
      * @param yueChipPage
      * @return
      */
-    Page<Grid> listGridQuery(@NotNull Set<Long> organizationalIds, String name, YueChipPage yueChipPage);
+    Page<Grid> listGridQuery(@NotNull Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds);
 
     /**
      * 根据机构id查寻网格

@@ -33,5 +33,5 @@ public interface GridDaoEx {
      * @param yueChipPage
      * @return
      */
-    public Page<GridPo> listGridQuery(@NotNull Set<Long> organizationalIds, String name, YueChipPage yueChipPage);
+    public Page<GridPo> listGridQuery(@NotNull Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds);
 }
