@@ -95,7 +95,7 @@ public class TenantDaoImpl implements TenantDaoEx {
                 @Override
                 public List<TenantPo> execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
-                    stat.execute("use upms");
+                    stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(null)));
                     QueryRunner queryRunner = new QueryRunner();
                     List<TenantPo> list = queryRunner.query(connection, "select * from t_tenant where state = ?  ", new ResultSetHandler<List<TenantPo>>() {
                         @Override
@@ -130,7 +130,7 @@ public class TenantDaoImpl implements TenantDaoEx {
                     @Override
                     public TenantPo execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        stat.execute("use upms");
+                        stat.execute(" use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
                         QueryRunner queryRunner = new QueryRunner();
                         String sql = "select * from t_tenant where tenant_number = ?";
                         Object[] params = new Object[]{tenantNumber};

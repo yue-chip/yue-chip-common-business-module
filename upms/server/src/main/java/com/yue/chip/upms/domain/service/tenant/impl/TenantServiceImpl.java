@@ -13,6 +13,7 @@ import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.jdbc.ReturningWork;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Mr.Liu
@@ -48,6 +50,9 @@ public class TenantServiceImpl implements TenantService {
 
     @Resource
     private RedisTemplate redisTemplate;
+
+    @Value("${spring.jpa.hibernate.multiTenant.enable:false}")
+    private String multiTenantEnabled;
 
     @Override
     public void createTenantDatabase(Long tenantNumber) {
@@ -116,6 +121,9 @@ public class TenantServiceImpl implements TenantService {
     @Override
     @Scheduled(cron = "0 0/1 * * * ?")
     public void saveAllToRedis() {
+        if (!Objects.equals(multiTenantEnabled,"enabled")) {
+            return;
+        }
         List<Tenant> list = tenantRepository.findAllTenant(State.NORMAL);
         list.forEach(tenant -> {
             saveToRedis(tenant);
