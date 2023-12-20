@@ -233,8 +233,8 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public Page<Grid> listGridQuery(Set<Long> organizationalIds, String name, String userName, YueChipPage yueChipPage) {
-        Page<GridPo> page = gridDao.listGridQuery(organizationalIds,name,userName,yueChipPage);
+    public Page<Grid> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds) {
+        Page<GridPo> page = gridDao.listGridQuery(organizationalIds,name,yueChipPage, userIds);
         List<Grid> list = gridMapper.toGrid(page.getContent());
         return new PageImpl<Grid>(list,page.getPageable(),page.getTotalElements());
     }
@@ -254,6 +254,12 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     @Override
     public List<OrganizationalUserPo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId) {
         List<OrganizationalUserPo> organizationalUserPoList = organizationalUserDao.findAllByOrganizationalIdAndUserIdIn(organizationalId, userId);
+        return organizationalUserPoList;
+    }
+
+    @Override
+    public List<OrganizationalUserPo> findUserAllByUserIdIn(Set<Long> userId) {
+        List<OrganizationalUserPo> organizationalUserPoList = organizationalUserDao.findAllByUserIdIn(userId);
         return organizationalUserPoList;
     }
 

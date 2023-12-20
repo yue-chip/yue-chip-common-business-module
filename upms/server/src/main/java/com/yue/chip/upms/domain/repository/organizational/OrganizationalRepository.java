@@ -181,11 +181,10 @@ public interface OrganizationalRepository {
      *
      * @param organizationalIds
      * @param name
-     * @param userName
      * @param yueChipPage
      * @return
      */
-    Page<Grid> listGridQuery(@NotNull Set<Long> organizationalIds, String name, String userName, YueChipPage yueChipPage);
+    Page<Grid> listGridQuery(@NotNull Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds);
 
     /**
      * 根据机构id查寻网格
@@ -208,6 +207,12 @@ public interface OrganizationalRepository {
      * @return
      */
     List<OrganizationalUserPo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId);
+    /**
+     * 根据用户id查询机构
+     * @param userId
+     * @return
+     */
+    List<OrganizationalUserPo> findUserAllByUserIdIn(Set<Long> userId);
 
     /**
      * 通过名称查询网格

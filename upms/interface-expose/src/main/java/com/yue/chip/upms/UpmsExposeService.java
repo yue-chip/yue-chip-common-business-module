@@ -118,4 +118,11 @@ public interface UpmsExposeService {
      */
     List<OrganizationalUserExposeVo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId);
 
+    /**
+     * 根据用户id查询机构
+     * @param userId
+     * @return
+     */
+    List<OrganizationalUserExposeVo> findUserAllByUserIdIn(Set<Long> userId);
+
 }

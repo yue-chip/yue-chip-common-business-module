@@ -197,4 +197,10 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         return organizationalUserMapper.toListOrganizationalUserExposeVo(list);
     }
 
+    @Override
+    public List<OrganizationalUserExposeVo> findUserAllByUserIdIn(Set<Long> userId) {
+        List<OrganizationalUserPo> list = organizationalRepository.findUserAllByUserIdIn(userId);
+        return organizationalUserMapper.toListOrganizationalUserExposeVo(list);
+    }
+
 }
