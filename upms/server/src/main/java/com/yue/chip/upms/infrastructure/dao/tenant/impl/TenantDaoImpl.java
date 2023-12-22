@@ -5,17 +5,12 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDaoEx;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
-import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -65,7 +60,7 @@ public class TenantDaoImpl implements TenantDaoEx {
                 @Override
                 public Boolean execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
-                    stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
+                    stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
                     stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
                     stat.close();
                     return true;
@@ -80,7 +75,7 @@ public class TenantDaoImpl implements TenantDaoEx {
                     @Override
                     public Boolean execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
+                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
                         stat.executeUpdate("insert t_tenant_state (state) values("+state.getKey()+")");
                         stat.close();
                         return true;
@@ -95,7 +90,7 @@ public class TenantDaoImpl implements TenantDaoEx {
                 @Override
                 public List<TenantPo> execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
-                    stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(null)));
+                    stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(null)).concat("`"));
                     PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_tenant where state = ?");
                     prepareStatement.setInt(1,state.getKey());
                     ResultSet resultSet = prepareStatement.executeQuery();
@@ -112,8 +107,9 @@ public class TenantDaoImpl implements TenantDaoEx {
                                 .tenantNumber(Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null)
                                 .build());
                     }
-                    stat.close();
+                    resultSet.close();
                     prepareStatement.close();
+                    stat.close();
                     return list;
                 }
             });
@@ -154,8 +150,9 @@ public class TenantDaoImpl implements TenantDaoEx {
                                     .bigScreenName(Objects.nonNull(resultSet.getObject("big_screen_name"))?resultSet.getString("big_screen_name"):null)
                                     .build();
                         }
-                        stat.close();
+                        resultSet.close();
                         prepareStatement.close();
+                        stat.close();
                         return tenantPo;
                     }
                 });

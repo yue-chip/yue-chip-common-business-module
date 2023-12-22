@@ -2,16 +2,10 @@ package com.yue.chip.upms.infrastructure.dao.weixin.impl;
 
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDaoEx;
-import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
-import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
 import org.hibernate.jdbc.ReturningWork;
 
 import java.sql.PreparedStatement;
@@ -34,7 +28,7 @@ public class UserWeiXinDaoImpl implements UserWeiXinDaoEx {
                     @Override
                     public Optional<UserWeiXinPo> execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
+                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
                         PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_user_weixin where id = ?");
                         prepareStatement.setLong(1,id);
                         ResultSet resultSet = prepareStatement.executeQuery();
@@ -47,8 +41,9 @@ public class UserWeiXinDaoImpl implements UserWeiXinDaoEx {
                                     .phoneNumber(Objects.nonNull(resultSet.getObject("phone_number"))?resultSet.getString("phone_number"):null)
                                     .build();
                         }
-                        stat.close();
+                        resultSet.close();
                         prepareStatement.close();
+                        stat.close();
                         return Optional.ofNullable(userWeiXinPo);
                     }
                 });

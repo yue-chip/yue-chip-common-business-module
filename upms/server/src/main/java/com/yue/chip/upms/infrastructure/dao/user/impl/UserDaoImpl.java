@@ -142,7 +142,7 @@ public class UserDaoImpl implements UserDaoEx {
                     @Override
                     public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
+                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
 
                         PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_user where id = ?");
                         if (Objects.nonNull(tenantNumber)) {
@@ -159,8 +159,9 @@ public class UserDaoImpl implements UserDaoEx {
                                     .phoneNumber(resultSet.getString("phone_number"))
                                     .build();
                         }
-                        stat.close();
+                        resultSet.close();
                         prepareStatement.close();
+                        stat.close();
                         return Optional.ofNullable(userPo);
                     }
                 });
@@ -175,7 +176,7 @@ public class UserDaoImpl implements UserDaoEx {
                 @Override
                 public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
-                    stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
+                    stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
 
                     PreparedStatement prepareStatement =  connection.prepareStatement("select u.* from t_user u join t_grid g on u.id = g.user_id where g.id = ?");
                     if (Objects.nonNull(tenantNumber)) {
@@ -192,8 +193,9 @@ public class UserDaoImpl implements UserDaoEx {
                                 .phoneNumber(resultSet.getString("phone_number"))
                                 .build();
                     }
-                    stat.close();
+                    resultSet.close();
                     prepareStatement.close();
+                    stat.close();
                     return Optional.ofNullable(userPo);
                 }
             });

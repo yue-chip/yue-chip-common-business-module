@@ -33,7 +33,7 @@ public class CreateSql {
         String newDateBase = database.concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber));
         StringBuffer sqlBuffer = new StringBuffer();
         sqlBuffer.append("");
-        sqlBuffer.append("USE " + newDateBase + ";\n");
+        sqlBuffer.append("USE `" + newDateBase + "`;\n");
         stat.execute(sqlBuffer.toString());
         sqlBuffer.delete(0,sqlBuffer.length());
         sqlBuffer.append("SET NAMES utf8mb4;\n");
