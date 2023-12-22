@@ -145,9 +145,7 @@ public class UserDaoImpl implements UserDaoEx {
                         stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
 
                         PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_user where id = ?");
-                        if (Objects.nonNull(tenantNumber)) {
-                            prepareStatement.setLong(1,id);
-                        }
+                        prepareStatement.setLong(1,id);
                         ResultSet resultSet = prepareStatement.executeQuery();
                         UserPo userPo = null;
                         while (resultSet.next()) {
@@ -179,9 +177,7 @@ public class UserDaoImpl implements UserDaoEx {
                     stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
 
                     PreparedStatement prepareStatement =  connection.prepareStatement("select u.* from t_user u join t_grid g on u.id = g.user_id where g.id = ?");
-                    if (Objects.nonNull(tenantNumber)) {
-                        prepareStatement.setLong(1,id);
-                    }
+                    prepareStatement.setLong(1,id);
                     ResultSet resultSet = prepareStatement.executeQuery();
                     UserPo userPo = null;
                     while (resultSet.next()) {
