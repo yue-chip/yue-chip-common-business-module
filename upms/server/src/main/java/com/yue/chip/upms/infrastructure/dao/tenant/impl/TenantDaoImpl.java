@@ -5,6 +5,7 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDaoEx;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
 import org.apache.commons.dbutils.QueryRunner;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -63,8 +65,7 @@ public class TenantDaoImpl implements TenantDaoEx {
                 @Override
                 public Boolean execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
-                    String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
-                    stat.execute("use ".concat(dataBaseName));
+                    stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
                     stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
                     stat.close();
                     return true;
@@ -79,8 +80,7 @@ public class TenantDaoImpl implements TenantDaoEx {
                     @Override
                     public Boolean execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
-                        stat.execute("use ".concat(dataBaseName));
+                        stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
                         stat.executeUpdate("insert t_tenant_state (state) values("+state.getKey()+")");
                         stat.close();
                         return true;
@@ -96,27 +96,24 @@ public class TenantDaoImpl implements TenantDaoEx {
                 public List<TenantPo> execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
                     stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(null)));
-                    QueryRunner queryRunner = new QueryRunner();
-                    List<TenantPo> list = queryRunner.query(connection, "select * from t_tenant where state = ?  ", new ResultSetHandler<List<TenantPo>>() {
-                        @Override
-                        public List<TenantPo> handle(ResultSet rs) throws SQLException {
-                            List<TenantPo> tenantPoList = new ArrayList<>();
-                            while (rs.next()) {
-                                tenantPoList.add(TenantPo.builder()
-                                        .manager(Objects.nonNull(rs.getObject("manager"))?rs.getString("manager"):null)
-                                        .id(rs.getLong("id"))
-                                        .isDefault(Objects.nonNull(rs.getObject("is_default"))?rs.getBoolean("is_default"):null)
-                                        .abbreviation(Objects.nonNull(rs.getObject("abbreviation"))?rs.getString("abbreviation"):null)
-                                        .domain(Objects.nonNull(rs.getObject("domain"))?rs.getString("domain"):null)
-                                        .phoneNumber(Objects.nonNull(rs.getObject("phone_number"))?rs.getString("phone_number"):null)
-                                        .name(Objects.nonNull(rs.getObject("name"))?rs.getString("name"):null)
-                                        .tenantNumber(Objects.nonNull(rs.getObject("tenant_number"))?rs.getLong("tenant_number"):null)
-                                        .build());
-                            }
-                            return tenantPoList;
-                        }
-                    }, new Object[]{state.getKey()});
+                    PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_tenant where state = ?");
+                    prepareStatement.setInt(1,state.getKey());
+                    ResultSet resultSet = prepareStatement.executeQuery();
+                    List<TenantPo> list = new ArrayList<>();
+                    while (resultSet.next()) {
+                        list.add(TenantPo.builder()
+                                .manager(Objects.nonNull(resultSet.getObject("manager"))?resultSet.getString("manager"):null)
+                                .id(resultSet.getLong("id"))
+                                .isDefault(Objects.nonNull(resultSet.getObject("is_default"))?resultSet.getBoolean("is_default"):null)
+                                .abbreviation(Objects.nonNull(resultSet.getObject("abbreviation"))?resultSet.getString("abbreviation"):null)
+                                .domain(Objects.nonNull(resultSet.getObject("domain"))?resultSet.getString("domain"):null)
+                                .phoneNumber(Objects.nonNull(resultSet.getObject("phone_number"))?resultSet.getString("phone_number"):null)
+                                .name(Objects.nonNull(resultSet.getObject("name"))?resultSet.getString("name"):null)
+                                .tenantNumber(Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null)
+                                .build());
+                    }
                     stat.close();
+                    prepareStatement.close();
                     return list;
                 }
             });
@@ -131,33 +128,34 @@ public class TenantDaoImpl implements TenantDaoEx {
                     public TenantPo execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
                         stat.execute(" use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
-                        QueryRunner queryRunner = new QueryRunner();
                         String sql = "select * from t_tenant where tenant_number = ?";
                         Object[] params = new Object[]{tenantNumber};
                         if (Objects.isNull(tenantNumber)) {
                             sql = "select * from t_tenant where tenant_number is null ";
                             params = new Object[]{};
                         }
-                        TenantPo tenantPo = queryRunner.query(connection,sql , new ResultSetHandler<TenantPo>() {
-                            @Override
-                            public TenantPo handle(ResultSet rs) throws SQLException {
-                                while (rs.next()) {
-                                    return  TenantPo.builder()
-                                            .manager(Objects.nonNull(rs.getObject("manager"))?rs.getString("manager"):null)
-                                            .id(rs.getLong("id"))
-                                            .isDefault(Objects.nonNull(rs.getObject("is_default"))?rs.getBoolean("is_default"):null)
-                                            .abbreviation(Objects.nonNull(rs.getObject("abbreviation"))?rs.getString("abbreviation"):null)
-                                            .domain(Objects.nonNull(rs.getObject("domain"))?rs.getString("domain"):null)
-                                            .phoneNumber(Objects.nonNull(rs.getObject("phone_number"))?rs.getString("phone_number"):null)
-                                            .name(Objects.nonNull(rs.getObject("name"))?rs.getString("name"):null)
-                                            .tenantNumber(Objects.nonNull(rs.getObject("tenant_number"))?rs.getLong("tenant_number"):null)
-                                            .bigScreenName(Objects.nonNull(rs.getObject("big_screen_name"))?rs.getString("big_screen_name"):null)
-                                            .build();
-                                }
-                                return null;
-                            }
-                        }, params);
+
+                        PreparedStatement prepareStatement =  connection.prepareStatement(sql);
+                        if (Objects.nonNull(tenantNumber)) {
+                            prepareStatement.setLong(1,tenantNumber);
+                        }
+                        ResultSet resultSet = prepareStatement.executeQuery();
+                        TenantPo tenantPo = null;
+                        while (resultSet.next()) {
+                            tenantPo = TenantPo.builder()
+                                    .manager(Objects.nonNull(resultSet.getObject("manager"))?resultSet.getString("manager"):null)
+                                    .id(resultSet.getLong("id"))
+                                    .isDefault(Objects.nonNull(resultSet.getObject("is_default"))?resultSet.getBoolean("is_default"):null)
+                                    .abbreviation(Objects.nonNull(resultSet.getObject("abbreviation"))?resultSet.getString("abbreviation"):null)
+                                    .domain(Objects.nonNull(resultSet.getObject("domain"))?resultSet.getString("domain"):null)
+                                    .phoneNumber(Objects.nonNull(resultSet.getObject("phone_number"))?resultSet.getString("phone_number"):null)
+                                    .name(Objects.nonNull(resultSet.getObject("name"))?resultSet.getString("name"):null)
+                                    .tenantNumber(Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null)
+                                    .bigScreenName(Objects.nonNull(resultSet.getObject("big_screen_name"))?resultSet.getString("big_screen_name"):null)
+                                    .build();
+                        }
                         stat.close();
+                        prepareStatement.close();
                         return tenantPo;
                     }
                 });

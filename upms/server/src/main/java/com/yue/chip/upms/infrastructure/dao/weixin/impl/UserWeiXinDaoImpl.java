@@ -2,6 +2,7 @@ package com.yue.chip.upms.infrastructure.dao.weixin.impl;
 
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDaoEx;
+import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.utils.AssertUtil;
@@ -13,6 +14,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.hibernate.jdbc.ReturningWork;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -32,24 +34,21 @@ public class UserWeiXinDaoImpl implements UserWeiXinDaoEx {
                     @Override
                     public Optional<UserWeiXinPo> execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
-                        stat.execute("use ".concat(dataBaseName));
-                        QueryRunner queryRunner = new QueryRunner();
-                        UserWeiXinPo userWeiXinPo = queryRunner.query(connection, "select * from t_user_weixin where id = ?  ", new ResultSetHandler<UserWeiXinPo>() {
-                            @Override
-                            public UserWeiXinPo handle(ResultSet rs) throws SQLException {
-                                while (rs.next()) {
-                                    return UserWeiXinPo.builder()
-                                            .id(rs.getLong("id"))
-                                            .tenantNumber(Objects.nonNull(rs.getObject("tenant_number"))?rs.getLong("tenant_number"):null)
-                                            .openId(Objects.nonNull(rs.getObject("open_id"))?rs.getString("open_id"):null)
-                                            .phoneNumber(Objects.nonNull(rs.getObject("phone_number"))?rs.getString("phone_number"):null)
-                                            .build();
-                                }
-                                return null;
-                            }
-                        }, new Object[]{id});
+                        stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
+                        PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_user_weixin where id = ?");
+                        prepareStatement.setLong(1,id);
+                        ResultSet resultSet = prepareStatement.executeQuery();
+                        UserWeiXinPo userWeiXinPo = null;
+                        while (resultSet.next()) {
+                            userWeiXinPo = UserWeiXinPo.builder()
+                                    .id(resultSet.getLong("id"))
+                                    .tenantNumber(Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null)
+                                    .openId(Objects.nonNull(resultSet.getObject("open_id"))?resultSet.getString("open_id"):null)
+                                    .phoneNumber(Objects.nonNull(resultSet.getObject("phone_number"))?resultSet.getString("phone_number"):null)
+                                    .build();
+                        }
                         stat.close();
+                        prepareStatement.close();
                         return Optional.ofNullable(userWeiXinPo);
                     }
                 });

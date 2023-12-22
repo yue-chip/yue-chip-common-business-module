@@ -119,7 +119,7 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0/1 * * * * ?")
     public void saveAllToRedis() {
         if (!Objects.equals(multiTenantEnabled,"enabled")) {
             return;

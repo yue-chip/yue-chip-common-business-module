@@ -3,6 +3,7 @@ package com.yue.chip.upms.infrastructure.dao.user.impl;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
+import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -140,25 +142,25 @@ public class UserDaoImpl implements UserDaoEx {
                     @Override
                     public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
-                        stat.execute("use ".concat(dataBaseName));
-                        QueryRunner queryRunner = new QueryRunner();
-                        UserPo userPo = queryRunner.query(connection, "select * from t_user where id = ?  ", new ResultSetHandler<UserPo>() {
-                            @Override
-                            public UserPo handle(ResultSet rs) throws SQLException {
-                                while (rs.next()) {
-                                    return UserPo.builder()
-                                            .id(rs.getLong("id"))
-                                            .isSms(rs.getBoolean("is_sms"))
-                                            .isCall(rs.getBoolean("is_call"))
-                                            .name(rs.getString("name"))
-                                            .phoneNumber(rs.getString("phone_number"))
-                                            .build();
-                                }
-                                return null;
-                            }
-                        }, new Object[]{id});
+                        stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
+
+                        PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_user where id = ?");
+                        if (Objects.nonNull(tenantNumber)) {
+                            prepareStatement.setLong(1,id);
+                        }
+                        ResultSet resultSet = prepareStatement.executeQuery();
+                        UserPo userPo = null;
+                        while (resultSet.next()) {
+                            userPo = UserPo.builder()
+                                    .id(resultSet.getLong("id"))
+                                    .isSms(resultSet.getBoolean("is_sms"))
+                                    .isCall(resultSet.getBoolean("is_call"))
+                                    .name(resultSet.getString("name"))
+                                    .phoneNumber(resultSet.getString("phone_number"))
+                                    .build();
+                        }
                         stat.close();
+                        prepareStatement.close();
                         return Optional.ofNullable(userPo);
                     }
                 });
@@ -173,25 +175,25 @@ public class UserDaoImpl implements UserDaoEx {
                 @Override
                 public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
-                    String dataBaseName = TenantDatabaseUtil.tenantDatabaseName("upms",tenantNumber);
-                    stat.execute("use ".concat(dataBaseName));
-                    QueryRunner queryRunner = new QueryRunner();
-                    UserPo userPo = queryRunner.query(connection, "select u.* from t_user u join t_grid g on u.id = g.user_id where g.id = ?  ", new ResultSetHandler<UserPo>() {
-                        @Override
-                        public UserPo handle(ResultSet rs) throws SQLException {
-                            while (rs.next()) {
-                                return UserPo.builder()
-                                        .id(rs.getLong("id"))
-                                        .name(rs.getString("name"))
-                                        .isSms(rs.getBoolean("is_sms"))
-                                        .isCall(rs.getBoolean("is_call"))
-                                        .phoneNumber(rs.getString("phone_number"))
-                                        .build();
-                            }
-                            return null;
-                        }
-                    }, new Object[]{id});
+                    stat.execute("use ".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
+
+                    PreparedStatement prepareStatement =  connection.prepareStatement("select u.* from t_user u join t_grid g on u.id = g.user_id where g.id = ?");
+                    if (Objects.nonNull(tenantNumber)) {
+                        prepareStatement.setLong(1,id);
+                    }
+                    ResultSet resultSet = prepareStatement.executeQuery();
+                    UserPo userPo = null;
+                    while (resultSet.next()) {
+                        userPo = UserPo.builder()
+                                .id(resultSet.getLong("id"))
+                                .name(resultSet.getString("name"))
+                                .isSms(resultSet.getBoolean("is_sms"))
+                                .isCall(resultSet.getBoolean("is_call"))
+                                .phoneNumber(resultSet.getString("phone_number"))
+                                .build();
+                    }
                     stat.close();
+                    prepareStatement.close();
                     return Optional.ofNullable(userPo);
                 }
             });
