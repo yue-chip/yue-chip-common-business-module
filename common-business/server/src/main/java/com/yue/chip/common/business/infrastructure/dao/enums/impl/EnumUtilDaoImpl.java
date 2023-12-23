@@ -44,7 +44,7 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
                 @Override
                 public Boolean execute(java.sql.Connection connection) throws SQLException {
                     Statement stat = connection.createStatement();
-                    ResultSet resultSet = stat.executeQuery("select tenant_number from `"+upms+".t_tenant`; ");
+                    ResultSet resultSet = stat.executeQuery("select tenant_number from "+upms+".t_tenant; ");
                     List<Long> tenantNumbers = new ArrayList<>();
                     while (resultSet.next()) {
                         Long tenantNumber = Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null;

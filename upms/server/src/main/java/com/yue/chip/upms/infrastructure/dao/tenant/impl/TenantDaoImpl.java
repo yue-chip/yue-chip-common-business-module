@@ -8,6 +8,7 @@ import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
 import org.hibernate.jdbc.ReturningWork;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 
@@ -26,6 +27,15 @@ public class TenantDaoImpl implements TenantDaoEx {
 
     @Resource
     private BaseDao<TenantPo> baseDao;
+
+    @Value("${multiTenant.dataBase.upms}")
+    private String upms;
+
+    @Value("${multiTenant.dataBase.common}")
+    private String common;
+
+    @Value("${multiTenant.dataBase.security}")
+    private String security;
 
     @Override
     public Page<TenantPo> list(String name, String manager, State state, String phoneNumber, YueChipPage pageable) {
@@ -123,7 +133,7 @@ public class TenantDaoImpl implements TenantDaoEx {
                     @Override
                     public TenantPo execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        stat.execute(" use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+                        stat.execute(" use `".concat(upms).concat("`"));
                         String sql = "select * from t_tenant where tenant_number = ?";
                         Object[] params = new Object[]{tenantNumber};
                         if (Objects.isNull(tenantNumber)) {
