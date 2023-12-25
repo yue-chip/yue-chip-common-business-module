@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Mr.Liu
@@ -52,16 +53,16 @@ public class TenantServiceImpl implements TenantService {
     @Resource
     private RedisTemplate redisTemplate;
 
-    @Value("${spring.jpa.hibernate.multiTenant.enable:false}")
+    @Value("${spring.jpa.hibernate.multiTenant:false}")
     private String multiTenantEnabled;
 
-    @Value("${multiTenant.dataBase.upms}")
+    @Value("${multiTenant.dataBase.upms:upms}")
     private String upms;
 
-    @Value("${multiTenant.dataBase.common}")
+    @Value("${multiTenant.dataBase.common:common}")
     private String common;
 
-    @Value("${multiTenant.dataBase.security}")
+    @Value("${multiTenant.dataBase.security:security}")
     private String security;
 
     @Override
@@ -123,7 +124,7 @@ public class TenantServiceImpl implements TenantService {
         if (StringUtils.hasText(domain)) {
            String[] domains = domain.split(",");
            for (String str : domains) {
-               redisTemplate.opsForValue().set(TenantUtil.TENANT_REMOTE_HOST.concat(str),tenant.getTenantNumber());
+               redisTemplate.opsForValue().set(TenantUtil.TENANT_REMOTE_HOST.concat(str),tenant.getTenantNumber(),62, TimeUnit.SECONDS);
            }
         }
     }

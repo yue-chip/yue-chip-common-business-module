@@ -28,13 +28,13 @@ public class TenantDaoImpl implements TenantDaoEx {
     @Resource
     private BaseDao<TenantPo> baseDao;
 
-    @Value("${multiTenant.dataBase.upms}")
+    @Value("${multiTenant.dataBase.upms:upms}")
     private String upms;
 
-    @Value("${multiTenant.dataBase.common}")
+    @Value("${multiTenant.dataBase.common:common}")
     private String common;
 
-    @Value("${multiTenant.dataBase.security}")
+    @Value("${multiTenant.dataBase.security:security}")
     private String security;
 
     @Override

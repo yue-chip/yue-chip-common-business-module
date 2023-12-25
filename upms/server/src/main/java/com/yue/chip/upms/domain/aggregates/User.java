@@ -11,6 +11,7 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
+import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Resource;
 import lombok.Builder;
@@ -111,13 +112,13 @@ public class User extends UserDefinition {
     @Override
     public String getProfilePhotoUrl() {
         Assert.notNull(getId(),"id不能为空");
-        return fileExposeService.getUrlSingle(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
+        return fileExposeService.getUrlSingle(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME, CurrentUserUtil.getCurrentUserTenantNumber());
     }
 
     @Override
     public Long getProfilePhotoId() {
         Assert.notNull(getId(),"id不能为空");
-        Map<Long,String> fileMap = fileExposeService.getUrl(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
+        Map<String,String> fileMap = fileExposeService.getUrl(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME, CurrentUserUtil.getCurrentUserTenantNumber());
         if (Objects.nonNull(fileMap) && fileMap.size()>0) {
             Object obj = fileMap.keySet().toArray()[0];
             if (obj instanceof Long) {

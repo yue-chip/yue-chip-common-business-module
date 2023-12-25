@@ -25,7 +25,7 @@ public class EnumUtilRepositoryImpl implements EnumUtilRepository {
     @Resource
     private EnumUtilMapper enumUtilMapper;
 
-    @Value("${spring.jpa.hibernate.multiTenant.enable:false}")
+    @Value("${spring.jpa.hibernate.multiTenant:false}")
     private String multiTenantEnabled;
 
 

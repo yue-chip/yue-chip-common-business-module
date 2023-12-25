@@ -7,8 +7,10 @@ import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -85,5 +87,17 @@ public interface UpmsApplication {
     public void deleteOrganizational(@NotNull @Size(min = 1) List<Long> ids);
 
     public UserVo test(String name);
+
+    @Cacheable(
+            value = {"test"},
+            key = "#id + '-' +#name"
+    )
+    public String testCache(Long id,String name);
+
+    @Cacheable(
+            value = {"urlSingle"},
+            key = "#tableId + '-' + #fileFieldName + '-' +#tableName+ '-' +#tenantNumber"
+    )
+    String getUrlSingle(@NotNull Long tableId, @NotBlank String fileFieldName, @NotBlank String tableName, @NotNull Long tenantNumber);
 
 }

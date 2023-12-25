@@ -1,6 +1,7 @@
 package com.yue.chip.upms.interfaces.facade;
 
 import com.yue.chip.annotation.AuthorizationIgnore;
+import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.common.business.expose.sms.SmsExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
@@ -46,6 +47,10 @@ public class TestController  {
     @DubboReference
     private SmsExposeService smsExposeService;
 
+    @DubboReference
+    private FileExposeService fileExposeService;
+
+
     @GetMapping("/sms")
 //    @PreAuthorize("@aps.hasPermission('ADD')")
     @AuthorizationIgnore
@@ -62,6 +67,16 @@ public class TestController  {
     public IResultData test(String name){
         log.info("test");
         upmsApplication.test("刘方");
+        return ResultData.builder().build();
+    }
+
+    @GetMapping("/test/file")
+//    @PreAuthorize("@aps.hasPermission('ADD')")
+    @AuthorizationIgnore
+    @Operation(summary = "测试文件", description = "测试文件")
+    public IResultData testFile(String name){
+        Map map = fileExposeService.getUrl(14L,"storePhoto","store",null);
+        log.info(map.toString());
         return ResultData.builder().build();
     }
 
