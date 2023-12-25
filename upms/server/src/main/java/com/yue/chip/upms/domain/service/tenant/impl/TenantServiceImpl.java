@@ -25,7 +25,6 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -125,7 +124,8 @@ public class TenantServiceImpl implements TenantService {
         if (StringUtils.hasText(domain)) {
            String[] domains = domain.split(",");
            for (String str : domains) {
-               redisTemplate.opsForValue().set(TenantUtil.TENANT_REMOTE_HOST.concat(str),tenant.getTenantNumber(), Duration.ofSeconds(62));
+               redisTemplate.opsForValue().set(TenantUtil.TENANT_REMOTE_HOST.concat(str),tenant.getTenantNumber());
+               redisTemplate.expire(TenantUtil.TENANT_REMOTE_HOST.concat(str),62, TimeUnit.SECONDS);
            }
         }
     }
