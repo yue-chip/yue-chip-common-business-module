@@ -61,7 +61,7 @@ public class FileExposeServiceImpl implements FileExposeService {
     public String getUrlSingle(Long tableId, String fileFieldName, String tableName, Long tenantNumber) {
         Map<String, String> fileMap = getUrl(tableId, fileFieldName, tableName, tenantNumber);
         if (fileMap.size()>0) {
-            Long id = (Long) fileMap.keySet().toArray()[0];
+            String id = (String) fileMap.keySet().toArray()[0];
             return fileMap.get(id);
         }
         return "";
