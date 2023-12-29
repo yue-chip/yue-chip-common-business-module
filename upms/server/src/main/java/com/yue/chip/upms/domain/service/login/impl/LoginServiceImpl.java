@@ -86,6 +86,10 @@ public class LoginServiceImpl implements LoginService {
                             .tenantNumber(TenantUtil.getTenantNumber())
                             .build()
             );
+            if (!Objects.equals(phoneNumber,userWeiXinPo.getPhoneNumber())) {
+                userWeiXinPo.setPhoneNumber(phoneNumber);
+                userWeiXinRepository.updateUserWeiXin(userWeiXinPo);
+            }
             optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
         }
         if (optional.isEmpty()) {
