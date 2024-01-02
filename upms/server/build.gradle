@@ -47,6 +47,8 @@ dependencies {
     api "org.springframework.statemachine:spring-statemachine-starter"
     api "org.springframework.statemachine:spring-statemachine-data-redis"
     api "org.springframework.statemachine:spring-statemachine-data-jpa"
+    api "com.dameng:Dm8JdbcDriver18"
+    api "com.dameng:DmDialect-for-hibernate5.6"
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"
