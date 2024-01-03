@@ -22,7 +22,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
 @Data
-@Comment("组织机构分组")
+//@Comment("组织机构分组")
 public class OrganizationalGroupPo extends OrganizationalGroupDefinition {
 
     @Override

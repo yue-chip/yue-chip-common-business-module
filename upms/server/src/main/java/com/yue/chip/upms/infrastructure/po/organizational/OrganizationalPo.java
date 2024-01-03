@@ -23,7 +23,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
 @Data
-@Comment("组织机构")
+//@Comment("组织机构")
 public class OrganizationalPo extends OrganizationalDefinition {
 
     @Override

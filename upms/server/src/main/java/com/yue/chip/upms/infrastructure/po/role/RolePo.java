@@ -23,7 +23,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @Data
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
-@Comment("角色")
+//@Comment("角色")
 public class RolePo extends RoleDefinition {
 
     @Override

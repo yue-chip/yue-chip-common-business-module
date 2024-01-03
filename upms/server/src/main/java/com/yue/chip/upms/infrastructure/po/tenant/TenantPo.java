@@ -22,7 +22,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Data
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
-@Comment("租户表")
+//@Comment("租户表")
 @NoArgsConstructor
 public class TenantPo extends TenantDefinition {
     @Override

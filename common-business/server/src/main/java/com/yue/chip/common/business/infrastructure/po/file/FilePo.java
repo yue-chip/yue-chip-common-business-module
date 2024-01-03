@@ -19,7 +19,7 @@ import org.hibernate.annotations.Comment;
 @Table(name = "t_file")
 @SuperBuilder
 @NoArgsConstructor
-@Comment("文件")
+//@Comment("文件")
 public class FilePo extends FileDefinition {
 
     @Override

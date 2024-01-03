@@ -25,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Data
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
-@Comment("角色-资源关联表")
+//@Comment("角色-资源关联表")
 public class RoleResourcesPo extends BaseEntity {
 
     private Long roleId;

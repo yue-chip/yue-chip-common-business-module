@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
-@Comment("用户")
+//@Comment("用户")
 public class UserPo extends UserDefinition {
 
     public static final String TABLE_NAME = "t_user";

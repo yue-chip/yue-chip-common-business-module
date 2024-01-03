@@ -2,9 +2,13 @@ apply from: this.rootProject.file('javaLibrary.gradle')
 archivesBaseName = 'yue-chip-upms-interface-expose'
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
-    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}")
+    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}"){
+        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
+    }
     api project(':common')
-    api 'yue.chip:yue-chip-interface-expose-starter'
+    api ('yue.chip:yue-chip-interface-expose-starter'){
+        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
+    }
     implementation 'jakarta.platform:jakarta.jakartaee-api'
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"

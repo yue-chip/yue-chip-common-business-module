@@ -29,7 +29,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
 @Data
-@Comment("菜单资源")
+//@Comment("菜单资源")
 public class ResourcesPo extends ResourcesDefinition {
 
     @Override

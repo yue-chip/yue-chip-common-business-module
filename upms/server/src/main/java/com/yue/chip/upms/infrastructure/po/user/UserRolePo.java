@@ -26,7 +26,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @Data
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
-@Comment("用户-角色关联表")
+//@Comment("用户-角色关联表")
 public class UserRolePo extends BaseEntity {
 
     private Long userId;

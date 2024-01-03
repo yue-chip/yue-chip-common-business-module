@@ -38,6 +38,12 @@ dependencies {
     compileOnly "org.mapstruct:mapstruct-jdk8"
     compileOnly "org.projectlombok:lombok"
     compileOnly "org.projectlombok:lombok-mapstruct-binding"
+    api "com.dameng:Dm8JdbcDriver18"
+    api "com.dameng:DmDialect-for-hibernate5.6"
+    api 'org.hibernate:hibernate-core:5.6.15.Final'
+    api (group: 'org.hibernate.orm', name: 'hibernate-core'){
+        transitive=false
+    }
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"

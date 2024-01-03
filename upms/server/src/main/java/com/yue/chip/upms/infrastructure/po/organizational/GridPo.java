@@ -2,6 +2,7 @@ package com.yue.chip.upms.infrastructure.po.organizational;
 
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.organizational.GridDefinition;
+import jakarta.enterprise.inject.Default;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +23,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
 @Data
-@Comment("网格")
+//@Comment("网格")
 public class GridPo extends GridDefinition {
     @Override
     @Column(name = "organizational_id", columnDefinition = "bigint NULL DEFAULT 0 COMMENT '机构id-不能为空'")

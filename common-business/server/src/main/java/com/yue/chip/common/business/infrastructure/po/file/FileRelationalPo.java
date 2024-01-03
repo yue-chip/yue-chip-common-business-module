@@ -20,7 +20,7 @@ import org.hibernate.annotations.Comment;
 @Table(name = "t_file_relational",indexes = {@Index(columnList = "tableId,fileFieldName,tableName")})
 @SuperBuilder
 @NoArgsConstructor
-@Comment("文件与其它表中间表")
+//@Comment("文件与其它表中间表")
 @Data
 public class FileRelationalPo extends BaseEntity {
 

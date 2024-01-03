@@ -13,9 +13,11 @@ allprojects {
 }
 subprojects {
     configurations.all() {
-        resolutionStrategy.cacheChangingModulesFor 10, 'seconds'
-        resolutionStrategy.force "org.antlr:antlr4-runtime:4.11.1"
-        resolutionStrategy.force "org.antlr:antlr4-tool:4.11.1"
-        resolutionStrategy.force "org.reflections:reflections:0.9.12"
+        resolutionStrategy {
+            cacheChangingModulesFor 10, 'seconds'
+            force 'org.antlr:antlr4:4.13.1'
+            force "org.antlr:antlr4-runtime:4.13.1"
+            force "org.reflections:reflections:0.9.12"
+        }
     }
 }

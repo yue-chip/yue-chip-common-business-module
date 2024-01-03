@@ -37,10 +37,18 @@ bootJar {
 dependencies {
     api project(':interface-expose')
     api project(':authentication')
-    api platform("yue.chip:starter:${yueChipPlatformVersion}")
-    api 'yue.chip:yue-chip-serve-starter'
-    api 'yue.chip:yue-chip-business-starter'
-    api "yue.chip:yue-chip-common-business-interface-expose:${commonBusinessVersion}"
+    api platform("yue.chip:starter:${yueChipPlatformVersion}") {
+        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
+    }
+    api ('yue.chip:yue-chip-serve-starter'){
+        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
+    }
+    api ('yue.chip:yue-chip-business-starter'){
+        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
+    }
+    api ("yue.chip:yue-chip-common-business-interface-expose:${commonBusinessVersion}"){
+        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
+    }
 //    api 'yue.chip:yue-chip-security'
 //    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
@@ -49,6 +57,7 @@ dependencies {
     api "org.springframework.statemachine:spring-statemachine-data-jpa"
     api "com.dameng:Dm8JdbcDriver18"
     api "com.dameng:DmDialect-for-hibernate5.6"
+    api 'org.hibernate:hibernate-core:5.6.15.Final'
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"
