@@ -88,18 +88,17 @@ public class LoginServiceImpl implements LoginService {
         }
 
         UserWeixin userWeixin = optional.get();
-        if (Objects.nonNull(userWeixin.getPhoneNumber())) {
+        if (!StringUtils.hasText(userWeixin.getPhoneNumber())) {
             if (!StringUtils.hasText(phoneNumber)) {
                 throw new AuthenticationServiceException("请绑定手机号码！");
             }
-        }else {
-            if (!Objects.equals(phoneNumber,userWeixin.getPhoneNumber()) ){
-                userWeixin.setPhoneNumber(phoneNumber);
-                userWeiXinRepository.updateUserWeiXin(userWeiXinMapper.toUserWeiXinPo(userWeixin));
-            }
+        }
+        if (StringUtils.hasText(phoneNumber) && !Objects.equals(phoneNumber,userWeixin.getPhoneNumber()) ){
+            userWeixin.setPhoneNumber(phoneNumber);
+            userWeiXinRepository.updateUserWeiXin(userWeiXinMapper.toUserWeiXinPo(userWeixin));
         }
 
-        if (optional.isEmpty()) {
+        if (Objects.isNull(userWeixin)) {
             throw new AuthenticationServiceException("用户鉴权失败！");
         }
         return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getPhoneNumber(),"",userWeixin.getTenantNumber());
