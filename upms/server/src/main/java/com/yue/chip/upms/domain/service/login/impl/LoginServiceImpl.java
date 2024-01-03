@@ -1,5 +1,6 @@
 package com.yue.chip.upms.domain.service.login.impl;
 
+import com.esotericsoftware.kryo.util.Null;
 import com.yue.chip.authentication.YueChipAuthenticationToken;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.tenant.TenantUtil;
@@ -75,27 +76,32 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String login1(String phoneNumber, String openId) {
-        Optional<UserWeixin> optional;
-
-        optional = userWeiXinRepository.findByOpenId(openId);
-        if (optional.isEmpty() && StringUtils.hasText(phoneNumber)) {
+        Optional<UserWeixin> optional = userWeiXinRepository.findByOpenId(openId);
+        if (optional.isEmpty()) {
             UserWeiXinPo userWeiXinPo = userWeiXinRepository.saveUserWeiXin(
                     UserWeiXinPo.builder()
                             .openId(openId)
-                            .phoneNumber(phoneNumber)
+                            .phoneNumber(StringUtils.hasText(phoneNumber)?phoneNumber:null)
                             .tenantNumber(TenantUtil.getTenantNumber())
-                            .build()
-            );
-            if (!Objects.equals(phoneNumber,userWeiXinPo.getPhoneNumber())) {
-                userWeiXinPo.setPhoneNumber(phoneNumber);
-                userWeiXinRepository.updateUserWeiXin(userWeiXinPo);
-            }
+                            .build());
             optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
         }
+
+        UserWeixin userWeixin = optional.get();
+        if (Objects.nonNull(userWeixin.getPhoneNumber())) {
+            if (!StringUtils.hasText(phoneNumber)) {
+                throw new AuthenticationServiceException("请绑定手机号码！");
+            }
+        }else {
+            if (!Objects.equals(phoneNumber,userWeixin.getPhoneNumber()) ){
+                userWeixin.setPhoneNumber(phoneNumber);
+                userWeiXinRepository.updateUserWeiXin(userWeiXinMapper.toUserWeiXinPo(userWeixin));
+            }
+        }
+
         if (optional.isEmpty()) {
             throw new AuthenticationServiceException("用户鉴权失败！");
         }
-        UserWeixin userWeixin = optional.get();
         return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getPhoneNumber(),"",userWeixin.getTenantNumber());
     }
 
