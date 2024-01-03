@@ -75,27 +75,31 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String login1(String phoneNumber, String openId) {
-        Optional<UserWeixin> optional;
-
-        optional = userWeiXinRepository.findByOpenId(openId);
-        if (optional.isEmpty() && StringUtils.hasText(phoneNumber)) {
+        Optional<UserWeixin> optional = userWeiXinRepository.findByOpenId(openId);
+        if (optional.isEmpty()) {
             UserWeiXinPo userWeiXinPo = userWeiXinRepository.saveUserWeiXin(
                     UserWeiXinPo.builder()
                             .openId(openId)
-                            .phoneNumber(phoneNumber)
+                            .phoneNumber(StringUtils.hasText(phoneNumber)?phoneNumber:null)
                             .tenantNumber(TenantUtil.getTenantNumber())
-                            .build()
-            );
-            if (!Objects.equals(phoneNumber,userWeiXinPo.getPhoneNumber())) {
-                userWeiXinPo.setPhoneNumber(phoneNumber);
-                userWeiXinRepository.updateUserWeiXin(userWeiXinPo);
-            }
+                            .build());
             optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
         }
-        if (optional.isEmpty()) {
+
+        UserWeixin userWeixin = optional.get();
+        if (!StringUtils.hasText(userWeixin.getPhoneNumber())) {
+            if (!StringUtils.hasText(phoneNumber)) {
+                throw new AuthenticationServiceException("请绑定手机号码！");
+            }
+        }
+        if (StringUtils.hasText(phoneNumber) && !Objects.equals(phoneNumber,userWeixin.getPhoneNumber()) ){
+            userWeixin.setPhoneNumber(phoneNumber);
+            userWeiXinRepository.updateUserWeiXin(userWeiXinMapper.toUserWeiXinPo(userWeixin));
+        }
+
+        if (Objects.isNull(userWeixin)) {
             throw new AuthenticationServiceException("用户鉴权失败！");
         }
-        UserWeixin userWeixin = optional.get();
         return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getPhoneNumber(),"",userWeixin.getTenantNumber());
     }
 
