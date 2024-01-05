@@ -6,7 +6,7 @@ import com.yue.chip.tenant.vo.TenantExposeVo;
 import com.yue.chip.upms.assembler.tenant.TenantMapper;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import java.util.List;

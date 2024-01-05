@@ -7,7 +7,7 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

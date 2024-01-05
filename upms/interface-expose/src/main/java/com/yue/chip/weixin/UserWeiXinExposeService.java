@@ -2,7 +2,7 @@ package com.yue.chip.weixin;
 
 import com.yue.chip.core.Optional;
 import com.yue.chip.weixin.vo.UserWeiXinExposeVo;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 
 public interface UserWeiXinExposeService {
 

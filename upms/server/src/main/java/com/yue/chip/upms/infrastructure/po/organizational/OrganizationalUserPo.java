@@ -2,12 +2,12 @@ package com.yue.chip.upms.infrastructure.po.organizational;
 
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.organizational.OrganizationalUserDefinition;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Comment;
+//import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -26,13 +26,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class OrganizationalUserPo extends OrganizationalUserDefinition {
 
     @Override
-    @Column(name = "user_id", columnDefinition = "bigint NULL DEFAULT 0 COMMENT '用户id'")
+    @Column(name = "user_id")
     public Long getUserId() {
         return super.getUserId();
     }
 
     @Override
-    @Column(name = "organizational_id", columnDefinition = "bigint NULL DEFAULT 0 COMMENT '组织机构id'")
+    @Column(name = "organizational_id")
     public Long getOrganizationalId() {
         return super.getOrganizationalId();
     }

@@ -9,8 +9,8 @@ import com.yue.chip.upms.domain.service.login.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotBlank;
+import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +28,7 @@ import java.util.Map;
 @RestController()
 @RequestMapping()
 @Validated
-@Tag(name = "登录")
+//@Tag(name = "登录")
 @Log
 public class LoginController{
 
@@ -37,7 +37,7 @@ public class LoginController{
 
     @PostMapping("/login1")
     @AuthorizationIgnore
-    @Operation(summary = "登录", description = "登录")
+    //@Operation(summary = "登录", description = "登录")
     public IResultData<String> login(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username,
                                      @NotBlank(message = "密码不能为空") @Parameter(description = "密码",name = "password",required = true)String password) {
         String token = loginService.login(username,password);
@@ -48,7 +48,7 @@ public class LoginController{
 
     @GetMapping("/login/out")
     @AuthorizationIgnore
-    @Operation(summary = "退出登录", description = "退出登录")
+    //@Operation(summary = "退出登录", description = "退出登录")
     public IResultData<String> loginOut() {
         loginService.loginOut();
         return ResultData.builder().build();

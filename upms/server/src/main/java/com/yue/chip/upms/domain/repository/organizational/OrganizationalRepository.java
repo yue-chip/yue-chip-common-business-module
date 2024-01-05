@@ -9,9 +9,9 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

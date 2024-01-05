@@ -6,8 +6,8 @@
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.yue.chip.common.business.domain.service.sms.SmsService;
 //import com.yue.chip.exception.BusinessException;
-//import jakarta.annotation.Resource;
-//import jakarta.validation.constraints.NotBlank;
+//import javax.annotation.Resource;
+//import javax.validation.constraints.NotBlank;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 //import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

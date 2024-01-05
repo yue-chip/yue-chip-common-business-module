@@ -5,7 +5,7 @@ import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.core.tenant.TenantConstant;
 import com.yue.chip.utils.TenantDatabaseUtil;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Value;
 

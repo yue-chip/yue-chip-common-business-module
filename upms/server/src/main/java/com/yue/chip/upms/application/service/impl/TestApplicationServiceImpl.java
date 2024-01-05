@@ -1,7 +1,7 @@
 package com.yue.chip.upms.application.service.impl;
 
 import com.yue.chip.upms.application.service.TestApplicationService;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 /**

@@ -5,8 +5,8 @@ import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
-import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotBlank;
+import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

@@ -2,7 +2,7 @@ package com.yue.chip.common.business.infrastructure.dao.file;
 
 import com.yue.chip.common.business.infrastructure.po.file.FileRelationalPo;
 import com.yue.chip.core.persistence.curd.BaseDao;
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.stylesheets.LinkStyle;
 

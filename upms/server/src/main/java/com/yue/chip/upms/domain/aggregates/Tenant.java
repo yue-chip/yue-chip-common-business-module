@@ -4,7 +4,7 @@ import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.tenant.TenantDefinition;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.utils.AssertUtil;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

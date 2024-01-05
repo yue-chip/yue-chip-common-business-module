@@ -1,8 +1,8 @@
 package com.yue.chip.common.business.infrastructure.dao.file;
 
 import com.yue.chip.common.business.infrastructure.po.file.FilePo;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import java.util.List;
 

@@ -5,17 +5,13 @@ import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.enums.Type;
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SelectBeforeUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+import javax.persistence.*;
 
 /**
  * @author Mr.Liu
@@ -33,65 +29,66 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class ResourcesPo extends ResourcesDefinition {
 
     @Override
-    @Column(name = "parent_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '父节点id'")
+    @Column(name = "parent_id")
     public Long getParentId() {
         return super.getParentId();
     }
 
     @Override
-    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '编码-不能为空'")
+    @Column(unique = true)
     public String getCode() {
         return super.getCode();
     }
 
     @Override
-    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '名称-不能为空'")
+    @Column(name = "name")
     public String getName() {
         return super.getName();
     }
 
     @Override
     @Convert(converter = Scope.ScopeConverter.class)
-    @Column(columnDefinition = "int NULL COMMENT '作用域(0:app,1:后台,2:前端,3:微信)-不能为空'")
+    //@Column(columnDefinition = "int NULL COMMENT '作用域(0:app,1:后台,2:前端,3:微信)-不能为空'")
     public Scope getScope() {
         return super.getScope();
     }
 
     @Override
     @Convert(converter = Type.TypeConverter.class)
-    @Column(columnDefinition = "int NULL COMMENT '类型(0:目录,1:菜单,2:功能)-不能为空'")
+    //@Column(columnDefinition = "int NULL COMMENT '类型(0:目录,1:菜单,2:功能)-不能为空'")
     public Type getType() {
         return super.getType();
     }
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    @Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)-不能为空'")
+    //@Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)-不能为空'")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column(columnDefinition = "bit(1) NULL COMMENT '是否默认菜单资源,默认资源不能删除-不能为空'")
+    //@Column(columnDefinition = "bit(1) NULL COMMENT '是否默认菜单资源,默认资源不能删除-不能为空'")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }
 
     @Override
-    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT 'url'")
+    //@Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT 'url'")
     public String getUrl() {
         return super.getUrl();
     }
 
     @Override
-    @Column(columnDefinition = "int NULL DEFAULT 0 COMMENT '排序'")
+    //@Column(columnDefinition = "int NULL DEFAULT 0 COMMENT '排序'")
     public Integer getSort() {
         return super.getSort();
     }
 
     @Override
-    @Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '备注'")
+    //@Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '备注'")
     public String getRemark() {
         return super.getRemark();
     }
+
 }

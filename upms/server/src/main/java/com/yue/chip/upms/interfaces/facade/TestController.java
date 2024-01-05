@@ -10,9 +10,6 @@ import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.application.service.TestApplicationService;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +32,7 @@ import java.util.Map;
 @RestController()
 @RequestMapping()
 @Validated
-@Tag(name = "测试")
+//@Tag(name = "测试")
 @Log
 public class TestController  {
 
@@ -54,7 +52,7 @@ public class TestController  {
     @GetMapping("/sms")
 //    @PreAuthorize("@aps.hasPermission('ADD')")
     @AuthorizationIgnore
-    @Operation(summary = "测试-sms", description = "测试-sms")
+    //@Operation(summary = "测试-sms", description = "测试-sms")
     public IResultData sms(){
         smsExposeService.sendSms("1400813276", "小未科技", "1795028", "test^test^test", "+8618928025540");
         return ResultData.builder().build();
@@ -63,7 +61,7 @@ public class TestController  {
     @GetMapping("/test")
 //    @PreAuthorize("@aps.hasPermission('ADD')")
     @AuthorizationIgnore
-    @Operation(summary = "测试-1", description = "测试-1")
+    //@Operation(summary = "测试-1", description = "测试-1")
     public IResultData test(String name){
         log.info("test");
         upmsApplication.test("刘方");
@@ -73,7 +71,7 @@ public class TestController  {
     @GetMapping("/test/file")
 //    @PreAuthorize("@aps.hasPermission('ADD')")
     @AuthorizationIgnore
-    @Operation(summary = "测试文件", description = "测试文件")
+    //@Operation(summary = "测试文件", description = "测试文件")
     public IResultData testFile(String name){
         Map map = fileExposeService.getUrl(14L,"storePhoto","store",null);
         log.info(map.toString());
@@ -83,7 +81,7 @@ public class TestController  {
     @PostMapping(value = "/test1")
     @AuthorizationIgnore
     @PreAuthorize("@aps.hasPermission('test')")
-    @Operation(summary = "测试-权限测试", description = "测试-权限测试")
+    //@Operation(summary = "测试-权限测试", description = "测试-权限测试")
     public IResultData<String> test1(String username,String password) {
 
         Map<String,String> map = new HashMap<>();
@@ -93,7 +91,7 @@ public class TestController  {
     @GetMapping("/mock")
 //    @PreAuthorize("@aps.hasPermission('ADD')")
     @AuthorizationIgnore
-    @Operation(summary = "测试-接口mock测试", description = "测试-接口mock测试")
+    //@Operation(summary = "测试-接口mock测试", description = "测试-接口mock测试")
     public IResultData<List<UserVo>> testMock(String name){
         return ResultData.builder().data(new PodamFactoryImpl().manufacturePojo(List.class,UserVo.class)).build();
     }
@@ -101,7 +99,7 @@ public class TestController  {
     @GetMapping("/mock1")
 //    @PreAuthorize("@aps.hasPermission('ADD')")
     @AuthorizationIgnore
-    @Operation(summary = "测试-接口mock测试1", description = "测试-接口mock测试1")
+    //@Operation(summary = "测试-接口mock测试1", description = "测试-接口mock测试1")
     public IPageResultData<List<UserVo>> testMock1(String name){
 //        return PageResultData.builder().data(JMockData.mock(new TypeReference<List<UserVo>>(){})).build();
 //        List<User> listGrid = new PodamFactoryImpl().manufacturePojo(List.class, User.class);

@@ -2,9 +2,9 @@ package com.yue.chip.upms.interfaces.dto.user;
 
 import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.definition.user.UserDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+//import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -14,15 +14,15 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @Builder
-@Schema
+//@Schema
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserUpdatePasswordDto{
 
-    @Schema(description = "用户id,不传则修改当前登录用户的密码")
+    //@Schema(description = "用户id,不传则修改当前登录用户的密码")
     private Long userId;
 
-    @Schema(description = "密码(md5编码)")
+    //@Schema(description = "密码(md5编码)")
     @NotBlank(message = "密码不能为空")
     private String password;
 

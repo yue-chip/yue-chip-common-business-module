@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
+//import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Objects;
  * @date 2023/10/9 上午9:53
  */
 @Data
-@Schema(description = "组织架构树形结构")
+//@Schema(description = "组织架构树形结构")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
@@ -31,13 +31,13 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrganizationalTreeListVo extends OrganizationalDefinition {
 
-    @Schema(description = "负责人姓名")
+    //@Schema(description = "负责人姓名")
     private String leaderName;
 
-    @Schema(description = "子节点")
+    //@Schema(description = "子节点")
     private List<OrganizationalTreeListVo> children;
 
-    @Schema(description = "用于列表a-switch组建展示")
+    //@Schema(description = "用于列表a-switch组建展示")
     private Boolean stateTmp;
 
     public Boolean getStateTmp() {

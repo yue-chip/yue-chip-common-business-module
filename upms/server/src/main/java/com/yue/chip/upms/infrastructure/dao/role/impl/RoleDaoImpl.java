@@ -3,7 +3,7 @@ package com.yue.chip.upms.infrastructure.dao.role.impl;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleDaoEx;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;

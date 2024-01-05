@@ -1,30 +1,22 @@
 package com.yue.chip.upms.definition.user;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.yue.chip.core.BaseDefinition;
 import com.yue.chip.core.common.enums.State;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Transient;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 
 /**
  * user 字段的定义 避免在聚合实体entity，dto，vo，po……等bean 进行重复定义
  */
 @Data
-@Schema(description = "用户")
+//@Schema(description = "用户")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
@@ -41,43 +33,43 @@ public class UserDefinition extends BaseDefinition {
      */
     public static final String PROFILE_PHOTO_FIELD_NAME = "profilePhoto";
 
-    @Schema(description = "头像id")
+    //@Schema(description = "头像id")
 //    @Getter(AccessLevel.NONE)
 //    @Setter(AccessLevel.NONE)
     @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
     private Long profilePhotoId;
 
     @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
-    @Schema(description = "头像url")
+    //@Schema(description = "头像url")
 //    @Getter(AccessLevel.NONE)
 //    @Setter(AccessLevel.NONE)
     private String profilePhotoUrl;
 
-    @Schema(description = "密码")
+    //@Schema(description = "密码")
     private String password;
 
-    @Schema(description = "用户登陆账号")
+    //@Schema(description = "用户登陆账号")
     private  String username;
 
-    @Schema(description = "姓名")
+    //@Schema(description = "姓名")
     private String name;
 
-    @Schema(description = "联系电话")
+    //@Schema(description = "联系电话")
     private String phoneNumber;
 
-    @Schema(description = "状态")
+    //@Schema(description = "状态")
     private State state;
 
-    @Schema(description = "是否接收短信通知")
+    //@Schema(description = "是否接收短信通知")
     private Boolean isSms;
 
-    @Schema(description = "是否接收紧急呼叫")
+    //@Schema(description = "是否接收紧急呼叫")
     private Boolean isCall;
 
-    @Schema(description = "最后登录时间")
+    //@Schema(description = "最后登录时间")
     private LocalDateTime lastLoginTime;
 
-    @Schema(description = "租户id")
+    //@Schema(description = "租户id")
     @JsonIgnore
     private Long tenantNumber;
 

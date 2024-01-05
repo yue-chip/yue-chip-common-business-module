@@ -5,7 +5,7 @@ import com.yue.chip.common.business.domain.aggregates.enums.EnumUtil;
 import com.yue.chip.common.business.domain.repository.enums.EnumUtilRepository;
 import com.yue.chip.common.business.infrastructure.dao.enums.EnumUtilDao;
 import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;

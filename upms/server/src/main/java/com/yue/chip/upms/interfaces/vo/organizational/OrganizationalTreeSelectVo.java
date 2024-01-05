@@ -2,7 +2,7 @@ package com.yue.chip.upms.interfaces.vo.organizational;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
+//import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
  * @date 2023/10/9 上午9:53
  */
 @Data
-@Schema(description = "组织架构树形结构")
+//@Schema(description = "组织架构树形结构")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
@@ -26,16 +26,16 @@ import java.util.List;
 )
 public class OrganizationalTreeSelectVo extends OrganizationalDefinition {
 
-    @Schema(description = "机构名称")
+    //@Schema(description = "机构名称")
     private String label;
 
-    @Schema(description = "机构名称")
+    //@Schema(description = "机构名称")
     private String title;
 
-    @Schema(description = "父节点id")
+    //@Schema(description = "父节点id")
     private Long pId;
 
-    @Schema(description = "机构id")
+    //@Schema(description = "机构id")
     private Long value;
 
 

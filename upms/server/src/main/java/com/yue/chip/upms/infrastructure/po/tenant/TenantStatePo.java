@@ -4,11 +4,11 @@ import com.yue.chip.core.BaseDefinition;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.core.persistence.entity.BaseEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+//import io.swagger.v3.oas.annotations.media.Schema;
+import javax.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Comment;
+//import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -27,7 +27,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 public class TenantStatePo extends BaseEntity {
 
-    @Column(name = "state" , columnDefinition = "int NULL DEFAULT 1 COMMENT '租户状态-不能为空'")
+    //@Column(name = "state" , columnDefinition = "int NULL DEFAULT 1 COMMENT '租户状态-不能为空'")
     private State state;
 
 }

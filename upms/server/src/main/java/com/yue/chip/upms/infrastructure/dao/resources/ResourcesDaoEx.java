@@ -2,7 +2,7 @@ package com.yue.chip.upms.infrastructure.dao.resources;
 
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 
 import java.util.List;
 

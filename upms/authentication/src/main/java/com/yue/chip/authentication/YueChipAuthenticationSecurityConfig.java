@@ -4,9 +4,9 @@ import com.yue.chip.core.ResultData;
 import com.yue.chip.core.common.enums.ResultDataState;
 import com.yue.chip.security.AbstractSecurityConfig;
 import com.yue.chip.security.AuthorizationIgnoreConfiguration;
-import jakarta.annotation.Resource;
-import jakarta.servlet.Servlet;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.annotation.Resource;
+import javax.servlet.Servlet;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +26,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+
+import javax.servlet.Filter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,14 +66,14 @@ public class YueChipAuthenticationSecurityConfig extends AbstractSecurityConfig 
             Map<String,String> map = new HashMap<>();
             map.put("token",yueChipAuthenticationToken.getToken());
             ResultData resultData = ResultData.builder().data(map).build();
-            responseWrite(response,resultData);
+            responseWrite((HttpServletResponse) response,resultData);
         });
         yueChipUserPasswordFilter.setAuthenticationFailureHandler((request, response, exception) -> {
             ResultData resultData = ResultData.builder().status(ResultDataState.LOGIN_FAIL.getKey()).message(exception.getMessage()).build();
-            responseWrite(response,resultData);
+            responseWrite((HttpServletResponse) response,resultData);
         });
         http.authenticationProvider(yueChipAuthenticationProvider)
-                .addFilterBefore(yueChipUserPasswordFilter,AnonymousAuthenticationFilter.class);
+                .addFilterBefore((Filter) yueChipUserPasswordFilter, (Class<? extends Filter>) AnonymousAuthenticationFilter.class);
         SecurityFilterChain securityFilterChain = http.build();
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
         yueChipUserPasswordFilter.setAuthenticationManager(authenticationManager);
@@ -80,7 +82,7 @@ public class YueChipAuthenticationSecurityConfig extends AbstractSecurityConfig 
 
 
     private void responseWrite(HttpServletResponse response, ResultData resultData) throws IOException {
-        ServletServerHttpResponse httpResponse = new ServletServerHttpResponse(response);
+        ServletServerHttpResponse httpResponse = new ServletServerHttpResponse((javax.servlet.http.HttpServletResponse) response);
         httpResponse.setStatusCode(HttpStatus.OK);
         responseConverter.write(resultData, MediaType.APPLICATION_JSON_UTF8,httpResponse);
     }

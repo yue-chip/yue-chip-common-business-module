@@ -6,7 +6,7 @@ import com.yue.chip.upms.definition.organizational.GridDefinition;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

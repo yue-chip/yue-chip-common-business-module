@@ -1,8 +1,8 @@
 package com.yue.chip.common.business.interfaces.dto.enuns;
 
 import com.yue.chip.common.business.definition.enums.EnumUtilDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
+//import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
  * @date 2023/7/6 下午1:40
  */
 @Data
-@Schema(description = "枚举")
+//@Schema(description = "枚举")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor

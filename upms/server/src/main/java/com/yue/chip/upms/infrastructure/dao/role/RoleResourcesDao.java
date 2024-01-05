@@ -2,7 +2,7 @@ package com.yue.chip.upms.infrastructure.dao.role;
 
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Mr.Liu

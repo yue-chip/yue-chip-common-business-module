@@ -3,8 +3,8 @@ package com.yue.chip.common.business.infrastructure.dao.file.impl;
 import com.yue.chip.common.business.infrastructure.dao.file.FileDaoEx;
 import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import com.yue.chip.core.persistence.curd.BaseDao;
-import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotBlank;
+import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
 
 import java.util.HashMap;
 import java.util.List;

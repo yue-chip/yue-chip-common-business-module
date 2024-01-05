@@ -2,16 +2,10 @@ package com.yue.chip.upms.infrastructure.po.role;
 
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.core.persistence.entity.BaseEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
-import lombok.Builder;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SelectBeforeUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -35,12 +29,12 @@ public class RoleResourcesPo extends BaseEntity {
     public RoleResourcesPo() {
     }
 
-    @Column(name = "role_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id-不能为空'")
+    @Column(name = "role_id")
     public Long getRoleId() {
         return roleId;
     }
 
-    @Column(name = "resources_id",  columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '菜单资源id-不能为空'")
+    @Column(name = "resources_id")
     public Long getResourcesId() {
         return resourcesId;
     }

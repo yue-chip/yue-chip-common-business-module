@@ -3,7 +3,7 @@ package com.yue.chip.upms.interfaces.vo.organizational;
 import com.yue.chip.upms.definition.organizational.GridDefinition;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import io.swagger.v3.oas.annotations.media.Schema;
+//import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2023/11/21 下午2:50
  */
 @Data
-@Schema(description = "网格")
+//@Schema(description = "网格")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor

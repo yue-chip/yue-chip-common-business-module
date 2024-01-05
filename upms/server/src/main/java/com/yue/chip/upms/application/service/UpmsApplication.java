@@ -7,9 +7,9 @@ import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;

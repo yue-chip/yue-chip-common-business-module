@@ -11,7 +11,7 @@ import com.yue.chip.common.business.expose.call.vo.QueryCallDetailByCallIdRespon
 import com.yue.chip.common.business.expose.call.vo.SingleCallByTtsResponseBodyExposeVo;
 import com.yue.chip.core.Optional;
 import com.yue.chip.exception.BusinessException;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;

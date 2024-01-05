@@ -16,10 +16,9 @@ import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
-import com.yue.chip.upms.infrastructure.repository.weixin.UserWeiXinRepositoryImpl;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -107,7 +106,7 @@ public class LoginServiceImpl implements LoginService {
     public void loginOut() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (Objects.nonNull(requestAttributes)) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+            HttpServletRequest request = (HttpServletRequest) ((ServletRequestAttributes) requestAttributes).getRequest();
             if (Objects.nonNull(request)) {
                 Object obj = request.getHeader("token");
                 if (Objects.nonNull(obj)) {

@@ -18,7 +18,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.utils.CurrentUserUtil;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;

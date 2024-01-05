@@ -1,8 +1,8 @@
 package com.yue.chip.upms.infrastructure.dao.role;
 
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;

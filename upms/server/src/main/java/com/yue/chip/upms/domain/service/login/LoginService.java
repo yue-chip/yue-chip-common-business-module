@@ -1,6 +1,6 @@
 package com.yue.chip.upms.domain.service.login;
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author Mr.Liu

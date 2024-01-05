@@ -5,9 +5,9 @@ import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.enums.Type;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+//import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
-@Schema
+//@Schema
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 @JsonIgnoreProperties(ignoreUnknown = true,value = {"id","createUserId","updateUserId","createDateTime","updateDateTime"})

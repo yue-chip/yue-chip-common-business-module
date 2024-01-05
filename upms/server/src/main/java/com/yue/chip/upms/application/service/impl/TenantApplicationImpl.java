@@ -11,8 +11,8 @@ import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantAddDTO;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantUpdateDTO;
 import com.yue.chip.utils.AssertUtil;
-import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotNull;
+import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -3,7 +3,7 @@ package com.yue.chip.upms.interfaces.vo.tenant;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.definition.tenant.TenantDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
+//import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Objects;
  * @date 2023/10/24 上午11:35
  */
 @Data
-@Schema(description = "租户")
+//@Schema(description = "租户")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor

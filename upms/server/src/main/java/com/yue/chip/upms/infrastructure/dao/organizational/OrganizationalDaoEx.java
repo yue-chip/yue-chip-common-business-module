@@ -3,7 +3,7 @@ package com.yue.chip.upms.infrastructure.dao.organizational;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

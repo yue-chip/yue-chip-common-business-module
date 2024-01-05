@@ -2,7 +2,7 @@ package com.yue.chip.upms.interfaces.vo.resources;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
+//import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2023/2/28 下午2:31
  */
 @Data
-@Schema(description = "资源")
+//@Schema(description = "资源")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor

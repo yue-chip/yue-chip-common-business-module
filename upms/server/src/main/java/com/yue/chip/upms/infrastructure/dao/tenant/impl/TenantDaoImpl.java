@@ -6,7 +6,7 @@ import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDaoEx;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.utils.TenantDatabaseUtil;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;

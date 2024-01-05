@@ -5,7 +5,7 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

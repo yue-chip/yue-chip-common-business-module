@@ -2,18 +2,15 @@ apply from: this.rootProject.file('javaLibrary.gradle')
 archivesBaseName = 'yue-chip-upms-interface-expose'
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
-    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}"){
-        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
-    }
+    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}")
     api project(':common')
-    api ('yue.chip:yue-chip-interface-expose-starter'){
-        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
-    }
+    api ('yue.chip:yue-chip-interface-expose-starter')
     implementation 'jakarta.platform:jakarta.jakartaee-api'
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"
     compileOnly "org.projectlombok:lombok"
+    compileOnly 'javax.validation:validation-api:2.0.1.Final'
     compileOnly "org.projectlombok:lombok-mapstruct-binding"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"

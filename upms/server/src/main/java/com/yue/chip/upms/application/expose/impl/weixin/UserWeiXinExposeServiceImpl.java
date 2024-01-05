@@ -6,8 +6,8 @@ import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.weixin.UserWeiXinExposeService;
 import com.yue.chip.weixin.vo.UserWeiXinExposeVo;
-import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotNull;
+import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import java.util.Objects;

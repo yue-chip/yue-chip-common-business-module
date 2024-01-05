@@ -2,8 +2,8 @@ package com.yue.chip.upms.infrastructure.dao.weixin;
 
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import java.util.Optional;
 

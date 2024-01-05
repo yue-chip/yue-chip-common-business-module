@@ -7,6 +7,7 @@ import com.yue.chip.exception.BusinessException;
 import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
+import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.Resources;
@@ -15,7 +16,6 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
-import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
@@ -25,17 +25,14 @@ import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
-import io.seata.spring.annotation.GlobalTransactional;
-import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.skywalking.apm.toolkit.trace.Tag;
-import org.apache.skywalking.apm.toolkit.trace.Tags;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -75,7 +72,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Override
     @Transactional(rollbackFor = {Throwable.class})
     @Trace
-    @Tags({@Tag(key = "userBindRole",value = "arg[0]")})
+    //@Tags({//@Tag(key = "userBindRole",value = "arg[0]")})
     public void roleBindResources(RoleResourcesAddDto roleResourcesAddDto) {
         //先删除已经绑定的资源
         upmsRepository.deleteRoleResourcesByRoleId(roleResourcesAddDto.getRoleId());
@@ -86,7 +83,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Override
     @Transactional(rollbackFor = {Throwable.class})
     @Trace
-    @Tags({@Tag(key = "userBindRole",value = "arg[0]")})
+    //@Tags({//@Tag(key = "userBindRole",value = "arg[0]")})
     public void userBindRole(UserRoleAddDto userRoleAddDto) {
         //先删除用户与角色的绑定关系
         upmsRepository.deleteUserRole(userRoleAddDto.getRoleId());
@@ -238,8 +235,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
 
     @Override
     @Trace
-    @Tags({@Tag(key = "name",value = "arg[0]"),@Tag(key = "UserDefinition",value = "returnedObj")})
-    @GlobalTransactional
+    //@Tags({//@Tag(key = "name",value = "arg[0]"),//@Tag(key = "UserDefinition",value = "returnedObj")})
+//    @GlobalTransactional
     public UserVo test(String name) {
 //        RoleAddDto roleAddDto = RoleAddDto.builder()
 //                .name(UUID.randomUUID().toString())

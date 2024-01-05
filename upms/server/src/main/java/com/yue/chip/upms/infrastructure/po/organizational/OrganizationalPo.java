@@ -3,12 +3,12 @@ package com.yue.chip.upms.infrastructure.po.organizational;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Comment;
+//import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -27,44 +27,44 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class OrganizationalPo extends OrganizationalDefinition {
 
     @Override
-    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '机构名称-不能为空'")
+    @Column(unique = true,name = "name")
     public String getName() {
         return super.getName();
     }
 
     @Override
-    @Column(name = "parent_id", columnDefinition = "bigint NULL DEFAULT 0 COMMENT '父节点id'")
+    @Column(name = "parent_id")
     public Long getParentId() {
         return super.getParentId();
     }
 
     @Override
-    @Column(name = "organizational_group_id", columnDefinition = "bigint NULL DEFAULT 0 COMMENT '机构分组id'")
+    @Column(name = "organizational_group_id")
     public Long getOrganizationalGroupId() {
         return super.getOrganizationalGroupId();
     }
 
     @Override
-    @Column(name = "sort", columnDefinition = "int NULL DEFAULT 0 COMMENT '排序'")
+    //@Column(name = "sort", columnDefinition = "int NULL DEFAULT 0 COMMENT '排序'")
     public Integer getSort() {
         return super.getSort();
     }
 
     @Override
-    @Column( columnDefinition = "bigint NULL DEFAULT 0 COMMENT '负责人id'")
+    //@Column( columnDefinition = "bigint NULL DEFAULT 0 COMMENT '负责人id'")
     public Long getLeaderId() {
         return super.getLeaderId();
     }
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    @Column(columnDefinition = "int NULL DEFAULT 1 COMMENT '状态(0:禁用,1:正常)-不能为空'")
+    //@Column(columnDefinition = "int NULL DEFAULT 1 COMMENT '状态(0:禁用,1:正常)-不能为空'")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '紧急联系电话'")
+    //@Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '紧急联系电话'")
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }

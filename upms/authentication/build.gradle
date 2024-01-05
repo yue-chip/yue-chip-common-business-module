@@ -5,14 +5,10 @@ archivesBaseName = 'yue-chip-upms-authentication'
 apply from: this.rootProject.file('javaLibrary.gradle')
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
-    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}"){
-        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
-    }
-    implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"){
-        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
-    }
-    implementation 'yue.chip:yue-chip-core'
-    api 'yue.chip:yue-chip-security'
+    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}")
+    implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    implementation ('yue.chip:yue-chip-core')
+    api ('yue.chip:yue-chip-security')
     api 'org.springframework.boot:spring-boot-starter-security'
     api 'org.springframework.boot:spring-boot-starter-web'
     compileOnly "org.mapstruct:mapstruct"

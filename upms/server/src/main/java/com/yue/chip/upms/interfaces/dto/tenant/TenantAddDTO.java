@@ -2,8 +2,8 @@ package com.yue.chip.upms.interfaces.dto.tenant;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.tenant.TenantDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
+//import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
-@Schema
+//@Schema
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 @JsonIgnoreProperties(

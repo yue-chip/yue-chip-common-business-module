@@ -1,7 +1,7 @@
 package com.yue.chip.common.business.interfaces.vo.file;
 
 import com.yue.chip.common.business.definition.file.FileDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
+//import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
  * @date 2023/7/5 下午5:17
  */
 @Data
-@Schema(description = "文件")
+//@Schema(description = "文件")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor

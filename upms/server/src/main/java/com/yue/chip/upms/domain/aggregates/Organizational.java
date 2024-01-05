@@ -3,13 +3,11 @@ package com.yue.chip.upms.domain.aggregates;
 import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
-import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.glassfish.jaxb.core.v2.TODO;
 import org.springframework.util.Assert;
 
 import java.util.List;

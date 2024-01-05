@@ -7,8 +7,8 @@ import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Optional;

@@ -2,7 +2,7 @@ package com.yue.chip.upms.infrastructure.dao.organizational;
 
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

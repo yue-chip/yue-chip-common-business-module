@@ -2,9 +2,9 @@ package com.yue.chip.upms.interfaces.dto.tenant;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.tenant.TenantDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+//import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
-@Schema
+//@Schema
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 public class TenantUpdateDTO extends TenantDefinition {

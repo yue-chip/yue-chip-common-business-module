@@ -2,13 +2,20 @@ apply from: this.rootProject.file('javaLibrary.gradle')
 archivesBaseName = 'yue-chip-common-business-interface-expose'
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
-    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}")
+    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}"){
+        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
+        exclude group: 'org.hibernate.validator', module: 'hibernate.validator'
+    }
     api project(':common')
-    api 'yue.chip:yue-chip-interface-expose-starter'
+    api ('yue.chip:yue-chip-interface-expose-starter'){
+        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
+        exclude group: 'org.hibernate.validator', module: 'hibernate.validator'
+    }
     api ('com.aliyun:dyvmsapi20170525') {
         exclude group: "com.sun.xml.bind"
     }
     implementation 'jakarta.platform:jakarta.jakartaee-api'
+    compileOnly 'javax.validation:validation-api:2.0.1.Final'
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"

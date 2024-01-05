@@ -1,7 +1,7 @@
 package com.yue.chip.common.business.infrastructure.dao.enums;
 
 import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Mr.Liu

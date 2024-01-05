@@ -11,7 +11,7 @@ import com.yue.chip.core.controller.BaseController;
 import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +29,7 @@ import java.util.*;
 @RestController()
 @RequestMapping("/file")
 @Validated
-@Tag(name = "文件")
+//@Tag(name = "文件")
 @Log
 public class FileController  {
 
@@ -42,7 +42,7 @@ public class FileController  {
     private FileMapper fileMapper;
 
     @PostMapping("/upload")
-    @Operation(description = "上传文件(支持多文件)",summary = "上传文件(支持多文件)")
+    //@Operation(description = "上传文件(支持多文件)",summary = "上传文件(支持多文件)")
     public IResultData<List<FileVo>> upload(StandardMultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
         Map<String, MultipartFile> files = multipartHttpServletRequest.getFileMap();
         List<FileVo> fileList = new ArrayList<FileVo>();

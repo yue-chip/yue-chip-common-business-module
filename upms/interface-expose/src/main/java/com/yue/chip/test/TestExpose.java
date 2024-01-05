@@ -1,7 +1,7 @@
 package com.yue.chip.test;
 
 import com.yue.chip.upms.definition.user.UserDefinition;
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import java.util.Map;
 

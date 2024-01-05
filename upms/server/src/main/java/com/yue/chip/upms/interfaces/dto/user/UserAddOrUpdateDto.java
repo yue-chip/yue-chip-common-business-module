@@ -2,9 +2,9 @@ package com.yue.chip.upms.interfaces.dto.user;
 
 import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.definition.user.UserDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+//import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,17 +16,17 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
-@Schema
+//@Schema
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 public class UserAddOrUpdateDto extends UserDefinition {
 
 //    @NotBlank(message = "组织机构ID不能为空",groups = {Validator.Insert.class,Validator.Update.class})
-    @Schema(description = "组织机构ID")
+    //@Schema(description = "组织机构ID")
     private Long organizationalId;
 
     @NotBlank(message = "密码不能为空",groups = {Validator.Insert.class})
-    @Schema(description = "密码")
+    //@Schema(description = "密码")
     private String passwordI;
 
     @Override

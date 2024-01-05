@@ -1,15 +1,15 @@
 package com.yue.chip.common.business.infrastructure.po.file;
 
 import com.yue.chip.core.persistence.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Comment;
+//import org.hibernate.annotations.Comment;
 
 /**
  * @author Mr.Liu
@@ -17,7 +17,7 @@ import org.hibernate.annotations.Comment;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_file_relational",indexes = {@Index(columnList = "tableId,fileFieldName,tableName")})
+@Table(name = "t_file_relational",indexes = {@Index(columnList = "table_id,file_field_name,table_name")})
 @SuperBuilder
 @NoArgsConstructor
 //@Comment("文件与其它表中间表")
@@ -32,19 +32,19 @@ public class FileRelationalPo extends BaseEntity {
 
     private Long fileId;
 
-    @Column(updatable = false,columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '关联表的表名-不能为空'")
+    @Column(updatable = false,name = "table_name")
     public String getTableName() {
         return tableName;
     }
-    @Column(updatable = false,columnDefinition = "bigint DEFAULT -9223372036854775808 COMMENT '关联表的id-不能为空'")
+    @Column(updatable = false,name = "table_id")
     public Long getTableId() {
         return tableId;
     }
-    @Column(updatable = false,columnDefinition = "bigint DEFAULT -9223372036854775808 COMMENT '文件id-不能为空'")
+    @Column(updatable = false,name = "file_id")
     public Long getFileId() {
         return fileId;
     }
-    @Column(updatable = false,columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '关联表的文件字段名-不能为空(如:头像,照片,合同……)被关联表中实际不存在该字段'")
+    @Column(updatable = false,name = "file_field_name")
     public String getFileFieldName() {
         return fileFieldName;
     }

@@ -2,11 +2,13 @@ apply from: this.rootProject.file('javaLibrary.gradle')
 archivesBaseName = 'yue-chip-upms-common'
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
-    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}"){
-        exclude group: 'org.hibernate.orm', module: 'hibernate-core'
-    }
-    implementation 'yue.chip:yue-chip-core'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api'
+    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}")
+    implementation ('yue.chip:yue-chip-core')
+    api 'com.fasterxml.jackson.core:jackson-annotations:2.15.3'
+    api 'javax.persistence:javax.persistence-api:2.2'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
+    api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
+//    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'jakarta.platform:jakarta.jakartaee-api'
     implementation 'org.reflections:reflections:'
@@ -15,6 +17,10 @@ dependencies {
     compileOnly "org.mapstruct:mapstruct-jdk8"
     compileOnly "org.projectlombok:lombok"
     compileOnly "org.projectlombok:lombok-mapstruct-binding"
+    api 'javax.persistence:persistence-api:1.0.2'
+    api 'javax.persistence:javax.persistence-api:2.2'
+    api 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final'
+    api 'javax.annotation:jsr250-api:1.0'
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"

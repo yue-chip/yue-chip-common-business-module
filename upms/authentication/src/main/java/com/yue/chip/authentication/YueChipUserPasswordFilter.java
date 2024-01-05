@@ -1,8 +1,5 @@
 package com.yue.chip.authentication;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -10,6 +7,9 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -52,4 +52,13 @@ public class YueChipUserPasswordFilter extends AbstractAuthenticationProcessingF
         authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
         return this.getAuthenticationManager().authenticate(authRequest);
     }
+
+//    @Override
+//    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+//        String username = request.getParameter(USERNAME);
+//        String password = request.getParameter(PASSWORD);
+//        YueChipAuthenticationToken authRequest = new YueChipAuthenticationToken(password,username);
+//        authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
+//        return this.getAuthenticationManager().authenticate(authRequest);
+//    }
 }

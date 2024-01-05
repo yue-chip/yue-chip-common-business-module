@@ -4,7 +4,7 @@ import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.utils.SpringContextUtil;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

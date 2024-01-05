@@ -5,7 +5,7 @@ import com.yue.chip.common.business.definition.file.FileDefinition;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.expose.file.FileExposeService;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.StringUtils;
 

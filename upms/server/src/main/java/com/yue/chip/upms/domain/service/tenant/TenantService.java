@@ -1,8 +1,8 @@
 package com.yue.chip.upms.domain.service.tenant;
 
 import com.yue.chip.upms.domain.aggregates.Tenant;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Mr.Liu

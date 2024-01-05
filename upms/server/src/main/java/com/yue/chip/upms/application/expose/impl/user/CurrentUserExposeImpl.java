@@ -5,8 +5,8 @@ import com.yue.chip.core.ICurrentUser;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
-import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotBlank;
+import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 

@@ -12,7 +12,7 @@ import com.yue.chip.upms.infrastructure.dao.tenant.TenantStateDao;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;

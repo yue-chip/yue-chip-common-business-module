@@ -1,9 +1,9 @@
 package com.yue.chip.upms.interfaces.dto.organizational;
 
 import com.yue.chip.upms.definition.organizational.GridDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+//import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
-@Schema
+//@Schema
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 public class GridUpdateDto extends GridDefinition {

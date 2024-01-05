@@ -5,7 +5,7 @@ import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDaoEx;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.hibernate.jdbc.ReturningWork;
 
 import java.sql.PreparedStatement;

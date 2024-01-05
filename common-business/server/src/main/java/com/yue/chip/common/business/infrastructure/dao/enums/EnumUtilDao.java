@@ -2,8 +2,8 @@ package com.yue.chip.common.business.infrastructure.dao.enums;
 
 import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
 import com.yue.chip.core.persistence.curd.BaseDao;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;

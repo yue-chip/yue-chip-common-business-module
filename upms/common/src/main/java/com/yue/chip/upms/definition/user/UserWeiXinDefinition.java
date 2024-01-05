@@ -1,27 +1,19 @@
 package com.yue.chip.upms.definition.user;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.yue.chip.core.BaseDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Transient;
+import javax.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
-
 /**
  * user 字段的定义 避免在聚合实体entity，dto，vo，po……等bean 进行重复定义
  */
 @Data
-@Schema(description = "用户小程序")
+//@Schema(description = "用户小程序")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
@@ -38,25 +30,25 @@ public class UserWeiXinDefinition extends BaseDefinition {
      */
     public static final String PROFILE_PHOTO_FIELD_NAME = "profilePhoto";
 
-    @Schema(description = "头像id")
+    //@Schema(description = "头像id")
 //    @Getter(AccessLevel.NONE)
 //    @Setter(AccessLevel.NONE)
     @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
     private Long profilePhotoId;
 
     @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
-    @Schema(description = "头像url")
+    //@Schema(description = "头像url")
 //    @Getter(AccessLevel.NONE)
 //    @Setter(AccessLevel.NONE)
     private String profilePhotoUrl;
 
-    @Schema(description = "openId")
+    //@Schema(description = "openId")
     private String openId;
 
-    @Schema(description = "手机号码")
+    //@Schema(description = "手机号码")
     private String phoneNumber;
 
-    @Schema(description = "租户编码")
+    //@Schema(description = "租户编码")
     @JsonIgnore
     private Long tenantNumber;
 

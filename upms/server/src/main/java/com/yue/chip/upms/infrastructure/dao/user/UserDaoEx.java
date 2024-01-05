@@ -2,8 +2,8 @@ package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

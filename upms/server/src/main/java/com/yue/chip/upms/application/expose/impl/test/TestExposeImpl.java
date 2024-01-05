@@ -5,7 +5,7 @@ import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import lombok.extern.java.Log;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.skywalking.apm.toolkit.trace.Tag;
@@ -32,7 +32,7 @@ public class TestExposeImpl implements TestExpose {
 
     @Override
     @Trace
-    @Tags({@Tag(key = "code",value = "arg[0]"),@Tag(key = "return",value = "returnedObj")})
+    //@Tags({//@Tag(key = "code",value = "arg[0]"),//@Tag(key = "return",value = "returnedObj")})
     public Map<String, String> test(String code) {
         log.info(code);
         Map<String,String> map = new HashMap<>();

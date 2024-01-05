@@ -21,15 +21,24 @@ bootJar {
 dependencies {
     api project(':interface-expose')
     api platform("yue.chip:starter:${yueChipPlatformVersion}")
-    api 'yue.chip:yue-chip-serve-starter'
-    api 'yue.chip:yue-chip-business-starter'
-    api 'yue.chip:yue-chip-security'
+    api ('yue.chip:yue-chip-serve-starter')
+    api ('yue.chip:yue-chip-business-starter')
+    api ('yue.chip:yue-chip-security')
     api 'io.minio:minio'
 //    api 'com.aliyun:dysmsapi20170525'
     api ('com.aliyun:dyvmsapi20170525') {
         exclude group: "com.sun.xml.bind"
     }
     api 'com.tencentcloudapi:tencentcloud-sdk-java-sms'
+    api "com.dameng:DmJdbcDriver18:8.1.3.62"
+    api "com.dameng:DmDialect-for-hibernate5.6:8.1.3.62"
+    api "org.hibernate:hibernate-core:5.6.15.Final"
+    api 'io.swagger.core.v3:swagger-annotations:2.2.20'
+    api 'com.google.guava:guava:33.0.0-jre'
+    api 'javax.servlet:javax.servlet-api:4.0.1'
+    api 'javax.annotation:javax.annotation-api:1.3.2'
+    api 'javax.validation:validation-api:2.0.1.Final'
+    api 'commons-beanutils:commons-beanutils:1.9.4'
 //    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -38,11 +47,9 @@ dependencies {
     compileOnly "org.mapstruct:mapstruct-jdk8"
     compileOnly "org.projectlombok:lombok"
     compileOnly "org.projectlombok:lombok-mapstruct-binding"
-    api "com.dameng:Dm8JdbcDriver18"
-    api "com.dameng:DmDialect-for-hibernate5.6"
-    api 'org.hibernate:hibernate-core:5.6.15.Final'
-    api (group: 'org.hibernate.orm', name: 'hibernate-core'){
-        transitive=false
+    api "com.dameng:DmJdbcDriver18"
+    api ("com.dameng:DmDialect-for-hibernate5.6"){
+        exclude group: 'org.hibernate', module: 'hibernate-core'
     }
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"

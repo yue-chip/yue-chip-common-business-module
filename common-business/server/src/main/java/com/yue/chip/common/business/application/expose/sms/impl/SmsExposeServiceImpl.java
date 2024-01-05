@@ -2,8 +2,8 @@ package com.yue.chip.common.business.application.expose.sms.impl;
 
 import com.yue.chip.common.business.domain.service.sms.SmsService;
 import com.yue.chip.common.business.expose.sms.SmsExposeService;
-import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotBlank;
+import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import java.util.Arrays;

@@ -7,7 +7,7 @@ import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.hibernate.jdbc.ReturningWork;

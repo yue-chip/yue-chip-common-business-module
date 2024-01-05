@@ -4,7 +4,7 @@ import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDaoEx;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;

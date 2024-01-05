@@ -5,7 +5,7 @@ import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalDaoEx;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;

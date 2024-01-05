@@ -7,7 +7,7 @@ import com.yue.chip.common.business.infrastructure.dao.file.FileDao;
 import com.yue.chip.common.business.infrastructure.dao.file.FileRelationalDao;
 import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import com.yue.chip.common.business.infrastructure.po.file.FileRelationalPo;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

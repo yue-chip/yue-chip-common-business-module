@@ -1,7 +1,7 @@
 package com.yue.chip.upms.infrastructure.dao.weixin;
 
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 
 import java.util.Optional;
 

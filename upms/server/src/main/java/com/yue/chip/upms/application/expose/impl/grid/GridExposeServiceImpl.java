@@ -7,7 +7,7 @@ import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.grid.vo.GridExposeVo;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
