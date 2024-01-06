@@ -17,8 +17,6 @@ import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -30,6 +28,8 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -62,7 +62,7 @@ public class LoginServiceImpl implements LoginService {
         //检查租户状态
         checkTenantState();
         Optional<User> optional = upmsRepository.findUserByUsername(username);
-        if (optional.isEmpty()) {
+        if (!optional.isPresent()) {
             throw new AuthenticationServiceException("该账号不存在");
         }
         User user = optional.get();
@@ -75,7 +75,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public String login1(String phoneNumber, String openId) {
         Optional<UserWeixin> optional = userWeiXinRepository.findByOpenId(openId);
-        if (optional.isEmpty()) {
+        if (!optional.isPresent()) {
             UserWeiXinPo userWeiXinPo = userWeiXinRepository.saveUserWeiXin(
                     UserWeiXinPo.builder()
                             .openId(openId)
@@ -135,7 +135,7 @@ public class LoginServiceImpl implements LoginService {
 
     private void checkTenantState() {
         Optional<TenantStatePo> optional = tenantRepository.findTenantStateFirst();
-        if (optional.isEmpty()) {
+        if (!optional.isPresent()) {
             BusinessException.throwException("该租户状态不可用");
         }else {
             TenantStatePo tenantStatePo = optional.get();

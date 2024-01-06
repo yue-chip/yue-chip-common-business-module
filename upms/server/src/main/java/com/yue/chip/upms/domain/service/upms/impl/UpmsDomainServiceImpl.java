@@ -7,10 +7,11 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
-import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Mr.Liu
@@ -30,7 +31,7 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
         List<RoleResourcesPo> list = new ArrayList<>();
         if (Objects.nonNull(resourcesIds)) {
             List<Long> newResourcesIds = new ArrayList<>();
-            newResourcesIds.addAll(Arrays.stream(resourcesIds).toList());
+            newResourcesIds.addAll(Arrays.stream(resourcesIds).collect(Collectors.toList()));
             for (Long id : resourcesIds) {
                 List<Long> allParentId = getAllParentId(id);
                 newResourcesIds.forEach(i->{

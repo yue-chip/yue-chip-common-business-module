@@ -12,17 +12,15 @@ import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantAddDTO;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantUpdateDTO;
 import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.annotation.Resource;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,7 +90,7 @@ public class TenantConsoleController {
     public IResultData<TenantVo> details(@Parameter(description = "修改需要传id，新增则不需要传",name = "id") @NotNull(message = "id不能为空")Long id) {
         Optional<Tenant> optional = tenantRepository.tenantDetails(id);
         if (optional.isPresent()) {
-           return ResultData.builder().data(optional.isEmpty()?null:tenantMapper.toTenantVo(optional.get())).build();
+           return ResultData.builder().data(!optional.isPresent()?null:tenantMapper.toTenantVo(optional.get())).build();
         }
         return ResultData.builder().build();
     }
