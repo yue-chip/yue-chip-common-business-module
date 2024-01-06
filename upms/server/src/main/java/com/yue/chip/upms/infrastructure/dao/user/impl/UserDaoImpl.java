@@ -14,6 +14,7 @@ import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.sql.PreparedStatement;
@@ -135,6 +136,7 @@ public class UserDaoImpl implements UserDaoEx {
     }
 
     @Override
+    @Transactional
     public Optional<UserPo> findByIdAndTenantNumber(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
         Optional<UserPo> result =baseDao.getSession().doReturningWork(
@@ -142,7 +144,7 @@ public class UserDaoImpl implements UserDaoEx {
                     @Override
                     public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+                        stat.execute(TenantDatabaseUtil.getDatabaseScript().concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
 
                         PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_user where id = ?");
                         prepareStatement.setLong(1,id);
@@ -167,6 +169,7 @@ public class UserDaoImpl implements UserDaoEx {
     }
 
     @Override
+    @Transactional
     public Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
         Optional<UserPo> result =baseDao.getSession().doReturningWork(
@@ -174,7 +177,7 @@ public class UserDaoImpl implements UserDaoEx {
                 @Override
                 public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
-                    stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+                    stat.execute(TenantDatabaseUtil.getDatabaseScript().concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
 
                     PreparedStatement prepareStatement =  connection.prepareStatement("select u.* from t_user u join t_grid g on u.id = g.user_id where g.id = ?");
                     prepareStatement.setLong(1,id);

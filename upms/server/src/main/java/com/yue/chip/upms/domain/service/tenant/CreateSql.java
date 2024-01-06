@@ -7,13 +7,14 @@ import cn.hutool.db.Db;
 import cn.hutool.db.DbUtil;
 import cn.hutool.db.Entity;
 import com.yue.chip.core.tenant.TenantConstant;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import com.yue.chip.utils.TenantDatabaseUtil;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 
 import javax.sql.DataSource;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
@@ -33,7 +34,7 @@ public class CreateSql {
         String newDateBase = database.concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber));
         StringBuffer sqlBuffer = new StringBuffer();
         sqlBuffer.append("");
-        sqlBuffer.append("USE `" + newDateBase + "`;\n");
+        sqlBuffer.append(TenantDatabaseUtil.getDatabaseScript() + newDateBase + ";\n");
         stat.execute(sqlBuffer.toString());
         sqlBuffer.delete(0,sqlBuffer.length());
         sqlBuffer.append("SET NAMES utf8mb4;\n");

@@ -7,6 +7,7 @@ import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import javax.annotation.Resource;
 import org.hibernate.jdbc.ReturningWork;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,6 +22,7 @@ public class UserWeiXinDaoImpl implements UserWeiXinDaoEx {
     BaseDao<UserWeiXinPo> baseDao;
 
     @Override
+    @Transactional
     public Optional<UserWeiXinPo> findById(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
         Optional<UserWeiXinPo> result =baseDao.getSession().doReturningWork(
@@ -28,7 +30,7 @@ public class UserWeiXinDaoImpl implements UserWeiXinDaoEx {
                     @Override
                     public Optional<UserWeiXinPo> execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+                        stat.execute(TenantDatabaseUtil.getDatabaseScript().concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
                         PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_user_weixin where id = ?");
                         prepareStatement.setLong(1,id);
                         ResultSet resultSet = prepareStatement.executeQuery();

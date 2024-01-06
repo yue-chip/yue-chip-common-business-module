@@ -2,7 +2,6 @@ package com.yue.chip.upms.domain.service.tenant.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.core.tenant.TenantConstant;
 import com.yue.chip.core.tenant.TenantUtil;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
@@ -10,8 +9,6 @@ import com.yue.chip.upms.domain.service.tenant.CreateSql;
 import com.yue.chip.upms.domain.service.tenant.TenantService;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDao;
 import com.yue.chip.utils.TenantDatabaseUtil;
-import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,9 +16,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
+import javax.validation.constraints.NotNull;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -66,15 +66,16 @@ public class TenantServiceImpl implements TenantService {
     private String security;
 
     @Override
+    @Transactional
     public void createTenantDatabase(Long tenantNumber) {
         Object result =tenantDao.getSession().doReturningWork(
             new ReturningWork<Boolean>() {
                 @Override
                 public Boolean execute(java.sql.Connection connection) throws SQLException {;
                     Statement stat = connection.createStatement();
-                    stat.executeUpdate("create database ".concat("`").concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)).concat("`"));
-                    stat.executeUpdate("create database ".concat("`").concat(TenantDatabaseUtil.tenantDatabaseName(upms,tenantNumber)).concat("`"));
-                    stat.executeUpdate("create database ".concat("`").concat(TenantDatabaseUtil.tenantDatabaseName(security,tenantNumber)).concat("`"));
+                    stat.executeUpdate("create database ".concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)));
+                    stat.executeUpdate("create database ".concat(TenantDatabaseUtil.tenantDatabaseName(upms,tenantNumber)));
+                    stat.executeUpdate("create database ".concat(TenantDatabaseUtil.tenantDatabaseName(security,tenantNumber)));
                     stat.close();
                     //创建表
                     createTenantTable(connection,tenantNumber);
@@ -85,32 +86,33 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
+    @Transactional
     public void initTenantData(@NotNull Long tenantNumber) {
         Object result =tenantDao.getSession().doReturningWork(
             new ReturningWork<Boolean>() {
                 @Override
                 public Boolean execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
-                    stat.execute("use ".concat("`").concat(TenantDatabaseUtil.tenantDatabaseName(upms,tenantNumber)).concat("`"));
-                    stat.executeUpdate("INSERT INTO  t_tenant_state(`state`) values (1);");
-                    stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_number`,`state`,`is_call`,`is_sms`) values ('superadmin','"+passwordEncoder.encode(SecureUtil.md5("superadmin"))+"','superadmin',"+tenantNumber+",1,1,1);");
-                    stat.executeUpdate("INSERT INTO  t_user(`name`,`password`,`username`,`tenant_number`,`state`,`is_call`,`is_sms`) values ('admin','"+passwordEncoder.encode(SecureUtil.md5("admin"))+"','admin',"+tenantNumber+",1,1,1);");
-//                  stat.executeUpdate("INSERT INTO  t_resources(`code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url`) select `code`,`is_default`,`name`,`parent_id`,`remark`,`scope`,`sort`,`state`,`type`,`url` from upms.t_resources where code not in ( 'TENANT','MENU');");
-                    stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('superadmin',1,'超级管理员','',1);");
-                    stat.executeUpdate("INSERT INTO  t_role(`code`,`is_default`,`name`,`remark`,`state`) values ('admin',1,'管理员','',1);");
-                    stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select re.id, r.id from t_role r join t_resources re where r.code ='admin';");
-                    stat.executeUpdate("INSERT INTO  t_role_resources(`resources_id`,`role_id`) select re.id, r.id from t_role r join t_resources re where r.code ='superadmin';");
-                    stat.executeUpdate("INSERT INTO  t_user_role(`user_id`,`role_id`) select u.id, r.id from t_role r join t_user u where r.code ='admin' and u.username ='admin';");
-                    stat.executeUpdate("INSERT INTO  t_user_role(`user_id`,`role_id`) select u.id, r.id from t_role r join t_user u where r.code ='superadmin' and u.username ='superadmin';");
+                    stat.execute(TenantDatabaseUtil.getDatabaseScript().concat(TenantDatabaseUtil.tenantDatabaseName(upms,tenantNumber)));
+                    stat.executeUpdate("INSERT INTO  t_tenant_state(state) values (1);");
+                    stat.executeUpdate("INSERT INTO  t_user(name,password,username,tenant_number,state,is_call,is_sms) values ('superadmin','"+passwordEncoder.encode(SecureUtil.md5("superadmin"))+"','superadmin',"+tenantNumber+",1,1,1);");
+                    stat.executeUpdate("INSERT INTO  t_user(name,password,username,tenant_number,state,is_call,is_sms) values ('admin','"+passwordEncoder.encode(SecureUtil.md5("admin"))+"','admin',"+tenantNumber+",1,1,1);");
+//                  stat.executeUpdate("INSERT INTO  t_resources(code,is_default,name,parent_id,remark,scope,sort,state,type,url) select code,is_default,name,parent_id,remark,scope,sort,state,type,url from upms.t_resources where code not in ( 'TENANT','MENU');");
+                    stat.executeUpdate("INSERT INTO  t_role(code,is_default,name,remark,state) values ('superadmin',1,'超级管理员','',1);");
+                    stat.executeUpdate("INSERT INTO  t_role(code,is_default,name,remark,state) values ('admin',1,'管理员','',1);");
+                    stat.executeUpdate("INSERT INTO  t_role_resources(resources_id,role_id) select re.id, r.id from t_role r join t_resources re where r.code ='admin';");
+                    stat.executeUpdate("INSERT INTO  t_role_resources(resources_id,role_id) select re.id, r.id from t_role r join t_resources re where r.code ='superadmin';");
+                    stat.executeUpdate("INSERT INTO  t_user_role(user_id,role_id) select u.id, r.id from t_role r join t_user u where r.code ='admin' and u.username ='admin';");
+                    stat.executeUpdate("INSERT INTO  t_user_role(user_id,role_id) select u.id, r.id from t_role r join t_user u where r.code ='superadmin' and u.username ='superadmin';");
 
-                    stat.execute("use ".concat("`").concat(TenantDatabaseUtil.tenantDatabaseName(security,tenantNumber)).concat("`"));
-                    stat.executeUpdate("INSERT INTO  alarm_category(`gate`,`name`,`state`,`message_type`,`code`,`emergency_call`,`sms`,`push`) select 1, `name`,`state`,`message_type`,`code`,`emergency_call`,`sms`,`push` from security.alarm_category;");
-                    stat.executeUpdate("INSERT INTO  device_category(`id`,`name`) select `id`,  `name` from security.device_category;");
-                    stat.executeUpdate("INSERT INTO  device_product(`category_id`,`guide`,`name`,`token`,`master_key`,`access_platform`,`heartbeat_intervals`) select `category_id`,`guide`,`name`,`token`,`master_key`,`access_platform`,`heartbeat_intervals` from security.device_product;");
-                    stat.executeUpdate("INSERT INTO  fire_station_category(`name`) select  `name` from security.fire_station_category;");
+                    stat.execute(TenantDatabaseUtil.getDatabaseScript().concat(TenantDatabaseUtil.tenantDatabaseName(security,tenantNumber)));
+                    stat.executeUpdate("INSERT INTO  alarm_category(gate,name,state,message_type,code,emergency_call,sms,push) select 1, name,state,message_type,code,emergency_call,sms,push from security.alarm_category;");
+                    stat.executeUpdate("INSERT INTO  device_category(id,name) select id,  name from security.device_category;");
+                    stat.executeUpdate("INSERT INTO  device_product(category_id,guide,name,token,master_key,access_platform,heartbeat_intervals) select category_id,guide,name,token,master_key,access_platform,heartbeat_intervals from security.device_product;");
+                    stat.executeUpdate("INSERT INTO  fire_station_category(name) select  name from security.fire_station_category;");
 
-                    stat.execute("use ".concat("`").concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)).concat("`"));
-                    stat.executeUpdate("INSERT INTO  t_enum_util(`code`,`value`,`version`) select `code`,`value`,`version` from common.t_enum_util;");
+                    stat.execute(TenantDatabaseUtil.getDatabaseScript().concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)));
+                    stat.executeUpdate("INSERT INTO  t_enum_util(code,value,version) select code,value,version from common.t_enum_util;");
                     stat.close();
                     return true;
                 }
@@ -124,8 +126,8 @@ public class TenantServiceImpl implements TenantService {
         if (StringUtils.hasText(domain)) {
            String[] domains = domain.split(",");
            for (String str : domains) {
-               redisTemplate.opsForValue().set(TenantUtil.TENANT_REMOTE_HOST.concat(str),tenant.getTenantNumber());
-               redisTemplate.expire(TenantUtil.TENANT_REMOTE_HOST.concat(str),62, TimeUnit.SECONDS);
+               redisTemplate.opsForValue().set(TenantUtil.TENANT_REMOTE_HOST.concat(str), tenant.getTenantNumber());
+               redisTemplate.expire(TenantUtil.TENANT_REMOTE_HOST.concat(str), 62, TimeUnit.SECONDS);
            }
         }
     }

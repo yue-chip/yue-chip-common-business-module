@@ -6,12 +6,13 @@ import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDaoEx;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.utils.TenantDatabaseUtil;
-import javax.annotation.Resource;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -64,13 +65,14 @@ public class TenantDaoImpl implements TenantDaoEx {
     }
 
     @Override
+    @Transactional
     public void updateOtherDataBase(State state, Long tenantNumber) {
         Object result = baseDao.getSession().doReturningWork(
             new ReturningWork<Boolean>() {
                 @Override
                 public Boolean execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
-                    stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+                    stat.execute(TenantDatabaseUtil.getDatabaseScript().concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
                     stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
                     stat.close();
                     return true;
@@ -79,13 +81,14 @@ public class TenantDaoImpl implements TenantDaoEx {
     }
 
     @Override
+    @Transactional
     public void insertOtherDataBase(State state, Long tenantNumber) {
         Object result = baseDao.getSession().doReturningWork(
                 new ReturningWork<Boolean>() {
                     @Override
                     public Boolean execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+                        stat.execute(TenantDatabaseUtil.getDatabaseScript().concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)));
                         stat.executeUpdate("insert t_tenant_state (state) values("+state.getKey()+")");
                         stat.close();
                         return true;
@@ -94,13 +97,14 @@ public class TenantDaoImpl implements TenantDaoEx {
     }
 
     @Override
+    @Transactional
     public List<TenantPo> findAllByState(State state) {
         List<TenantPo> result = baseDao.getSession().doReturningWork(
             new ReturningWork<List<TenantPo>>() {
                 @Override
                 public List<TenantPo> execute(java.sql.Connection connection) throws SQLException {
                     Statement stat =  connection.createStatement();
-                    stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(null)).concat("`"));
+                    stat.execute(TenantDatabaseUtil.getDatabaseScript().concat(TenantDatabaseUtil.tenantDatabaseName(null)));
                     PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_tenant where state = ?");
                     prepareStatement.setInt(1,state.getKey());
                     ResultSet resultSet = prepareStatement.executeQuery();
@@ -109,9 +113,10 @@ public class TenantDaoImpl implements TenantDaoEx {
                         list.add(TenantPo.builder()
                                 .manager(Objects.nonNull(resultSet.getObject("manager"))?resultSet.getString("manager"):null)
                                 .id(resultSet.getLong("id"))
+                                .state(Objects.nonNull(resultSet.getObject("state"))?State.instance(resultSet.getInt("state")):null)
                                 .isDefault(Objects.nonNull(resultSet.getObject("is_default"))?resultSet.getBoolean("is_default"):null)
                                 .abbreviation(Objects.nonNull(resultSet.getObject("abbreviation"))?resultSet.getString("abbreviation"):null)
-                                .domain(Objects.nonNull(resultSet.getObject("domain"))?resultSet.getString("domain"):null)
+                                .domain(Objects.nonNull(resultSet.getObject("request_domain"))?resultSet.getString("request_domain"):null)
                                 .phoneNumber(Objects.nonNull(resultSet.getObject("phone_number"))?resultSet.getString("phone_number"):null)
                                 .name(Objects.nonNull(resultSet.getObject("name"))?resultSet.getString("name"):null)
                                 .tenantNumber(Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null)
@@ -127,13 +132,14 @@ public class TenantDaoImpl implements TenantDaoEx {
     }
 
     @Override
+    @Transactional
     public Optional<TenantPo> findTenantByTenantNumber(Long tenantNumber) {
         TenantPo result = baseDao.getSession().doReturningWork(
                 new ReturningWork<TenantPo>() {
                     @Override
                     public TenantPo execute(java.sql.Connection connection) throws SQLException {
                         Statement stat =  connection.createStatement();
-                        stat.execute(" use `".concat(upms).concat("`"));
+                        stat.execute(" use ".concat(upms));
                         String sql = "select * from t_tenant where tenant_number = ?";
                         Object[] params = new Object[]{tenantNumber};
                         if (Objects.isNull(tenantNumber)) {

@@ -8,6 +8,7 @@ import com.yue.chip.utils.TenantDatabaseUtil;
 import javax.annotation.Resource;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -38,6 +39,7 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
     private String security;
 
     @Override
+    @Transactional
     public void saveOtherTenantEnum(EnumUtilPo enumUtilPo) {
         Object result =enumUtilPoBaseDao.getSession().doReturningWork(
             new ReturningWork<Boolean>() {
@@ -52,13 +54,13 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
                     }
                     for (Long tenantNumber:tenantNumbers){
                         try {
-                            stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)).concat("`"));
+                            stat.execute(TenantDatabaseUtil.getDatabaseScript().concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)));
                             PreparedStatement delete = connection.prepareStatement("delete from t_enum_util where code =? and version = ?");
                             delete.setString(1, enumUtilPo.getCode());
                             delete.setString(2, enumUtilPo.getVersion());
                             delete.executeUpdate();
 
-                            PreparedStatement insert = connection.prepareStatement("INSERT INTO t_enum_util(`code`,`value`,`version`) values (?,?,?)");
+                            PreparedStatement insert = connection.prepareStatement("INSERT INTO t_enum_util(code,value,version) values (?,?,?)");
                             insert.setString(1, enumUtilPo.getCode());
                             insert.setString(2, enumUtilPo.getValue());
                             insert.setString(3, enumUtilPo.getVersion());
