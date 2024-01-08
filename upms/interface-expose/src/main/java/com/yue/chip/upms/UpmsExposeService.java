@@ -6,10 +6,11 @@ import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 
@@ -25,14 +26,16 @@ public interface UpmsExposeService {
      * @param userIds
      * @return
      */
-    List<UserExposeVo> findUserAllByIdIn(List<Long> userIds);
+    List<UserExposeVo> findUserAllByIdIn(@Size(min = 1) List<Long> userIds);
+
+    Optional<UserExposeVo> findUserById(@NotNull Long userId);
 
     /**
      * 根据机构id查询用户
      * @param organizationalIds
      * @return
      */
-    List<UserExposeVo> findUserAllByOrganizationalId(List<Long> organizationalIds);
+    List<UserExposeVo> findUserAllByOrganizationalId(@Size(min = 1)List<Long> organizationalIds);
 
     /**
      * 根据用户id和租户编码查寻用户
@@ -64,7 +67,7 @@ public interface UpmsExposeService {
      * @param ids
      * @return
      */
-    public List<OrganizationalExposeVo> findOrganizationalByIdList(Set<Long> ids);
+    public List<OrganizationalExposeVo> findOrganizationalByIdList(@Size(min = 1)Set<Long> ids);
 
     public List<OrganizationalExposeVo> findOrganizationalAll();
 
@@ -72,14 +75,14 @@ public interface UpmsExposeService {
      * 获取所有节点数据
      * @return
      */
-    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByOrganizationalId(Long organizationalId);
+    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByOrganizationalId(@NotNull Long organizationalId);
 
     /**
      * 根据用户获取所在机构和所有子节点
      * @param userId
      * @return
      */
-    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByUserId(Long userId);
+    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByUserId(@NotNull Long userId);
 
     /**
      * 根据当前用户获取所在机构和所有子节点
@@ -88,13 +91,13 @@ public interface UpmsExposeService {
     public List<OrganizationalExposeVo> findOrganizationalAllChildrenByCurrentUserId();
 
 
-    public Set<Long> findOrganizationalAllChildrenOrganizationalIds(Long parentId);
+    public Set<Long> findOrganizationalAllChildrenOrganizationalIds(@NotNull Long parentId);
 
     List<UserExposeVo> findUserAllByNameOrPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber);
 
-    public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(Long parentId);
+    public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(@NotNull Long parentId);
 
-    public Page<OrganizationalExposeVo> organizationalExposeVoPage(List<Long> organizationalList, YueChipPage yueChipPage);
+    public Page<OrganizationalExposeVo> organizationalExposeVoPage(@Size(min = 1)List<Long> organizationalList,@NotNull YueChipPage yueChipPage);
 
     /**
      * 获取机构下的网格
@@ -116,13 +119,13 @@ public interface UpmsExposeService {
      * @param userId
      * @return
      */
-    List<OrganizationalUserExposeVo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId);
+    List<OrganizationalUserExposeVo> findUserAllByOrganizationalIdAndUserIdIn(@NotNull Long organizationalId,@Size(min = 1) Set<Long> userId);
 
     /**
      * 根据用户id查询机构
      * @param userId
      * @return
      */
-    List<OrganizationalUserExposeVo> findUserAllByUserIdIn(Set<Long> userId);
+    List<OrganizationalUserExposeVo> findUserAllByUserIdIn(@Size(min = 1)Set<Long> userId);
 
 }
