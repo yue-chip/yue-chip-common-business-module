@@ -5,11 +5,17 @@ dependencies {
     api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}"){
         exclude group: 'org.hibernate.orm', module: 'hibernate-core'
         exclude group: 'org.hibernate.validator', module: 'hibernate.validator'
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
     }
     api project(':common')
     api ('yue.chip:yue-chip-interface-expose-starter'){
         exclude group: 'org.hibernate.orm', module: 'hibernate-core'
         exclude group: 'org.hibernate.validator', module: 'hibernate.validator'
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
     }
     api ('com.aliyun:dyvmsapi20170525') {
         exclude group: "com.sun.xml.bind"

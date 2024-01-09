@@ -2,8 +2,16 @@ apply from: this.rootProject.file('javaLibrary.gradle')
 archivesBaseName = 'yue-chip-upms-common'
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
-    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}")
-    implementation ('yue.chip:yue-chip-core')
+    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}"){
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
+    }
+    implementation ('yue.chip:yue-chip-core'){
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
+    }
     api 'com.fasterxml.jackson.core:jackson-annotations:2.15.3'
     api 'javax.persistence:javax.persistence-api:2.2'
     api 'com.fasterxml.jackson.core:jackson-databind:2.15.3'

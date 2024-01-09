@@ -20,10 +20,28 @@ bootJar {
 }
 dependencies {
     api project(':interface-expose')
-    api platform("yue.chip:starter:${yueChipPlatformVersion}")
-    api ('yue.chip:yue-chip-serve-starter')
-    api ('yue.chip:yue-chip-business-starter')
-    api ('yue.chip:yue-chip-security')
+    api platform("yue.chip:starter:${yueChipPlatformVersion}"){
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
+    }
+    api ('yue.chip:yue-chip-serve-starter'){
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
+    }
+    api ('yue.chip:yue-chip-business-starter'){
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
+    }
+    api ('yue.chip:yue-chip-security'){
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
+    }
+    api "com.tongweb.springboot:tongweb-spring-boot-starter-2.x"
+    api 'pull-parser:pull-parser:2.1.10'
     api 'io.minio:minio'
 //    api 'com.aliyun:dysmsapi20170525'
     api ('com.aliyun:dyvmsapi20170525') {

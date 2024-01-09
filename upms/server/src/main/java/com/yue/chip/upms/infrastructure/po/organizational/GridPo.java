@@ -21,6 +21,7 @@ import javax.persistence.*;
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
+@Data
 //@Comment("网格")
 public class GridPo extends GridDefinition {
     @Override

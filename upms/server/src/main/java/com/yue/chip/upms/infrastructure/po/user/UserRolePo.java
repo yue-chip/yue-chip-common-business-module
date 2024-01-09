@@ -20,7 +20,7 @@ import javax.persistence.*;
 @Table(name = "t_user_role",indexes = {@Index(columnList = "user_id"),@Index(columnList = "role_id")})
 @SuperBuilder
 @NoArgsConstructor
-//@Data
+@Data
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 //@Comment("用户-角色关联表")
 public class UserRolePo extends BaseEntity {

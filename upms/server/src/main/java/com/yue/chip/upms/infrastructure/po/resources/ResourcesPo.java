@@ -24,7 +24,7 @@ import javax.persistence.*;
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
-//@Data
+@Data
 //@Comment("菜单资源")
 public class ResourcesPo extends ResourcesDefinition {
 
@@ -48,45 +48,45 @@ public class ResourcesPo extends ResourcesDefinition {
 
     @Override
     @Convert(converter = Scope.ScopeConverter.class)
-    //@Column(columnDefinition = "int NULL COMMENT '作用域(0:app,1:后台,2:前端,3:微信)-不能为空'")
+    @Column(name = "scope")
     public Scope getScope() {
         return super.getScope();
     }
 
     @Override
     @Convert(converter = Type.TypeConverter.class)
-    //@Column(columnDefinition = "int NULL COMMENT '类型(0:目录,1:菜单,2:功能)-不能为空'")
+    @Column(name = "type")
     public Type getType() {
         return super.getType();
     }
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    //@Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)-不能为空'")
+    @Column(name = "state")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    //@Column(columnDefinition = "bit(1) NULL COMMENT '是否默认菜单资源,默认资源不能删除-不能为空'")
+    @Column(name = "is_default")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }
 
     @Override
-    //@Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT 'url'")
+    @Column(name = "url")
     public String getUrl() {
         return super.getUrl();
     }
 
     @Override
-    //@Column(columnDefinition = "int NULL DEFAULT 0 COMMENT '排序'")
+    @Column(name = "sort")
     public Integer getSort() {
         return super.getSort();
     }
 
     @Override
-    //@Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '备注'")
+    @Column(name = "remark")
     public String getRemark() {
         return super.getRemark();
     }

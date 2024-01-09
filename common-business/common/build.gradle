@@ -5,10 +5,16 @@ dependencies {
     api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}"){
         exclude group: 'org.hibernate.orm', module: 'hibernate-core'
         exclude group: 'org.hibernate.validator', module: 'hibernate.validator'
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
     }
     implementation ('yue.chip:yue-chip-core'){
         exclude group: 'org.hibernate.orm', module: 'hibernate-core'
         exclude group: 'org.hibernate.validator', module: 'hibernate.validator'
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
     }
     api 'com.fasterxml.jackson.core:jackson-annotations:2.15.3'
     api 'javax.persistence:javax.persistence-api:2.2'

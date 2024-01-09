@@ -2,13 +2,13 @@ package com.yue.chip.upms.infrastructure.po.organizational;
 
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.organizational.OrganizationalUserDefinition;
-import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-//import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
 
 /**
  * @author Mr.Liu
@@ -21,7 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
-//@Data
+@Data
 //@Comment("组织机构与用户关联关系")
 public class OrganizationalUserPo extends OrganizationalUserDefinition {
 

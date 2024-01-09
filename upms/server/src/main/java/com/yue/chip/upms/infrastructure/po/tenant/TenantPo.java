@@ -19,21 +19,21 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper=true)
 @Entity
 @Table(name = "t_tenant",indexes = {@Index(columnList = "manager"),@Index(columnList = "phone_number") })
-//@Data
+@Data
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 //@Comment("租户表")
 @NoArgsConstructor
 public class TenantPo extends TenantDefinition {
     @Override
-    @Column(unique = true)
+    @Column(unique = true,name = "name")
     public String getName() {
         return super.getName();
     }
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    //@Column(columnDefinition = "int NULL DEFAULT 1 COMMENT '状态(0:禁用,1:正常)-不能为空'")
+    @Column(name = "state")
     public State getState() {
         return super.getState();
     }
@@ -57,25 +57,25 @@ public class TenantPo extends TenantDefinition {
     }
 
     @Override
-    //@Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '租户名称-简称-不能为空'")
+    @Column( name = "abbreviation")
     public String getAbbreviation() {
         return super.getAbbreviation();
     }
 
     @Override
-    @Column(updatable = false)
+    @Column(updatable = false,name = "is_default")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }
 
     @Override
-    @Column(unique = true)
+    @Column(unique = true,name = "tenant_number")
     public Long getTenantNumber() {
         return super.getTenantNumber();
     }
 
     @Override
-    //@Column( columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '数字大屏名称-不能为空'")
+    @Column( name = "big_screen_name")
     public String getBigScreenName() {
         return super.getBigScreenName();
     }

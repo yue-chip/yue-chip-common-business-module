@@ -2,9 +2,17 @@ apply from: this.rootProject.file('javaLibrary.gradle')
 archivesBaseName = 'yue-chip-upms-interface-expose'
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
-    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}")
+    api platform("yue.chip:starter:${project.hasProperty('yueChipPlatformVersion') ? String.valueOf(yueChipPlatformVersion) : yueChipPlatformVersion}"){
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
+    }
     api project(':common')
-    api ('yue.chip:yue-chip-interface-expose-starter')
+    api ('yue.chip:yue-chip-interface-expose-starter'){
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-core')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
+        exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
+    }
     implementation 'jakarta.platform:jakarta.jakartaee-api'
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"

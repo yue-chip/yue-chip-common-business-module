@@ -21,20 +21,20 @@ import javax.persistence.*;
 @Table(name = "t_role",indexes = {@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
 @SuperBuilder
 @NoArgsConstructor
-//@Data
+@Data
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 //@Comment("角色")
 public class RolePo extends RoleDefinition {
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    //@Column(columnDefinition = "int NULL COMMENT '状态(0:禁用,1:正常)-不能为空'")
+    @Column(name = "state")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column(unique = true)
+    @Column(unique = true,name = "code")
     public String getCode() {
         return super.getCode();
     }
@@ -46,13 +46,13 @@ public class RolePo extends RoleDefinition {
     }
 
     @Override
-    //@Column(columnDefinition = "bit(1) NULL COMMENT '是否默认角色（0：否，1：是）默认角色不能删除-不能为空'")
+    @Column(name = "is_default")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }
 
     @Override
-    //@Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '备注'")
+    @Column(name = "remark")
     public String getRemark() {
         return super.getRemark();
     }

@@ -34,17 +34,18 @@ public class UserDefinition extends BaseDefinition {
      */
     public static final String PROFILE_PHOTO_FIELD_NAME = "profilePhoto";
 
-    //@Schema(description = "头像id")
-//    @Getter(AccessLevel.NONE)
-//    @Setter(AccessLevel.NONE)
     @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
     private Long profilePhotoId;
 
     @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
-    //@Schema(description = "头像url")
-//    @Getter(AccessLevel.NONE)
-//    @Setter(AccessLevel.NONE)
     private String profilePhotoUrl;
+
+    @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
+    private Long otherPhotoId;
+
+    @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
+    private String otherPhotoUrl;
+
 
     //@Schema(description = "密码")
     private String password;

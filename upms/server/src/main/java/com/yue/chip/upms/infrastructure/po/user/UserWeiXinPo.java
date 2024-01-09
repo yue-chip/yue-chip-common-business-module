@@ -2,13 +2,16 @@ package com.yue.chip.upms.infrastructure.po.user;
 
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.user.UserWeiXinDefinition;
-import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-//import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Table;
 
 /**
  * @author Mr.Liu
@@ -21,12 +24,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
-//@Data
+@Data
 //@Comment("微信用户")
 public class UserWeiXinPo extends UserWeiXinDefinition {
 
     @Override
-    @Column(unique = true)
+    @Column(unique = true,name = "open_id")
     public String getOpenId() {
         return super.getOpenId();
     }
@@ -38,7 +41,7 @@ public class UserWeiXinPo extends UserWeiXinDefinition {
     }
 
     @Override
-    //@Column(columnDefinition = "bigint DEFAULT 1 COMMENT '租户编码'")
+    @Column(name = "tenant_number")
     public Long getTenantNumber() {
         return super.getTenantNumber();
     }
