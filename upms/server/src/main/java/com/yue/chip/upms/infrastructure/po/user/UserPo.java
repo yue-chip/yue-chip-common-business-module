@@ -95,4 +95,20 @@ public class UserPo extends UserDefinition {
     public Long getTenantNumber() {
         return super.getTenantNumber();
     }
+
+    public String getEmail() {
+        return super.getEmail();
+    }
+
+    public IdCardType getIdCardType() {
+        return super.getIdCardType();
+    }
+
+    public String getCertificateNumber() {
+        return super.getCertificateNumber();
+    }
+
+    public String getIdentificationNumber() {
+        return super.getIdentificationNumber();
+    }
 }

@@ -21,7 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
-@Data
+//@Data
 //@Comment("微信用户")
 public class UserWeiXinPo extends UserWeiXinDefinition {
 

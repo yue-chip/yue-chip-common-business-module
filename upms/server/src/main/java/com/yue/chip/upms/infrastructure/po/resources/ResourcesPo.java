@@ -24,7 +24,7 @@ import javax.persistence.*;
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
-@Data
+//@Data
 //@Comment("菜单资源")
 public class ResourcesPo extends ResourcesDefinition {
 

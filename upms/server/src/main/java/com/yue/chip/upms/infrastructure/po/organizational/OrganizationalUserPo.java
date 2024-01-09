@@ -21,7 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
-@Data
+//@Data
 //@Comment("组织机构与用户关联关系")
 public class OrganizationalUserPo extends OrganizationalUserDefinition {
 

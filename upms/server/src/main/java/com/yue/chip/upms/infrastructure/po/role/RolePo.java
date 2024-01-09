@@ -21,7 +21,7 @@ import javax.persistence.*;
 @Table(name = "t_role",indexes = {@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
 @SuperBuilder
 @NoArgsConstructor
-@Data
+//@Data
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 //@Comment("角色")
 public class RolePo extends RoleDefinition {

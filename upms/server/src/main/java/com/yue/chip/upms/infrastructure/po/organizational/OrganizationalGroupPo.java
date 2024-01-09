@@ -26,7 +26,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class OrganizationalGroupPo extends OrganizationalGroupDefinition {
 
     @Override
-    @Column(unique = true,name = "name")
+    @Column(unique = true,name = "name",columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '机构分组名称-不能为空'")
     public String getName() {
         return super.getName();
     }

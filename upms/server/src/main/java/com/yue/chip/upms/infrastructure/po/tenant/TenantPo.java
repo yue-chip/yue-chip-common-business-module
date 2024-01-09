@@ -19,7 +19,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper=true)
 @Entity
 @Table(name = "t_tenant",indexes = {@Index(columnList = "manager"),@Index(columnList = "phone_number") })
-@Data
+//@Data
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 //@Comment("租户表")

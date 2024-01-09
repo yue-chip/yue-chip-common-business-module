@@ -19,7 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EqualsAndHashCode(callSuper=true)
 @Entity
 @Table(name = "t_tenant_state")
-@Data
+//@Data
 @Builder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 //@Comment("租户状态")

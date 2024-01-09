@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       hmr: { overlay :false},
-      port: 5174,
+      port: 5177,
       host: '0.0.0.0'
     },
     resolve: {
