@@ -3,6 +3,7 @@ package com.yue.chip.upms.infrastructure.po.tenant;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.core.persistence.entity.BaseEntity;
+import jakarta.persistence.Convert;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -29,6 +30,8 @@ public class TenantStatePo extends BaseEntity {
     //@Column(name = "state" , columnDefinition = "int NULL DEFAULT 1 COMMENT '租户状态-不能为空'")
     private State state;
 
-
-
+    @Convert(converter = State.StateConverter.class)
+    public State getState() {
+        return state;
+    }
 }
