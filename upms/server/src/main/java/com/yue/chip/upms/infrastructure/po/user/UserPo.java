@@ -126,6 +126,7 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
+    @Convert(converter = IdCardType.IdCardTypeConverter.class)
     @Comment("证书类型")
     @ColumnDefault("0")
     public IdCardType getIdCardType() {
