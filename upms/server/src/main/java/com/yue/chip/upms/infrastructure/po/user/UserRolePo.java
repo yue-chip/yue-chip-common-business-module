@@ -2,16 +2,16 @@ package com.yue.chip.upms.infrastructure.po.user;
 
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.core.persistence.entity.BaseEntity;
-import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SelectBeforeUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -21,24 +21,28 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_user_role",indexes = {@Index(columnList = "user_id"),@Index(columnList = "role_id")})
+@Table(name = "t_user_role",indexes = {@Index(columnList = "userId"),@Index(columnList = "roleId")})
 @SuperBuilder
 @NoArgsConstructor
-@Data
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @Comment("用户-角色关联表")
 public class UserRolePo extends BaseEntity {
 
+    @Setter
     private Long userId;
 
+    @Setter
     private Long roleId;
 
-    @Column(name = "user_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '用户id-不能为空'")
+
+    @Comment("用户id-不能为空")
+    @ColumnDefault("-9223372036854775808")
     public Long getUserId() {
         return this.userId;
     }
 
-    @Column(name = "role_id", columnDefinition = "bigint NULL DEFAULT -9223372036854775808 COMMENT '角色id-不能为空'")
+    @Comment("角色id-不能为空")
+    @ColumnDefault("-9223372036854775808")
     public Long getRoleId() {
         return this.roleId;
     }

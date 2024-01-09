@@ -25,6 +25,60 @@
       <a-form-item label="电话号码" name="phoneNumber" ref="phoneNumber" >
         <a-input placeholder="请输入电话号码" v-model:value="addOrUpdateModel.phoneNumber" />
       </a-form-item>
+      <a-form-item label="邮箱" name="email" ref="email">
+        <a-input placeholder="请输入电子邮箱" v-model:value="addOrUpdateModel.email" />
+      </a-form-item>
+      <a-form-item label="证件类型" name="IdCardType" ref="IdCardType">
+        <a-select v-model:value="addOrUpdateModel.IdCardType">
+          <a-select-option value="0">身份证</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="证书编号" name="certificateNumber" ref="certificateNumber">
+        <a-input placeholder="请输入证书编号" v-model:value="addOrUpdateModel.certificateNumber" />
+      </a-form-item>
+      <a-form-item label="身份证号码" name="identificationNumber" ref="identificationNumber">
+        <a-input placeholder="请输入身份证号码" v-model:value="addOrUpdateModel.identificationNumber" />
+      </a-form-item>
+      <a-form-item label="头像" >
+        <a-upload
+          v-model:file-list="fileList"
+          name="avatar"
+          list-type="picture-card"
+          class="avatar-uploader"
+          :show-upload-list="false"
+          action="/api/common/file/upload"
+          :before-upload="beforeUpload"
+          :headers="headers"
+          @change="handleChange"
+        >
+          <img width="100" height="100" v-if="imageUrl" :src="imageUrl" alt="avatar" />
+          <div v-else>
+            <loading-outlined v-if="loading"></loading-outlined>
+            <plus-outlined v-else></plus-outlined>
+            <div class="ant-upload-text">Upload</div>
+          </div>
+        </a-upload>
+      </a-form-item>
+      <a-form-item label="其它照片" >
+        <a-upload
+          v-model:file-list="otherPhotoUrlList"
+          name="avatar"
+          list-type="picture-card"
+          class="avatar-uploader"
+          :show-upload-list="false"
+          action="/api/common/file/upload"
+          :before-upload="beforeUpload"
+          :headers="headers"
+          @change="handleChange1"
+        >
+          <img width="100" height="100" v-if="otherPhotoUrl" :src="otherPhotoUrl" alt="avatar" />
+          <div v-else>
+            <loading-outlined v-if="otherPhotoLoading"></loading-outlined>
+            <plus-outlined v-else></plus-outlined>
+            <div class="ant-upload-text">Upload</div>
+          </div>
+        </a-upload>
+      </a-form-item>
     </a-form>
     <a-row >
       <a-col :span="24" style="text-align:center;">
@@ -50,10 +104,10 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, onMounted} from 'vue'
+  import {ref, onMounted,computed} from 'vue'
   import {useRouter,useRoute} from 'vue-router'
   import { RollbackOutlined,SaveOutlined,UndoOutlined } from '@ant-design/icons-vue';
-  import type { FormInstance,TreeSelectProps } from 'ant-design-vue';
+  import type { FormInstance,TreeSelectProps,UploadChangeParam, UploadProps } from 'ant-design-vue';
   import { TreeSelect,message } from 'ant-design-vue';
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   const router=useRouter();
@@ -67,13 +121,24 @@
   let usernameDisabled = ref(false);
   const SHOW_PARENT = TreeSelect.SHOW_PARENT;
   let treeData: TreeSelectProps['treeData'] = ref([]);
+  const fileList = ref([]);
+  const loading = ref<boolean>(false);
+  let imageUrl = ref<string>('');
+  let profilePhoto = ref<string>('');
+  const otherPhotoUrlList =ref([])
+  const otherPhotoLoading = ref<boolean>(false);
+  let otherPhotoUrl = ref<string>('');
+  let otherPhoto = ref<string>('');
   import {Md5} from 'ts-md5';
   const rules:any={
     username:[{required:true,message:"请输入账号",trigger:'blur'}],
     pass:[{required:true,message:"请输入密码",trigger:'blur'}],
     name:[{required:true,message:"请输入姓名",trigger:'blur'}],
   };
-
+  let headers = computed(()=>{
+    const token = sessionStorage.getItem("token");
+    return {"Token":token};
+  })
   onMounted(() => {
     const id = route.query.id;
     if (id) {
@@ -144,6 +209,77 @@
     saveButtonDisabled.value = save;
     resetDisabled.value = reset;
     backDisabled.value =back;
+  }
+
+  const handleChange = (info: UploadChangeParam) => {
+    if (info.file.status === 'uploading') {
+      loading.value = true;
+      return;
+    }
+    if (info.file.status === 'done') {
+      if (info.file.response.status === 200) {
+        const data = info.file.response.data;
+        addOrUpdateModel.value.profilePhotoId = data[0].id;
+        // profilePhoto.value = "/api"+data[0].url;
+        getBase64(info.file.originFileObj, (base64Url: string) => {
+          imageUrl.value = base64Url;
+          loading.value = false;
+        });
+      }
+
+
+    }
+    if (info.file.status === 'error') {
+      loading.value = false;
+      message.error('upload error');
+    }
+  };
+
+  const handleChange1 = (info: UploadChangeParam) => {
+    if (info.file.status === 'uploading') {
+      otherPhotoLoading.value = true;
+      return;
+    }
+    if (info.file.status === 'done') {
+      if (info.file.response.status === 200) {
+        const data = info.file.response.data;
+        addOrUpdateModel.value.otherPhotoId = data[0].id;
+        // profilePhoto.value = "/api"+data[0].url;
+        getBase64(info.file.originFileObj, (base64Url: string) => {
+          otherPhotoUrl.value = base64Url;
+          otherPhotoLoading.value = false;
+        });
+      }
+
+
+    }
+    if (info.file.status === 'error') {
+      loading.value = false;
+      message.error('upload error');
+    }
+  };
+
+  const beforeUpload = (file: UploadProps['fileList'][number]) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
+    if (!isJpgOrPng) {
+      message.error('请上传正确的头像文件(jpeg/png/jpg)!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 10;
+    if (!isLt2M) {
+      message.error('请上传小与10MB的图像!');
+    }
+    return isJpgOrPng && isLt2M;
+  };
+
+  function getBase64(img: Blob, callback: (base64Url: string) => void) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
+  }
+  const ispaly = () => {
+    ismute.value = !ismute.value
+    emit('ispaly', ismute.value)
+
   }
 </script>
 

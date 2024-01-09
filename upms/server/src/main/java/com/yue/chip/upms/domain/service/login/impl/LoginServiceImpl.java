@@ -1,6 +1,5 @@
 package com.yue.chip.upms.domain.service.login.impl;
 
-import com.esotericsoftware.kryo.util.Null;
 import com.yue.chip.authentication.YueChipAuthenticationToken;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.tenant.TenantUtil;
@@ -17,7 +16,6 @@ import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
-import com.yue.chip.upms.infrastructure.repository.weixin.UserWeiXinRepositoryImpl;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;

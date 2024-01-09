@@ -100,6 +100,26 @@
       dataIndex: 'organizationalName',
       key: 'organizationalName',
     },
+    {
+      title: '电子邮箱',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: '证件类型',
+      dataIndex: ['idCardType','desc'],
+      key: 'idCardType',
+    },
+    {
+      title: '证书编号',
+      dataIndex: 'certificateNumber',
+      key: 'certificateNumber',
+    },
+    {
+      title: '身份证号码',
+      dataIndex: 'identificationNumber',
+      key: 'identificationNumber',
+    },
     // {
     //   title: '状态',
     //   dataIndex: ['state','desc'],

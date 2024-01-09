@@ -1,23 +1,17 @@
 package com.yue.chip.upms.definition.user;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.yue.chip.core.BaseDefinition;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.upms.enums.IdCardType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -41,17 +35,23 @@ public class UserDefinition extends BaseDefinition {
      */
     public static final String PROFILE_PHOTO_FIELD_NAME = "profilePhoto";
 
+    public static final String OTHER_PHOTO_FIELD_NAME = "otherPhoto";
+
     @Schema(description = "头像id")
-//    @Getter(AccessLevel.NONE)
-//    @Setter(AccessLevel.NONE)
     @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
     private Long profilePhotoId;
 
     @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
     @Schema(description = "头像url")
-//    @Getter(AccessLevel.NONE)
-//    @Setter(AccessLevel.NONE)
     private String profilePhotoUrl;
+
+    @Schema(description = "其它照片id")
+    @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
+    private Long otherPhotoId;
+
+    @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
+    @Schema(description = "其它照片url")
+    private String otherPhotoUrl;
 
     @Schema(description = "密码")
     private String password;
@@ -64,6 +64,18 @@ public class UserDefinition extends BaseDefinition {
 
     @Schema(description = "联系电话")
     private String phoneNumber;
+
+    @Schema(description = "电子邮箱")
+    private String email;
+
+    @Schema(description = "证件类型")
+    private IdCardType idCardType;
+
+    @Schema(description = "证书编号")
+    private String certificateNumber;
+
+    @Schema(description = "身份证号码")
+    private String identificationNumber;
 
     @Schema(description = "状态")
     private State state;
