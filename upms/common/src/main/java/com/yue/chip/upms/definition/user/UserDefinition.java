@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.core.BaseDefinition;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.upms.enums.IdCardType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -53,9 +54,20 @@ public class UserDefinition extends BaseDefinition {
 
     //@Schema(description = "姓名")
     private String name;
-
-    //@Schema(description = "联系电话")
+//    @Schema(description = "联系电话")
     private String phoneNumber;
+
+//    @Schema(description = "电子邮箱")
+    private String email;
+
+//    @Schema(description = "证件类型")
+    private IdCardType idCardType;
+
+//    @Schema(description = "证书编号")
+    private String certificateNumber;
+
+//    @Schema(description = "身份证号码")
+    private String identificationNumber;
 
     //@Schema(description = "状态")
     private State state;
