@@ -1,5 +1,6 @@
 package com.yue.chip.upms;
 
+import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.Optional;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.grid.vo.GridExposeVo;
@@ -39,11 +40,12 @@ public interface UpmsExposeService {
 
     /**
      * 根据机构id分页查询用户
+     *
      * @param organizationalIds
      * @param yueChipPage
      * @return
      */
-    Page<UserExposeVo> findUserAllByOrganizationalId(@Size(min = 1)List<Long> organizationalIds,String name, @NotNull YueChipPage yueChipPage);
+    IPageResultData<List<UserExposeVo>> findUserAllByOrganizationalId(@Size(min = 1)List<Long> organizationalIds, String name, @NotNull YueChipPage yueChipPage);
 
     /**
      * 根据用户id和租户编码查寻用户
