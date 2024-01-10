@@ -302,6 +302,8 @@ public interface UpmsRepository {
      */
     public IPageResultData<List<UserVo>> userList(String name, @NotNull Pageable pageable);
 
+    public IPageResultData<List<User>> userList(List<Long> organizationalIds, String name, @NotNull Pageable pageable);
+
     /**
      * 保存用户
      * @param userPo
