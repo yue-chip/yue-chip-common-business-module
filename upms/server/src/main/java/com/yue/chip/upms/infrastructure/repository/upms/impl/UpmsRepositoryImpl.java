@@ -333,6 +333,13 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public IPageResultData<List<User>> userList(List<Long> ids, String name, Pageable pageable) {
+        Page<UserPo> page = userDao.find(ids, name, pageable);
+        List<User> listUser = userMapper.toUserList(page.getContent());
+        return (IPageResultData<List<User>>) PageResultData.convert(page,userMapper.toUserListVo(listUser));
+    }
+
+    @Override
     public User saveUser(UserPo userPo) {
         userPo.setPassword(passwordEncoder.encode(userPo.getPassword()));
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));

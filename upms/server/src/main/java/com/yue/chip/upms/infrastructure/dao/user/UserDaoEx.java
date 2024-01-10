@@ -33,6 +33,8 @@ public interface UserDaoEx {
      */
     public Page<UserPo> find( String name, String username,@NotNull Pageable pageable);
 
+    public Page<UserPo> find(List<Long> ids, String name,@NotNull Pageable pageable);
+
     /**
      * 根据角色查询关联的用户
      * @param roleId

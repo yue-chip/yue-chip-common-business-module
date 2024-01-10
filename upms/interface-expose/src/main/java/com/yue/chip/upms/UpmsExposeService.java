@@ -38,6 +38,14 @@ public interface UpmsExposeService {
     List<UserExposeVo> findUserAllByOrganizationalId(@Size(min = 1)List<Long> organizationalIds);
 
     /**
+     * 根据机构id分页查询用户
+     * @param organizationalIds
+     * @param yueChipPage
+     * @return
+     */
+    Page<UserExposeVo> findUserAllByOrganizationalId(@Size(min = 1)List<Long> organizationalIds,String name, @NotNull YueChipPage yueChipPage);
+
+    /**
      * 根据用户id和租户编码查寻用户
      * @param id
      * @param tenantNumber

@@ -43,4 +43,6 @@ public interface OrganizationalUserDao extends BaseDao<OrganizationalUserPo> {
      * @return
      */
     List<OrganizationalUserPo> findAllByUserIdIn(@NotNull Set<Long> userId);
+
+    List<OrganizationalUserPo> findAllByOrganizationalIdIn(List<Long> organizationalIds);
 }

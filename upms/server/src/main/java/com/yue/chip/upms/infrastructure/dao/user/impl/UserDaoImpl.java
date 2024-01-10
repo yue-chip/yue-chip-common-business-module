@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.sql.PreparedStatement;
@@ -75,6 +76,23 @@ public class UserDaoImpl implements UserDaoEx {
         if (StringUtils.hasText(username)) {
             sb.append(" and u.username like :username ");
             para.put("name","%"+username+"%");
+        }
+        sb.append(" and u.username <> 'superadmin' ");
+        return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
+    }
+
+    @Override
+    public Page<UserPo> find(List<Long> ids, String name, Pageable pageable) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u where 1=1 ");
+        Map<String,Object> para = new HashMap<>();
+        if (!CollectionUtils.isEmpty(ids)) {
+            sb.append(" and u.id in :ids ");
+            para.put("ids", ids);
+        }
+        if (StringUtils.hasText(name)) {
+            sb.append(" and u.name like :name ");
+            para.put("name","%"+name+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);

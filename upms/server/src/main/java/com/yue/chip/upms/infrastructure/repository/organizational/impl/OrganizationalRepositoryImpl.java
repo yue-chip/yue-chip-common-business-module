@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.repository.organizational.impl;
 
+import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
@@ -17,6 +18,8 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
+import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import javax.annotation.Resource;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Mr.Liu
@@ -185,6 +189,14 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     public Page<OrganizationalPo> organizationalPoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
         Page<OrganizationalPo> organizationalPos = organizationalDao.organizationalPoPage(organizationalList, yueChipPage);
         return organizationalPos;
+    }
+
+    @Override
+    public IPageResultData<List<User>> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
+        List<OrganizationalUserPo> organizationalIdIn = organizationalUserDao.findAllByOrganizationalIdIn(organizationalIds);
+        List<Long> userIdList = organizationalIdIn.stream().map(OrganizationalUserPo::getUserId).collect(Collectors.toList());
+        IPageResultData<List<User>> userList = upmsRepository.userList(userIdList, name, yueChipPage);
+        return userList;
     }
 
     @Override
