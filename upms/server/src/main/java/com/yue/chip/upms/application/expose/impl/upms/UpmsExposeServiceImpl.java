@@ -74,8 +74,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public IPageResultData<List<UserExposeVo>> findUserAllByOrganizationalId(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
-        IPageResultData<List<UserExposeVo>> page = organizationalRepository.organizationalPoList(organizationalIds, name, yueChipPage);
+    public IPageResultData<UserExposeVo> findUserAllByOrganizationalId(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
+        IPageResultData<UserExposeVo> page = organizationalRepository.organizationalPoList(organizationalIds, name, yueChipPage);
 //        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(page.getData());
 
 //        Page<UserExposeVo> returnPage = new PageImpl<UserExposeVo>(userExposeVo, page.getPageable(),page.getTotalElements());
