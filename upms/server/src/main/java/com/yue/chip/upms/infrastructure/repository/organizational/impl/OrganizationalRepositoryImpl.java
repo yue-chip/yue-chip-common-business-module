@@ -1,6 +1,7 @@
 package com.yue.chip.upms.infrastructure.repository.organizational.impl;
 
 import com.yue.chip.core.IPageResultData;
+import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
@@ -19,7 +20,6 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
-import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import javax.annotation.Resource;
@@ -196,18 +196,18 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public IPageResultData<List<User>> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
+    public IPageResultData<List<UserExposeVo>> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
         List<OrganizationalUserPo> organizationalIdIn = organizationalUserDao.findAllByOrganizationalIdIn(organizationalIds);
         List<Long> userIdList = organizationalIdIn.stream().map(OrganizationalUserPo::getUserId).collect(Collectors.toList());
-        IPageResultData<List<User>> userList = upmsRepository.userList(userIdList, name, yueChipPage);
+        IPageResultData<List<User>> page = upmsRepository.userList(userIdList, name, yueChipPage);
 
-        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(userList.getData());
+        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(page.getData());
         Map<Long, Long> map = organizationalIdIn.stream().collect(Collectors.toMap(OrganizationalUserPo::getUserId, OrganizationalUserPo::getOrganizationalId));
         userExposeVo.forEach(user -> {
             user.setOrganizationalId(map.get(user.getId()));
         });
 
-        return userList;
+        return new PageResultData(userExposeVo,page.getPageable(),page.getTotalElements());
     }
 
     @Override

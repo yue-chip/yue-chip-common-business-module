@@ -5,7 +5,6 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.aggregates.Organizational;
-import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
@@ -129,7 +128,7 @@ public interface OrganizationalRepository {
 
     public Page<OrganizationalPo> organizationalPoPage(@NotNull @Size(min = 0) List<Long> organizationalList, @NotNull YueChipPage yueChipPage);
 
-    IPageResultData<List<User>> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage);
+    IPageResultData<List<UserExposeVo>> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage);
 
     /**
      * 新增网格

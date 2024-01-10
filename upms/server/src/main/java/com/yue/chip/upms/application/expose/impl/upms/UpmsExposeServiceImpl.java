@@ -15,7 +15,6 @@ import com.yue.chip.upms.domain.repository.organizational.OrganizationalReposito
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
-import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
@@ -75,14 +74,12 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public Page<UserExposeVo> findUserAllByOrganizationalId(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
-        IPageResultData<List<User>> page = organizationalRepository.organizationalPoList(organizationalIds, name, yueChipPage);
-        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(page.getData());
-        Set<Long> userIds = userExposeVo.stream().map(UserExposeVo::getId).collect(Collectors.toSet());
+    public IPageResultData<List<UserExposeVo>> findUserAllByOrganizationalId(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
+        IPageResultData<List<UserExposeVo>> page = organizationalRepository.organizationalPoList(organizationalIds, name, yueChipPage);
+//        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(page.getData());
 
-
-        Page<UserExposeVo> returnPage = new PageImpl<UserExposeVo>(userExposeVo, page.getPageable(),page.getTotalElements());
-        return returnPage;
+//        Page<UserExposeVo> returnPage = new PageImpl<UserExposeVo>(userExposeVo, page.getPageable(),page.getTotalElements());
+        return page;
     }
 
     @Override
