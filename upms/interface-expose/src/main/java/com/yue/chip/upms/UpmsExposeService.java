@@ -45,7 +45,7 @@ public interface UpmsExposeService {
      * @param yueChipPage
      * @return
      */
-    IPageResultData<List<UserExposeVo>> findUserAllByOrganizationalId(@Size(min = 1)List<Long> organizationalIds, String name, @NotNull YueChipPage yueChipPage);
+    IPageResultData<UserExposeVo> findUserAllByOrganizationalId(@Size(min = 1)List<Long> organizationalIds, String name, @NotNull YueChipPage yueChipPage);
 
     /**
      * 根据用户id和租户编码查寻用户

@@ -196,7 +196,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public IPageResultData<List<UserExposeVo>> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
+    public IPageResultData<UserExposeVo> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
         List<OrganizationalUserPo> organizationalIdIn = organizationalUserDao.findAllByOrganizationalIdIn(organizationalIds);
         List<Long> userIdList = organizationalIdIn.stream().map(OrganizationalUserPo::getUserId).collect(Collectors.toList());
         IPageResultData<List<User>> page = upmsRepository.userList(userIdList, name, yueChipPage);
