@@ -336,7 +336,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public IPageResultData<List<User>> userList(List<Long> ids, String name, Pageable pageable) {
         Page<UserPo> page = userDao.find(ids, name, pageable);
         List<User> listUser = userMapper.toUserList(page.getContent());
-        return (IPageResultData<List<User>>) PageResultData.convert(page,userMapper.toUserListVo(listUser));
+        return (IPageResultData<List<User>>) PageResultData.convert(page,listUser);
     }
 
     @Override
