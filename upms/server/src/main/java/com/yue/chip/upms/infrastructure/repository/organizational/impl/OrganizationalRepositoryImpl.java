@@ -5,6 +5,7 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
+import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -39,6 +40,9 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
 
     @Resource
     private OrganizationalDao organizationalDao;
+
+    @javax.annotation.Resource
+    private UserMapper userMapper;
 
     @Resource
     private OrganizationalUserDao organizationalUserDao;
@@ -196,6 +200,13 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         List<OrganizationalUserPo> organizationalIdIn = organizationalUserDao.findAllByOrganizationalIdIn(organizationalIds);
         List<Long> userIdList = organizationalIdIn.stream().map(OrganizationalUserPo::getUserId).collect(Collectors.toList());
         IPageResultData<List<User>> userList = upmsRepository.userList(userIdList, name, yueChipPage);
+
+        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(userList.getData());
+        Map<Long, Long> map = organizationalIdIn.stream().collect(Collectors.toMap(OrganizationalUserPo::getUserId, OrganizationalUserPo::getOrganizationalId));
+        userExposeVo.forEach(user -> {
+            user.setOrganizationalId(map.get(user.getId()));
+        });
+
         return userList;
     }
 
