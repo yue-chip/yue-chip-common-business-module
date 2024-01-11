@@ -89,11 +89,13 @@ public interface OrganizationalRepository {
 
     /**
      * 查询树形结构
+     *
      * @param parentId
      * @param state
+     * @param name
      * @return
      */
-    public List<OrganizationalTreeListVo> findTree(@NotNull Long parentId, @NotNull State state);
+    public List<OrganizationalTreeListVo> findTree(@NotNull Long parentId, @NotNull State state,String name);
 
     /**
      * 查询树形结构（当前登录用户所属的机构）

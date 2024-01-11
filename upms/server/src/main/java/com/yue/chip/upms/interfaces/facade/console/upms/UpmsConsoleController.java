@@ -335,14 +335,14 @@ public class UpmsConsoleController {
 
     @GetMapping("/organizational/tree/list")
     @Operation(description = "组织机构-树形结构列表",summary = "组织机构-树形结构列表")
-    public IResultData<List<OrganizationalTreeListVo>> organizationalTreeList(){
-        return ResultData.builder().data(organizationalRepository.findTree(0L, null)).build();
+    public IResultData<List<OrganizationalTreeListVo>> organizationalTreeList(@Parameter(description = "组织机构名称",name="name")String name){
+        return ResultData.builder().data(organizationalRepository.findTree(0L, null,name )).build();
     }
 
     @GetMapping("/organizational/tree/select")
     @Operation(description = "组织机构-树形结构下拉框选择",summary = "组织机构-树形结构下拉框选择")
-    public IResultData<List<OrganizationalTreeSelectVo>> organizationalTreeSelect(){
-        List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree(0L,State.NORMAL);
+    public IResultData<List<OrganizationalTreeSelectVo>> organizationalTreeSelect(@Parameter(description = "组织机构名称",name="name")String name){
+        List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree(0L,State.NORMAL, name);
         return ResultData.builder().data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
     }
 

@@ -14,7 +14,6 @@ import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeSelectVo;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,7 +54,7 @@ public class UpmsAppController {
     @GetMapping("/organizational/tree/select")
     @Operation(description = "组织机构-树形结构下拉框选择",summary = "组织机构-树形结构下拉框选择")
     public IResultData<List<OrganizationalTreeSelectVo>> organizationalTreeSelect(){
-        List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree(0L, State.NORMAL);
+        List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree(0L, State.NORMAL,null );
         return ResultData.builder().data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
     }
 
