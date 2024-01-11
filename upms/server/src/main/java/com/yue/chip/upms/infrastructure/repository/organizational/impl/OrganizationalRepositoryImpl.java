@@ -118,7 +118,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public List<OrganizationalTreeListVo> findTree(Long parentId,State state) {
+    public List<OrganizationalTreeListVo> findTree(Long parentId, State state, String name) {
         List<OrganizationalTreeListVo> treeListVos = new ArrayList<OrganizationalTreeListVo>();
         List<OrganizationalPo> list = new ArrayList<>();
         if (Objects.nonNull(state)) {
@@ -128,7 +128,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         }
         treeListVos = organizationalMapper.toOrganizationalTreeListVo(list);
         treeListVos.forEach(organizationalTreeListVo -> {
-            organizationalTreeListVo.setChildren(findTree(organizationalTreeListVo.getId(),state));
+            organizationalTreeListVo.setChildren(findTree(organizationalTreeListVo.getId(),state, name));
             if (Objects.nonNull(organizationalTreeListVo.getLeaderId())) {
                 Optional<User> optional = upmsRepository.findUserById(organizationalTreeListVo.getLeaderId());
                 if (optional.isPresent()) {
@@ -143,7 +143,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     public List<OrganizationalTreeListVo> findTree1(State state) {
         Optional<Organizational> optional = findByUserId(CurrentUserUtil.getCurrentUserId());
         if (optional.isPresent()) {
-            List<OrganizationalTreeListVo> list = findTree(optional.get().getParentId(),state);
+            List<OrganizationalTreeListVo> list = findTree(optional.get().getParentId(),state, null);
             List<OrganizationalTreeListVo> returList = new ArrayList<>();
             for (OrganizationalTreeListVo organizationalTreeListVo : list) {
                 if (Objects.equals(organizationalTreeListVo.getId(),optional.get().getId())) {
