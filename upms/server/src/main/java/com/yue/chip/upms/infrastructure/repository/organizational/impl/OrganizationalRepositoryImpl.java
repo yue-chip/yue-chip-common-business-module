@@ -211,6 +211,19 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
+    public IPageResultData<UserExposeVo> findByUserIdIn(Set<Long> userIds, YueChipPage yueChipPage) {
+        IPageResultData<List<User>> page = upmsRepository.userList(new ArrayList<>(userIds), null, yueChipPage);
+        Map<Long, Long> userOrganizationalMap = findUserAllByUserIdIn(userIds).stream().collect(Collectors.toMap(OrganizationalUserPo::getUserId, OrganizationalUserPo::getOrganizationalId));
+        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(page.getData());
+        userExposeVo.forEach(user -> {
+            user.setOrganizationalId(userOrganizationalMap.get(user.getId()));
+        });
+
+        return new PageResultData(userExposeVo,page.getPageable(),page.getTotalElements());
+    }
+
+
+    @Override
     public void saveGrid(GridPo gridPo) {
         gridDao.save(gridPo);
     }
