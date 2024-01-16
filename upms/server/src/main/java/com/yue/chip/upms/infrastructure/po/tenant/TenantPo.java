@@ -18,7 +18,7 @@ import javax.persistence.*;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_tenant",indexes = {@Index(columnList = "manager"),@Index(columnList = "phone_number") })
+@Table(name = "T_TENANT",indexes = {@Index(columnList = "MANAGER"),@Index(columnList = "PHONE_NUMBER") })
 @Data
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
@@ -26,56 +26,56 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class TenantPo extends TenantDefinition {
     @Override
-    @Column(unique = true,name = "name")
+    @Column(unique = true,name = "NAME")
     public String getName() {
         return super.getName();
     }
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    @Column(name = "state")
+    @Column(name = "STATE")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column( name = "manager")
+    @Column( name = "MANAGER")
     public String getManager() {
         return super.getManager();
     }
 
     @Override
-    @Column( name = "phone_number")
+    @Column( name = "PHONE_NUMBER")
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }
 
     @Override
-    @Column( name = "request_domain")
+    @Column( name = "REQUEST_DOMAIN")
     public String getDomain() {
         return super.getDomain();
     }
 
     @Override
-    @Column( name = "abbreviation")
+    @Column( name = "ABBREVIATION")
     public String getAbbreviation() {
         return super.getAbbreviation();
     }
 
     @Override
-    @Column(updatable = false,name = "is_default")
+    @Column(updatable = false,name = "IS_DEFAULT")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }
 
     @Override
-    @Column(unique = true,name = "tenant_number")
+    @Column(unique = true,name = "TENANT_NUMBER")
     public Long getTenantNumber() {
         return super.getTenantNumber();
     }
 
     @Override
-    @Column( name = "big_screen_name")
+    @Column( name = "BIG_SCREEN_NAME")
     public String getBigScreenName() {
         return super.getBigScreenName();
     }

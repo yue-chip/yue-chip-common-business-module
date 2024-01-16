@@ -17,7 +17,7 @@ import javax.persistence.*;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_grid",indexes = {@Index(columnList = "organizational_id"),@Index(columnList = "user_id"),@Index(columnList = "name")})
+@Table(name = "T_GRID",indexes = {@Index(columnList = "ORGANIZATIONAL_ID"),@Index(columnList = "USER_ID"),@Index(columnList = "NAME")})
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
@@ -25,19 +25,19 @@ import javax.persistence.*;
 //@Comment("网格")
 public class GridPo extends GridDefinition {
     @Override
-    @Column(name = "organizational_id", columnDefinition = "bigint NULL DEFAULT 0 COMMENT '机构id-不能为空'")
+    @Column(name = "ORGANIZATIONAL_ID")
     public Long getOrganizationalId() {
         return super.getOrganizationalId();
     }
 
     @Override
-    @Column(name = "user_id",columnDefinition = "bigint NULL DEFAULT 0 COMMENT '机构id-不能为空'")
+    @Column(name = "USER_ID")
     public Long getUserId() {
         return super.getUserId();
     }
 
     @Override
-    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '网格名称-不能为空'")
+    @Column(unique = true, name = "NAME")
     public String getName() {
         return super.getName();
     }

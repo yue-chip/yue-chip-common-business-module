@@ -18,7 +18,7 @@ import javax.persistence.*;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_organizational", indexes = {@Index(columnList = "name"),@Index(columnList = "parent_id"),@Index(columnList = "organizational_group_id")})
+@Table(name = "T_ORGANIZATIONAL", indexes = {@Index(columnList = "NAME"),@Index(columnList = "PARENT_ID"),@Index(columnList = "ORGANIZATIONAL_GROUP_ID")})
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
@@ -27,44 +27,44 @@ import javax.persistence.*;
 public class OrganizationalPo extends OrganizationalDefinition {
 
     @Override
-    @Column(unique = true,name = "name")
+    @Column(unique = true,name = "NAME")
     public String getName() {
         return super.getName();
     }
 
     @Override
-    @Column(name = "parent_id")
+    @Column(name = "PARENT_ID")
     public Long getParentId() {
         return super.getParentId();
     }
 
     @Override
-    @Column(name = "organizational_group_id")
+    @Column(name = "ORGANIZATIONAL_GROUP_ID")
     public Long getOrganizationalGroupId() {
         return super.getOrganizationalGroupId();
     }
 
     @Override
-    @Column(name = "sort")
+    @Column(name = "SORT")
     public Integer getSort() {
         return super.getSort();
     }
 
     @Override
-    @Column( name = "leader_id")
+    @Column( name = "LEADER_ID")
     public Long getLeaderId() {
         return super.getLeaderId();
     }
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    @Column(name = "state")
+    @Column(name = "STATE")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column( name = "phone_number")
+    @Column( name = "PHONE_NUMBER")
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }

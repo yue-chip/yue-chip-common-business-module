@@ -10,6 +10,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import org.springframework.data.domain.Page;
 
 import javax.validation.constraints.NotBlank;

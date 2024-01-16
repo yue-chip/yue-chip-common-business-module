@@ -16,7 +16,7 @@ import javax.persistence.*;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_role_resources",indexes = {@Index(columnList = "role_id"),@Index(columnList = "resources_id") })
+@Table(name = "T_ROLE_RESOURCES",indexes = {@Index(columnList = "ROLE_ID"),@Index(columnList = "RESOURCES_ID") })
 @Data
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
@@ -30,12 +30,12 @@ public class RoleResourcesPo extends BaseEntity {
     public RoleResourcesPo() {
     }
 
-    @Column(name = "role_id")
+    @Column(name = "ROLE_ID")
     public Long getRoleId() {
         return roleId;
     }
 
-    @Column(name = "resources_id")
+    @Column(name = "RESOURCES_ID")
     public Long getResourcesId() {
         return resourcesId;
     }

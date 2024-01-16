@@ -15,7 +15,7 @@ import javax.persistence.*;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_tenant_state")
+@Table(name = "T_TENANT_STATE")
 @Data
 @Builder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
@@ -28,7 +28,7 @@ public class TenantStatePo extends BaseEntity {
     private State state;
 
     @Convert(converter = State.StateConverter.class)
-    @Column(name = "state")
+    @Column(name = "STATE")
     public State getState() {
         return state;
     }

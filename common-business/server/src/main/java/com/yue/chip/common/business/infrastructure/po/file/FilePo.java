@@ -1,13 +1,13 @@
 package com.yue.chip.common.business.infrastructure.po.file;
 
 import com.yue.chip.common.business.definition.file.FileDefinition;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 //import org.hibernate.annotations.Comment;
 
 /**
@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_file")
+@Table(name = "T_FILE")
 @SuperBuilder
 @NoArgsConstructor
 //@Comment("文件")
@@ -24,24 +24,28 @@ public class FilePo extends FileDefinition {
 
     @Override
     //@Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '原始文件名'")
+    @Column(name = "ORIGINAL_FILE_NAME")
     public String getOriginalFileName() {
         return super.getOriginalFileName();
     }
 
     @Override
     //@Column(columnDefinition = "bigint DEFAULT 0 COMMENT '文件大小'")
+    @Column(name = "SIZE")
     public Long getSize() {
         return super.getSize();
     }
 
     @Override
     //@Column(columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '文件存储后的文件名'")
+    @Column(name = "FILE_NAME")
     public String getFileName() {
         return super.getFileName();
     }
 
     @Override
     //@Column(columnDefinition = "varchar(500) NULL DEFAULT '' COMMENT '文件存储后/访问路径'")
+    @Column(name = "URL")
     public String getUrl() {
         return super.getUrl();
     }

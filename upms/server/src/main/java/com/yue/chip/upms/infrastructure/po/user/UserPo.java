@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_user",indexes = {@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
+@Table(name = "T_USER",indexes = {@Index(columnList = "NAME"),@Index(columnList = "CREATE_DATE_TIME"), @Index(columnList = "UPDATE_DATE_TIME")})
 @SuperBuilder
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
@@ -28,103 +28,103 @@ import java.time.LocalDateTime;
 @Data
 public class UserPo extends UserDefinition {
 
-    public static final String TABLE_NAME = "t_user";
+    public static final String TABLE_NAME = "T_USER";
 
     @Override
-    @Column(updatable = false,name = "password")
+    @Column(updatable = false,name = "PASSWORD")
     public String getPassword() {
         return super.getPassword();
     }
 
     @Override
-    @Column(unique = true,name = "username")
+    @Column(unique = true,name = "USERNAME")
     public String getUsername() {
         return super.getUsername();
     }
 
     @Override
-    @Column(name = "name")
+    @Column(name = "NAME")
     public String getName() {
         return super.getName();
     }
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    @Column(name = "state")
+    @Column(name = "STATE")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column(name = "phone_number")
+    @Column(name = "PHONE_NUMBER")
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }
 
     @Override
-    @Column(name = "is_sms")
+    @Column(name = "IS_SMS")
     public Boolean getIsSms() {
         return super.getIsSms();
     }
 
     @Override
-    @Column(name = "is_call")
+    @Column(name = "IS_CALL")
     public Boolean getIsCall() {
         return super.getIsCall();
     }
 
     @Override
-    @Column(name = "last_login_time")
+    @Column(name = "LAST_LOGIN_TIME")
     public LocalDateTime getLastLoginTime() {
         return super.getLastLoginTime();
     }
 
     @Override
-    @Column(name = "is_account_non_expired")
+    @Column(name = "IS_ACCOUNT_NON_EXPIRED")
     public boolean isAccountNonExpired() {
         return super.isAccountNonExpired();
     }
 
     @Override
-    @Column(name = "is_account_non_locked")
+    @Column(name = "IS_ACCOUNT_NON_LOCKED")
     public boolean isAccountNonLocked() {
         return super.isAccountNonLocked();
     }
 
     @Override
-    @Column(name = "is_credentials_non_expired")
+    @Column(name = "IS_CREDENTIALS_NON_EXPIRED")
     public boolean isCredentialsNonExpired() {
         return super.isCredentialsNonExpired();
     }
 
     @Override
-    @Column(name = "is_enabled")
+    @Column(name = "IS_ENABLED")
     public boolean isEnabled() {
         return super.isEnabled();
     }
 
     @Override
-    @Column(name = "tenant_number")
+    @Column(name = "TENANT_NUMBER")
     public Long getTenantNumber() {
         return super.getTenantNumber();
     }
 
-    @Column(name = "email")
+    @Column(name = "EMAIL")
     public String getEmail() {
         return super.getEmail();
     }
 
-    @Column(name = "id_card_type")
+    @Column(name = "ID_CARD_TYPE")
     public IdCardType getIdCardType() {
         return super.getIdCardType();
     }
 
-    @Column(name = "certificate_number")
+    @Column(name = "CERTIFICATE_NUMBER")
     public String getCertificateNumber() {
         return super.getCertificateNumber();
     }
 
-    @Column(name = "identification_number")
+    @Column(name = "IDENTIFICATION_NUMBER")
     public String getIdentificationNumber() {
         return super.getIdentificationNumber();
     }

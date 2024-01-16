@@ -20,7 +20,7 @@ import javax.persistence.*;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_resources", indexes = {@Index(columnList = "parent_id"),@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
+@Table(name = "T_RESOURCES", indexes = {@Index(columnList = "PARENT_ID"),@Index(columnList = "NAME"),@Index(columnList = "CREATE_DATE_TIME"), @Index(columnList = "UPDATE_DATE_TIME")})
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
@@ -29,64 +29,64 @@ import javax.persistence.*;
 public class ResourcesPo extends ResourcesDefinition {
 
     @Override
-    @Column(name = "parent_id")
+    @Column(name = "PARENT_ID")
     public Long getParentId() {
         return super.getParentId();
     }
 
     @Override
-    @Column(unique = true)
+    @Column(unique = true,name = "CODE")
     public String getCode() {
         return super.getCode();
     }
 
     @Override
-    @Column(name = "name")
+    @Column(name = "NAME")
     public String getName() {
         return super.getName();
     }
 
     @Override
     @Convert(converter = Scope.ScopeConverter.class)
-    @Column(name = "scope")
+    @Column(name = "SCOPE")
     public Scope getScope() {
         return super.getScope();
     }
 
     @Override
     @Convert(converter = Type.TypeConverter.class)
-    @Column(name = "type")
+    @Column(name = "TYPE")
     public Type getType() {
         return super.getType();
     }
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    @Column(name = "state")
+    @Column(name = "STATE")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column(name = "is_default")
+    @Column(name = "IS_DEFAULT")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }
 
     @Override
-    @Column(name = "url")
+    @Column(name = "URL")
     public String getUrl() {
         return super.getUrl();
     }
 
     @Override
-    @Column(name = "sort")
+    @Column(name = "SORT")
     public Integer getSort() {
         return super.getSort();
     }
 
     @Override
-    @Column(name = "remark")
+    @Column(name = "REMARK")
     public String getRemark() {
         return super.getRemark();
     }

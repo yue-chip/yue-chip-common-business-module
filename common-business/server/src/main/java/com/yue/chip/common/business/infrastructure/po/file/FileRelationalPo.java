@@ -1,14 +1,15 @@
 package com.yue.chip.common.business.infrastructure.po.file;
 
 import com.yue.chip.core.persistence.entity.BaseEntity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 //import org.hibernate.annotations.Comment;
 
 /**
@@ -17,7 +18,7 @@ import lombok.experimental.SuperBuilder;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_file_relational",indexes = {@Index(columnList = "table_id,file_field_name,table_name")})
+@Table(name = "T_FILE_RELATIONAL",indexes = {@Index(columnList = "TABLE_ID,FILE_FIELD_NAME,TABLE_NAME")})
 @SuperBuilder
 @NoArgsConstructor
 //@Comment("文件与其它表中间表")
@@ -32,19 +33,19 @@ public class FileRelationalPo extends BaseEntity {
 
     private Long fileId;
 
-    @Column(updatable = false,name = "table_name")
+    @Column(updatable = false,name = "TABLE_NAME")
     public String getTableName() {
         return tableName;
     }
-    @Column(updatable = false,name = "table_id")
+    @Column(updatable = false,name = "TABLE_ID")
     public Long getTableId() {
         return tableId;
     }
-    @Column(updatable = false,name = "file_id")
+    @Column(updatable = false,name = "FILE_ID")
     public Long getFileId() {
         return fileId;
     }
-    @Column(updatable = false,name = "file_field_name")
+    @Column(updatable = false,name = "FILE_FIELD_NAME")
     public String getFileFieldName() {
         return fileFieldName;
     }

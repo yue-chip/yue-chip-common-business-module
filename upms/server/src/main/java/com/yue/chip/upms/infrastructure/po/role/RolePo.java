@@ -18,7 +18,7 @@ import javax.persistence.*;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_role",indexes = {@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
+@Table(name = "T_ROLE",indexes = {@Index(columnList = "NAME"),@Index(columnList = "CREATE_DATE_TIME"), @Index(columnList = "UPDATE_DATE_TIME")})
 @SuperBuilder
 @NoArgsConstructor
 @Data
@@ -28,31 +28,31 @@ public class RolePo extends RoleDefinition {
 
     @Override
     @Convert(converter = State.StateConverter.class)
-    @Column(name = "state")
+    @Column(name = "STATE")
     public State getState() {
         return super.getState();
     }
 
     @Override
-    @Column(unique = true,name = "code")
+    @Column(unique = true,name = "CODE")
     public String getCode() {
         return super.getCode();
     }
 
     @Override
-    @Column(name = "name")
+    @Column(name = "NAME")
     public String getName() {
         return super.getName();
     }
 
     @Override
-    @Column(name = "is_default")
+    @Column(name = "IS_DEFAULT")
     public Boolean getIsDefault() {
         return super.getIsDefault();
     }
 
     @Override
-    @Column(name = "remark")
+    @Column(name = "REMARK")
     public String getRemark() {
         return super.getRemark();
     }

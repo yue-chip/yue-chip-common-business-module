@@ -17,7 +17,7 @@ import javax.persistence.*;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_organizational_user",indexes = {@Index(columnList = "user_id"),@Index(columnList = "organizational_id")})
+@Table(name = "T_ORGANIZATIONAL_USER",indexes = {@Index(columnList = "USER_ID"),@Index(columnList = "ORGANIZATIONAL_ID")})
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
@@ -26,13 +26,13 @@ import javax.persistence.*;
 public class OrganizationalUserPo extends OrganizationalUserDefinition {
 
     @Override
-    @Column(name = "user_id")
+    @Column(name = "USER_ID")
     public Long getUserId() {
         return super.getUserId();
     }
 
     @Override
-    @Column(name = "organizational_id")
+    @Column(name = "ORGANIZATIONAL_ID")
     public Long getOrganizationalId() {
         return super.getOrganizationalId();
     }

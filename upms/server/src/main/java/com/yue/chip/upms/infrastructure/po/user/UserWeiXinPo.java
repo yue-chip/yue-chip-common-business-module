@@ -20,7 +20,7 @@ import javax.persistence.Table;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_user_weixin")
+@Table(name = "T_USER_WEIXIN")
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
@@ -29,19 +29,19 @@ import javax.persistence.Table;
 public class UserWeiXinPo extends UserWeiXinDefinition {
 
     @Override
-    @Column(unique = true,name = "open_id")
+    @Column(unique = true,name = "OPEN_ID")
     public String getOpenId() {
         return super.getOpenId();
     }
 
     @Override
-    @Column(unique = true,name = "phone_number")
+    @Column(unique = true,name = "PHONE_NUMBER")
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }
 
     @Override
-    @Column(name = "tenant_number")
+    @Column(name = "TENANT_NUMBER")
     public Long getTenantNumber() {
         return super.getTenantNumber();
     }

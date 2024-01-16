@@ -17,7 +17,7 @@ import javax.persistence.*;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_user_role",indexes = {@Index(columnList = "user_id"),@Index(columnList = "role_id")})
+@Table(name = "T_USER_ROLE",indexes = {@Index(columnList = "USER_ID"),@Index(columnList = "ROLE_ID")})
 @SuperBuilder
 @NoArgsConstructor
 @Data
@@ -29,12 +29,12 @@ public class UserRolePo extends BaseEntity {
 
     private Long roleId;
 
-    @Column(name = "user_id")
+    @Column(name = "USER_ID")
     public Long getUserId() {
         return this.userId;
     }
 
-    @Column(name = "role_id")
+    @Column(name = "ROLE_ID")
     public Long getRoleId() {
         return this.roleId;
     }
