@@ -2,6 +2,7 @@ package com.yue.chip.grid;
 
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.grid.vo.GridExposeVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface GridExposeService {
      */
 
     Page<GridExposeVo> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds);
+
+    Page<UserExposeVo> findByGridIdIn(Set<Long> gridIds, YueChipPage yueChipPage);
 }
