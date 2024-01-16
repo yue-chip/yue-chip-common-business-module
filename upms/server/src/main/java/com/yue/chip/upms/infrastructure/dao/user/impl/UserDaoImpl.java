@@ -3,13 +3,11 @@ package com.yue.chip.upms.infrastructure.dao.user.impl;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
-import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.AssertUtil;
+import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.validation.constraints.NotNull;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -159,26 +157,29 @@ public class UserDaoImpl implements UserDaoEx {
                 new ReturningWork<Optional<UserPo>>() {
                     @Override
                     public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
-                        Statement stat =  connection.createStatement();
-                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
-
-                        PreparedStatement prepareStatement =  connection.prepareStatement("select * from t_user where id = ?");
-                        prepareStatement.setLong(1,id);
-                        ResultSet resultSet = prepareStatement.executeQuery();
-                        UserPo userPo = null;
-                        while (resultSet.next()) {
-                            userPo = UserPo.builder()
-                                    .id(resultSet.getLong("id"))
-                                    .isSms(resultSet.getBoolean("is_sms"))
-                                    .isCall(resultSet.getBoolean("is_call"))
-                                    .name(resultSet.getString("name"))
-                                    .phoneNumber(resultSet.getString("phone_number"))
-                                    .build();
+                        Statement stat = null;
+                        PreparedStatement prepareStatement = null;
+                        ResultSet resultSet = null;
+                        try {
+                            stat =  connection.createStatement();
+                            stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+                            prepareStatement =  connection.prepareStatement("select * from t_user where id = ?");
+                            prepareStatement.setLong(1,id);
+                            resultSet = prepareStatement.executeQuery();
+                            UserPo userPo = null;
+                            while (resultSet.next()) {
+                                userPo = UserPo.builder()
+                                        .id(resultSet.getLong("id"))
+                                        .isSms(resultSet.getBoolean("is_sms"))
+                                        .isCall(resultSet.getBoolean("is_call"))
+                                        .name(resultSet.getString("name"))
+                                        .phoneNumber(resultSet.getString("phone_number"))
+                                        .build();
+                            }
+                            return Optional.ofNullable(userPo);
+                        }finally {
+                            HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
                         }
-                        resultSet.close();
-                        prepareStatement.close();
-                        stat.close();
-                        return Optional.ofNullable(userPo);
                     }
                 });
         return result;
@@ -191,26 +192,30 @@ public class UserDaoImpl implements UserDaoEx {
             new ReturningWork<Optional<UserPo>>() {
                 @Override
                 public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
-                    Statement stat =  connection.createStatement();
-                    stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
-
-                    PreparedStatement prepareStatement =  connection.prepareStatement("select u.* from t_user u join t_grid g on u.id = g.user_id where g.id = ?");
-                    prepareStatement.setLong(1,id);
-                    ResultSet resultSet = prepareStatement.executeQuery();
-                    UserPo userPo = null;
-                    while (resultSet.next()) {
-                        userPo = UserPo.builder()
-                                .id(resultSet.getLong("id"))
-                                .name(resultSet.getString("name"))
-                                .isSms(resultSet.getBoolean("is_sms"))
-                                .isCall(resultSet.getBoolean("is_call"))
-                                .phoneNumber(resultSet.getString("phone_number"))
-                                .build();
+                    Statement stat = null;
+                    PreparedStatement prepareStatement = null;
+                    ResultSet resultSet = null;
+                    try {
+                        stat =  connection.createStatement();
+                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+                        prepareStatement =  connection.prepareStatement("select u.* from t_user u join t_grid g on u.id = g.user_id where g.id = ?");
+                        prepareStatement.setLong(1,id);
+                        resultSet = prepareStatement.executeQuery();
+                        UserPo userPo = null;
+                        while (resultSet.next()) {
+                            userPo = UserPo.builder()
+                                    .id(resultSet.getLong("id"))
+                                    .name(resultSet.getString("name"))
+                                    .isSms(resultSet.getBoolean("is_sms"))
+                                    .isCall(resultSet.getBoolean("is_call"))
+                                    .phoneNumber(resultSet.getString("phone_number"))
+                                    .build();
+                        }
+                        return Optional.ofNullable(userPo);
+                    }finally {
+                        HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
                     }
-                    resultSet.close();
-                    prepareStatement.close();
-                    stat.close();
-                    return Optional.ofNullable(userPo);
+
                 }
             });
         return result;

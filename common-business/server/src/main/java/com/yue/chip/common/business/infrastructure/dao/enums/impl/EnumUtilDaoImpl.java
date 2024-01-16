@@ -4,6 +4,7 @@ import com.yue.chip.common.business.infrastructure.dao.enums.EnumUtilDaoEx;
 import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.core.tenant.TenantConstant;
+import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
 import org.hibernate.jdbc.ReturningWork;
@@ -43,35 +44,42 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
             new ReturningWork<Boolean>() {
                 @Override
                 public Boolean execute(java.sql.Connection connection) throws SQLException {
-                    Statement stat = connection.createStatement();
-                    ResultSet resultSet = stat.executeQuery("select tenant_number from "+upms+".t_tenant; ");
-                    List<Long> tenantNumbers = new ArrayList<>();
-                    while (resultSet.next()) {
-                        Long tenantNumber = Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null;
-                        tenantNumbers.add(tenantNumber);
-                    }
-                    for (Long tenantNumber:tenantNumbers){
-                        try {
-                            stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)).concat("`"));
-                            PreparedStatement delete = connection.prepareStatement("delete from t_enum_util where code =? and version = ?");
-                            delete.setString(1, enumUtilPo.getCode());
-                            delete.setString(2, enumUtilPo.getVersion());
-                            delete.executeUpdate();
-
-                            PreparedStatement insert = connection.prepareStatement("INSERT INTO t_enum_util(`code`,`value`,`version`) values (?,?,?)");
-                            insert.setString(1, enumUtilPo.getCode());
-                            insert.setString(2, enumUtilPo.getValue());
-                            insert.setString(3, enumUtilPo.getVersion());
-                            insert.executeUpdate();
-                            delete.close();
-                            insert.close();
-                        }catch (Exception ex) {
-                            ex.printStackTrace();
+                    Statement stat =null;
+                    ResultSet resultSet =null;
+                    try {
+                        stat = connection.createStatement();
+                        resultSet = stat.executeQuery("select tenant_number from "+upms+".t_tenant; ");
+                        List<Long> tenantNumbers = new ArrayList<>();
+                        while (resultSet.next()) {
+                            Long tenantNumber = Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null;
+                            tenantNumbers.add(tenantNumber);
                         }
+                        for (Long tenantNumber:tenantNumbers){
+                            PreparedStatement delete = null;
+                            PreparedStatement insert = null;
+                            try {
+                                stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)).concat("`"));
+                                delete = connection.prepareStatement("delete from t_enum_util where code =? and version = ?");
+                                delete.setString(1, enumUtilPo.getCode());
+                                delete.setString(2, enumUtilPo.getVersion());
+                                delete.executeUpdate();
+
+                                insert = connection.prepareStatement("INSERT INTO t_enum_util(`code`,`value`,`version`) values (?,?,?)");
+                                insert.setString(1, enumUtilPo.getCode());
+                                insert.setString(2, enumUtilPo.getValue());
+                                insert.setString(3, enumUtilPo.getVersion());
+                                insert.executeUpdate();
+                            }catch (Exception ex) {
+
+                            }finally {
+                                HibernateSessionJdbcUtil.close(delete,insert);
+                            }
+                        }
+                        return true;
+                    }finally {
+                        HibernateSessionJdbcUtil.close(resultSet,stat);
                     }
-                    resultSet.close();
-                    stat.close();
-                    return true;
+
                 }
             });
     }
