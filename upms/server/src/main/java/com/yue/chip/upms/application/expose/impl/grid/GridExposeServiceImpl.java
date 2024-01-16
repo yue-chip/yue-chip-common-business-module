@@ -1,5 +1,6 @@
 package com.yue.chip.upms.application.expose.impl.grid;
 
+import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.grid.GridExposeService;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
@@ -7,6 +8,7 @@ import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.grid.vo.GridExposeVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author xianming.chen
@@ -41,5 +44,12 @@ public class GridExposeServiceImpl implements GridExposeService {
     public Page<GridExposeVo> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds) {
         Page<Grid> page = organizationalRepository.listGridQuery(organizationalIds, name, yueChipPage, userIds);
         return new PageImpl<GridExposeVo>(gridMapper.toGridExposeVo(page.getContent()),page.getPageable(),page.getTotalElements());
+    }
+
+    @Override
+    public Page<UserExposeVo> findByGridIdIn(Set<Long> gridIds, YueChipPage yueChipPage) {
+        List<Grid> gridList = organizationalRepository.findByGridId(gridIds);
+        Set<Long> userIds = gridList.stream().map(Grid::getUserId).collect(Collectors.toSet());
+        return organizationalRepository.findByUserIdIn(userIds, yueChipPage);
     }
 }

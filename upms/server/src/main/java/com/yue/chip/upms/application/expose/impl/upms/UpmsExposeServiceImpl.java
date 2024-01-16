@@ -76,9 +76,6 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     @Override
     public IPageResultData<UserExposeVo> findUserAllByOrganizationalId(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
         IPageResultData<UserExposeVo> page = organizationalRepository.organizationalPoList(organizationalIds, name, yueChipPage);
-//        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(page.getData());
-
-//        Page<UserExposeVo> returnPage = new PageImpl<UserExposeVo>(userExposeVo, page.getPageable(),page.getTotalElements());
         return page;
     }
 
@@ -138,11 +135,13 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     @Override
     public List<OrganizationalExposeVo> findOrganizationalAllChildrenByOrganizationalId(Long organizationalId) {
         List<Organizational> list = organizationalRepository.findAllChildren(organizationalId);
+        List<Organizational> firstList = new ArrayList<>();
         java.util.Optional<Organizational> optional = organizationalRepository.findById(organizationalId);
         if (optional.isPresent()) {
-            list.add(optional.get());
+            firstList.add(optional.get());
         }
-        return organizationalMapper.toOrganizationalExposeVo(list);
+        firstList.addAll(list);
+        return organizationalMapper.toOrganizationalExposeVo(firstList);
     }
 
     @Override
