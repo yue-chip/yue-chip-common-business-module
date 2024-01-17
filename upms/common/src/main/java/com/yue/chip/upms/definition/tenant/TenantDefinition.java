@@ -36,7 +36,7 @@ public class TenantDefinition extends BaseDefinition {
     private String phoneNumber;
 
     @Schema(description = "访问地址(xxx.xxx.com/120.102.25.45)-用户区分租户")
-    private String domain;
+    private String requestDomain;
 
     @Schema(description = "是否默认租户，默认租户不能删除(系统创建，不能手动添加)")
     private Boolean isDefault;
