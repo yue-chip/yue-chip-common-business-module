@@ -45,9 +45,9 @@ public class GridExposeServiceImpl implements GridExposeService {
     }
 
     @Override
-    public Page<UserExposeVo> findByGridIdIn(Set<Long> gridIds, YueChipPage yueChipPage) {
+    public Page<UserExposeVo> findByGridIdIn(Set<Long> gridIds, String name, YueChipPage yueChipPage) {
         List<Grid> gridList = organizationalRepository.findByGridId(gridIds);
         Set<Long> userIds = gridList.stream().map(Grid::getUserId).collect(Collectors.toSet());
-        return organizationalRepository.findByUserIdIn(userIds, yueChipPage);
+        return organizationalRepository.findByUserIdIn(userIds, name, yueChipPage);
     }
 }
