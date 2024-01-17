@@ -4,6 +4,7 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.tenant.TenantDefinition;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -57,13 +58,15 @@ public class TenantPo extends TenantDefinition {
     @Override
     @Comment("访问地址(xxx.xxx.com,120.102.25.45)-用户区分租户")
     @ColumnDefault("''")
-    public String getDomain() {
-        return super.getDomain();
+    @NotNull
+    public String getRequestDomain() {
+        return super.getRequestDomain();
     }
 
     @Override
     @Comment("租户名称-简称-不能为空")
     @ColumnDefault("''")
+    @NotNull
     public String getAbbreviation() {
         return super.getAbbreviation();
     }

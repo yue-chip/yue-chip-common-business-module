@@ -2,7 +2,6 @@ package com.yue.chip.upms.domain.service.tenant.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.core.tenant.TenantConstant;
 import com.yue.chip.core.tenant.TenantUtil;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
@@ -120,7 +119,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public void saveToRedis(Tenant tenant) {
-        String domain = tenant.getDomain();
+        String domain = tenant.getRequestDomain();
         if (StringUtils.hasText(domain)) {
            String[] domains = domain.split(",");
            for (String str : domains) {
@@ -146,7 +145,7 @@ public class TenantServiceImpl implements TenantService {
     public Boolean checkDomainIsExist(Long updateId, String domain) {
         Boolean domainIsExist = Tenant.builder()
                 .id(updateId)
-                .domain(domain).build()
+                .requestDomain(domain).build()
                 .checkDomainIsExist(updateId);
         return domainIsExist;
     }
