@@ -30,5 +30,5 @@ public interface GridExposeService {
 
     Page<GridExposeVo> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds);
 
-    Page<UserExposeVo> findByGridIdIn(Set<Long> gridIds, YueChipPage yueChipPage);
+    Page<UserExposeVo> findByGridIdIn(Set<Long> gridIds, String name, YueChipPage yueChipPage);
 }

@@ -133,7 +133,7 @@ public interface OrganizationalRepository {
 
     IPageResultData<UserExposeVo> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage);
 
-    public IPageResultData<UserExposeVo> findByUserIdIn(Set<Long> userIds, YueChipPage yueChipPage);
+    public IPageResultData<UserExposeVo> findByUserIdIn(Set<Long> userIds, String name, YueChipPage yueChipPage);
 
     /**
      * 新增网格
