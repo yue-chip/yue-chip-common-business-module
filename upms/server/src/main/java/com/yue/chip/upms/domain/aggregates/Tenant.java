@@ -45,14 +45,14 @@ public class Tenant extends TenantDefinition {
     }
 
     public Boolean checkDomainIsExist(Long updateId) {
-        AssertUtil.hasText(getDomain(),"登录域不能为空");
+        AssertUtil.hasText(getRequestDomain(),"登录域不能为空");
         List<Tenant> list = tenantRepository.findAll();
         for (Tenant tenant : list) {
-            String domain1 = tenant.getDomain();
+            String domain1 = tenant.getRequestDomain();
             if (StringUtils.hasText(domain1)) {
                 String[] strs = domain1.split(",");
                 for (String str : strs) {
-                    if (Objects.equals(getDomain(),str)) {
+                    if (Objects.equals(getRequestDomain(),str)) {
                         if ((Objects.nonNull(getId()) && !Objects.equals(getId(),updateId)) || Objects.isNull(getId())) {
                             return true;
                         }

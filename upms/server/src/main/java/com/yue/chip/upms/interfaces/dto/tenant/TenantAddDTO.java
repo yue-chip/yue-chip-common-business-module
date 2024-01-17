@@ -51,7 +51,7 @@ public class TenantAddDTO extends TenantDefinition {
 
     @Override
     @NotBlank(message = "访问域名不能为空")
-    public String getDomain() {
-        return super.getDomain();
+    public String getRequestDomain() {
+        return super.getRequestDomain();
     }
 }
