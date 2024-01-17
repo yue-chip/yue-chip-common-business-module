@@ -86,12 +86,12 @@ public class UserDefinition extends BaseDefinition {
     @JsonIgnore
     private Long tenantNumber;
 
-    private  boolean accountNonExpired;
+    private  Boolean accountNonExpired;
 
-    private  boolean accountNonLocked;
+    private  Boolean accountNonLocked;
 
-    private  boolean credentialsNonExpired;
+    private  Boolean credentialsNonExpired;
 
-    private  boolean enabled;
+    private  Boolean enabled;
 
 }

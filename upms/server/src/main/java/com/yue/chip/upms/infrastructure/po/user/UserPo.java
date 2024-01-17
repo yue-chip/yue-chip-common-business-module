@@ -80,27 +80,27 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
-    @Column(name = "IS_ACCOUNT_NON_EXPIRED")
-    public boolean isAccountNonExpired() {
-        return super.isAccountNonExpired();
+    @Column(name = "ACCOUNT_NON_EXPIRED")
+    public Boolean getAccountNonExpired() {
+        return super.getAccountNonExpired();
     }
 
     @Override
-    @Column(name = "IS_ACCOUNT_NON_LOCKED")
-    public boolean isAccountNonLocked() {
-        return super.isAccountNonLocked();
+    @Column(name = "ACCOUNT_NON_LOCKED")
+    public Boolean getAccountNonLocked() {
+        return super.getAccountNonLocked();
     }
 
     @Override
-    @Column(name = "IS_CREDENTIALS_NON_EXPIRED")
-    public boolean isCredentialsNonExpired() {
-        return super.isCredentialsNonExpired();
+    @Column(name = "CREDENTIALS_NON_EXPIRED")
+    public Boolean getCredentialsNonExpired() {
+        return super.getCredentialsNonExpired();
     }
 
     @Override
-    @Column(name = "IS_ENABLED")
-    public boolean isEnabled() {
-        return super.isEnabled();
+    @Column(name = "ENABLED")
+    public Boolean getEnabled() {
+        return super.getEnabled();
     }
 
     @Override

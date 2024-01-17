@@ -154,6 +154,7 @@ public class UserDaoImpl implements UserDaoEx {
     }
 
     @Override
+    @Transactional
     public Optional<UserPo> findByIdAndTenantNumber(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
         Optional<UserPo> result =baseDao.getSession().doReturningWork(
@@ -189,6 +190,7 @@ public class UserDaoImpl implements UserDaoEx {
     }
 
     @Override
+    @Transactional
     public Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
         Optional<UserPo> result =baseDao.getSession().doReturningWork(

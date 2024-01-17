@@ -66,6 +66,7 @@ public class TenantDaoImpl implements TenantDaoEx {
     }
 
     @Override
+    @Transactional
     public void updateOtherDataBase(State state, Long tenantNumber) {
         Object result = baseDao.getSession().doReturningWork(
             new ReturningWork<Boolean>() {
@@ -86,6 +87,7 @@ public class TenantDaoImpl implements TenantDaoEx {
     }
 
     @Override
+    @Transactional
     public void insertOtherDataBase(State state, Long tenantNumber) {
         Object result = baseDao.getSession().doReturningWork(
                 new ReturningWork<Boolean>() {
@@ -106,6 +108,7 @@ public class TenantDaoImpl implements TenantDaoEx {
     }
 
     @Override
+    @Transactional
     public List<TenantPo> findAllByState(State state) {
         List<TenantPo> result = baseDao.getSession().doReturningWork(
             new ReturningWork<List<TenantPo>>() {
@@ -144,6 +147,7 @@ public class TenantDaoImpl implements TenantDaoEx {
     }
 
     @Override
+    @Transactional
     public Optional<TenantPo> findTenantByTenantNumber(Long tenantNumber) {
         TenantPo result = baseDao.getSession().doReturningWork(
                 new ReturningWork<TenantPo>() {

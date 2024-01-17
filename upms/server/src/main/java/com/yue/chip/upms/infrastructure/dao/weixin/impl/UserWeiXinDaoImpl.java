@@ -23,6 +23,7 @@ public class UserWeiXinDaoImpl implements UserWeiXinDaoEx {
     BaseDao<UserWeiXinPo> baseDao;
 
     @Override
+    @Transactional
     public Optional<UserWeiXinPo> findById(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
         Optional<UserWeiXinPo> result =baseDao.getSession().doReturningWork(
