@@ -90,26 +90,26 @@ public class UserPo extends UserDefinition {
 
     @Override
     @ColumnDefault("0")
-    public boolean isAccountNonExpired() {
-        return super.isAccountNonExpired();
+    public Boolean getAccountNonExpired() {
+        return super.getAccountNonExpired();
     }
 
     @Override
     @ColumnDefault("0")
-    public boolean isAccountNonLocked() {
-        return super.isAccountNonLocked();
+    public Boolean getAccountNonLocked() {
+        return super.getAccountNonLocked();
     }
 
     @Override
     @ColumnDefault("0")
-    public boolean isCredentialsNonExpired() {
-        return super.isCredentialsNonExpired();
+    public Boolean getCredentialsNonExpired() {
+        return super.getCredentialsNonExpired();
     }
 
     @Override
     @ColumnDefault("1")
-    public boolean isEnabled() {
-        return super.isEnabled();
+    public Boolean getEnabled() {
+        return super.getEnabled();
     }
 
     @Override
