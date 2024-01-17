@@ -103,8 +103,8 @@
           </a-col>
 
           <a-col :span="24">
-            <a-form-item label="访问域名" name="domain" ref="domain" >
-              <a-input placeholder="请输入访问域名(www.baidu.com)多个域逗号隔开" v-model:value="addOrUpdateModel.domain" />
+            <a-form-item label="访问域名" name="requestDomain" ref="requestDomain" >
+              <a-input placeholder="请输入访问域名(www.baidu.com)多个域逗号隔开" v-model:value="addOrUpdateModel.requestDomain" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -132,7 +132,7 @@
     abbreviation:[{required:true,message:"请输入租户简称",trigger:'blur'}],
     manager:[{required:true,message:"请输入名称",trigger:'blur'}],
     phoneNumber:[{required:true,message:"请输入联系电话",trigger:'blur'}],
-    domain:[{required:true,message:"请输入访问域",trigger:'blur'}],
+    requestDomain:[{required:true,message:"请输入访问域",trigger:'blur'}],
     bigScreenName:[{required:true,message:"请输入数字大屏名称",trigger:'blur'}],
   };
   const columns = [
@@ -163,8 +163,8 @@
     },
     {
       title: '访问域',
-      dataIndex: 'domain',
-      key: 'domain',
+      dataIndex: 'requestDomain',
+      key: 'requestDomain',
     },
     {
       title: '创建时间',
