@@ -52,8 +52,8 @@ public class TenantPo extends TenantDefinition {
 
     @Override
     @Column( name = "REQUEST_DOMAIN")
-    public String getDomain() {
-        return super.getDomain();
+    public String getRequestDomain() {
+        return super.getRequestDomain();
     }
 
     @Override

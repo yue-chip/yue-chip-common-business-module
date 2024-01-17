@@ -122,7 +122,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public void saveToRedis(Tenant tenant) {
-        String domain = tenant.getDomain();
+        String domain = tenant.getRequestDomain();
         if (StringUtils.hasText(domain)) {
            String[] domains = domain.split(",");
            for (String str : domains) {
@@ -148,7 +148,7 @@ public class TenantServiceImpl implements TenantService {
     public Boolean checkDomainIsExist(Long updateId, String domain) {
         Boolean domainIsExist = Tenant.builder()
                 .id(updateId)
-                .domain(domain).build()
+                .requestDomain(domain).build()
                 .checkDomainIsExist(updateId);
         return domainIsExist;
     }
