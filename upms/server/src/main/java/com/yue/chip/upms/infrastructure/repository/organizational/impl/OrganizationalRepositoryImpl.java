@@ -211,8 +211,8 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public IPageResultData<UserExposeVo> findByUserIdIn(Set<Long> userIds, YueChipPage yueChipPage) {
-        IPageResultData<List<User>> page = upmsRepository.userList(new ArrayList<>(userIds), null, yueChipPage);
+    public IPageResultData<UserExposeVo> findByUserIdIn(Set<Long> userIds, String name, YueChipPage yueChipPage) {
+        IPageResultData<List<User>> page = upmsRepository.userList(new ArrayList<>(userIds), name, yueChipPage);
         Map<Long, Long> userOrganizationalMap = findUserAllByUserIdIn(userIds).stream().collect(Collectors.toMap(OrganizationalUserPo::getUserId, OrganizationalUserPo::getOrganizationalId));
         List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(page.getData());
         userExposeVo.forEach(user -> {
