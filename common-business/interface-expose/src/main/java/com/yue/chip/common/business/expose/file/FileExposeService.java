@@ -1,12 +1,10 @@
 package com.yue.chip.common.business.expose.file;
 
 import com.yue.chip.common.business.definition.file.FileDefinition;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +38,7 @@ public interface FileExposeService {
      * @param tenantNumber
      * @return fileId 和 url 的映射关系
      */
-    @Cacheable(value = FileDefinition.CACHE_KEY_URL_MULTIPLE,key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
+//    @Cacheable(value = FileDefinition.CACHE_KEY_URL_MULTIPLE,key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
     public Map<String,String> getUrl(@NotNull Long tableId, @NotBlank String fileFieldName, @NotBlank String tableName,Long tenantNumber);
 
     /**
@@ -52,7 +50,7 @@ public interface FileExposeService {
      * @param tenantNumber
      * @return fileId 和 url 的映射关系
      */
-    @Cacheable(value = FileDefinition.CACHE_KEY_URL_SINGLE,key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
+//    @Cacheable(value = FileDefinition.CACHE_KEY_URL_SINGLE,key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
     public String getUrlSingle(@NotNull Long tableId,@NotBlank String fileFieldName,@NotBlank String tableName,Long tenantNumber);
 
     /**
@@ -65,7 +63,7 @@ public interface FileExposeService {
      * @param tenantNumber
      * @return
      */
-    @CacheEvict(value = {FileDefinition.CACHE_KEY_URL_SINGLE,FileDefinition.CACHE_KEY_URL_MULTIPLE}, key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
+//    @CacheEvict(value = {FileDefinition.CACHE_KEY_URL_SINGLE,FileDefinition.CACHE_KEY_URL_MULTIPLE}, key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
     public List<Long> save(@NotNull Long tableId, @NotBlank String tableName, @NotBlank String fileFieldName,@NotNull @Size(min = 1) List<Long> fileIds,Long tenantNumber);
 
     /**
@@ -78,7 +76,7 @@ public interface FileExposeService {
      * @param tenantNumber
      * @return
      */
-    @CacheEvict(value = {FileDefinition.CACHE_KEY_URL_SINGLE,FileDefinition.CACHE_KEY_URL_MULTIPLE}, key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
+//    @CacheEvict(value = {FileDefinition.CACHE_KEY_URL_SINGLE,FileDefinition.CACHE_KEY_URL_MULTIPLE}, key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
     public List<Long> save(@NotNull Long tableId, @NotBlank String tableName, @NotBlank String fileFieldName,@NotNull Long fileId,Long tenantNumber);
 
 

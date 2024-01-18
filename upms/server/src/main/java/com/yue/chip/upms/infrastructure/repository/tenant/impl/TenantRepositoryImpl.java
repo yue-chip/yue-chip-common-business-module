@@ -12,13 +12,14 @@ import com.yue.chip.upms.infrastructure.dao.tenant.TenantStateDao;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
-import javax.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -113,6 +114,7 @@ public class TenantRepositoryImpl implements TenantRepository {
     }
 
     @Override
+    @Transactional
     public Optional<TenantStatePo> findTenantStateFirst() {
         List<TenantStatePo> list = tenantStateDao.findAll();
         if (list.size()>0){
