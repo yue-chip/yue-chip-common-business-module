@@ -269,8 +269,8 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public Page<Grid> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds) {
-        Page<GridPo> page = gridDao.listGridQuery(organizationalIds,name,yueChipPage, userIds);
+    public Page<Grid> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds, String time) {
+        Page<GridPo> page = gridDao.listGridQuery(organizationalIds,name,yueChipPage, userIds, time);
         List<Grid> list = gridMapper.toGrid(page.getContent());
         return new PageImpl<Grid>(list,page.getPageable(),page.getTotalElements());
     }
