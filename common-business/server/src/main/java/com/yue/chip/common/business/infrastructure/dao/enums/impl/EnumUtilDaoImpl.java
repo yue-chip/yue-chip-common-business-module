@@ -3,14 +3,12 @@ package com.yue.chip.common.business.infrastructure.dao.enums.impl;
 import com.yue.chip.common.business.infrastructure.dao.enums.EnumUtilDaoEx;
 import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
 import com.yue.chip.core.persistence.curd.BaseDao;
-import com.yue.chip.core.tenant.TenantConstant;
 import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
