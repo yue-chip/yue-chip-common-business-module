@@ -1,6 +1,5 @@
 package com.yue.chip.common.business.application.expose.call.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.aliyun.dyvmsapi20170525.Client;
 import com.aliyun.dyvmsapi20170525.models.*;
 import com.aliyun.teautil.models.RuntimeOptions;
@@ -15,8 +14,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.Map;
 
@@ -26,12 +24,11 @@ import java.util.Map;
  * @date 2023/11/17 下午2:08
  */
 @DubboService(interfaceClass = CallExposeService.class)
-@ConditionalOnProperty(prefix = "call",name = "provider",havingValue = "aliyun")
-@ConditionalOnClass( {Client.class} )
 @Slf4j
 public class CallExposeServiceImpl implements CallExposeService {
 
     @Resource
+    @Lazy
     private Client client;
 
     @Override
