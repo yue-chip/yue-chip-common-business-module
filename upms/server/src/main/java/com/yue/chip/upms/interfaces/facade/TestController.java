@@ -10,6 +10,7 @@ import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.application.service.TestApplicationService;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -62,9 +63,10 @@ public class TestController  {
 
     @GetMapping("/test")
 //    @PreAuthorize("@aps.hasPermission('ADD')")
-    @AuthorizationIgnore
+//    @AuthorizationIgnore
     @Operation(summary = "测试-1", description = "测试-1")
     public IResultData test(String name){
+        CurrentUserUtil.getCurrentUserTenantNumber();
         log.info("test");
         upmsApplication.test("刘方");
         return ResultData.builder().build();
