@@ -5,6 +5,7 @@ import com.yue.chip.common.business.expose.sms.SmsExposeService;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @DubboService(interfaceClass = SmsExposeService.class)
 public class SmsExposeServiceImpl implements SmsExposeService {
     @Resource
+    @Lazy
     private SmsService smsService;
 
     @Override

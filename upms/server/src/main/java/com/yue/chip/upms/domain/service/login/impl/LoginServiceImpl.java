@@ -1,6 +1,6 @@
 package com.yue.chip.upms.domain.service.login.impl;
 
-import com.yue.chip.authentication.YueChipAuthenticationToken;
+//import com.yue.chip.authentication.YueChipAuthenticationToken;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.tenant.jpa.TenantUtil;
 import com.yue.chip.exception.BusinessException;
