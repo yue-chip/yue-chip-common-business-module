@@ -66,6 +66,7 @@ public class TestController  {
 //    @AuthorizationIgnore
     @Operation(summary = "测试-1", description = "测试-1")
     public IResultData test(String name){
+        CurrentUserUtil.getCurrentUserUsername();
         CurrentUserUtil.getCurrentUserTenantNumber();
         log.info("test");
         upmsApplication.test("刘方");

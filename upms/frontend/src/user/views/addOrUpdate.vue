@@ -226,8 +226,6 @@
           loading.value = false;
         });
       }
-
-
     }
     if (info.file.status === 'error') {
       loading.value = false;
