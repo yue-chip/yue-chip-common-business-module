@@ -1,5 +1,13 @@
 server:
   port: 0
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*
 spring:
   main:
     allow-bean-definition-overriding: true
