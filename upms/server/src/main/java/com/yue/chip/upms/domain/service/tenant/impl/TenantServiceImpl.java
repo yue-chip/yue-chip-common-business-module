@@ -2,7 +2,7 @@ package com.yue.chip.upms.domain.service.tenant.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.core.tenant.jpa.TenantUtil;
+import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.upms.domain.service.tenant.CreateSql;
@@ -123,8 +123,8 @@ public class TenantServiceImpl implements TenantService {
         if (StringUtils.hasText(domain)) {
            String[] domains = domain.split(",");
            for (String str : domains) {
-               redisTemplate.opsForValue().set(TenantUtil.TENANT_REMOTE_HOST.concat(str),tenant.getTenantNumber());
-               redisTemplate.expire(TenantUtil.TENANT_REMOTE_HOST.concat(str),62, TimeUnit.SECONDS);
+               redisTemplate.opsForValue().set(TenantNumberUtil.TENANT_REMOTE_HOST.concat(str),tenant.getTenantNumber());
+               redisTemplate.expire(TenantNumberUtil.TENANT_REMOTE_HOST.concat(str),62, TimeUnit.SECONDS);
            }
         }
     }
