@@ -1,8 +1,6 @@
 package com.yue.chip.upms.interfaces.facade.login.weixin;
 
-import com.yue.chip.upms.domain.service.login.LoginService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Log
 public class LoginController {
 
-    @Resource
-    private LoginService loginService;
+//    @Resource
+//    private LoginService loginService;
 //
 //    @PostMapping("/login")
 //    @AuthorizationIgnore
