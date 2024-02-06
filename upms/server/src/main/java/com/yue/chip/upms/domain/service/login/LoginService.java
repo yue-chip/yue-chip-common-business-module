@@ -5,14 +5,14 @@ package com.yue.chip.upms.domain.service.login;
  * @date 2023/5/25 下午2:05
  */
 public interface LoginService {
-//
+
 //    /**
 //     * pc 登录
 //     * @param username
 //     * @param password
 //     * @return
 //     */
-//    public String login(@NotBlank String username,@NotBlank String password);
+//    public String login(@NotBlank String username, @NotBlank String password);
 //
 //    /**
 //     *
