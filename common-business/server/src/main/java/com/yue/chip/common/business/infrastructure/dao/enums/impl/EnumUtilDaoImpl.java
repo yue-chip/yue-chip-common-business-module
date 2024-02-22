@@ -34,9 +34,6 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
     @Value("${multiTenant.dataBase.common:common}")
     private String common;
 
-    @Value("${multiTenant.dataBase.security:security}")
-    private String security;
-
     @Override
     @Transactional
     public void saveOtherTenantEnum(EnumUtilPo enumUtilPo) {
@@ -48,7 +45,7 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
                     ResultSet resultSet =null;
                     try {
                         stat = connection.createStatement();
-                        resultSet = stat.executeQuery("select tenant_number from "+upms+".t_tenant; ");
+                        resultSet = stat.executeQuery("select tenant_number from `"+upms+"`.`t_tenant`; ");
                         List<Long> tenantNumbers = new ArrayList<>();
                         while (resultSet.next()) {
                             Long tenantNumber = Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null;
@@ -64,7 +61,7 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
                                 delete.setString(2, enumUtilPo.getVersion());
                                 delete.executeUpdate();
 
-                                insert = connection.prepareStatement("INSERT INTO t_enum_util(`code`,`value`,`version`) values (?,?,?)");
+                                insert = connection.prepareStatement("INSERT INTO `t_enum_util`(`code`,`value`,`version`) values (?,?,?)");
                                 insert.setString(1, enumUtilPo.getCode());
                                 insert.setString(2, enumUtilPo.getValue());
                                 insert.setString(3, enumUtilPo.getVersion());

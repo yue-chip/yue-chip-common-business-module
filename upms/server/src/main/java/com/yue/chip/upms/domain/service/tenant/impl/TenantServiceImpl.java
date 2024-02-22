@@ -2,6 +2,8 @@ package com.yue.chip.upms.domain.service.tenant.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.tenant.jpa.TenantConstant;
+import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
