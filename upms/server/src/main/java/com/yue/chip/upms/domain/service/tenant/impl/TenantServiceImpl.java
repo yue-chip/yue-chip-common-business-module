@@ -2,6 +2,8 @@ package com.yue.chip.upms.domain.service.tenant.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.tenant.jpa.TenantConstant;
+import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
@@ -24,6 +26,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -64,19 +67,34 @@ public class TenantServiceImpl implements TenantService {
     @Value("${multiTenant.dataBase.security:security}")
     private String security;
 
+    @Value("${multiTenant.sqlScript:}")
+    private String sqlScript;
+
     @Override
     public void createTenantDatabase(Long tenantNumber) {
         Object result =tenantDao.getSession().doReturningWork(
             new ReturningWork<Boolean>() {
                 @Override
-                public Boolean execute(java.sql.Connection connection) throws SQLException {;
-                    Statement stat = connection.createStatement();
-                    stat.executeUpdate("create database ".concat("`").concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)).concat("`"));
-                    stat.executeUpdate("create database ".concat("`").concat(TenantDatabaseUtil.tenantDatabaseName(upms,tenantNumber)).concat("`"));
-                    stat.executeUpdate("create database ".concat("`").concat(TenantDatabaseUtil.tenantDatabaseName(security,tenantNumber)).concat("`"));
-                    stat.close();
-                    //创建表
-                    createTenantTable(connection,tenantNumber);
+                public Boolean execute(java.sql.Connection connection) throws SQLException {
+                    Statement stat = null;
+                    try {
+                        stat = connection.createStatement();
+                        sqlScript = sqlScript.replaceAll("\\{tenantNumber\\}", TenantConstant.PREFIX_TENANT.concat(String.valueOf(tenantNumber)));
+                        sqlScript = sqlScript.replaceAll("\\{tenant_number\\}", String.valueOf(tenantNumber));
+                        Statement finalStat = stat;
+                        Arrays.stream(sqlScript.split(";")).toList().forEach(sql -> {
+                            try {
+                                if (StringUtils.hasText(sql)) {
+                                    finalStat.addBatch(sql);
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                        stat.executeBatch();
+                    }finally {
+                        HibernateSessionJdbcUtil.close(stat);
+                    }
                     return true;
                 }
             }
@@ -197,8 +215,3 @@ public class TenantServiceImpl implements TenantService {
         CreateSql.execute(dataSource, connection, security, "user_message", tenantNumber,new CreateSql.TempBean().setInsert(false));
     }
 }
-
-
-
-
-
