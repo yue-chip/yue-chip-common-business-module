@@ -1,7 +1,6 @@
 package com.yue.chip.upms.application.service.impl;
 
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.application.service.TenantApplication;
 import com.yue.chip.upms.assembler.tenant.TenantMapper;
 import com.yue.chip.upms.domain.aggregates.Tenant;
@@ -61,12 +60,8 @@ public class TenantApplicationImpl implements TenantApplication {
         tenantRepository.updateTenantNumber(entity.getId(),entity.getId());
         //创建租户数据库
         tenantService.createTenantDatabase(entity.getId());
-        //初始化数据
-        tenantService.initTenantData(entity.getId());
         //租户信息保存到redis
         tenantService.saveToRedis(tenantMapper.toTenant(entity));
-//        //保存租户状态用户登录校验
-//        tenantRepository.insertOtherDataBase(State.NORMAL,entity.getId());
         return entity;
     }
 
