@@ -5,7 +5,6 @@ import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.common.business.expose.sms.SmsExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
-import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.application.service.TestApplicationService;
 import com.yue.chip.upms.application.service.UpmsApplication;
@@ -103,8 +102,8 @@ public class TestController  {
     public IPageResultData<List<UserVo>> testMock1(String name){
 //        return PageResultData.builder().data(JMockData.mock(new TypeReference<List<UserVo>>(){})).build();
 //        List<User> listGrid = new PodamFactoryImpl().manufacturePojo(List.class, User.class);
-        return PageResultData.builder().data(new PodamFactoryImpl().manufacturePojo(List.class,UserVo.class)).build();
-
+//        return PageResultData.builder().data(new PodamFactoryImpl().manufacturePojo(List.class,UserVo.class)).build();
+        return null;
     }
 
 }
