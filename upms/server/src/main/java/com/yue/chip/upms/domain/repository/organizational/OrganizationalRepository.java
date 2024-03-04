@@ -131,9 +131,9 @@ public interface OrganizationalRepository {
 
     public Page<OrganizationalPo> organizationalPoPage(@NotNull @Size(min = 0) List<Long> organizationalList, @NotNull YueChipPage yueChipPage);
 
-    IPageResultData<UserExposeVo> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage);
+    IPageResultData<List<UserExposeVo>> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage);
 
-    public IPageResultData<UserExposeVo> findByUserIdIn(Set<Long> userIds, String name, YueChipPage yueChipPage);
+    public IPageResultData<List<UserExposeVo>> findByUserIdIn(Set<Long> userIds, String name, YueChipPage yueChipPage);
 
     /**
      * 新增网格
