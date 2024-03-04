@@ -7,7 +7,9 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
+import com.yue.chip.utils.AssertUtil;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -71,6 +73,36 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
                     .build()
             );
         }
+    }
+
+    public void checkResourcesNameIsExist(String name, @NotNull Long parentId, Long id) {
+        Resources resources = Resources.builder()
+                .name(name)
+                .id(id)
+                .parentId(parentId)
+                .build();
+        Boolean isExist = resources.checkNameIsExist();
+        AssertUtil.isFalse(isExist,"该名称已经存");
+    }
+
+    @Override
+    public void checkResourcesCodeIsExist(String code, Long id) {
+        Resources resources = Resources.builder()
+                .code(code)
+                .id(id)
+                .build();
+        Boolean isExist = resources.checkCodeIsExist();
+        AssertUtil.isFalse(isExist,"该编码已经存");
+    }
+
+    @Override
+    public void checkResourcesUrlIsExist(String url, Long id) {
+        Resources resources = Resources.builder()
+                .url(url)
+                .id(id)
+                .build();
+        Boolean isExist = resources.checkUrlIsExist();
+        AssertUtil.isFalse(isExist,"该url已经存");
     }
 
     private List<Long> getAllParentId(Long resourcesId) {

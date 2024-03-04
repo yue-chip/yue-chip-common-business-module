@@ -7,6 +7,7 @@ import com.yue.chip.exception.BusinessException;
 import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
+import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.Resources;
@@ -16,9 +17,12 @@ import com.yue.chip.upms.domain.repository.organizational.OrganizationalReposito
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
+import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
+import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
@@ -66,11 +70,15 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Resource
     private OrganizationalMapper organizationalMapper;
 
+    @Resource
+    private ResourcesMapper resourcesMapper;
+
     @DubboReference
     private FileExposeService fileExposeService;
 
     @Resource
     private PasswordEncoder passwordEncoder;
+
 
     @Override
     @Transactional(rollbackFor = {Throwable.class})
@@ -225,6 +233,37 @@ public class UpmsApplicationImpl implements UpmsApplication {
                 deleteOrganizational(organizational.getId());
             });
         });
+    }
+
+    @Override
+    public Resources saveResources(ResourcesAddDto resourcesAddDto) {
+        //检查编码是否存子阿
+        upmsDomainService.checkResourcesCodeIsExist(resourcesAddDto.getCode(),null);
+        //检查url是否存子阿
+        upmsDomainService.checkResourcesUrlIsExist(resourcesAddDto.getUrl(),null);
+        //检查名称是否存在
+        upmsDomainService.checkResourcesNameIsExist(resourcesAddDto.getName(),resourcesAddDto.getParentId(),null);
+        //保存资源
+        resourcesAddDto.setCode(resourcesAddDto.getCode().trim().toUpperCase());
+        Resources resources = upmsRepository.saveResources(resourcesMapper.toResourcesPo(resourcesAddDto));
+        //保存icon
+        fileExposeService.save(resources.getId(), ResourcesPo.TABLE_NAME,ResourcesPo.ICON_FIELD_NAME,resourcesAddDto.getIconId());
+        return resources;
+    }
+
+    @Override
+    public void updateResources(@NotNull ResourcesUpdateDto resourcesUpdateDto) {
+        //检查编码是否存子阿
+        upmsDomainService.checkResourcesCodeIsExist(resourcesUpdateDto.getCode(),resourcesUpdateDto.getId());
+        //检查url是否存子阿
+        upmsDomainService.checkResourcesUrlIsExist(resourcesUpdateDto.getUrl(),resourcesUpdateDto.getId());
+        //检查名称是否存在
+        upmsDomainService.checkResourcesNameIsExist(resourcesUpdateDto.getName(), resourcesUpdateDto.getParentId(),resourcesUpdateDto.getId());
+        //修改资源
+        resourcesUpdateDto.setCode(resourcesUpdateDto.getCode().trim().toUpperCase());
+        upmsRepository.updateResources(resourcesMapper.toResourcesPo(resourcesUpdateDto));
+        //保存icon
+        fileExposeService.save(resourcesUpdateDto.getId(), ResourcesPo.TABLE_NAME,ResourcesPo.ICON_FIELD_NAME,resourcesUpdateDto.getIconId());
     }
 
     private void deleteOrganizational(Long id) {

@@ -117,15 +117,41 @@
             </a-form-item>
           </a-col>
         </a-row>
+        <a-row>
+          <a-col :span="12">
+            <a-form-item label="icon">
+              <a-upload
+                v-model:file-list="fileList"
+                name="avatar"
+                list-type="picture-card"
+                class="avatar-uploader"
+                :show-upload-list="false"
+                action="/api/common/file/upload"
+                :before-upload="beforeUpload"
+                :headers="headers"
+                @change="handleChange"
+              >
+                <img width="100" height="100" v-if="imageUrl" :src="imageUrl" alt="avatar" />
+                <div v-else>
+                  <loading-outlined v-if="uploadLoading"></loading-outlined>
+                  <plus-outlined v-else></plus-outlined>
+                  <div class="ant-upload-text">Upload</div>
+                </div>
+              </a-upload>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+          </a-col>
+        </a-row>
       </a-form>
     </a-modal>
   </div>
 </template>
 
 <script setup lang="ts">
-  import {ref, onActivated,getCurrentInstance} from 'vue'
+import {ref, onActivated, getCurrentInstance, computed} from 'vue'
   import { SearchOutlined,PlusOutlined,DeleteOutlined,EditOutlined } from '@ant-design/icons-vue';
-  import {Modal,message,FormInstance} from "ant-design-vue";
+import {Modal, message, FormInstance, UploadProps, UploadChangeParam} from "ant-design-vue";
   import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
   const _this:any = getCurrentInstance();
   const fromAddOrUpdate = ref<FormInstance>();
@@ -134,6 +160,19 @@
   const searchModel = ref({scope:"CONSOLE"})
   let addOrUpdateModel = ref({})
   const loading = ref(false);
+  const uploadLoading = ref(false);
+  const fileList = ref([]);
+  let imageUrl = ref<string>('');
+  let headers = computed(()=>{
+    const token = sessionStorage.getItem("token");
+    const access_token = sessionStorage.getItem("access_token");
+    if (token && token !== ''){
+      return {"Token":token};
+    }
+    if (access_token && access_token !== ''){
+      return {"Authorization":`Bearer ${access_token}`};
+    }
+  })
   const columns = [
     {
       title: '名称',
@@ -287,10 +326,14 @@
       addOrUpdateModel.value.type = type;
     }
     visible.value = true;
+    imageUrl.value = '';
+    fileList.value = [];
   }
 
   function cancel(){
     visible.value = false;
+    imageUrl.value = '';
+    fileList.value = [];
     addOrUpdateModel.value = {};
   }
 
@@ -329,6 +372,9 @@
           addOrUpdateModel.value.scope = data.data.scope.name;
           addOrUpdateModel.value.type = data.data.type.name;
           addOrUpdateModel.value.state = data.data.state.name;
+          if (data.data.iconUrl) {
+            imageUrl.value = "/api/file" + data.data.iconUrl;
+          }
           visible.value = true;
         }
       },null,null)
@@ -352,6 +398,45 @@
           onCancel() {
           },
       });
+  }
+
+  const beforeUpload = (file: UploadProps['fileList'][number]) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
+    if (!isJpgOrPng) {
+      message.error('请上传正确的头像文件(jpeg/png/jpg)!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 10;
+    if (!isLt2M) {
+      message.error('请上传小与10MB的图像!');
+    }
+    return isJpgOrPng && isLt2M;
+  };
+
+  const handleChange = (info: UploadChangeParam) => {
+    if (info.file.status === 'uploading') {
+      uploadLoading.value = true;
+      return;
+    }
+    if (info.file.status === 'done') {
+      if (info.file.response.status === 200) {
+        const data = info.file.response.data;
+        addOrUpdateModel.value.iconId = data[0].id;
+        // profilePhoto.value = "/api"+data[0].url;
+          getBase64(info.file.originFileObj, (base64Url: string) => {
+          imageUrl.value = base64Url;
+          uploadLoading.value = false;
+        });
+      }
+    }
+    if (info.file.status === 'error') {
+      uploadLoading.value = false;
+      message.error('upload error');
+    }
+  };
+  function getBase64(img: Blob, callback: (base64Url: string) => void) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
   }
 </script>
 

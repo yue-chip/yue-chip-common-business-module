@@ -17,5 +17,7 @@ public class ResourcesTreeVo {
 
     private Long key;
 
+    private String iconUrl;
+
     private List<ResourcesTreeVo> children;
 }

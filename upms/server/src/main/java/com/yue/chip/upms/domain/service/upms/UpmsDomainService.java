@@ -1,5 +1,6 @@
 package com.yue.chip.upms.domain.service.upms;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -21,4 +22,27 @@ public interface UpmsDomainService {
      * @param organizationalId
      */
     public void userOrganizational(@NotNull Long userId,Long organizationalId);
+
+    /**
+     * 判断资源名称是否存在
+     *
+     * @param name
+     * @param parentId
+     * @param id
+     */
+    public void checkResourcesNameIsExist(@NotBlank String name,@NotNull Long parentId, Long id);
+
+    /**
+     * 判断资源编码是否存在
+     * @param code
+     * @param id
+     */
+    public void checkResourcesCodeIsExist(@NotBlank String code,Long id);
+
+    /**
+     * 判断资源编码是否存在
+     * @param url
+     * @param id
+     */
+    public void checkResourcesUrlIsExist(@NotBlank String url,Long id);
 }
