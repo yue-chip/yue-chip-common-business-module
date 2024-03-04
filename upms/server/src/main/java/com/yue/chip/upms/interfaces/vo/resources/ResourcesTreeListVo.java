@@ -1,9 +1,10 @@
 package com.yue.chip.upms.interfaces.vo.resources;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 public class ResourcesTreeListVo extends ResourcesDefinition {
+
+    private String iconUrl;
 
     private List<ResourcesTreeListVo> children;
 }

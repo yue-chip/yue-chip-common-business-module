@@ -236,16 +236,14 @@ public class UpmsConsoleController {
     @Operation(description = "菜单资源-新建资源",summary = "菜单资源-新建资源")
     @PostMapping("/resources/add")
     public IResultData resourcesAdd(@RequestBody @Validated({Validator.Insert.class}) ResourcesAddDto resources){
-        resources.setCode(resources.getCode().trim().toUpperCase());
-        upmsRepository.saveResources(resourcesMapper.toResourcesPo(resources));
+        upmsApplication.saveResources(resources);
         return ResultData.builder().build();
     }
 
     @Operation(description = "菜单资源-修改资源",summary = "菜单资源-修改资源")
     @PutMapping("/resources/update")
     public IResultData resourcesUpdate(@RequestBody @Validated({Validator.Update.class}) ResourcesUpdateDto resources){
-        resources.setCode(resources.getCode().trim().toUpperCase());
-        upmsRepository.updateResources(resourcesMapper.toResourcesPo(resources));
+        upmsApplication.updateResources(resources);
         return ResultData.builder().build();
     }
 

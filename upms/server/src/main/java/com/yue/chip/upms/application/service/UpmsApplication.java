@@ -1,7 +1,10 @@
 package com.yue.chip.upms.application.service;
 
+import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
+import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
+import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
@@ -85,6 +88,21 @@ public interface UpmsApplication {
      * @param ids
      */
     public void deleteOrganizational(@NotNull @Size(min = 1) List<Long> ids);
+
+    /**
+     * 新建资源
+     *
+     * @param resourcesAddDto
+     * @return
+     */
+    public Resources saveResources(@NotNull ResourcesAddDto resourcesAddDto);
+
+    /**
+     * 修改资源
+     *
+     * @param resourcesUpdateDto
+     */
+    public void updateResources(@NotNull ResourcesUpdateDto resourcesUpdateDto);
 
     public UserVo test(String name);
 

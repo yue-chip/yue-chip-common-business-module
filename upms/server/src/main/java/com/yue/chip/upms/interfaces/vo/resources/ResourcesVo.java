@@ -1,6 +1,5 @@
 package com.yue.chip.upms.interfaces.vo.resources;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -18,4 +17,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class ResourcesVo extends ResourcesDefinition {
+
+    @Schema(description = "图片地址")
+    private String iconUrl;
 }

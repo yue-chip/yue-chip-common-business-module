@@ -25,6 +25,8 @@ public interface ResourcesMapper {
 
     public ResourcesTreeListVo toResourcesTreeListVo(ResourcesPo resourcesPo);
 
+    public ResourcesTreeListVo toResourcesTreeListVo(Resources resources);
+
     public List<ResourcesTreeVo> toResourcesTreeVo(List<ResourcesTreeListVo> list);
 
     @Mappings({@Mapping(source = "id", target = "key"),

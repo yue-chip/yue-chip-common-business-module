@@ -13,6 +13,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import static com.yue.chip.upms.infrastructure.po.resources.ResourcesPo.TABLE_NAME;
+
 /**
  * @author Mr.Liu
  * @date 2023/1/12 下午2:51
@@ -20,12 +22,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = "t_resources", indexes = {@Index(columnList = "parent_id"),@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
+@Table(name = TABLE_NAME, indexes = {@Index(columnList = "parent_id"),@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
 @Comment("菜单资源")
 public class ResourcesPo extends ResourcesDefinition {
+
+    public static final String TABLE_NAME = "t_resources";
 
     @Override
     @Comment("父节点id")

@@ -11,7 +11,6 @@ import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
-import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
@@ -19,13 +18,11 @@ import com.yue.chip.upms.infrastructure.dao.role.RoleDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserRoleDao;
-import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
-import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
@@ -236,7 +233,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
             treeList = null;
         }
         list.forEach(resourcesPo -> {
-            ResourcesTreeListVo resourcesTree = resourcesMapper.toResourcesTreeListVo(resourcesPo);
+            ResourcesTreeListVo resourcesTree = resourcesMapper.toResourcesTreeListVo(resourcesMapper.toResources(resourcesPo));
             resourcesTree.setChildren(findResourcesToTreeList(userId,resourcesPo.getId(),scope));
             treeList.add(resourcesTree);
         });

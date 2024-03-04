@@ -58,8 +58,33 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
+    public Map<String, String> getUrl(Long tableId, String fileFieldName, String tableName) {
+        if (Objects.isNull(tableId) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {
+            return Collections.EMPTY_MAP;
+        }
+        List<File> list = fileRepository.find(tableId, fileFieldName, tableName);
+        Map<String, String> urls = new HashMap<>();
+        if (Objects.nonNull(list)) {
+            list.forEach(file -> {
+                urls.put(String.valueOf(file.getId()), file.getUrl());
+            });
+        }
+        return urls;
+    }
+
+    @Override
     public String getUrlSingle(Long tableId, String fileFieldName, String tableName, Long tenantNumber) {
         Map<String, String> fileMap = getUrl(tableId, fileFieldName, tableName, tenantNumber);
+        if (fileMap.size()>0) {
+            String id = (String) fileMap.keySet().toArray()[0];
+            return fileMap.get(id);
+        }
+        return "";
+    }
+
+    @Override
+    public String getUrlSingle(Long tableId, String fileFieldName, String tableName) {
+        Map<String, String> fileMap = getUrl(tableId, fileFieldName, tableName);
         if (fileMap.size()>0) {
             String id = (String) fileMap.keySet().toArray()[0];
             return fileMap.get(id);
@@ -74,10 +99,23 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
+    public List<Long> save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
+        fileRepository.save(tableId, tableName, fileFieldName, fileIds);
+        return fileIds;
+    }
+
+    @Override
     public List<Long> save(Long tableId, String tableName, String fileFieldName, Long fileId, Long tenantNumber) {
         List<Long> fileIds = new ArrayList<>();
         fileIds.add(fileId);
         return save(tableId, tableName, fileFieldName, fileIds, tenantNumber);
+    }
+
+    @Override
+    public List<Long> save(Long tableId, String tableName, String fileFieldName, Long fileId) {
+        List<Long> fileIds = new ArrayList<>();
+        fileIds.add(fileId);
+        return save(tableId, tableName, fileFieldName, fileIds);
     }
 //
 //    @Override

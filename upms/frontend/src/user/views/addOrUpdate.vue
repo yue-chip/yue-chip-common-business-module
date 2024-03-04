@@ -137,7 +137,15 @@
   };
   let headers = computed(()=>{
     const token = sessionStorage.getItem("token");
-    return {"Token":token};
+    const access_token = sessionStorage.getItem("access_token");
+
+    if (token && token !== ''){
+      return {"Token":token};
+    }
+    if (access_token && access_token !== ''){
+      return {"Authorization":`Bearer ${access_token}`};
+    }
+
   })
   onMounted(() => {
     const id = route.query.id;
@@ -274,11 +282,11 @@
     reader.addEventListener('load', () => callback(reader.result as string));
     reader.readAsDataURL(img);
   }
-  const ispaly = () => {
-    ismute.value = !ismute.value
-    emit('ispaly', ismute.value)
-
-  }
+  // const ispaly = () => {
+  //   ismute.value = !ismute.value
+  //   emit('ispaly', ismute.value)
+  //
+  // }
 </script>
 
 <style scoped>

@@ -39,7 +39,10 @@ public interface FileExposeService {
      * @return fileId 和 url 的映射关系
      */
 //    @Cacheable(value = FileDefinition.CACHE_KEY_URL_MULTIPLE,key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
+    @Deprecated
     public Map<String,String> getUrl(@NotNull Long tableId, @NotBlank String fileFieldName, @NotBlank String tableName,Long tenantNumber);
+
+    public Map<String,String> getUrl(@NotNull Long tableId, @NotBlank String fileFieldName, @NotBlank String tableName);
 
     /**
      * 根据表id和表名称查找单个文件url
@@ -51,7 +54,10 @@ public interface FileExposeService {
      * @return fileId 和 url 的映射关系
      */
 //    @Cacheable(value = FileDefinition.CACHE_KEY_URL_SINGLE,key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
+    @Deprecated
     public String getUrlSingle(@NotNull Long tableId,@NotBlank String fileFieldName,@NotBlank String tableName,Long tenantNumber);
+
+    public String getUrlSingle(@NotNull Long tableId,@NotBlank String fileFieldName,@NotBlank String tableName);
 
     /**
      * 保存表与文件的关联关系
@@ -64,7 +70,19 @@ public interface FileExposeService {
      * @return
      */
 //    @CacheEvict(value = {FileDefinition.CACHE_KEY_URL_SINGLE,FileDefinition.CACHE_KEY_URL_MULTIPLE}, key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
+    @Deprecated
     public List<Long> save(@NotNull Long tableId, @NotBlank String tableName, @NotBlank String fileFieldName,@NotNull @Size(min = 1) List<Long> fileIds,Long tenantNumber);
+
+    /**
+     * 保存表与文件的关联关系
+     * @param tableId
+     * @param tableName
+     * @param fileFieldName
+     * @param fileIds
+     * @return
+     */
+    public List<Long> save(@NotNull Long tableId, @NotBlank String tableName, @NotBlank String fileFieldName,@NotNull @Size(min = 1) List<Long> fileIds);
+
 
     /**
      * 保存表与文件的关联关系
@@ -77,7 +95,18 @@ public interface FileExposeService {
      * @return
      */
 //    @CacheEvict(value = {FileDefinition.CACHE_KEY_URL_SINGLE,FileDefinition.CACHE_KEY_URL_MULTIPLE}, key = "#p0 + '-' + #p1 + '-' +#p2 + '-' +#p3")
+    @Deprecated
     public List<Long> save(@NotNull Long tableId, @NotBlank String tableName, @NotBlank String fileFieldName,@NotNull Long fileId,Long tenantNumber);
+
+    /**
+     * 保存表与文件的关联关系
+     * @param tableId
+     * @param tableName
+     * @param fileFieldName
+     * @param fileId
+     * @return
+     */
+    public List<Long> save(@NotNull Long tableId, @NotBlank String tableName, @NotBlank String fileFieldName,@NotNull Long fileId);
 
 
 //    /**
