@@ -3,6 +3,7 @@ package com.yue.chip.upms.infrastructure.po.user;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.user.UserDefinition;
+import com.yue.chip.upms.enums.Gender;
 import com.yue.chip.upms.enums.IdCardType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -146,4 +147,17 @@ public class UserPo extends UserDefinition {
     public String getIdentificationNumber() {
         return super.getIdentificationNumber();
     }
+
+    @Override
+    @Comment("性别(0:男 1:女)")
+    public Gender getGender() {
+        return super.getGender();
+    }
+
+    @Override
+    @Comment("昵称")
+    public String getNickname() {
+        return super.getNickname();
+    }
+
 }

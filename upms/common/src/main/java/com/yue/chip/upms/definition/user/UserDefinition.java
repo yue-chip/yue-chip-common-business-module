@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.core.BaseDefinition;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.upms.enums.Gender;
 import com.yue.chip.upms.enums.IdCardType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Transient;
@@ -61,6 +62,12 @@ public class UserDefinition extends BaseDefinition {
 
     @Schema(description = "姓名")
     private String name;
+
+    @Schema(description = "性别")
+    private Gender gender;
+
+    @Schema(description = "昵称")
+    private String nickname;
 
     @Schema(description = "联系电话")
     private String phoneNumber;
