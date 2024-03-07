@@ -1,8 +1,9 @@
 package com.yue.chip.upms.application.expose.impl.upms;
 
 import com.yue.chip.core.IPageResultData;
-import com.yue.chip.core.PageResultData;
+import com.yue.chip.core.PageSerializable;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.YueChipPageSerializable;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.UpmsExposeService;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
@@ -197,11 +198,10 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public IPageResultData<List<OrganizationalExposeVo>> organizationalExposeVoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
+    public PageSerializable<OrganizationalExposeVo> organizationalExposeVoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
         Page<OrganizationalPo> page = organizationalRepository.organizationalPoPage(organizationalList, yueChipPage);
         List<OrganizationalExposeVo> organizationalExposeVoList = organizationalMapper.toOrganizationalExposeVoList(page.getContent());
-        IPageResultData<List<OrganizationalExposeVo>> returnPage = new PageResultData<>(organizationalExposeVoList, page.getPageable(),page.getTotalElements());
-        return returnPage;
+        return new YueChipPageSerializable<OrganizationalExposeVo>(organizationalExposeVoList, page.getPageable(),page.getTotalElements());
     }
 
     @Override
