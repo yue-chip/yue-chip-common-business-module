@@ -1,6 +1,7 @@
 package com.yue.chip.upms.application.expose.impl.upms;
 
 import com.yue.chip.core.IPageResultData;
+import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.UpmsExposeService;
@@ -21,7 +22,6 @@ import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -191,10 +191,10 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public Page<OrganizationalExposeVo> organizationalExposeVoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
+    public IPageResultData<List<OrganizationalExposeVo>> organizationalExposeVoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
         Page<OrganizationalPo> page = organizationalRepository.organizationalPoPage(organizationalList, yueChipPage);
         List<OrganizationalExposeVo> organizationalExposeVoList = organizationalMapper.toOrganizationalExposeVoList(page.getContent());
-        Page<OrganizationalExposeVo> returnPage = new PageImpl<OrganizationalExposeVo>(organizationalExposeVoList, page.getPageable(),page.getTotalElements());
+        IPageResultData<List<OrganizationalExposeVo>> returnPage = new PageResultData<>(organizationalExposeVoList, page.getPageable(),page.getTotalElements());
         return returnPage;
     }
 
