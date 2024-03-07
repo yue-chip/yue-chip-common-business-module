@@ -2,6 +2,7 @@ package com.yue.chip.upms;
 
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.Optional;
+import com.yue.chip.core.PageSerializable;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
@@ -106,7 +107,7 @@ public interface UpmsExposeService {
 
     public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(@NotNull Long parentId);
 
-    public IPageResultData<List<OrganizationalExposeVo>> organizationalExposeVoPage(@Size(min = 1)List<Long> organizationalList,@NotNull YueChipPage yueChipPage);
+    public PageSerializable<OrganizationalExposeVo> organizationalExposeVoPage(@Size(min = 1)List<Long> organizationalList, @NotNull YueChipPage yueChipPage);
 
     /**
      * 获取机构下的网格
