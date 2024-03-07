@@ -10,7 +10,6 @@ import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Set;
@@ -107,7 +106,7 @@ public interface UpmsExposeService {
 
     public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(@NotNull Long parentId);
 
-    public Page<OrganizationalExposeVo> organizationalExposeVoPage(@Size(min = 1)List<Long> organizationalList,@NotNull YueChipPage yueChipPage);
+    public IPageResultData<List<OrganizationalExposeVo>> organizationalExposeVoPage(@Size(min = 1)List<Long> organizationalList,@NotNull YueChipPage yueChipPage);
 
     /**
      * 获取机构下的网格
