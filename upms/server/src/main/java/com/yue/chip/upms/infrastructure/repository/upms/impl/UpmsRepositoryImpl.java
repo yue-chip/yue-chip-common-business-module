@@ -364,6 +364,13 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         return userList;
     }
 
+    @Override
+    public List<User> findAllByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email) {
+        List<UserPo> allByNameOrPhoneNumberOrEmail = userDao.findAllByUsernameLikeOrPhoneNumberLikeOrEmailLike(username,phoneNumber,email);
+        List<User> userList = userMapper.toUserList(allByNameOrPhoneNumberOrEmail);
+        return userList;
+    }
+
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {
         if (optional.isPresent()) {
             return Optional.ofNullable(resourcesMapper.toResources(optional.get()));

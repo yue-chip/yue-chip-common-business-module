@@ -103,6 +103,7 @@ public interface UpmsExposeService {
     public Set<Long> findOrganizationalAllChildrenOrganizationalIds(@NotNull Long parentId);
 
     List<UserExposeVo> findUserAllByNameOrPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber);
+    List<UserExposeVo> findUserAllByUsernameOrPhoneNumberOrEmail(@NotBlank String username, @NotBlank String phoneNumber, @NotBlank String email);
 
     public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(@NotNull Long parentId);
 
