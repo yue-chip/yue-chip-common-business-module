@@ -155,9 +155,16 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
+    @ColumnDefault("''")
     @Comment("昵称")
     public String getNickname() {
         return super.getNickname();
     }
 
+    @Override
+    @ColumnDefault("''")
+    @Comment("极光推送用户标识")
+    public String getJiGuangUserKey() {
+        return super.getJiGuangUserKey();
+    }
 }

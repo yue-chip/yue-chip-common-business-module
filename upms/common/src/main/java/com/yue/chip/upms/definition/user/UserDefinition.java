@@ -100,6 +100,9 @@ public class UserDefinition extends BaseDefinition {
     @JsonIgnore
     private Long tenantNumber;
 
+    @Schema(description = "极光用户推送标识")
+    private String jiGuangUserKey;
+
     private  Boolean accountNonExpired;
 
     private  Boolean accountNonLocked;
