@@ -1,6 +1,5 @@
 package com.yue.chip.upms;
 
-import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.Optional;
 import com.yue.chip.core.PageSerializable;
 import com.yue.chip.core.YueChipPage;
@@ -45,7 +44,7 @@ public interface UpmsExposeService {
      * @param yueChipPage
      * @return
      */
-    IPageResultData<List<UserExposeVo>> findUserAllByOrganizationalId(@Size(min = 1)List<Long> organizationalIds, String name, @NotNull YueChipPage yueChipPage);
+    PageSerializable<UserExposeVo> findUserAllByOrganizationalId(@Size(min = 1)List<Long> organizationalIds, String name, @NotNull YueChipPage yueChipPage);
 
     /**
      * 根据用户id和租户编码查寻用户

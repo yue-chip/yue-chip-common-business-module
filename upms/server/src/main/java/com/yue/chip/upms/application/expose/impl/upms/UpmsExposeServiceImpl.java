@@ -75,9 +75,9 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public IPageResultData<List<UserExposeVo>> findUserAllByOrganizationalId(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
+    public PageSerializable<UserExposeVo> findUserAllByOrganizationalId(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
         IPageResultData<List<UserExposeVo>> page = organizationalRepository.organizationalPoList(organizationalIds, name, yueChipPage);
-        return page;
+        return new YueChipPageSerializable<>(page.getContent(),page.getPageable(),page.getTotalElements());
     }
 
     @Override
