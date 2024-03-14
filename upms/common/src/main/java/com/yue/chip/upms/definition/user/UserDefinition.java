@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.core.BaseDefinition;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.enums.Gender;
 import com.yue.chip.upms.enums.IdCardType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -92,6 +93,9 @@ public class UserDefinition extends BaseDefinition {
 
     @Schema(description = "是否接收紧急呼叫")
     private Boolean isCall;
+
+    @Schema(description = "用户类型")
+    private UserType userType;
 
     @Schema(description = "最后登录时间")
     private LocalDateTime lastLoginTime;
