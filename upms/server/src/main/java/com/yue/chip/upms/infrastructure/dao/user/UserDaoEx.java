@@ -1,6 +1,8 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
+import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,6 +36,7 @@ public interface UserDaoEx {
     public Page<UserPo> find( String name, String username,@NotNull Pageable pageable);
 
     public Page<UserPo> find(List<Long> ids, String name,@NotNull Pageable pageable);
+    Page<UserPo> find(String phoneNumber, String email, State state, UserType userType, @NotNull YueChipPage yueChipPage);
 
     /**
      * 根据角色查询关联的用户

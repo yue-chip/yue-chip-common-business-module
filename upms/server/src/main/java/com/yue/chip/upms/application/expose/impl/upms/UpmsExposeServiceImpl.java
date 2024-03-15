@@ -4,6 +4,7 @@ import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageSerializable;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.YueChipPageSerializable;
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.UpmsExposeService;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
@@ -17,6 +18,7 @@ import com.yue.chip.upms.domain.repository.organizational.OrganizationalReposito
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
@@ -226,6 +228,12 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public List<OrganizationalUserExposeVo> findUserAllByUserIdIn(Set<Long> userId) {
         List<OrganizationalUserPo> list = organizationalRepository.findUserAllByUserIdIn(userId);
         return organizationalUserMapper.toListOrganizationalUserExposeVo(list);
+    }
+
+    @Override
+    public IPageResultData<List<UserExposeVo>> findUserAllByUserType(String phoneNumber, String email, State state, YueChipPage yueChipPage) {
+        IPageResultData<List<UserExposeVo>> userList = upmsRepository.findUserAllByUserType(phoneNumber, email, state, yueChipPage);
+        return userList;
     }
 
 }

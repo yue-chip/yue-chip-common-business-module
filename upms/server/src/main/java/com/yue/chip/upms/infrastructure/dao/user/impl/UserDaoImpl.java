@@ -1,6 +1,8 @@
 package com.yue.chip.upms.infrastructure.dao.user.impl;
 
+import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
@@ -93,6 +95,31 @@ public class UserDaoImpl implements UserDaoEx {
         }
         sb.append(" and u.username <> 'superadmin' ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
+    }
+
+    @Override
+    public Page<UserPo> find(String phoneNumber, String email, State state, UserType userType, YueChipPage yueChipPage) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u where 1=1 ");
+        Map<String,Object> para = new HashMap<>();
+        if (Objects.nonNull(state)) {
+            sb.append(" and u.state = :state ");
+            para.put("state", state);
+        }
+        if (Objects.nonNull(userType)) {
+            sb.append(" and u.userType = :userType ");
+            para.put("userType", userType);
+        }
+        if (StringUtils.hasText(phoneNumber)) {
+            sb.append(" and u.phoneNumber like :phoneNumber ");
+            para.put("phoneNumber","%"+phoneNumber+"%");
+        }
+        if (StringUtils.hasText(email)) {
+            sb.append(" and u.email like :email ");
+            para.put("email","%"+email+"%");
+        }
+        sb.append(" and u.username <> 'superadmin' ");
+        return (Page<UserPo>) baseDao.findNavigator(yueChipPage,sb.toString(),para);
     }
 
     @Override

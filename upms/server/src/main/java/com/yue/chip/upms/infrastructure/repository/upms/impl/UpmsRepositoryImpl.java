@@ -4,6 +4,7 @@ import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
@@ -27,6 +28,7 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -369,6 +371,14 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         List<UserPo> allByNameOrPhoneNumberOrEmail = userDao.findAllByUsernameLikeOrPhoneNumberLikeOrEmailLike(username,phoneNumber,email);
         List<User> userList = userMapper.toUserList(allByNameOrPhoneNumberOrEmail);
         return userList;
+    }
+
+    @Override
+    public IPageResultData<List<UserExposeVo>> findUserAllByUserType(String phoneNumber, String email, State state, YueChipPage yueChipPage) {
+        Page<UserPo> page = userDao.find(phoneNumber, email, state, UserType.ORDINARY, yueChipPage);
+        List<User> listUser = userMapper.toUserList(page.getContent());
+        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(listUser);
+        return (IPageResultData<List<UserExposeVo>>) PageResultData.convert(page,userExposeVo);
     }
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {

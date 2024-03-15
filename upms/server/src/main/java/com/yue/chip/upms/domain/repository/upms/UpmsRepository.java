@@ -2,6 +2,7 @@ package com.yue.chip.upms.domain.repository.upms;
 
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -15,6 +16,7 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -328,4 +330,6 @@ public interface UpmsRepository {
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
 
     List<User> findAllByUsernameOrPhoneNumberOrEmail(@NotBlank String username,@NotBlank String phoneNumber,@NotBlank String email);
+
+    IPageResultData<List<UserExposeVo>> findUserAllByUserType(String phoneNumber, String email, State state, @NotNull YueChipPage yueChipPage);
 }

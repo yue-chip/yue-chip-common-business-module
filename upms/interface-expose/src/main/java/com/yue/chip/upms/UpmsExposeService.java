@@ -1,8 +1,11 @@
 package com.yue.chip.upms;
 
+import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.Optional;
 import com.yue.chip.core.PageSerializable;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
@@ -10,6 +13,8 @@ import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.apache.catalina.User;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.util.List;
 import java.util.Set;
@@ -137,5 +142,15 @@ public interface UpmsExposeService {
      * @return
      */
     List<OrganizationalUserExposeVo> findUserAllByUserIdIn(@Size(min = 1)Set<Long> userId);
+
+    /**
+     * 普通用户列表
+     * @param phoneNumber
+     * @param email
+     * @param state
+     * @param yueChipPage
+     * @return
+     */
+    IPageResultData<List<UserExposeVo>> findUserAllByUserType(String phoneNumber, String email, State state, YueChipPage yueChipPage);
 
 }
