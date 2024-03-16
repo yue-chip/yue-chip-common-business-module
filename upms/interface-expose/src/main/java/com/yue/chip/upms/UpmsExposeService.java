@@ -151,6 +151,6 @@ public interface UpmsExposeService {
      * @param yueChipPage
      * @return
      */
-    IPageResultData<List<UserExposeVo>> findUserAllByUserType(String phoneNumber, String email, State state, YueChipPage yueChipPage);
+    PageSerializable<UserExposeVo> findUserAllByUserType(String phoneNumber, String email, State state, YueChipPage yueChipPage);
 
 }
