@@ -1,7 +1,12 @@
 package com.yue.chip.upms.definition.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.yue.chip.core.BaseDefinition;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
@@ -98,6 +103,9 @@ public class UserDefinition extends BaseDefinition {
     private UserType userType;
 
     @Schema(description = "最后登录时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime lastLoginTime;
 
     @Schema(description = "租户id")
