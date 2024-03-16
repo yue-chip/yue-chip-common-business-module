@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true,value = {"createDateTime","updateDateTime","password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId"})
+@JsonIgnoreProperties(ignoreUnknown = true,value = {"updateDateTime","password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId"})
 public class UserDefinition extends BaseDefinition {
 
     /**
@@ -107,6 +107,12 @@ public class UserDefinition extends BaseDefinition {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime lastLoginTime;
+
+    @Schema(description = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime createDateTime;
 
     @Schema(description = "租户id")
     @JsonIgnore
