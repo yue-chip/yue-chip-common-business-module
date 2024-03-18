@@ -54,6 +54,12 @@ public interface UpmsApplication {
     public void saveUser(@NotNull UserAddOrUpdateDto userAddOrUpdateDto);
 
     /**
+     * 保存app用户
+     * @param userAddOrUpdateDto
+     */
+    public void saveAppUser(@NotNull UserAddOrUpdateDto userAddOrUpdateDto);
+
+    /**
      * 修改用户
      * @param userAddOrUpdateDto
      */

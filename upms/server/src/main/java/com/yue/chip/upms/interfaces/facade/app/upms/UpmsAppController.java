@@ -78,4 +78,11 @@ public class UpmsAppController {
         upmsApplication.updateUserPassword(userUpdatePasswordDto);
         return ResultData.builder().build();
     }
+
+    @PostMapping("/user/register")
+    @Operation(description = "用户-注册用户",summary = "用户-注册用户")
+    public IResultData saveUser(@RequestBody @Validated({Validator.Insert.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
+        upmsApplication.saveUser(userAddOrUpdateDto);
+        return ResultData.builder().build();
+    }
 }

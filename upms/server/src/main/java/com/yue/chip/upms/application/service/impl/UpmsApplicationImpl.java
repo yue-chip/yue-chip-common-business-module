@@ -3,6 +3,7 @@ package com.yue.chip.upms.application.service.impl;
 import cn.hutool.core.lang.Assert;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
@@ -141,6 +142,20 @@ public class UpmsApplicationImpl implements UpmsApplication {
         User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
         Assert.isFalse(user.checkUsernameIsExist(), () -> {return new BusinessException("该帐号已存在");});
         //保存用户
+        User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
+        //保存用户与组织架构的关联关系
+        upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
+        //保存头像
+        fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber() );
+    }
+
+    @Override
+    public void saveAppUser(UserAddOrUpdateDto userAddOrUpdateDto) {
+        //检查用户是否存在
+        User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
+        Assert.isFalse(user.checkUsernameIsExist(), () -> {return new BusinessException("该帐号已存在");});
+        //保存app用户
+        userAddOrUpdateDto.setUserType(UserType.ORDINARY);
         User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系
         upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
