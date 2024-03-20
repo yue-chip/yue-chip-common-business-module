@@ -72,4 +72,12 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      */
     List<UserPo> findAllByUsernameLikeOrPhoneNumberLikeOrEmailLike(String username,String phoneNumber,String email);
 
+    /**
+     * 根据username或手机号或邮箱精准查询
+     * @param username
+     * @param phoneNumber
+     * @param email
+     * @return
+     */
+    UserPo findByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email);
 }

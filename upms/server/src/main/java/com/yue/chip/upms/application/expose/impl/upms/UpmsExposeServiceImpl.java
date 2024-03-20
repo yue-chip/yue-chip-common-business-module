@@ -181,9 +181,9 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public List<UserExposeVo> findUserAllByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email) {
-        List<User> list = upmsRepository.findAllByUsernameOrPhoneNumberOrEmail(username,phoneNumber,email);
-        return userMapper.toUserExposeVo(list);
+    public UserExposeVo findByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email) {
+        User byUsernameOrPhoneNumberOrEmail = upmsRepository.findByUsernameOrPhoneNumberOrEmail(username, phoneNumber, email);
+        return userMapper.toUserExposeVo(byUsernameOrPhoneNumberOrEmail);
     }
 
     @Override

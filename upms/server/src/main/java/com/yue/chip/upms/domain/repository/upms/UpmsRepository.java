@@ -329,7 +329,7 @@ public interface UpmsRepository {
 
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
 
-    List<User> findAllByUsernameOrPhoneNumberOrEmail(@NotBlank String username,@NotBlank String phoneNumber,@NotBlank String email);
+    User findByUsernameOrPhoneNumberOrEmail(@NotBlank String username,@NotBlank String phoneNumber,@NotBlank String email);
 
     IPageResultData<List<UserExposeVo>> findUserAllByUserType(String phoneNumber, String email, State state, @NotNull YueChipPage yueChipPage);
 }
