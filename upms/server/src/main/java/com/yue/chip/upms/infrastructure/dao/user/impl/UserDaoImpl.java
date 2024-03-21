@@ -98,7 +98,7 @@ public class UserDaoImpl implements UserDaoEx {
     }
 
     @Override
-    public Page<UserPo> find(String phoneNumber, String email, State state, UserType userType, YueChipPage yueChipPage) {
+    public Page<UserPo> find(String name, String nickname, String username, String phoneNumber, String email, State state, UserType userType, YueChipPage yueChipPage) {
         StringBuffer sb = new StringBuffer();
         sb.append(" select u from UserPo u where 1=1 ");
         Map<String,Object> para = new HashMap<>();
@@ -109,6 +109,18 @@ public class UserDaoImpl implements UserDaoEx {
         if (Objects.nonNull(userType)) {
             sb.append(" and u.userType = :userType ");
             para.put("userType", userType);
+        }
+        if (StringUtils.hasText(name)) {
+            sb.append(" and u.name like :name ");
+            para.put("name","%"+name+"%");
+        }
+        if (StringUtils.hasText(nickname)) {
+            sb.append(" and u.nickname like :nickname ");
+            para.put("nickname","%"+nickname+"%");
+        }
+        if (StringUtils.hasText(username)) {
+            sb.append(" and u.username like :username ");
+            para.put("username","%"+username+"%");
         }
         if (StringUtils.hasText(phoneNumber)) {
             sb.append(" and u.phoneNumber like :phoneNumber ");

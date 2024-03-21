@@ -36,7 +36,7 @@ public interface UserDaoEx {
     public Page<UserPo> find( String name, String username,@NotNull Pageable pageable);
 
     public Page<UserPo> find(List<Long> ids, String name,@NotNull Pageable pageable);
-    Page<UserPo> find(String phoneNumber, String email, State state, UserType userType, @NotNull YueChipPage yueChipPage);
+    Page<UserPo> find(String name, String nickname, String username, String phoneNumber, String email, State state, UserType userType, @NotNull YueChipPage yueChipPage);
 
     /**
      * 根据角色查询关联的用户
