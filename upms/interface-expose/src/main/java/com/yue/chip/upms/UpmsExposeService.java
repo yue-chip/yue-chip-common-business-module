@@ -151,9 +151,10 @@ public interface UpmsExposeService {
      * @param phoneNumber
      * @param email
      * @param state
+     * @param nameLike
      * @param yueChipPage
      * @return
      */
-    PageSerializable<UserExposeVo> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, YueChipPage yueChipPage);
+    PageSerializable<UserExposeVo> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage);
 
 }

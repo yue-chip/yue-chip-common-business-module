@@ -98,7 +98,7 @@ public class UserDaoImpl implements UserDaoEx {
     }
 
     @Override
-    public Page<UserPo> find(String name, String nickname, String username, String phoneNumber, String email, State state, UserType userType, YueChipPage yueChipPage) {
+    public Page<UserPo> find(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, UserType userType, YueChipPage yueChipPage) {
         StringBuffer sb = new StringBuffer();
         sb.append(" select u from UserPo u where 1=1 ");
         Map<String,Object> para = new HashMap<>();
@@ -129,6 +129,11 @@ public class UserDaoImpl implements UserDaoEx {
         if (StringUtils.hasText(email)) {
             sb.append(" and u.email like :email ");
             para.put("email","%"+email+"%");
+        }
+        if (StringUtils.hasText(nameLike)) {
+            String keyword = "%" + nameLike + "%";
+            sb.append(" and (u.name like :keyword or u.nickname like :keyword or u.username like :keyword or u.email like :keyword or u.phoneNumber like :keyword)");
+            para.put("keyword", keyword);
         }
         sb.append(" and u.username <> 'superadmin' ");
         return (Page<UserPo>) baseDao.findNavigator(yueChipPage,sb.toString(),para);

@@ -374,8 +374,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, YueChipPage yueChipPage) {
-        Page<UserPo> page = userDao.find(name, nickname, username, phoneNumber, email, state, UserType.ORDINARY, yueChipPage);
+    public IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage) {
+        Page<UserPo> page = userDao.find(name, nickname, username, phoneNumber, email, state, nameLike, UserType.ORDINARY, yueChipPage);
         List<User> listUser = userMapper.toUserList(page.getContent());
         List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(listUser);
         return (IPageResultData<List<UserExposeVo>>) PageResultData.convert(page,userExposeVo);

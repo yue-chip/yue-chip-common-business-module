@@ -231,8 +231,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public PageSerializable<UserExposeVo> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, YueChipPage yueChipPage) {
-        IPageResultData<List<UserExposeVo>> userList = upmsRepository.findUserAllByUserType(name, nickname, username, phoneNumber, email, state, yueChipPage);
+    public PageSerializable<UserExposeVo> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage) {
+        IPageResultData<List<UserExposeVo>> userList = upmsRepository.findUserAllByUserType(name, nickname, username, phoneNumber, email, state, nameLike, yueChipPage);
         return new YueChipPageSerializable<UserExposeVo>(userList.getContent(),userList.getPageable(),userList.getTotalElements());
     }
 
