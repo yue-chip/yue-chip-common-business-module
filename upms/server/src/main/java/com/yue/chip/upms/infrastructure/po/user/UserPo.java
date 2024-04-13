@@ -34,7 +34,7 @@ public class UserPo extends UserDefinition {
     public static final String TABLE_NAME = "t_user";
 
     @Override
-    @Column(updatable = false)
+//    @Column(updatable = false)
     @NotNull
     @Comment("密码-不能为空")
     public String getPassword() {
