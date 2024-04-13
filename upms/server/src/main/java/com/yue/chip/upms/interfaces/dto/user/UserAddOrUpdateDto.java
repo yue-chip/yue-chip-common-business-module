@@ -26,8 +26,8 @@ public class UserAddOrUpdateDto extends UserDefinition {
     private Long organizationalId;
 
 //    @NotBlank(message = "密码不能为空",groups = {Validator.Insert.class})
-//    @Schema(description = "密码")
-//    private String passwordI;
+    @Schema(description = "密码")
+    private String passwordI;
 
     @Override
     @NotNull(message = "id不能为空",groups = {Validator.Update.class})
