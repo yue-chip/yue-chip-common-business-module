@@ -59,7 +59,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
 
     @Override
     public List<UserExposeVo> findUserAllByIdIn(List<Long> userIds) {
-        return userMapper.toUserExposeVo(upmsRepository.findUserByIds(userIds)) ;
+        return userMapper.toUserExposeVo(upmsRepository.findUserByIds(userIds));
     }
 
     @Override
@@ -79,12 +79,12 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     @Override
     public PageSerializable<UserExposeVo> findUserAllByOrganizationalId(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
         IPageResultData<List<UserExposeVo>> page = organizationalRepository.organizationalPoList(organizationalIds, name, yueChipPage);
-        return new YueChipPageSerializable<>(page.getContent(),page.getPageable(),page.getTotalElements());
+        return new YueChipPageSerializable<>(page.getContent(), page.getPageable(), page.getTotalElements());
     }
 
     @Override
     public com.yue.chip.core.Optional<UserExposeVo> findByIdAndTenantNumber(Long id, Long tenantNumber) {
-        Optional<User> optional = upmsRepository.findByIdAndTenantNumber(id,tenantNumber);
+        Optional<User> optional = upmsRepository.findByIdAndTenantNumber(id, tenantNumber);
         if (optional.isPresent()) {
             return com.yue.chip.core.Optional.ofNullable(userMapper.toUserExposeVo(optional.get()));
         }
@@ -93,7 +93,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
 
     @Override
     public com.yue.chip.core.Optional<UserExposeVo> findByGridIdAndTenantNumber(Long id, Long tenantNumber) {
-        Optional<User> optional = upmsRepository.findByGridIdAndTenantNumber(id,tenantNumber);
+        Optional<User> optional = upmsRepository.findByGridIdAndTenantNumber(id, tenantNumber);
         if (optional.isPresent()) {
             return com.yue.chip.core.Optional.ofNullable(userMapper.toUserExposeVo(optional.get()));
         }
@@ -174,9 +174,10 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         }
         return childrenIds;
     }
+
     @Override
     public List<UserExposeVo> findUserAllByNameOrPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber) {
-        List<User> list = upmsRepository.findAllByNameOrPhoneNumber(name,phoneNumber);
+        List<User> list = upmsRepository.findAllByNameOrPhoneNumber(name, phoneNumber);
         return userMapper.toUserExposeVo(list);
     }
 
@@ -203,7 +204,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public PageSerializable<OrganizationalExposeVo> organizationalExposeVoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
         Page<OrganizationalPo> page = organizationalRepository.organizationalPoPage(organizationalList, yueChipPage);
         List<OrganizationalExposeVo> organizationalExposeVoList = organizationalMapper.toOrganizationalExposeVoList(page.getContent());
-        return new YueChipPageSerializable<OrganizationalExposeVo>(organizationalExposeVoList, page.getPageable(),page.getTotalElements());
+        return new YueChipPageSerializable<OrganizationalExposeVo>(organizationalExposeVoList, page.getPageable(), page.getTotalElements());
     }
 
     @Override
@@ -233,7 +234,12 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     @Override
     public PageSerializable<UserExposeVo> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage) {
         IPageResultData<List<UserExposeVo>> userList = upmsRepository.findUserAllByUserType(name, nickname, username, phoneNumber, email, state, nameLike, yueChipPage);
-        return new YueChipPageSerializable<UserExposeVo>(userList.getContent(),userList.getPageable(),userList.getTotalElements());
+        return new YueChipPageSerializable<UserExposeVo>(userList.getContent(), userList.getPageable(), userList.getTotalElements());
+    }
+
+    @Override
+    public void register(String phoneNumber, String password, String name, Long id) {
+        upmsRepository.register(phoneNumber, password, name, id);
     }
 
 }

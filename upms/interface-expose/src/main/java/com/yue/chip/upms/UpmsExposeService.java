@@ -157,4 +157,12 @@ public interface UpmsExposeService {
      */
     PageSerializable<UserExposeVo> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage);
 
+    /**
+     * APP用户注册或修改密码
+     * @param phoneNumber
+     * @param password
+     * @param id
+     */
+    void register(@NotBlank String phoneNumber, @NotBlank String password, String name, Long id);
+
 }
