@@ -17,7 +17,6 @@ import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
-import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleDao;
@@ -76,10 +75,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private UserWeiXinMapper userWeiXinMapper;
     @Resource
     private PasswordEncoder passwordEncoder;
-    @Resource
-    private UpmsRepository upmsRepository;
-    @Resource
-    private UpmsDomainService upmsDomainService;
+
     @DubboReference
     private FileExposeService fileExposeService;
 
@@ -413,9 +409,9 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         if (Objects.nonNull(id)) {
             userAddOrUpdateDto.setId(id);
         }
-        User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
+        User newUser = saveUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系
-        upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
+//        upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
         //保存头像
         fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME, UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber() );
     }
