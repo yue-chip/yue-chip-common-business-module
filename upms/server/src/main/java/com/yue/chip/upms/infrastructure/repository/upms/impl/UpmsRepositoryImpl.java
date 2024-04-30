@@ -45,6 +45,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import javax.sql.DataSource;
 import java.util.*;
 
 /**
@@ -91,6 +92,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public Optional<User> findUserById(Long id) {
+
         Optional<UserPo> optional = userDao.findFirstById(id);
         if (optional.isPresent()){
             return Optional.ofNullable(userMapper.toUser(optional.get()));
