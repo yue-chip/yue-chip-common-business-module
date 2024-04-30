@@ -333,11 +333,4 @@ public interface UpmsRepository {
 
     IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, @NotNull YueChipPage yueChipPage);
 
-    /**
-     * 注册或修改密码
-     * @param phoneNumber
-     * @param password
-     * @param id
-     */
-    void register(@NotNull String phoneNumber, @NotNull String password, String name, Long id);
 }

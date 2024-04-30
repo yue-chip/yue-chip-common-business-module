@@ -239,7 +239,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
 
     @Override
     public void register(String phoneNumber, String password, String name, Long id) {
-        upmsRepository.register(phoneNumber, password, name, id);
+        organizationalRepository.register(phoneNumber, password, name, id);
     }
 
 }

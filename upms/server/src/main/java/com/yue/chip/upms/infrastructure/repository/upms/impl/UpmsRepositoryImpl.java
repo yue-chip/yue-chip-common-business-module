@@ -77,9 +77,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Resource
     private PasswordEncoder passwordEncoder;
 
-    @DubboReference
-    private FileExposeService fileExposeService;
-
     @Override
     public Optional<User> findUserByUsername(String username) {
         Optional<UserPo> optional = userDao.findFirstByUsername(username);
@@ -393,30 +390,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         return (IPageResultData<List<UserExposeVo>>) PageResultData.convert(page,userExposeVo);
     }
 
-    @Override
-    public void register(String phoneNumber, String password, String name, Long id) {
-        //检查用户是否存在
-        User user = User.builder().username(phoneNumber).build();
-        Assert.isFalse(user.checkUsernameIsExist(), () -> {return new BusinessException("该帐号已存在");});
-        //保存app用户
-        UserAddOrUpdateDto userAddOrUpdateDto = new UserAddOrUpdateDto();
-        userAddOrUpdateDto.setPhoneNumber(phoneNumber);
-        userAddOrUpdateDto.setUsername(phoneNumber);
-        userAddOrUpdateDto.setPassword(password);
-        userAddOrUpdateDto.setUserType(UserType.ORDINARY);
-        if (StringUtils.hasText(name)) {
-            userAddOrUpdateDto.setName(name);
-            userAddOrUpdateDto.setNickname(name);
-        }
-        if (Objects.nonNull(id)) {
-            userAddOrUpdateDto.setId(id);
-        }
-        User newUser = saveUser(userMapper.toUserPo(userAddOrUpdateDto));
-        //保存用户与组织架构的关联关系
-//        upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
-        //保存头像
-        fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME, UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber() );
-    }
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {
         if (optional.isPresent()) {
