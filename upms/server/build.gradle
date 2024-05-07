@@ -47,6 +47,7 @@ dependencies {
     api "org.springframework.statemachine:spring-statemachine-starter"
     api "org.springframework.statemachine:spring-statemachine-data-redis"
     api "org.springframework.statemachine:spring-statemachine-data-jpa"
+    api "org.postgresql:postgresql"
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"

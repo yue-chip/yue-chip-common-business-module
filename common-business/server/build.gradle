@@ -30,6 +30,7 @@ dependencies {
         exclude group: "com.sun.xml.bind"
     }
     api 'com.tencentcloudapi:tencentcloud-sdk-java-sms'
+    api "org.postgresql:postgresql"
 //    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
