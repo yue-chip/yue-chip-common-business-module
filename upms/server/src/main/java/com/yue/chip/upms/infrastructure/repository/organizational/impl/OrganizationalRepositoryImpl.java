@@ -1,38 +1,31 @@
 package com.yue.chip.upms.infrastructure.repository.organizational.impl;
 
-import cn.hutool.core.lang.Assert;
-import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
-import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
-import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
-import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.infrastructure.dao.organizational.GridDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalUserDao;
 import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
-import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
@@ -325,7 +318,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         UserAddOrUpdateDto userAddOrUpdateDto = new UserAddOrUpdateDto();
         userAddOrUpdateDto.setPhoneNumber(phoneNumber);
         userAddOrUpdateDto.setUsername(phoneNumber);
-        userAddOrUpdateDto.setPassword(password);
+        userAddOrUpdateDto.setPasswordI(password);
         userAddOrUpdateDto.setUserType(UserType.ORDINARY);
         if (StringUtils.hasText(name)) {
             userAddOrUpdateDto.setName(name);
