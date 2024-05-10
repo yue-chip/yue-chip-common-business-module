@@ -109,6 +109,7 @@ public interface UpmsExposeService {
 
     List<UserExposeVo> findUserAllByNameOrPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber);
     UserExposeVo findByUsernameOrPhoneNumberOrEmail(@NotBlank String username, @NotBlank String phoneNumber, @NotBlank String email);
+    UserExposeVo findByPhoneNumber(@NotBlank String phoneNumber);
 
     public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(@NotNull Long parentId);
 
