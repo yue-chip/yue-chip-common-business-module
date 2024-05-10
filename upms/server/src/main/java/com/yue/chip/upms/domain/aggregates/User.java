@@ -12,7 +12,6 @@ import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.utils.CurrentUserUtil;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Resource;
 import lombok.Builder;
 import lombok.Data;

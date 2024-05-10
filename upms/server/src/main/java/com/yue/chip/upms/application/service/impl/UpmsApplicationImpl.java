@@ -153,7 +153,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     public void saveAppUser(UserAddOrUpdateDto userAddOrUpdateDto) {
         //检查用户是否存在
         User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
-        Assert.isFalse(user.checkUsernameIsExist(), () -> {return new BusinessException("该帐号已存在");});
+        Assert.isFalse((Objects.nonNull(userAddOrUpdateDto.getId()) && user.checkUsernameIsExist()), () -> {return new BusinessException("该帐号已存在");});
         //保存app用户
         if (Objects.isNull(userAddOrUpdateDto.getUserType())) {
             userAddOrUpdateDto.setUserType(UserType.ORDINARY);
