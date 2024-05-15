@@ -7,12 +7,9 @@ import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Mr.Liu
@@ -46,42 +43,41 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
-    public Map<Long, String> getUrl(Long tableId, String fileFieldName, String tableName) {
+    public Map<String, String> getUrl(Long tableId, String fileFieldName, String tableName, Long tenantNumber) {
         if (Objects.isNull(tableId) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {
             return Collections.EMPTY_MAP;
         }
         List<File> list = fileRepository.find(tableId, fileFieldName, tableName);
-        Map<Long, String> urls = new HashMap<>();
+        Map<String, String> urls = new HashMap<>();
         if (Objects.nonNull(list)) {
             list.forEach(file -> {
-                urls.put(file.getId(), file.getUrl());
+                urls.put(String.valueOf(file.getId()), file.getUrl());
             });
         }
         return urls;
     }
 
     @Override
-    public String getUrlSingle(Long tableId, String fileFieldName, String tableName) {
-        Map<Long, String> fileMap = getUrl(tableId, fileFieldName, tableName);
+    public String getUrlSingle(Long tableId, String fileFieldName, String tableName, Long tenantNumber) {
+        Map<String, String> fileMap = getUrl(tableId, fileFieldName, tableName, tenantNumber);
         if (fileMap.size()>0) {
-            Long id = (Long) fileMap.keySet().toArray()[0];
+            String id = (String) fileMap.keySet().toArray()[0];
             return fileMap.get(id);
         }
         return "";
     }
 
     @Override
-//    @CacheEvict(value = {FileDefinition.CACHE_KEY_URL_MULTIPLE,FileDefinition.CACHE_KEY_URL_SINGLE},key = "#tableId" + "-"+"#fileFieldName"+"-"+"#tableName")
-    public List<Long> save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
+    public List<Long> save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds, Long tenantNumber) {
         fileRepository.save(tableId, tableName, fileFieldName, fileIds);
         return fileIds;
     }
 
     @Override
-    public List<Long> save(Long tableId, String tableName, String fileFieldName, Long fileId) {
+    public List<Long> save(Long tableId, String tableName, String fileFieldName, Long fileId, Long tenantNumber) {
         List<Long> fileIds = new ArrayList<>();
         fileIds.add(fileId);
-        return save(tableId, tableName, fileFieldName, fileIds);
+        return save(tableId, tableName, fileFieldName, fileIds, tenantNumber);
     }
 //
 //    @Override

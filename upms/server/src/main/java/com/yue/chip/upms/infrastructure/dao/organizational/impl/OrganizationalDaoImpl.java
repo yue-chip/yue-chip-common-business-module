@@ -1,11 +1,13 @@
 package com.yue.chip.upms.infrastructure.dao.organizational.impl;
 
+import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalDaoEx;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -34,5 +36,18 @@ public class OrganizationalDaoImpl implements OrganizationalDaoEx {
             return Optional.ofNullable(list.get(0));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Page<OrganizationalPo> organizationalPoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
+        if (!CollectionUtils.isEmpty(organizationalList)) {
+            StringBuffer sb = new StringBuffer();
+            Map<String,Object> para = new HashMap<>();
+            sb.append("select r from OrganizationalPo r where id in :ids ");
+            para.put("ids", organizationalList);
+            sb.append(" ORDER BY r.createDateTime ASC ");
+            return (Page<OrganizationalPo>) baseDao.findNavigator(yueChipPage, sb.toString(), para);
+        }
+        return null;
     }
 }

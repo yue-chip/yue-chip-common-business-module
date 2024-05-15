@@ -6,6 +6,7 @@ import com.yue.chip.common.business.domain.repository.enums.EnumUtilRepository;
 import com.yue.chip.common.business.infrastructure.dao.enums.EnumUtilDao;
 import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -23,6 +24,9 @@ public class EnumUtilRepositoryImpl implements EnumUtilRepository {
 
     @Resource
     private EnumUtilMapper enumUtilMapper;
+
+    @Value("${spring.jpa.hibernate.multiTenant:false}")
+    private String multiTenantEnabled;
 
 
 
@@ -44,7 +48,9 @@ public class EnumUtilRepositoryImpl implements EnumUtilRepository {
             //保存枚举
             save(enumUtilPo);
             //保存到其它租户数据库中的枚举
-            enumUtilDao.saveOtherTenantEnum(enumUtilPo);
+            if (Objects.equals(multiTenantEnabled,"enabled")) {
+                enumUtilDao.saveOtherTenantEnum(enumUtilPo);
+            }
         });
     }
 

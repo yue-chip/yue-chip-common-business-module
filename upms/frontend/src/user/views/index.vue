@@ -42,10 +42,10 @@
       <a-table rowKey="id" :row-selection="rowSelection" :columns="columns" :data-source="dataList" :pagination="pagination" :loading="loading" :scroll="{ y: 440 }" >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.key === 'isSms'">
-            <a-switch @change="smsChange(record.id,record.isSms)" v-model:checked="record.isSms" checked-children="开" un-checked-children="关" />
+            <a-switch @change="smsChange(record)" v-model:checked="record.isSms" checked-children="开" un-checked-children="关" />
           </template>
           <template v-if="column.key === 'isCall'">
-            <a-switch @change="callChange(record.id,record.isCall)" v-model:checked="record.isCall" checked-children="开" un-checked-children="关" />
+            <a-switch @change="callChange(record)" v-model:checked="record.isCall" checked-children="开" un-checked-children="关" />
           </template>
           <template v-if="column.key === 'operation'">
             <a-space :size="5">
@@ -101,10 +101,30 @@
       key: 'organizationalName',
     },
     {
-      title: '状态',
-      dataIndex: ['state','desc'],
-      key: ['state','name'],
+      title: '电子邮箱',
+      dataIndex: 'email',
+      key: 'email',
     },
+    {
+      title: '证件类型',
+      dataIndex: ['idCardType','desc'],
+      key: 'idCardType',
+    },
+    {
+      title: '证书编号',
+      dataIndex: 'certificateNumber',
+      key: 'certificateNumber',
+    },
+    {
+      title: '身份证号码',
+      dataIndex: 'identificationNumber',
+      key: 'identificationNumber',
+    },
+    // {
+    //   title: '状态',
+    //   dataIndex: ['state','desc'],
+    //   key: ['state','name'],
+    // },
     {
       title: '接收短信通知',
       key: "isSms",
@@ -202,8 +222,8 @@
     });
   }
 
-  function smsChange(id: string,isSms: any){
-    axios.axiosPut("/upms/console/user/update",{"id":id,"isSms":isSms},
+  function smsChange(data:any){
+    axios.axiosPut("/upms/console/user/update",data,
       (data:any)=>{
         if (data.status === 200 ) {
           message.info(data.message);
@@ -212,8 +232,8 @@
       },null,null)
   }
 
-  function callChange(id: string,isCall: any){
-    axios.axiosPut("/upms/console/user/update",{"id":id,"isCall":isCall},
+  function callChange(data: any){
+    axios.axiosPut("/upms/console/user/update",data,
         (data:any)=>{
           if (data.status === 200 ) {
             message.info(data.message);

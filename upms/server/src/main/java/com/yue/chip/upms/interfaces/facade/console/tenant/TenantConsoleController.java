@@ -7,14 +7,10 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.application.service.TenantApplication;
 import com.yue.chip.upms.assembler.tenant.TenantMapper;
-import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
-import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
-import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantAddDTO;
 import com.yue.chip.upms.interfaces.dto.tenant.TenantUpdateDTO;
-import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.event.PaintEvent;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,8 +90,11 @@ public class TenantConsoleController {
     @GetMapping("/details")
     @Operation(description = "租户-租户详情",summary = "租户-租户详情")
     public IResultData<TenantVo> details(@Parameter(description = "修改需要传id，新增则不需要传",name = "id") @NotNull(message = "id不能为空")Long id) {
-        Optional<TenantVo> optional = tenantRepository.details(id);
-        return ResultData.builder().data(optional.isEmpty()?null:optional.get()).build();
+        Optional<Tenant> optional = tenantRepository.tenantDetails(id);
+        if (optional.isPresent()) {
+           return ResultData.builder().data(optional.isEmpty()?null:tenantMapper.toTenantVo(optional.get())).build();
+        }
+        return ResultData.builder().build();
     }
 
     @Operation(description = "租户-判断租户名称是否存在",summary = "租户-判断租户名称是否存在")

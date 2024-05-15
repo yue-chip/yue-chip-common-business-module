@@ -1,8 +1,6 @@
 package com.yue.chip.upms.application.service.impl;
 
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.exception.BusinessException;
@@ -18,7 +16,6 @@ import com.yue.chip.upms.domain.repository.organizational.OrganizationalReposito
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.assembler.user.UserMapper;
-import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalUserDao;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
@@ -129,7 +126,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
     }
 
     @Override
-    @GlobalTransactional(rollbackFor = {Exception.class})
+//    @GlobalTransactional(rollbackFor = {Exception.class})
+    @Transactional(rollbackFor = {Exception.class})
     public void saveUser(@NotNull UserAddOrUpdateDto userAddOrUpdateDto) {
         //检查用户是否存在
         User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
@@ -139,22 +137,23 @@ public class UpmsApplicationImpl implements UpmsApplication {
         //保存用户与组织架构的关联关系
         upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
         //保存头像
-        fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()) );
+        fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber() );
     }
 
     @Override
-    @GlobalTransactional(rollbackFor = {Exception.class})
+//    @GlobalTransactional(rollbackFor = {Exception.class})
+    @Transactional(rollbackFor = {Exception.class})
     public void updateUser(UserAddOrUpdateDto userAddOrUpdateDto) {
         //更新头像
         if (Objects.nonNull(userAddOrUpdateDto.getProfilePhotoId())) {
-            fileExposeService.save(userAddOrUpdateDto.getId(),UserPo.TABLE_NAME,UserPo.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhotoId());
+            fileExposeService.save(userAddOrUpdateDto.getId(),UserPo.TABLE_NAME,UserPo.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhotoId(),CurrentUserUtil.getCurrentUserTenantNumber());
         }
         //修改用户
         upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系
         upmsDomainService.userOrganizational(userAddOrUpdateDto.getId(),userAddOrUpdateDto.getOrganizationalId());
         //保存头像
-        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()));
+        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber());
     }
 
     @Override
@@ -177,6 +176,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
                 upmsDomainService.userOrganizational(id,null);
                 //删除机构负责人
                 organizationalRepository.deleteLeader(id);
+                //删除网格管理员
+                organizationalRepository.deleteGridByUserId(id);
             });
         }
     }
@@ -231,6 +232,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
         organizationalRepository.deleteOrganizationalUserByOrganizationalId(id);
         //删除组织机构
         organizationalRepository.deleteOrganizationalById(id);
+        //删除机构下的网格
+        organizationalRepository.deleteGridByOrganizationalId(id);
     }
 
     @Override
@@ -245,6 +248,16 @@ public class UpmsApplicationImpl implements UpmsApplication {
 //        upmsRepository.saveRole(roleAddDto);
 //        UserDefinition userDefinition = testExpose.test1("");
         return UserVo.builder().name("张三").build();
+    }
+
+    @Override
+    public String testCache(Long id, String name) {
+        return id.toString()+name;
+    }
+
+    @Override
+    public String getUrlSingle(Long tableId, String fileFieldName, String tableName, Long tenantNumber) {
+        return fileExposeService.getUrlSingle(tableId, fileFieldName, tableName,tenantNumber);
     }
 
 

@@ -1,21 +1,34 @@
 package com.yue.chip.upms.infrastructure.repository.organizational.impl;
 
+import com.yue.chip.core.IPageResultData;
+import com.yue.chip.core.PageResultData;
+import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
+import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.infrastructure.dao.organizational.GridDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalUserDao;
+import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Mr.Liu
@@ -28,6 +41,9 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     @Resource
     private OrganizationalDao organizationalDao;
 
+    @javax.annotation.Resource
+    private UserMapper userMapper;
+
     @Resource
     private OrganizationalUserDao organizationalUserDao;
 
@@ -35,7 +51,13 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     private OrganizationalMapper organizationalMapper;
 
     @Resource
+    private GridMapper gridMapper;
+
+    @Resource
     private UpmsRepository upmsRepository;
+
+    @Resource
+    private GridDao gridDao;
 
 
     @Override
@@ -96,7 +118,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public List<OrganizationalTreeListVo> findTree(Long parentId,State state) {
+    public List<OrganizationalTreeListVo> findTree(Long parentId, State state, String name) {
         List<OrganizationalTreeListVo> treeListVos = new ArrayList<OrganizationalTreeListVo>();
         List<OrganizationalPo> list = new ArrayList<>();
         if (Objects.nonNull(state)) {
@@ -106,7 +128,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         }
         treeListVos = organizationalMapper.toOrganizationalTreeListVo(list);
         treeListVos.forEach(organizationalTreeListVo -> {
-            organizationalTreeListVo.setChildren(findTree(organizationalTreeListVo.getId(),state));
+            organizationalTreeListVo.setChildren(findTree(organizationalTreeListVo.getId(),state, name));
             if (Objects.nonNull(organizationalTreeListVo.getLeaderId())) {
                 Optional<User> optional = upmsRepository.findUserById(organizationalTreeListVo.getLeaderId());
                 if (optional.isPresent()) {
@@ -114,14 +136,14 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
                 }
             }
         });
-        return treeListVos;
+        return treeListVos.size()>0?treeListVos:null;
     }
 
     @Override
     public List<OrganizationalTreeListVo> findTree1(State state) {
         Optional<Organizational> optional = findByUserId(CurrentUserUtil.getCurrentUserId());
         if (optional.isPresent()) {
-            List<OrganizationalTreeListVo> list = findTree(optional.get().getParentId(),state);
+            List<OrganizationalTreeListVo> list = findTree(optional.get().getParentId(),state, null);
             List<OrganizationalTreeListVo> returList = new ArrayList<>();
             for (OrganizationalTreeListVo organizationalTreeListVo : list) {
                 if (Objects.equals(organizationalTreeListVo.getId(),optional.get().getId())) {
@@ -165,6 +187,122 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     public List<OrganizationalPo> findChildren(Long parentId) {
         List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
         return list;
+    }
+
+    @Override
+    public Page<OrganizationalPo> organizationalPoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
+        Page<OrganizationalPo> organizationalPos = organizationalDao.organizationalPoPage(organizationalList, yueChipPage);
+        return organizationalPos;
+    }
+
+    @Override
+    public IPageResultData<List<UserExposeVo>> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage) {
+        List<OrganizationalUserPo> organizationalIdIn = organizationalUserDao.findAllByOrganizationalIdIn(organizationalIds);
+        List<Long> userIdList = organizationalIdIn.stream().map(OrganizationalUserPo::getUserId).collect(Collectors.toList());
+        IPageResultData<List<User>> page = upmsRepository.userList(userIdList, name, yueChipPage);
+
+        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(page.getData());
+        Map<Long, Long> map = organizationalIdIn.stream().collect(Collectors.toMap(OrganizationalUserPo::getUserId, OrganizationalUserPo::getOrganizationalId));
+        userExposeVo.forEach(user -> {
+            user.setOrganizationalId(map.get(user.getId()));
+        });
+
+        return new PageResultData(userExposeVo,page.getPageable(),page.getTotalElements());
+    }
+
+    @Override
+    public IPageResultData<List<UserExposeVo>> findByUserIdIn(Set<Long> userIds, String name, YueChipPage yueChipPage) {
+        IPageResultData<List<User>> page = upmsRepository.userList(new ArrayList<>(userIds), name, yueChipPage);
+        Map<Long, Long> userOrganizationalMap = findUserAllByUserIdIn(userIds).stream().collect(Collectors.toMap(OrganizationalUserPo::getUserId, OrganizationalUserPo::getOrganizationalId));
+        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(page.getData());
+        userExposeVo.forEach(user -> {
+            user.setOrganizationalId(userOrganizationalMap.get(user.getId()));
+        });
+
+        return new PageResultData(userExposeVo,page.getPageable(),page.getTotalElements());
+    }
+
+
+    @Override
+    public void saveGrid(GridPo gridPo) {
+        gridDao.save(gridPo);
+    }
+
+    @Override
+    public void updateGrid(GridPo gridPo) {
+        gridDao.update(gridPo);
+    }
+
+    @Override
+    public void deleteGrid(List<Long> ids) {
+        if (Objects.nonNull(ids) && ids.size()>0) {
+            ids.forEach(id->{
+                gridDao.deleteById(id);
+            });
+        }
+    }
+
+    @Override
+    public void deleteGridByUserId(Long userId) {
+        gridDao.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public void deleteGridByOrganizationalId(Long organizationalId) {
+        gridDao.deleteAllByOrganizationalId(organizationalId);
+    }
+
+    @Override
+    public Optional<Grid> gridDetails(Long id) {
+        Optional<GridPo> optional = gridDao.findById(id);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(gridMapper.toGrid(optional.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Page<GridVo> listGrid(Long organizationalId, String name, String userName, YueChipPage yueChipPage) {
+        Page<GridPo> page = gridDao.List(organizationalId,name,userName,yueChipPage);
+        List<Grid> list = gridMapper.toGrid(page.getContent());
+        return new PageImpl<GridVo>(gridMapper.toGridVo(list),page.getPageable(),page.getTotalElements());
+    }
+
+    @Override
+    public Page<Grid> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds, String time) {
+        Page<GridPo> page = gridDao.listGridQuery(organizationalIds,name,yueChipPage, userIds, time);
+        List<Grid> list = gridMapper.toGrid(page.getContent());
+        return new PageImpl<Grid>(list,page.getPageable(),page.getTotalElements());
+    }
+
+    @Override
+    public List<Grid> listGrid(Long organizationalId) {
+        List<GridPo> list = gridDao.findAllByOrganizationalId(organizationalId);
+        return gridMapper.toGrid(list);
+    }
+
+    @Override
+    public List<Grid> findByGridId(Set<Long> gridId) {
+        List<GridPo> list = gridDao.findAllByIdIn(gridId);
+        return gridMapper.toGrid(list);
+    }
+
+    @Override
+    public List<OrganizationalUserPo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId) {
+        List<OrganizationalUserPo> organizationalUserPoList = organizationalUserDao.findAllByOrganizationalIdAndUserIdIn(organizationalId, userId);
+        return organizationalUserPoList;
+    }
+
+    @Override
+    public List<OrganizationalUserPo> findUserAllByUserIdIn(Set<Long> userId) {
+        List<OrganizationalUserPo> organizationalUserPoList = organizationalUserDao.findAllByUserIdIn(userId);
+        return organizationalUserPoList;
+    }
+
+    @Override
+    public List<Grid> findGridByName(String name) {
+        List<GridPo> list = gridDao.findAllByNameLike(name);
+        return gridMapper.toGrid(list);
     }
 
     private void findAllChildren(Long parentId,List<Organizational> organizationals) {

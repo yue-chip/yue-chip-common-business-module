@@ -3,14 +3,19 @@ package com.yue.chip.common.business.infrastructure.dao.enums.impl;
 import com.yue.chip.common.business.infrastructure.dao.enums.EnumUtilDaoEx;
 import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
 import com.yue.chip.core.persistence.curd.BaseDao;
-import com.yue.chip.core.tenant.TenantConstant;
+import com.yue.chip.utils.HibernateSessionJdbcUtil;
+import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
+import org.hibernate.jdbc.ReturningWork;
+import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.meta.When;
-import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Mr.Liu
@@ -22,52 +27,55 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
     @Resource
     private BaseDao<EnumUtilPo> enumUtilPoBaseDao;
 
-    @Resource
-    private DataSource dataSource;
+    @Value("${multiTenant.dataBase.upms:upms}")
+    private String upms;
+
+    @Value("${multiTenant.dataBase.common:common}")
+    private String common;
 
     @Override
     public void saveOtherTenantEnum(EnumUtilPo enumUtilPo) {
-        Connection connection = null;
-        try {
-            //创建数据库
-            connection = dataSource.getConnection();
-            connection.setAutoCommit(false);
-            Statement stat = connection.createStatement();
-            ResultSet resultSet = stat.executeQuery("select id from upms.t_tenant; ");
-            List<Long> tenantNumbers = new ArrayList<>();
-            while (resultSet.next()) {
-                Long tenantNumber = resultSet.getLong("id");
-                tenantNumbers.add(tenantNumber);
-            }
-            for (Long tenantNumber:tenantNumbers){
-                try {
-                    stat.execute("use common".concat(TenantConstant.PREFIX_TENANT).concat(String.valueOf(tenantNumber)));
-                    PreparedStatement delete = connection.prepareStatement("delete from t_enum_util where code =? and version = ?");
-                    delete.setString(1, enumUtilPo.getCode());
-                    delete.setString(2, enumUtilPo.getVersion());
-                    delete.executeUpdate();
+        Object result =enumUtilPoBaseDao.getSession().doReturningWork(
+            new ReturningWork<Boolean>() {
+                @Override
+                public Boolean execute(java.sql.Connection connection) throws SQLException {
+                    Statement stat =null;
+                    ResultSet resultSet =null;
+                    try {
+                        stat = connection.createStatement();
+                        resultSet = stat.executeQuery("select tenant_number from `"+upms+"`.`t_tenant`; ");
+                        List<Long> tenantNumbers = new ArrayList<>();
+                        while (resultSet.next()) {
+                            Long tenantNumber = Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null;
+                            tenantNumbers.add(tenantNumber);
+                        }
+                        for (Long tenantNumber:tenantNumbers){
+                            PreparedStatement delete = null;
+                            PreparedStatement insert = null;
+                            try {
+                                stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)).concat("`"));
+                                delete = connection.prepareStatement("delete from t_enum_util where code =? and version = ?");
+                                delete.setString(1, enumUtilPo.getCode());
+                                delete.setString(2, enumUtilPo.getVersion());
+                                delete.executeUpdate();
 
-                    PreparedStatement insert = connection.prepareStatement("INSERT INTO t_enum_util(`code`,`value`,`version`) values (?,?,?)");
-                    insert.setString(1, enumUtilPo.getCode());
-                    insert.setString(2, enumUtilPo.getValue());
-                    insert.setString(3, enumUtilPo.getVersion());
-                    insert.executeUpdate();
-                }catch (Exception ex) {
-                    ex.printStackTrace();
+                                insert = connection.prepareStatement("INSERT INTO `t_enum_util`(`code`,`value`,`version`) values (?,?,?)");
+                                insert.setString(1, enumUtilPo.getCode());
+                                insert.setString(2, enumUtilPo.getValue());
+                                insert.setString(3, enumUtilPo.getVersion());
+                                insert.executeUpdate();
+                            }catch (Exception ex) {
+
+                            }finally {
+                                HibernateSessionJdbcUtil.close(delete,insert);
+                            }
+                        }
+                        return true;
+                    }finally {
+                        HibernateSessionJdbcUtil.close(resultSet,stat);
+                    }
+
                 }
-            }
-            resultSet.close();
-            stat.close();
-            connection.commit();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                connection.rollback();
-                connection.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
+            });
     }
 }

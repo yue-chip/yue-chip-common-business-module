@@ -26,7 +26,6 @@ import java.time.LocalDate;
 @SuperBuilder
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true,value = {"createDateTime","updateDateTime","password","createUserId","updateUserId"})
-@Deprecated
 public class UserWeiXinDefinition extends BaseDefinition {
 
     /**
@@ -51,21 +50,15 @@ public class UserWeiXinDefinition extends BaseDefinition {
 //    @Setter(AccessLevel.NONE)
     private String profilePhotoUrl;
 
-    @Schema(description = "密码")
-    private String password;
+    @Schema(description = "openId")
+    private String openId;
 
-    @Schema(description = "用户登陆账号")
-    private  String username;
-
-    @Schema(description = "姓名")
-    private String name;
-
-    @Schema(description = "电话号码")
+    @Schema(description = "手机号码")
     private String phoneNumber;
 
-    @Schema(description = "租户id")
+    @Schema(description = "租户编码")
     @JsonIgnore
-    private Long tenantId;
+    private Long tenantNumber;
 
 
 }

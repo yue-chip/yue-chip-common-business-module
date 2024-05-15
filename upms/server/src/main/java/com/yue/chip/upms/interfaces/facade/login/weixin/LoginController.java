@@ -44,6 +44,17 @@ public class LoginController {
         return ResultData.builder().data(map).build();
     }
 
+    @PostMapping("/login1")
+    @AuthorizationIgnore
+    @Operation(summary = "登录1", description = "登录1")
+    public IResultData<String> login1(@Parameter(description = "手机号码",name = "phoneNumber")String phoneNumber,
+            @NotBlank(message = "openId不能为空") @Parameter(description = "openId",name = "openId",required = true)String openId) {
+        String token = loginService.login1(phoneNumber,openId);
+        Map<String,String> map = new HashMap<>();
+        map.put("token",token);
+        return ResultData.builder().data(map).build();
+    }
+
     @GetMapping("/login/out")
     @AuthorizationIgnore
     @Operation(summary = "退出登录", description = "退出登录")

@@ -6,10 +6,13 @@ import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
+import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
+import com.yue.chip.utils.CurrentUserUtil;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Resource;
 import lombok.Builder;
 import lombok.Data;
@@ -42,6 +45,9 @@ public class User extends UserDefinition {
     @Resource
     private static OrganizationalRepository organizationalRepository;
 
+    @Resource
+    private static TenantRepository tenantRepository;
+
     @Builder.Default
     private RoleMapper roleMapper = RoleMapper.INSTANCE;
 
@@ -57,6 +63,12 @@ public class User extends UserDefinition {
      * 角色 - 值对象(此值对象非彼值对象) 意思意思
      */
     private List<Role> roles;
+
+    /**
+     * 租户
+     */
+    private Tenant tenant;
+
 
     public Boolean checkUsernameIsExist() {
         Assert.hasText(getUsername(),"帐号不能为空");
@@ -100,13 +112,13 @@ public class User extends UserDefinition {
     @Override
     public String getProfilePhotoUrl() {
         Assert.notNull(getId(),"id不能为空");
-        return fileExposeService.getUrlSingle(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
+        return fileExposeService.getUrlSingle(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME, CurrentUserUtil.getCurrentUserTenantNumber());
     }
 
     @Override
     public Long getProfilePhotoId() {
         Assert.notNull(getId(),"id不能为空");
-        Map<Long,String> fileMap = fileExposeService.getUrl(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
+        Map<String,String> fileMap = fileExposeService.getUrl(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME, CurrentUserUtil.getCurrentUserTenantNumber());
         if (Objects.nonNull(fileMap) && fileMap.size()>0) {
             Object obj = fileMap.keySet().toArray()[0];
             if (obj instanceof Long) {
@@ -119,6 +131,9 @@ public class User extends UserDefinition {
     }
 
     public Organizational getOrganizational() {
+        if (Objects.nonNull(organizational)) {
+            return this.organizational;
+        }
         Assert.notNull(getId(),"id不能为空");
         if (Objects.nonNull(organizational)) {
             return this.organizational;
@@ -127,6 +142,17 @@ public class User extends UserDefinition {
         if (optional.isPresent()) {
             return optional.get();
         }
-        return null;
+        return Organizational.builder().build();
+    }
+
+    public Tenant getTenant() {
+        if (Objects.nonNull(tenant)) {
+            return this.tenant;
+        }
+        Optional<Tenant> optional = tenantRepository.findTenantByTenantNumber(getTenantNumber());
+        if (optional.isPresent()){
+            return optional.get();
+        }
+        return Tenant.builder().build();
     }
 }

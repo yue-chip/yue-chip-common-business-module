@@ -1,37 +1,35 @@
 package com.yue.chip.upms.infrastructure.repository.upms.impl;
 
-import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.upms.assembler.user.UserWeixinMapper;
+import com.yue.chip.upms.assembler.resources.ResourcesMapper;
+import com.yue.chip.upms.assembler.role.RoleMapper;
+import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
-import com.yue.chip.upms.assembler.resources.ResourcesMapper;
-import com.yue.chip.upms.assembler.role.RoleMapper;
-import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserRoleDao;
-import com.yue.chip.upms.infrastructure.dao.user.UserWeiXinDao;
+import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -40,7 +38,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -53,9 +50,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Resource
     private UserDao userDao;
-
-    @Resource
-    private UserWeiXinDao userWeiXinDao;
 
     @Resource
     private UserRoleDao userRoleDao;
@@ -72,7 +66,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Resource
     private ResourcesMapper resourcesMapper;
     @Resource
-    private UserWeixinMapper userWeixinMapper;
+    private UserWeiXinMapper userWeiXinMapper;
     @Resource
     private PasswordEncoder passwordEncoder;
 
@@ -87,16 +81,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public Optional<UserWeixin> findUserWeixinByUsername(String username) {
-        Optional<UserWeiXinPo> optional = userWeiXinDao.findFirstByUsername(username);
-        if (optional.isPresent()) {
-            UserWeixin userWeixin = userWeixinMapper.toUserWeixin(optional.get());
-            return Optional.ofNullable(userWeixin);
-        }
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<User> findUserById(Long id) {
         Optional<UserPo> optional = userDao.findFirstById(id);
         if (optional.isPresent()){
@@ -106,9 +90,36 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public Optional<User> findByIdAndTenantNumber(Long id, Long tenantNumber) {
+        Optional<UserPo> optional = userDao.findByIdAndTenantNumber(id,tenantNumber);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(userMapper.toUser(optional.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> findByGridIdAndTenantNumber(Long id, Long tenantNumber) {
+        Optional<UserPo> optional = userDao.findByGridIdAndTenantNumber(id,tenantNumber);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(userMapper.toUser(optional.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public List<User> findUserByIds(List<Long> userIds) {
         List<UserPo> userPoList = userDao.findAllByIdIn(userIds);
         return userMapper.toUser(userPoList);
+    }
+
+    @Override
+    public Optional<User> findUserByGridId(Long gridId) {
+        List<UserPo> list = userDao.findUserByGridId(gridId);
+        if (list.size()>0) {
+            return Optional.ofNullable(userMapper.toUser(list.get(0)));
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -160,7 +171,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
                         .roleId(roleId)
                         .build();
                 list.add(userRolePo);
-//                userRoleDao.save(userRolePo);
+//                userRoleDao.saveTenant(userRolePo);
             }
             userRoleDao.saveAll(list);
         }
@@ -322,9 +333,16 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public IPageResultData<List<User>> userList(List<Long> ids, String name, Pageable pageable) {
+        Page<UserPo> page = userDao.find(ids, name, pageable);
+        List<User> listUser = userMapper.toUserList(page.getContent());
+        return (IPageResultData<List<User>>) PageResultData.convert(page,listUser);
+    }
+
+    @Override
     public User saveUser(UserPo userPo) {
-        userPo.setPassword(passwordEncoder.encode(SecureUtil.md5(userPo.getPassword())));
-        userPo.setTenantId(CurrentUserUtil.getCurrentUserTenantId(true));
+        userPo.setPassword(passwordEncoder.encode(userPo.getPassword()));
+        userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);
     }
@@ -344,7 +362,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public List<User> findAllByNameOrPhoneNumber(String name,String phoneNumber) {
-        List<UserPo> allByNameOrPhoneNumber = userDao.findAllByNameOrPhoneNumber(name,phoneNumber);
+        List<UserPo> allByNameOrPhoneNumber = userDao.findAllByNameLikeOrPhoneNumberLike(name,phoneNumber);
         List<User> userList = userMapper.toUserList(allByNameOrPhoneNumber);
         return userList;
     }

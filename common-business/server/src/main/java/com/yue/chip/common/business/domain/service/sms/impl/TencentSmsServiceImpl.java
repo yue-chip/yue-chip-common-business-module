@@ -3,6 +3,7 @@ package com.yue.chip.common.business.domain.service.sms.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
+import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.yue.chip.common.business.domain.service.sms.SmsService;
@@ -10,10 +11,8 @@ import com.yue.chip.exception.BusinessException;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import com.tencentcloudapi.sms.v20210111.SmsClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +23,11 @@ import java.util.List;
  * @date 2023/11/1 下午2:39
  */
 @Service
-@ConditionalOnProperty(prefix = "sms",name = "provider",havingValue = "tencent")
-@ConditionalOnClass({SmsClient.class})
 @Slf4j
 public class TencentSmsServiceImpl implements SmsService {
 
     @Resource
+    @Lazy
     private SmsClient client;
 
     @Override
@@ -82,7 +80,7 @@ public class TencentSmsServiceImpl implements SmsService {
          * 返回的 res 是一个 SendSmsResponse 类的实例，与请求对象对应 */
         try {
             SendSmsResponse res = client.SendSms(req);
-            log.info("发送结果：".concat(new ObjectMapper().writeValueAsString(res.getSendStatusSet())));
+            log.info("sms发送结果：".concat(new ObjectMapper().writeValueAsString(res.getSendStatusSet())));
         } catch (TencentCloudSDKException e) {
             e.printStackTrace();
             BusinessException.throwException("发送失败："+e.getMessage());

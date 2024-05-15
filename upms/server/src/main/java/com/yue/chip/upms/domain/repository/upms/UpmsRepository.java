@@ -15,7 +15,6 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -38,13 +37,6 @@ public interface UpmsRepository {
     public Optional<User> findUserByUsername(@NotBlank String username);
 
     /**
-     * 根据登录帐号查询微信登录用户
-     * @param username
-     * @return
-     */
-    public Optional<UserWeixin> findUserWeixinByUsername(@NotBlank String username);
-
-    /**
      * 根据用户id查询用户
      *
      * @param id
@@ -53,11 +45,37 @@ public interface UpmsRepository {
     public Optional<User> findUserById(@NotNull Long id);
 
     /**
+     * 根据用户id和租户编码查寻用户
+     *
+     * @param id
+     * @param tenantNumber
+     * @return
+     */
+    Optional<User> findByIdAndTenantNumber(@NotNull Long id, Long tenantNumber);
+
+    /**
+     * 根据网格id和租户编码查寻用户
+     *
+     * @param id
+     * @param tenantNumber
+     * @return
+     */
+    Optional<User> findByGridIdAndTenantNumber(@NotNull Long id, Long tenantNumber);
+
+    /**
      * 根据用户id查询用户
      * @param userIds
      * @return
      */
     List<User> findUserByIds(@NotNull @Size(min = 1) List<Long> userIds);
+
+    /**
+     * 根据网格id查寻用户
+     *
+     * @param gridId
+     * @return
+     */
+    Optional<User> findUserByGridId(@NotNull Long gridId);
 
     /**
      * 根据机构id查询用户
@@ -283,6 +301,8 @@ public interface UpmsRepository {
      * @return
      */
     public IPageResultData<List<UserVo>> userList(String name, @NotNull Pageable pageable);
+
+    public IPageResultData<List<User>> userList(List<Long> organizationalIds, String name, @NotNull Pageable pageable);
 
     /**
      * 保存用户

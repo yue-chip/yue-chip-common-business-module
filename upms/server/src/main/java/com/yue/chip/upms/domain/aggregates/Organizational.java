@@ -32,6 +32,11 @@ public class Organizational extends OrganizationalDefinition {
     private static OrganizationalRepository organizationalRepository;
 
     /**
+     * 网格
+     */
+    private List<Grid> grids;
+
+    /**
      * 负责人
      */
     private User leader;
@@ -52,6 +57,11 @@ public class Organizational extends OrganizationalDefinition {
             }
         }
         return optional.isPresent();
+    }
+
+    public List<Grid> getGrids() {
+        // TODO
+        return grids;
     }
 
     public List<User> getUsers() {

@@ -4,9 +4,14 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,5 +28,14 @@ public interface TenantDao extends BaseDao<TenantPo>,TenantDaoEx {
      */
     public Optional<TenantPo> findFirstByName(@NotBlank String name);
 
-
+    /**
+     * 更新租户编码
+     * @param id
+     * @param tenantNumber
+     * @return
+     */
+    @Transactional
+    @Modifying
+    @Query(value = "update t_tenant set tenant_number = :tenantNumber where id = :id", nativeQuery = true)
+    public int updateTenantNumber(@NotNull @Param("id") Long id, @NotNull @Param("tenantNumber") Long tenantNumber);
 }

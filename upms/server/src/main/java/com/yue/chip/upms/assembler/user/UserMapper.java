@@ -27,7 +27,7 @@ public interface UserMapper {
 
     public List<User> toUser(List<UserPo> userPos);
 
-//    public List<UserVo> toUserListVo(List<UserPo> list);
+//    public List<UserVo> toUserListVo(List<UserPo> listGrid);
 
     @Mappings({@Mapping(target = "organizationalName",source = "organizational.name"),
             @Mapping(target = "organizationalId",source = "organizational.id")})
@@ -53,7 +53,11 @@ public interface UserMapper {
     public UserVo toUserVo(UserPo userPo);
 
     @Mappings({@Mapping(target = "organizationalName",source = "organizational.name"),
-            @Mapping(target = "organizationalId",source = "organizational.id")})
+            @Mapping(target = "organizationalId",source = "organizational.id"),
+            @Mapping(target = "tenantName",source = "tenant.name"),
+            @Mapping(target = "tenantAbbreviation",source = "tenant.abbreviation"),
+            @Mapping(target = "tenantNumber",source = "tenant.tenantNumber"),
+            @Mapping(target = "bigScreenName",source = "tenant.bigScreenName")})
     public UserVo toUserVo(User user);
 
     UserExposeVo toUserExposeVo(User userPo);

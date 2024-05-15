@@ -3,8 +3,6 @@ package com.yue.chip.upms.interfaces.facade.login.pc;
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
-import com.yue.chip.core.controller.BaseController;
-import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -14,16 +14,16 @@ public interface LoginService {
      * @param password
      * @return
      */
-    public String login(@NotBlank String username,@NotBlank String password);
+    public String login(@NotBlank String username, @NotBlank String password);
 
     /**
-     * 微信登录
-     * @param username
-     * @param password
+     *
+     * @param phoneNumber
+     * @param openId
      * @return
      */
-    @Deprecated
-    public String weixinLogin(@NotBlank String username,@NotBlank String password);
+    public String login1(@NotBlank String phoneNumber,@NotBlank String openId);
+
 
     /**
      * 退出登录

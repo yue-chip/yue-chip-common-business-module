@@ -54,19 +54,23 @@ public class FileRepositoryImpl implements FileRepository {
 
     @Override
     public void save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
-        fileRelationalDao.deleteByTableIdAndTableNameAndFileFieldName(tableId, tableName, fileFieldName);
-        if (Objects.nonNull(tableId) && Objects.nonNull(tableName) && Objects.nonNull(fileFieldName) && Objects.nonNull(fileIds)) {
-            List<FileRelationalPo> list = new ArrayList<>();
-            fileIds.stream().filter(id->Objects.nonNull(id)).forEach(fileId ->{
-                FileRelationalPo fileRelationalPo = FileRelationalPo.builder()
-                        .fileFieldName(fileFieldName)
-                        .fileId(fileId)
-                        .tableId(tableId)
-                        .tableName(tableName)
-                        .build();
-                list.add(fileRelationalPo);
-            });
-            fileRelationalDao.saveAll(list);
+        if (Objects.nonNull(tableId) && Objects.nonNull(tableName) && Objects.nonNull(fileFieldName) ) {
+            fileRelationalDao.deleteByTableIdAndTableNameAndFileFieldName(tableId, tableName, fileFieldName);
+            if (Objects.nonNull(fileIds) && fileIds.size() >0) {
+                List<FileRelationalPo> list = new ArrayList<>();
+                fileIds.stream().filter(id -> Objects.nonNull(id)).forEach(fileId -> {
+                    if (Objects.nonNull(fileId)) {
+                        FileRelationalPo fileRelationalPo = FileRelationalPo.builder()
+                                .fileFieldName(fileFieldName)
+                                .fileId(fileId)
+                                .tableId(tableId)
+                                .tableName(tableName)
+                                .build();
+                        list.add(fileRelationalPo);
+                    }
+                });
+                fileRelationalDao.saveAll(list);
+            }
         }
     }
 }

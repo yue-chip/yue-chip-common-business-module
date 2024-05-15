@@ -16,8 +16,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-//@YueChipDDDEntity
-@Deprecated
+@YueChipDDDEntity
 public class UserWeixin extends UserWeiXinDefinition {
 
 }

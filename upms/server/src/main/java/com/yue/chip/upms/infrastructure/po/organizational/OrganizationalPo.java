@@ -4,10 +4,10 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -22,18 +22,21 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @SuperBuilder
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})
 @NoArgsConstructor
-@Data
 @Comment("组织机构")
 public class OrganizationalPo extends OrganizationalDefinition {
 
     @Override
-    @Column(unique = true, columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '机构名称-不能为空'")
+    @Column(unique = true)
+    @Comment("机构名称-不能为空")
+    @ColumnDefault("''")
     public String getName() {
         return super.getName();
     }
 
     @Override
-    @Column(name = "parent_id", columnDefinition = "bigint NULL DEFAULT 0 COMMENT '父节点id'")
+    @Column(name = "parent_id")
+    @Comment("父节点id")
+    @ColumnDefault("0")
     public Long getParentId() {
         return super.getParentId();
     }

@@ -1,9 +1,7 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
@@ -35,6 +33,8 @@ public interface UserDaoEx {
      */
     public Page<UserPo> find( String name, String username,@NotNull Pageable pageable);
 
+    public Page<UserPo> find(List<Long> ids, String name,@NotNull Pageable pageable);
+
     /**
      * 根据角色查询关联的用户
      * @param roleId
@@ -59,5 +59,32 @@ public interface UserDaoEx {
      * @return
      */
     public List<UserPo> findUserByOrganizationalId(@NotNull @Size(min = 1) List<Long> organizationalIds, @NotNull State state);
+
+    /**
+     * 根据网格id查寻用户
+     *
+     * @param gridId
+     * @return
+     */
+    public List<UserPo> findUserByGridId(@NotNull Long gridId);
+
+    /**
+     * 根据用id和租户编码查寻用户
+     *
+     * @param id
+     * @param tenantNumber
+     * @return
+     */
+    Optional<UserPo> findByIdAndTenantNumber(@NotNull Long id, Long tenantNumber);
+
+
+    /**
+     * 根据网格id和租户编码查寻用户
+     *
+     * @param id
+     * @param tenantNumber
+     * @return
+     */
+    Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber);
 
 }

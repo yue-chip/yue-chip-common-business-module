@@ -1,14 +1,15 @@
 package com.yue.chip.upms.interfaces.facade;
 
 import com.yue.chip.annotation.AuthorizationIgnore;
+import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.common.business.expose.sms.SmsExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
-import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.application.service.TestApplicationService;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -46,6 +47,10 @@ public class TestController  {
     @DubboReference
     private SmsExposeService smsExposeService;
 
+    @DubboReference
+    private FileExposeService fileExposeService;
+
+
     @GetMapping("/sms")
 //    @PreAuthorize("@aps.hasPermission('ADD')")
     @AuthorizationIgnore
@@ -57,11 +62,22 @@ public class TestController  {
 
     @GetMapping("/test")
 //    @PreAuthorize("@aps.hasPermission('ADD')")
-    @AuthorizationIgnore
+//    @AuthorizationIgnore
     @Operation(summary = "测试-1", description = "测试-1")
     public IResultData test(String name){
+        CurrentUserUtil.getCurrentUserTenantNumber();
         log.info("test");
         upmsApplication.test("刘方");
+        return ResultData.builder().build();
+    }
+
+    @GetMapping("/test/file")
+//    @PreAuthorize("@aps.hasPermission('ADD')")
+    @AuthorizationIgnore
+    @Operation(summary = "测试文件", description = "测试文件")
+    public IResultData testFile(String name){
+        Map map = fileExposeService.getUrl(14L,"storePhoto","store",null);
+        log.info(map.toString());
         return ResultData.builder().build();
     }
 
@@ -89,9 +105,9 @@ public class TestController  {
     @Operation(summary = "测试-接口mock测试1", description = "测试-接口mock测试1")
     public IPageResultData<List<UserVo>> testMock1(String name){
 //        return PageResultData.builder().data(JMockData.mock(new TypeReference<List<UserVo>>(){})).build();
-//        List<User> list = new PodamFactoryImpl().manufacturePojo(List.class, User.class);
-        return PageResultData.builder().data(new PodamFactoryImpl().manufacturePojo(List.class,UserVo.class)).build();
-
+//        List<User> listGrid = new PodamFactoryImpl().manufacturePojo(List.class, User.class);
+//        return PageResultData.builder().data(new PodamFactoryImpl().manufacturePojo(List.class,UserVo.class)).build();
+        return null;
     }
 
 }

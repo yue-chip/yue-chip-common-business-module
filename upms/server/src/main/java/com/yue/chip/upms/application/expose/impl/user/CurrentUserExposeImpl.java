@@ -1,5 +1,6 @@
 package com.yue.chip.upms.application.expose.impl.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yue.chip.core.ICurrentUser;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -25,17 +26,12 @@ public class CurrentUserExposeImpl implements ICurrentUser<User> {
     @Resource
     private UpmsRepository upmsRepository;
 
-    @Resource
-    private UserMapper userMapper;
-
     @Override
     public Map<String, Object> findUserToMap(@NotBlank String username) {
         Optional<User> optional = upmsRepository.findUserByUsername(username);
         if (optional.isPresent()) {
             User user = optional.get();
-            Map<String, Object> map = new HashMap<>();
-            map.put("id",user.getId());
-            map.put("tenantId",user.getTenantId());
+            Map<String, Object> map = new ObjectMapper().convertValue(user,Map.class);
             return map;
         }
         return null;

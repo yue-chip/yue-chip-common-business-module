@@ -73,13 +73,24 @@
     </a-card>
 
     <a-modal width="800px" v-model:visible="visible" title="添加/修改租户" cancelText="取消" okText="保存" :destroyOnClose="true" :mask="true" :maskClosable="false" @cancel="cancel" @ok="save">
-      <a-form ref="fromAddOrUpdate" :rules="rules" :model="addOrUpdateModel" :labelCol="{span: 3,offset:0}" >
+      <a-form ref="fromAddOrUpdate" :rules="rules" :model="addOrUpdateModel" :labelCol="{span: 4,offset:0}" >
         <a-row >
           <a-col :span="24">
             <a-form-item label="名称" name="name" ref="name">
               <a-input placeholder="请输入租户名称" v-model:value="addOrUpdateModel.name" />
             </a-form-item>
           </a-col>
+          <a-col :span="24">
+            <a-form-item label="简称" name="abbreviation" ref="abbreviation">
+              <a-input placeholder="请输入租户简称" v-model:value="addOrUpdateModel.abbreviation" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-item label="数字大屏名称" name="bigScreenName" ref="bigScreenName">
+              <a-input placeholder="请输入数字大屏名称" v-model:value="addOrUpdateModel.bigScreenName" />
+            </a-form-item>
+          </a-col>
+
           <a-col :span="24">
             <a-form-item label="负责人" name="manager" ref="manager">
               <a-input placeholder="请输入负责人" v-model:value="addOrUpdateModel.manager" />
@@ -88,6 +99,12 @@
           <a-col :span="24">
             <a-form-item label="联系电话" name="phoneNumber" ref="phoneNumber">
               <a-input placeholder="请输入负责人" v-model:value="addOrUpdateModel.phoneNumber" />
+            </a-form-item>
+          </a-col>
+
+          <a-col :span="24">
+            <a-form-item label="访问域名" name="requestDomain" ref="requestDomain" >
+              <a-input placeholder="请输入访问域名(www.baidu.com)多个域逗号隔开" v-model:value="addOrUpdateModel.requestDomain" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -112,8 +129,11 @@
   let stateList = ref([]);
   const rules:any={
     name:[{required:true,message:"请输入租户名称",trigger:'blur'}],
+    abbreviation:[{required:true,message:"请输入租户简称",trigger:'blur'}],
     manager:[{required:true,message:"请输入名称",trigger:'blur'}],
     phoneNumber:[{required:true,message:"请输入联系电话",trigger:'blur'}],
+    requestDomain:[{required:true,message:"请输入访问域",trigger:'blur'}],
+    bigScreenName:[{required:true,message:"请输入数字大屏名称",trigger:'blur'}],
   };
   const columns = [
     {
@@ -140,6 +160,11 @@
       title: '联系电话',
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
+    },
+    {
+      title: '访问域',
+      dataIndex: 'requestDomain',
+      key: 'requestDomain',
     },
     {
       title: '创建时间',

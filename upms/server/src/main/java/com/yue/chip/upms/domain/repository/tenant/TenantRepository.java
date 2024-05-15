@@ -35,27 +35,49 @@ public interface TenantRepository {
      * 新增
      * @param tenantPo
      */
-    public TenantPo save(@NotNull TenantPo tenantPo);
+    public TenantPo saveTenant(@NotNull TenantPo tenantPo);
 
     /**
      * 修改
      * @param tenantPo
      */
-    public void update(@NotNull TenantPo tenantPo);
+    public void updateTenant(@NotNull TenantPo tenantPo);
+
+    /**
+     * 更新租户编码
+     * @param tenantId
+     * @param tenantNumber
+     */
+    public void updateTenantNumber(@NotNull Long tenantId,@NotNull Long tenantNumber);
 
     /**
      * 删除
      *
      * @param id
      */
-    public void delete(@NotNull Long id);
+    public void deleteTenant(@NotNull Long id);
 
     /**
      * 根据名称查询
      * @param name
      * @return
      */
-    public Optional<Tenant> findByName(@NotBlank String name);
+    public Optional<Tenant> findTenantByName(@NotBlank String name);
+
+    /**
+     * 根据租户编码获取租户
+     * @param tenantNumber
+     * @return
+     */
+    public Optional<Tenant> findTenantByTenantNumber(Long tenantNumber);
+
+    /**
+     * 查寻所有租户(特殊场景使用 jdbc查寻 禁止其它功能调用)
+     * @param state
+     * @return
+     */
+    public List<Tenant> findAllTenant(@NotNull State state);
+
 
     /**
      * 更新租户状态
@@ -71,12 +93,20 @@ public interface TenantRepository {
      */
     public void updateOtherDataBase(@NotNull State state, @NotNull Long tenantNumber);
 
+
+    /**
+     * 保存其它租户数据库中的租户状态
+     * @param state
+     * @param tenantNumber
+     */
+    public void insertOtherDataBase(@NotNull State state, @NotNull Long tenantNumber);
+
     /**
      * 查询当前租户状态
      *
      * @return
      */
-    public Optional<TenantStatePo> findFirst();
+    public Optional<TenantStatePo> findTenantStateFirst();
 
     /**
      * 获取租户详情
@@ -84,5 +114,11 @@ public interface TenantRepository {
      * @param id
      * @return
      */
-    public Optional<TenantVo> details(@NotNull Long id);
+    public Optional<Tenant> tenantDetails(@NotNull Long id);
+
+    /**
+     * 获取所有租户
+     * @return
+     */
+    public List<Tenant> findAll();
 }

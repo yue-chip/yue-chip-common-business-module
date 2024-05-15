@@ -15,9 +15,10 @@ import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -44,27 +45,51 @@ public class TenantRepositoryImpl implements TenantRepository {
     }
 
     @Override
-    public TenantPo save(TenantPo tenantPo) {
-        return tenantDao.save(tenantPo);
+    public TenantPo saveTenant(TenantPo tenantPo) {
+        tenantPo = tenantDao.save(tenantPo);
+        tenantPo.setTenantNumber(tenantPo.getId());
+        return tenantPo;
     }
 
     @Override
-    public void update(TenantPo tenantPo) {
+    @Transactional(rollbackFor = {Exception.class},propagation = Propagation.REQUIRES_NEW)
+    public void updateTenant(TenantPo tenantPo) {
         tenantDao.update(tenantPo);
     }
 
     @Override
-    public void delete(Long id) {
+    public void updateTenantNumber(Long tenantId, Long tenantNumber) {
+        tenantDao.updateTenantNumber(tenantId,tenantNumber);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class},propagation = Propagation.REQUIRES_NEW)
+    public void deleteTenant(Long id) {
         tenantDao.deleteById(id);
     }
 
     @Override
-    public Optional<Tenant> findByName(String name) {
+    public Optional<Tenant> findTenantByName(String name) {
         Optional<TenantPo> optional = tenantDao.findFirstByName(name);
         if (optional.isPresent()) {
             return Optional.ofNullable(tenantMapper.toTenant(optional.get()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<Tenant> findTenantByTenantNumber(Long tenantNumber) {
+        Optional<TenantPo> optional = tenantDao.findTenantByTenantNumber(tenantNumber);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(tenantMapper.toTenant(optional.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Tenant> findAllTenant(State state) {
+        List<TenantPo> list = tenantDao.findAllByState(state);
+        return tenantMapper.toTenant(list);
     }
 
     @Override
@@ -82,7 +107,13 @@ public class TenantRepositoryImpl implements TenantRepository {
     }
 
     @Override
-    public Optional<TenantStatePo> findFirst() {
+    @Transactional(rollbackFor = {Exception.class},propagation = Propagation.REQUIRES_NEW)
+    public void insertOtherDataBase(State state, Long tenantNumber) {
+        tenantDao.insertOtherDataBase(state,tenantNumber);
+    }
+
+    @Override
+    public Optional<TenantStatePo> findTenantStateFirst() {
         List<TenantStatePo> list = tenantStateDao.findAll();
         if (list.size()>0){
             return Optional.ofNullable(list.get(0));
@@ -91,11 +122,17 @@ public class TenantRepositoryImpl implements TenantRepository {
     }
 
     @Override
-    public Optional<TenantVo> details(Long id) {
+    public Optional<Tenant> tenantDetails(Long id) {
         Optional<TenantPo> optional = tenantDao.findById(id);
         if (optional.isPresent()) {
-            return Optional.ofNullable(tenantMapper.toTenantVo(optional.get()));
+            return Optional.ofNullable(tenantMapper.toTenant(optional.get()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<Tenant> findAll() {
+        List<TenantPo> list  = tenantDao.findAll();
+        return tenantMapper.toTenant(list);
     }
 }
