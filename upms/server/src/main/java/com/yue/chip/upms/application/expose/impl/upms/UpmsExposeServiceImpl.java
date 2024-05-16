@@ -21,12 +21,12 @@ import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
+import jakarta.validation.constraints.NotBlank;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotBlank;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -1,13 +1,10 @@
 package com.yue.chip.upms.domain.service.login.impl;
 
-import com.yue.chip.authentication.YueChipAuthenticationToken;
+//import com.yue.chip.authentication.YueChipAuthenticationToken;
+
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.exception.BusinessException;
-import com.yue.chip.security.YueChipSimpleGrantedAuthority;
-import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
-import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
@@ -16,13 +13,11 @@ import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -30,8 +25,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -69,7 +62,8 @@ public class LoginServiceImpl implements LoginService {
         if (!passwordEncoder.matches(password,user.getPassword()) ) {
             throw new AuthenticationServiceException("密码错误");
         }
-        return authority(user.getResources(),user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber());
+//        return authority(user.getResources(),user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber());
+        return "";
     }
 
     @Override
@@ -99,7 +93,8 @@ public class LoginServiceImpl implements LoginService {
         if (Objects.isNull(userWeixin)) {
             throw new AuthenticationServiceException("用户鉴权失败！");
         }
-        return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getPhoneNumber(),"",userWeixin.getTenantNumber());
+//        return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getPhoneNumber(),"",userWeixin.getTenantNumber());
+        return "";
     }
 
     @Override
@@ -119,19 +114,19 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
-    private String authority(List<Resources> resourcesList,Long id, String username ,String password,Long tenantNumber) {
-        List<GrantedAuthority> authoritiesList = AuthorityUtils.createAuthorityList();
-        resourcesList.forEach(resources -> {
-            YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
-            grantedAuthority.setAuthority(resources.getCode());
-            authoritiesList.add(grantedAuthority);
-        });
-        YueChipAuthenticationToken token = new YueChipAuthenticationToken(username, authoritiesList);
-        SecurityContextHolder.getContext().setAuthentication(token);
-        YueChipUserDetails userDetails = new YueChipUserDetails(id,username,password, tenantNumber,authoritiesList);
-        YueChipRedisTokenStoreUtil.store(userDetails,token.getToken());
-        return token.getToken();
-    }
+//    private String authority(List<Resources> resourcesList,Long id, String username ,String password,Long tenantNumber) {
+//        List<GrantedAuthority> authoritiesList = AuthorityUtils.createAuthorityList();
+//        resourcesList.forEach(resources -> {
+//            YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
+//            grantedAuthority.setAuthority(resources.getCode());
+//            authoritiesList.add(grantedAuthority);
+//        });
+//        YueChipAuthenticationToken token = new YueChipAuthenticationToken(username, authoritiesList);
+//        SecurityContextHolder.getContext().setAuthentication(token);
+//        YueChipUserDetails userDetails = new YueChipUserDetails(id,username,password, tenantNumber,authoritiesList);
+//        YueChipRedisTokenStoreUtil.store(userDetails,token.getToken());
+//        return token.getToken();
+//    }
 
     private void checkTenantState() {
         Optional<TenantStatePo> optional = tenantRepository.findTenantStateFirst();

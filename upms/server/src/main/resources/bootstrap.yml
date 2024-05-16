@@ -5,12 +5,9 @@ spring:
     allow-bean-definition-overriding: true
     allow-circular-references: true
   nacos:
-    group: XIAO-WEI-GROUP
-    host: 192.168.31.202:8848
-    namespace: 1706918c-e809-426a-b633-e351101ed09d
-#    group: YUE-CHIP-GROUP
-#    host: 192.168.177.129:8848
-#    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
+    group: YUE-CHI-GROUP
+    host: 192.168.177.129:8848
+    namespace: 60861075-1051-417c-b85d-70d5f638d719
     password: nacos
     username: nacos
   application:
