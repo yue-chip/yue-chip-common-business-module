@@ -5,9 +5,7 @@ dependencies {
     api platform("yue.chip:starter:${yueChipPlatformVersion}")
     api project(':common')
     api 'yue.chip:yue-chip-interface-expose-starter'
-    api ('com.aliyun:dyvmsapi20170525') {
-        exclude group: "com.sun.xml.bind"
-    }
+    api "com.aliyun:alibabacloud-dyvmsapi20170525"
     implementation 'jakarta.platform:jakarta.jakartaee-api'
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
