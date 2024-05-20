@@ -19,7 +19,7 @@
     </appender>
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>./logs/common-business.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>./logs/upms.%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>5</MaxHistory>
             <totalSizeCap>5GB</totalSizeCap>
         </rollingPolicy>
