@@ -17,11 +17,23 @@
             </layout>
         </encoder>
     </appender>
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>./logs/common-business.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <MaxHistory>5</MaxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{tid}] [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
 
 
     <root level="info">
         <appender-ref ref="console" />
         <appender-ref ref="grpc-log" />
+        <appender-ref ref="file" />
     </root>
 
 </configuration>
