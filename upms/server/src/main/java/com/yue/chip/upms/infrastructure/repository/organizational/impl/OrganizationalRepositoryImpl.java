@@ -24,7 +24,6 @@ import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import javax.annotation.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -262,17 +261,17 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public Page<GridVo> listGrid(Long organizationalId, String name, String userName, YueChipPage yueChipPage) {
+    public IPageResultData<List<GridVo>> listGrid(Long organizationalId, String name, String userName, YueChipPage yueChipPage) {
         Page<GridPo> page = gridDao.List(organizationalId,name,userName,yueChipPage);
         List<Grid> list = gridMapper.toGrid(page.getContent());
-        return new PageImpl<GridVo>(gridMapper.toGridVo(list),page.getPageable(),page.getTotalElements());
+        return new PageResultData<List<GridVo>>(gridMapper.toGridVo(list),page.getPageable(),page.getTotalElements());
     }
 
     @Override
-    public Page<Grid> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds, String time) {
+    public IPageResultData<List<Grid>> listGridQuery(Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds, String time) {
         Page<GridPo> page = gridDao.listGridQuery(organizationalIds,name,yueChipPage, userIds, time);
         List<Grid> list = gridMapper.toGrid(page.getContent());
-        return new PageImpl<Grid>(list,page.getPageable(),page.getTotalElements());
+        return new PageResultData<List<Grid>>(list,page.getPageable(),page.getTotalElements());
     }
 
     @Override

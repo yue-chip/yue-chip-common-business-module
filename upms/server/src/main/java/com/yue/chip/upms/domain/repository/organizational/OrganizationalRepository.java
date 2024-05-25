@@ -182,7 +182,7 @@ public interface OrganizationalRepository {
      * @param yueChipPage
      * @return
      */
-    Page<GridVo> listGrid(@NotNull Long organizationalId, String name, String userName, YueChipPage yueChipPage);
+    IPageResultData<List<GridVo>> listGrid(@NotNull Long organizationalId, String name, String userName, YueChipPage yueChipPage);
 
     /**
      * 分页列表
@@ -192,7 +192,7 @@ public interface OrganizationalRepository {
      * @param yueChipPage
      * @return
      */
-    Page<Grid> listGridQuery(@NotNull Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds, String time);
+    IPageResultData<List<Grid>> listGridQuery(@NotNull Set<Long> organizationalIds, String name, YueChipPage yueChipPage, Set<Long> userIds, String time);
 
     /**
      * 根据机构id查寻网格

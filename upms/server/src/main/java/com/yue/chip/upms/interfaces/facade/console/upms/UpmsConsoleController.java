@@ -376,7 +376,7 @@ public class UpmsConsoleController {
     @GetMapping("/grid/list")
     //@Operation(description = "网格-网格列表",summary = "网格-网格列表")
     public IPageResultData<List<GridVo>> gridList(@NotNull(message = "机构id不能为空") Long organizationalId,String name,String userName,YueChipPage yueChipPage) {
-        return (IPageResultData) organizationalRepository.listGrid(organizationalId, name, userName, yueChipPage);
+        return organizationalRepository.listGrid(organizationalId, name, userName, yueChipPage);
     }
 
     @PutMapping("/grid/update")
