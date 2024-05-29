@@ -53,9 +53,4 @@ public interface GridDao extends BaseDao<GridPo>, GridDaoEx {
      */
     List<GridPo> findAllByNameLike(String name);
 
-    /**
-     * 根据机构id查询网格
-     * @return
-     */
-    List<GridPo> findAllByOrganizationalId();
 }
