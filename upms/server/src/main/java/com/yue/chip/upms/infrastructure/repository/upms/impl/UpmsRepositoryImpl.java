@@ -395,4 +395,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         }
         return Optional.empty();
     }
+    @Override
+    public IPageResultData<List<UserExposeVo>> userList(Long id, String phoneNumber, State state, Pageable pageable) {
+        Page<UserPo> page = userDao.find(id, phoneNumber,state, pageable);
+        List<User> listUser = userMapper.toUserList(page.getContent());
+        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(listUser);
+        return (IPageResultData<List<UserExposeVo>>) PageResultData.convert(page,userExposeVo);
+    }
 }

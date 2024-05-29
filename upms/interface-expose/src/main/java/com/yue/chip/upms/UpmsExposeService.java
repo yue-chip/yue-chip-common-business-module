@@ -165,4 +165,14 @@ public interface UpmsExposeService {
      */
     void register(@NotBlank String phoneNumber, @NotBlank String password, String name, Long id);
 
+    /**
+     * 根据用户ID、电话号码和状态查询用户分页信息
+     *
+     * @param id 用户ID
+     * @param phoneNumber 用户电话号码
+     * @param state 用户状态
+     * @param yueChipPage 分页信息
+     * @return 返回一个包含用户信息的分页对象PageSerializable<UserExposeVo>
+     */
+    PageSerializable<UserExposeVo> findUserAllByIdAndPhoneNumberAndStatus(Long id, String phoneNumber,State state, YueChipPage yueChipPage);
 }

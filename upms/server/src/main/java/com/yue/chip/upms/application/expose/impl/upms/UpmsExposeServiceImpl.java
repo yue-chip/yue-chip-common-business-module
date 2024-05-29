@@ -242,4 +242,12 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         organizationalRepository.register(phoneNumber, password, name, id);
     }
 
+
+    @Override
+    public PageSerializable<UserExposeVo> findUserAllByIdAndPhoneNumberAndStatus(Long id, String phoneNumber, State state, YueChipPage yueChipPage) {
+        IPageResultData<List<UserExposeVo>> userList = upmsRepository.userList(id, phoneNumber,state, yueChipPage);
+        return new YueChipPageSerializable<UserExposeVo>(userList.getContent(), userList.getPageable(), userList.getTotalElements());
+    }
+
+
 }

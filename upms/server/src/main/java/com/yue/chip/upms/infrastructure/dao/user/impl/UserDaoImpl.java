@@ -138,6 +138,26 @@ public class UserDaoImpl implements UserDaoEx {
         sb.append(" and u.username <> 'superadmin' ");
         return (Page<UserPo>) baseDao.findNavigator(yueChipPage,sb.toString(),para);
     }
+    @Override
+    public Page<UserPo> find(Long id, String phoneNumber, State state, Pageable pageable) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u where 1=1 ");
+        Map<String,Object> para = new HashMap<>();
+        if (Objects.nonNull(id)) {
+            sb.append(" and u.id = :id ");
+            para.put("id", id);
+        }
+        if (StringUtils.hasText(phoneNumber)) {
+            sb.append(" and u.phoneNumber like :phoneNumber ");
+            para.put("phoneNumber","%"+phoneNumber+"%");
+        }
+        if (Objects.nonNull(state)) {
+            sb.append(" and u.state = :state ");
+            para.put("state", state);
+        }
+        sb.append(" and u.username <> 'superadmin' ");
+        return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
+    }
 
     @Override
     public List<UserPo> findByRoleId(Long roleId) {

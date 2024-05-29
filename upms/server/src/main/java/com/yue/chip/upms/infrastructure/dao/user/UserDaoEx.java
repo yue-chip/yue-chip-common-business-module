@@ -63,6 +63,8 @@ public interface UserDaoEx {
      */
     public List<UserPo> findUserByOrganizationalId(@NotNull @Size(min = 1) List<Long> organizationalIds, @NotNull State state);
 
+    public Page<UserPo> find(Long id, String phoneNumber,State state,@NotNull Pageable pageable);
+
     /**
      * 根据网格id查寻用户
      *
