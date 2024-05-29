@@ -13,10 +13,7 @@ import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
-import com.yue.chip.upms.interfaces.dto.organizational.GridAddDto;
-import com.yue.chip.upms.interfaces.dto.organizational.GridUpdateDto;
-import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
-import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
+import com.yue.chip.upms.interfaces.dto.organizational.*;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
@@ -48,6 +45,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Mr.Liu
@@ -372,11 +370,23 @@ public class UpmsConsoleController {
         organizationalRepository.saveGrid(gridMapper.toGridPo(gridAddDto));
         return ResultData.builder().build();
     }
+    @PostMapping("/grid/add2")
+    @Operation(description = "网格-添加网格2",summary = "网格-添加网格2")
+    public IResultData addGrid2(@RequestBody @Validated GridAddDto2 gridAddDto2) {
+        organizationalRepository.saveGrid2(gridMapper.toGridPo(gridAddDto2), gridAddDto2.getUserIds());
+        return ResultData.builder().build();
+    }
 
     @GetMapping("/grid/list")
     @Operation(description = "网格-网格列表",summary = "网格-网格列表")
     public IPageResultData<List<GridVo>> gridList(@NotNull(message = "机构id不能为空") Long organizationalId,String name,String userName,YueChipPage yueChipPage) {
         return organizationalRepository.listGrid(organizationalId, name, userName, yueChipPage);
+    }
+
+    @GetMapping("/grid/list/tree")
+    @Operation(description = "网格-网格列表-树形",summary = "网格-网格列表-树形")
+    public IResultData<List<GridVo>> gridList(@NotNull(message = "机构id不能为空") Long organizationalId) {
+        return ResultData.builder().data(organizationalRepository.listGridTree(organizationalId)).build();
     }
 
     @PutMapping("/grid/update")

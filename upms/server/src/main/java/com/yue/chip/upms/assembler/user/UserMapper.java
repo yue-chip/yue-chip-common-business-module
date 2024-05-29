@@ -42,6 +42,7 @@ public interface UserMapper {
     public UserSelectVo toUserSelectVo(User user);
 
     public List<User> toUserList(List<UserPo> list);
+    public List<UserVo> toListUser(List<UserPo> list);
 
     public UserPo toUserPo(User user);
 

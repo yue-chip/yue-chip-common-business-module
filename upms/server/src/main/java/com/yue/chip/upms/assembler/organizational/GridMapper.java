@@ -3,9 +3,11 @@ package com.yue.chip.upms.assembler.organizational;
 import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.interfaces.dto.organizational.GridAddDto;
+import com.yue.chip.upms.interfaces.dto.organizational.GridAddDto2;
 import com.yue.chip.upms.interfaces.dto.organizational.GridUpdateDto;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.grid.vo.GridExposeVo;
+import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -23,6 +25,7 @@ public interface GridMapper {
     GridMapper INSTANCE = Mappers.getMapper(GridMapper.class);
 
     public GridPo toGridPo(GridAddDto gridAddDto);
+    GridPo toGridPo(GridAddDto2 gridAddDto2);
 
     public GridPo toGridPo(GridUpdateDto gridUpdateDto);
 
@@ -33,6 +36,7 @@ public interface GridMapper {
     public GridVo toGridVo(Grid grid);
 
     public List<GridVo> toGridVo(List<Grid> gridList);
+    List<GridVo2> toListGridVo(List<GridPo> gridPoList);
 
     public GridExposeVo toGridExposeVo(Grid grid);
     
