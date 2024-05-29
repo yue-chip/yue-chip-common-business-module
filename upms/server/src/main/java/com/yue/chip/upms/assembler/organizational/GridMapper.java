@@ -5,6 +5,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.interfaces.dto.organizational.GridAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.GridAddDto2;
 import com.yue.chip.upms.interfaces.dto.organizational.GridUpdateDto;
+import com.yue.chip.upms.interfaces.dto.organizational.GridUpdateDto2;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
@@ -13,6 +14,7 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Mr.Liu
@@ -26,6 +28,7 @@ public interface GridMapper {
 
     public GridPo toGridPo(GridAddDto gridAddDto);
     GridPo toGridPo(GridAddDto2 gridAddDto2);
+    GridPo toGridPo(GridUpdateDto2 gridUpdateDto2);
 
     public GridPo toGridPo(GridUpdateDto gridUpdateDto);
 
