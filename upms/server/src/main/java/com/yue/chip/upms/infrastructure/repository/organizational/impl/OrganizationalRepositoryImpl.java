@@ -257,8 +257,24 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public void updateGrid(GridPo gridPo) {
+    public void updateGrid(GridPo gridPo, List<Long> userIds) {
+        if (Objects.isNull(gridPo.getParentId())) {
+            gridPo.setParentId(0L);
+        }
         gridDao.update(gridPo);
+        List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridPo.getId());
+        if (!CollectionUtils.isEmpty(gridUserPoList)) {
+            List<Long> ids = gridUserPoList.stream().map(GridUserPo::getId).collect(Collectors.toList());
+            ids.forEach(id -> {
+                gridUserDao.deleteById(id);
+            });
+        }
+        userIds.forEach(userId -> {
+            GridUserPo gridUserPo = new GridUserPo();
+            gridUserPo.setUserId(userId);
+            gridUserPo.setGridId(gridPo.getId());
+            gridUserDao.save(gridUserPo);
+        });
     }
 
     @Override
@@ -308,11 +324,15 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
                     userIdList.add(gridVo.getUserId());
                 }
                 List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridVo.getId());
-                List<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toList());
-                userIdList.addAll(userIds);
+                if (!CollectionUtils.isEmpty(gridUserPoList)) {
+                    List<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toList());
+                    userIdList.addAll(userIds);
+                }
                 List<UserPo> userPoList = userDao.findAllByIdIn(userIdList);
-                List<UserVo> listUserVo = userMapper.toListUser(userPoList);
-                gridVo.setUser(listUserVo);
+                if (!CollectionUtils.isEmpty(userPoList)) {
+                    List<UserVo> listUserVo = userMapper.toListUser(userPoList);
+                    gridVo.setUser(listUserVo);
+                }
             });
             tree = buildTree(gridVos);
         }

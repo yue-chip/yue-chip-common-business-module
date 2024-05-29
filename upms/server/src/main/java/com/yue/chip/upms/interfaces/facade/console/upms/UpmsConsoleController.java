@@ -395,6 +395,12 @@ public class UpmsConsoleController {
         organizationalRepository.saveGrid(gridMapper.toGridPo(gridUpdateDto));
         return ResultData.builder().build();
     }
+    @PutMapping("/grid/update2")
+    @Operation(description = "网格-修改网格2",summary = "网格-修改网格2")
+    public IResultData updateGrid(@RequestBody @Validated GridUpdateDto2 gridUpdateDto2) {
+        organizationalRepository.updateGrid(gridMapper.toGridPo(gridUpdateDto2), gridUpdateDto2.getUserIds());
+        return ResultData.builder().build();
+    }
 
     @DeleteMapping("/grid/delete")
     //@Operation(description = "网格-删除网格",summary = "网格-删除网格")

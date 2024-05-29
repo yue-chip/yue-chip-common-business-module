@@ -151,7 +151,7 @@ public interface OrganizationalRepository {
      * 修改网格
      * @param gridPo
      */
-    public void updateGrid(@NotNull GridPo gridPo);
+    public void updateGrid(@NotNull GridPo gridPo, List<Long> userIds);
 
     /**
      * 删除网格
