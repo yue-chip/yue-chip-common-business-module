@@ -9,6 +9,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
+import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import org.springframework.data.domain.Page;
@@ -140,6 +141,11 @@ public interface OrganizationalRepository {
      * @param gridPo
      */
     public void saveGrid(@NotNull GridPo gridPo);
+    /**
+     * 新增网格2
+     * @param gridPo
+     */
+    void saveGrid2(GridPo gridPo, List<Long> userIds);
 
     /**
      * 修改网格
@@ -183,6 +189,13 @@ public interface OrganizationalRepository {
      * @return
      */
     IPageResultData<List<GridVo>> listGrid(@NotNull Long organizationalId, String name, String userName, YueChipPage yueChipPage);
+
+    /**
+     * 网格树形列表
+     * @param organizationalId
+     * @return
+     */
+    List<GridVo2> listGridTree(@NotNull Long organizationalId);
 
     /**
      * 分页列表
