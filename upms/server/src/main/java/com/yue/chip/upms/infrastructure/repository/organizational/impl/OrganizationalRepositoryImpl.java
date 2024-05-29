@@ -299,7 +299,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     @Override
     public List<GridVo2> listGridTree(Long organizationalId) {
         List<GridVo2> tree = new ArrayList<>();
-        List<GridPo> gridPoList = gridDao.findAllByOrganizationalId();
+        List<GridPo> gridPoList = gridDao.findAllByOrganizationalId(organizationalId);
         if (!CollectionUtils.isEmpty(gridPoList)) {
             List<GridVo2> gridVos = gridMapper.toListGridVo(gridPoList);
             gridVos.forEach(gridVo -> {
