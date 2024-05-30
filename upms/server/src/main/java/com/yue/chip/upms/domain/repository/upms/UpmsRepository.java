@@ -326,6 +326,8 @@ public interface UpmsRepository {
      */
     public void deleteUser(@NotNull Long id);
 
+    public void updateState(@NotNull Long id,State state);
+
 
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
 

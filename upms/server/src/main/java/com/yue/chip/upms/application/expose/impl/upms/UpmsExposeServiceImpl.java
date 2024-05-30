@@ -249,5 +249,10 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         return new YueChipPageSerializable<UserExposeVo>(userList.getContent(), userList.getPageable(), userList.getTotalElements());
     }
 
+    @Override
+    public void updateState(Long id,State state) {
+        upmsRepository.updateState(id, state);
+    }
+
 
 }

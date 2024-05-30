@@ -175,4 +175,14 @@ public interface UpmsExposeService {
      * @return 返回一个包含用户信息的分页对象PageSerializable<UserExposeVo>
      */
     PageSerializable<UserExposeVo> findUserAllByIdAndPhoneNumberAndStatus(Long id, String phoneNumber,State state, YueChipPage yueChipPage);
+
+
+
+    /**
+     * 更新状态
+     *
+     * @param id    实体ID
+     * @param state 状态对象
+     */
+    void updateState(Long id,State state);
 }

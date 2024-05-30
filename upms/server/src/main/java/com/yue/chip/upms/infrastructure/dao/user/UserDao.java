@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
@@ -80,4 +81,9 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @return
      */
     UserPo findByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email);
+
+    @Modifying
+    @Query("update UserPo set state=:state where id =:id")
+    @Transactional
+    public void updateUserStatus(@NotNull @Param("id") Long id, @NotBlank @Param("state") State state);
 }

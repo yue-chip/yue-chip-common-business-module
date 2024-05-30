@@ -402,4 +402,10 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(listUser);
         return (IPageResultData<List<UserExposeVo>>) PageResultData.convert(page,userExposeVo);
     }
+    @Override
+    public void updateState(@NotNull Long id, @NotNull State state){
+        userDao.updateUserStatus(id,state);
+    }
+
+
 }
