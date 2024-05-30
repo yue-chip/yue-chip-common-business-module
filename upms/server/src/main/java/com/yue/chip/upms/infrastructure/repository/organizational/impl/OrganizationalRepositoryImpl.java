@@ -32,6 +32,7 @@ import com.yue.chip.utils.CurrentUserUtil;
 import javax.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -279,6 +280,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
+    @Transactional
     public void deleteGrid(List<Long> ids) {
         if (Objects.nonNull(ids) && ids.size()>0) {
             if (ids.size() == 1) {
