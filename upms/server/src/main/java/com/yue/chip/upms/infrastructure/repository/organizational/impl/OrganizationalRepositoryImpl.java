@@ -289,7 +289,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
                 if (gridPoOptional.get().getParentId() > 0) {
                     throw new BusinessException("请先删除该网格下的所有的子网格再删除！");
                 }
-                List<GridPo> gridPoList = gridDao.findAllByOrganizationalId(id);
+                List<GridPo> gridPoList = gridDao.findAllByParentId(id);
                 if (!CollectionUtils.isEmpty(gridPoList)) {
                     throw new BusinessException("请先删除该网格下的所有的子网格再删除！");
                 }
