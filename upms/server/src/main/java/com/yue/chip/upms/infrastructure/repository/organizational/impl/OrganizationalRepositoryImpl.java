@@ -4,6 +4,7 @@ import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
@@ -31,6 +32,7 @@ import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -278,11 +280,40 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
+    @Transactional
     public void deleteGrid(List<Long> ids) {
         if (Objects.nonNull(ids) && ids.size()>0) {
-            ids.forEach(id->{
+            if (ids.size() == 1) {
+                Long id = ids.get(0);
+                Optional<GridPo> gridPoOptional = gridDao.findById(id);
+                if (gridPoOptional.get().getParentId() > 0) {
+                    List<GridPo> gridPoList = gridDao.findAllByParentId(id);
+                    if (!CollectionUtils.isEmpty(gridPoList)) {
+                        throw new BusinessException("请先删除该网格下的所有的子网格再删除！");
+                    }
+                }
+                if (gridPoOptional.get().getParentId() == 0) {
+                    List<GridPo> gridPoList = gridDao.findAllByParentId(id);
+                    if (!CollectionUtils.isEmpty(gridPoList)) {
+                        throw new BusinessException("请先删除该网格下的所有的子网格再删除！");
+                    }
+                }
                 gridDao.deleteById(id);
-            });
+                List<Long> idList = gridUserDao.findAllByGridId(id).stream().map(GridUserPo::getId).collect(Collectors.toList());
+                if (!CollectionUtils.isEmpty(idList)) {
+                    idList.forEach(idd -> {
+                        gridDao.deleteById(idd);
+                    });
+                }
+            } else {
+                ids.forEach(id->{
+                    gridDao.deleteById(id);
+                });
+                List<Long> idList = gridUserDao.findAllByGridIdIn(ids).stream().map(GridUserPo::getId).collect(Collectors.toList());
+                if (!CollectionUtils.isEmpty(idList)) {
+                    gridUserDao.deleteByIds(idList);
+                }
+            }
         }
     }
 
