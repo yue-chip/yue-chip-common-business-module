@@ -228,7 +228,7 @@ function edit(item: any) {
         id: item.id,
         organizationalId:item.organizationalId
     };
-    showUserSelect();
+    showUserSelect(); 
     
     /* axios.axiosGet("/upms/console/grid/details", { params: { id: id } }, (data: any) => {
         addOrUpdateModel.value = data.data;
