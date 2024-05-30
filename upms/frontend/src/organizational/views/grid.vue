@@ -59,6 +59,12 @@
             <a-table rowKey="id" :row-selection="rowSelection" :columns="columns" :data-source="dataList"
                 :pagination="undefined" :loading="loading" :scroll="{ y: 440 }">
                 <template #bodyCell="{ column, text, record }">
+                    <template v-if="column.key === 'username'">
+                       <div v-for="item in record.user" :key="item.id">
+                        {{ item.name }} {{ item.phoneNumber }} 
+                       </div>
+                    </template>
+                    
                     <template v-if="column.key === 'operation'">
                         <a-space :size="5">
                             <a-button size="small" @click="edit(record)">
@@ -151,12 +157,7 @@ const columns = [
     },
     {
         title: '网格员',
-        dataIndex: ['user', 'name'],
-        key: 'username',
-    },
-    {
-        title: '电话',
-        dataIndex: ['user', 'phoneNumber'],
+        
         key: 'username',
     },
     {
