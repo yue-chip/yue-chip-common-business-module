@@ -52,4 +52,5 @@ public interface GridDao extends BaseDao<GridPo>, GridDaoEx {
      * @return
      */
     List<GridPo> findAllByNameLike(String name);
+
 }
