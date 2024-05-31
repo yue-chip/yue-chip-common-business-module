@@ -23,7 +23,8 @@ dependencies {
     api platform("yue.chip:starter:${yueChipPlatformVersion}")
     api 'yue.chip:yue-chip-serve-starter'
     api 'yue.chip:yue-chip-business-starter'
-    api 'yue.chip:yue-chip-security'
+//    api 'yue.chip:yue-chip-security'
+    api "yue.chip:yue-chip-oauth2-resource-server"
     api 'io.minio:minio'
     api ('com.aliyun:alibabacloud-dysmsapi20170525') {
         exclude group: "org.dom4j", module: "dom4j"
@@ -32,7 +33,6 @@ dependencies {
         exclude group: "org.dom4j", module: "dom4j"
     }
     api 'com.tencentcloudapi:tencentcloud-sdk-java-sms'
-//    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly "org.mapstruct:mapstruct"
