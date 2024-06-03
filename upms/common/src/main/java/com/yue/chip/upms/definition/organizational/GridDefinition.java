@@ -32,6 +32,6 @@ public class GridDefinition extends BaseDefinition {
     private Long parentId;
 
     @Schema(description = "排序")
-    private int sort;
+    private Integer sort;
 
 }

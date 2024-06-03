@@ -50,7 +50,7 @@ public class GridUpdateDto2 extends GridDefinition {
 
     @Override
     @NotNull(message = "排序不能为空")
-    public int getSort() {
+    public Integer getSort() {
         return super.getSort();
     }
 

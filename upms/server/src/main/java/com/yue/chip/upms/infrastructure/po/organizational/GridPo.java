@@ -3,7 +3,6 @@ package com.yue.chip.upms.infrastructure.po.organizational;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.organizational.GridDefinition;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -56,7 +55,7 @@ public class GridPo extends GridDefinition {
     @Override
     @Comment("排序")
     @ColumnDefault("1")
-    public int getSort() {
+    public Integer getSort() {
         return super.getSort();
     }
 }
