@@ -5,6 +5,7 @@ import com.yue.chip.core.PageSerializable;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.YueChipPageSerializable;
 import com.yue.chip.grid.vo.GridExposeVo;
+import com.yue.chip.grid.vo.GridVo;
 import com.yue.chip.upms.UpmsExposeService;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
@@ -17,11 +18,13 @@ import com.yue.chip.upms.domain.repository.organizational.OrganizationalReposito
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 
@@ -202,6 +205,20 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public List<GridExposeVo> findByOrganizationalId(Long organizationalId) {
         List<Grid> list = organizationalRepository.listGrid(organizationalId);
         return gridMapper.toGridExposeVo(list);
+    }
+
+    @Override
+    public List<GridVo> findTreeByOrganizationalId(Long organizationalId) {
+        List<GridVo> gridVos = new ArrayList<>();
+        List<GridVo2> gridVo2s = organizationalRepository.listGridTree(organizationalId);
+        if (!CollectionUtils.isEmpty(gridVo2s)) {
+            gridVo2s.forEach(gridVo -> {
+                GridVo gridVo1 = new GridVo();
+                BeanUtils.copyProperties(gridVo, gridVo1);
+                gridVos.add(gridVo1);
+            });
+        }
+        return gridVos;
     }
 
     @Override
