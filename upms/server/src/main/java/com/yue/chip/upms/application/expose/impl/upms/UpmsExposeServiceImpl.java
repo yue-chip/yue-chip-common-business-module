@@ -5,6 +5,7 @@ import com.yue.chip.core.PageSerializable;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.YueChipPageSerializable;
 import com.yue.chip.grid.vo.GridExposeVo;
+import com.yue.chip.grid.vo.GridTreeVo;
 import com.yue.chip.grid.vo.GridVo;
 import com.yue.chip.upms.UpmsExposeService;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
@@ -208,17 +209,9 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public List<GridVo> findTreeByOrganizationalId(Long organizationalId) {
-        List<GridVo> gridVos = new ArrayList<>();
-        List<GridVo2> gridVo2s = organizationalRepository.listGridTree(organizationalId);
-        if (!CollectionUtils.isEmpty(gridVo2s)) {
-            gridVo2s.forEach(gridVo -> {
-                GridVo gridVo1 = new GridVo();
-                BeanUtils.copyProperties(gridVo, gridVo1);
-                gridVos.add(gridVo1);
-            });
-        }
-        return gridVos;
+    public List<GridTreeVo> findTreeByOrganizationalId(Long organizationalId) {
+        List<GridTreeVo> gridTreeVos = organizationalRepository.listGridTree2(organizationalId);
+        return gridTreeVos;
     }
 
     @Override
