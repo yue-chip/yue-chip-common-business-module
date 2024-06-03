@@ -3,6 +3,7 @@ package com.yue.chip.upms.domain.repository.organizational;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.grid.vo.GridTreeVo;
 import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
@@ -196,6 +197,8 @@ public interface OrganizationalRepository {
      * @return
      */
     List<GridVo2> listGridTree(@NotNull Long organizationalId);
+
+    List<GridTreeVo> listGridTree2(@NotNull Long organizationalId);
 
     /**
      * 分页列表

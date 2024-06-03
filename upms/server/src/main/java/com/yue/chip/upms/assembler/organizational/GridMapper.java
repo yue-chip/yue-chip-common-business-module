@@ -1,5 +1,6 @@
 package com.yue.chip.upms.assembler.organizational;
 
+import com.yue.chip.grid.vo.GridTreeVo;
 import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.interfaces.dto.organizational.GridAddDto;
@@ -40,6 +41,7 @@ public interface GridMapper {
 
     public List<GridVo> toGridVo(List<Grid> gridList);
     List<GridVo2> toListGridVo(List<GridPo> gridPoList);
+    List<GridTreeVo> toListGridTreeVo(List<GridPo> gridPoList);
 
     public GridExposeVo toGridExposeVo(Grid grid);
     
