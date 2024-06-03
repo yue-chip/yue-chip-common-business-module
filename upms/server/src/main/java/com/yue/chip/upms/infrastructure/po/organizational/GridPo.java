@@ -41,4 +41,18 @@ public class GridPo extends GridDefinition {
     public String getName() {
         return super.getName();
     }
+
+    @Override
+//    @Comment("父节点id")
+//    @ColumnDefault("0")
+    public Long getParentId() {
+        return super.getParentId();
+    }
+
+    @Override
+//    @Comment("排序")
+//    @ColumnDefault("1")
+    public Integer getSort() {
+        return super.getSort();
+    }
 }
