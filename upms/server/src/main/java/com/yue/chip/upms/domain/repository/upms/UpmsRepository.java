@@ -330,6 +330,7 @@ public interface UpmsRepository {
 
 
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
+    List<User> findAllByPhoneNumber(@NotBlank String phoneNumber);
 
     User findByUsernameOrPhoneNumberOrEmail(@NotBlank String username,@NotBlank String phoneNumber,@NotBlank String email);
 
