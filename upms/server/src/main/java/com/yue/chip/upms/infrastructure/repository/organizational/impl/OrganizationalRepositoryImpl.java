@@ -17,9 +17,11 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.dao.organizational.GridDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalUserDao;
+import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
@@ -62,6 +64,9 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
 
     @Resource
     private GridDao gridDao;
+
+    @Resource
+    private UserDao userDao;
 
     @Resource
     private UpmsApplication upmsApplication;
@@ -325,7 +330,11 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
             userAddOrUpdateDto.setNickname(name);
         }
         if (Objects.nonNull(id)) {
-            userAddOrUpdateDto.setId(id);
+            Optional<UserPo> firstById = userDao.findFirstById(id);
+            if (firstById.isPresent()) {
+                userAddOrUpdateDto = userMapper.toUserAddOrUpdateDto(firstById.get());
+                userAddOrUpdateDto.setPasswordI(password);
+            }
         }
         upmsApplication.saveAppUser(userAddOrUpdateDto);
     }

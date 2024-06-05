@@ -50,6 +50,8 @@ public interface UserMapper {
 
     public User toUser(UserAddOrUpdateDto userAddOrUpdateDto);
 
+    public UserAddOrUpdateDto toUserAddOrUpdateDto(UserPo userPo);
+
     public UserVo toUserVo(UserPo userPo);
 
     @Mappings({@Mapping(target = "organizationalName",source = "organizational.name"),
