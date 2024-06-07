@@ -1,6 +1,8 @@
 package com.yue.chip.common.business.expose.call.vo;
 
-import com.aliyun.dyvmsapi20170525.models.QueryCallDetailByCallIdResponseBody;
+import com.aliyun.core.annotation.NameInMap;
+import lombok.Builder;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -9,5 +11,18 @@ import java.io.Serializable;
  * @description: TODO
  * @date 2023/11/27 下午3:35
  */
-public class QueryCallDetailByCallIdResponseBodyExposeVo extends QueryCallDetailByCallIdResponseBody implements Serializable {
+@Builder
+@Data
+public class QueryCallDetailByCallIdResponseBodyExposeVo implements Serializable {
+    @NameInMap("Code")
+    private String code;
+
+    @NameInMap("Data")
+    private String data;
+
+    @NameInMap("Message")
+    private String message;
+
+    @NameInMap("RequestId")
+    private String requestId;
 }

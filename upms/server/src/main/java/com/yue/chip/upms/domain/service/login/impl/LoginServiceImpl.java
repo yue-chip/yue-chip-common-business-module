@@ -80,7 +80,7 @@
 //                    UserWeiXinPo.builder()
 //                            .openId(openId)
 //                            .phoneNumber(StringUtils.hasText(phoneNumber)?phoneNumber:null)
-//                            .tenantNumber(TenantNumberUtil.getTenantNumber())
+//                            .tenantNumber(TenantUtil.getTenantNumber())
 //                            .build());
 //            optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
 //        }
@@ -144,4 +144,4 @@
 //            }
 //        }
 //    }
-//}
+}

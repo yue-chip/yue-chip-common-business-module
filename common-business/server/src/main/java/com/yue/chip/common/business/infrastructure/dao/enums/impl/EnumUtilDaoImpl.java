@@ -39,11 +39,12 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
             new ReturningWork<Boolean>() {
                 @Override
                 public Boolean execute(java.sql.Connection connection) throws SQLException {
+                    connection.setCatalog(upms+".t_tenant");
                     Statement stat =null;
                     ResultSet resultSet =null;
                     try {
                         stat = connection.createStatement();
-                        resultSet = stat.executeQuery("select tenant_number from `"+upms+"`.`t_tenant`; ");
+                        resultSet = stat.executeQuery("select tenant_number from t_tenant; ");
                         List<Long> tenantNumbers = new ArrayList<>();
                         while (resultSet.next()) {
                             Long tenantNumber = Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null;
@@ -53,7 +54,7 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
                             PreparedStatement delete = null;
                             PreparedStatement insert = null;
                             try {
-                                stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber)).concat("`"));
+                                connection.setCatalog(TenantDatabaseUtil.tenantDatabaseName(common,tenantNumber));
                                 delete = connection.prepareStatement("delete from t_enum_util where code =? and version = ?");
                                 delete.setString(1, enumUtilPo.getCode());
                                 delete.setString(2, enumUtilPo.getVersion());

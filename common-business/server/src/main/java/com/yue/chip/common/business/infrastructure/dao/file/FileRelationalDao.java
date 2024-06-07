@@ -3,11 +3,8 @@ package com.yue.chip.common.business.infrastructure.dao.file;
 import com.yue.chip.common.business.infrastructure.po.file.FileRelationalPo;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.stylesheets.LinkStyle;
-
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * @author Mr.Liu
@@ -23,6 +20,6 @@ public interface FileRelationalDao extends BaseDao<FileRelationalPo> {
      * @return
      */
     @Transactional(rollbackFor = {Exception.class})
-    public int deleteByTableIdAndTableNameAndFileFieldName(@NotNull Long tableId,@NotBlank String tableName,@NotBlank String fileFieldName);
+    public int deleteByTableIdAndTableNameAndFileFieldName(@NotNull Long tableId, @NotBlank String tableName, @NotBlank String fileFieldName);
 
 }
