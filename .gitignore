@@ -7,12 +7,13 @@ package-lock.json
 .env.*.local
 .gradle
 .idea
-
+logs
+*.log
 # Log files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
+components.d.ts
 .DS_Store
 {{#unit}}
 /test/unit/coverage/

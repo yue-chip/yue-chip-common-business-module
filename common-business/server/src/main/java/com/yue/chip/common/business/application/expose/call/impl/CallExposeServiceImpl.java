@@ -1,8 +1,7 @@
 package com.yue.chip.common.business.application.expose.call.impl;
 
-import com.aliyun.dyvmsapi20170525.Client;
-import com.aliyun.dyvmsapi20170525.models.*;
-import com.aliyun.teautil.models.RuntimeOptions;
+import com.aliyun.sdk.service.dyvmsapi20170525.AsyncClient;
+import com.aliyun.sdk.service.dyvmsapi20170525.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yue.chip.common.business.expose.call.CallExposeService;
@@ -14,7 +13,8 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.util.Map;
 
@@ -29,53 +29,45 @@ public class CallExposeServiceImpl implements CallExposeService {
 
     @Resource
     @Lazy
-    private Client client;
+    private AsyncClient client;
 
     @Override
     public Optional<SingleCallByTtsResponseBodyExposeVo> call(String calledNumber, Object ttsParam, String ttsCode, Integer playTimes, Integer volume, String outId) {
-        SingleCallByTtsRequest singleCallByTtsRequest = new SingleCallByTtsRequest()
-                .setCalledNumber(calledNumber)
-                .setTtsCode(ttsCode)
-                .setTtsParam(converterTtsParam(ttsParam))
-                .setPlayTimes(playTimes)
-                .setVolume(volume)
-                .setOutId(outId);
-        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        SingleCallByTtsRequest request = SingleCallByTtsRequest.builder()
+                .calledNumber(calledNumber)
+                .ttsCode(ttsCode)
+                .ttsParam(converterTtsParam(ttsParam))
+                .playTimes(playTimes)
+                .volume(volume)
+                .outId(outId)
+                .build();
+                // Asynchronously get the return value of the API request
+        CompletableFuture<SingleCallByTtsResponse> response = client.singleCallByTts(request);
+        // Synchronously get the return value of the API request
         try {
-            // 复制代码运行请自行打印 API 的返回值
-            SingleCallByTtsResponse singleCallByTtsResponse = client.singleCallByTtsWithOptions(singleCallByTtsRequest, runtime);
-            SingleCallByTtsResponseBody body = singleCallByTtsResponse.getBody();
+            SingleCallByTtsResponse resp = response.get();
+            SingleCallByTtsResponseBody body = resp.getBody();
             log.info("call结果：".concat(new ObjectMapper().writeValueAsString(body)));
-            SingleCallByTtsResponseBodyExposeVo detail = new SingleCallByTtsResponseBodyExposeVo();
+            SingleCallByTtsResponseBodyExposeVo detail = SingleCallByTtsResponseBodyExposeVo.builder().build();
             BeanUtils.copyProperties(body,detail);
             return Optional.ofNullable(detail);
         } catch (Exception e) {
-            log.info("call失败");
-            e.printStackTrace();
-            BusinessException.throwException("call失败："+e.getMessage());
+            throw new RuntimeException(e);
         }
-        return Optional.empty();
     }
 
     @Override
     public Optional<QueryCallDetailByCallIdResponseBodyExposeVo> callResult(String callId, Long prodId, Long queryDate) {
-        QueryCallDetailByCallIdRequest queryCallDetailByCallIdRequest = new QueryCallDetailByCallIdRequest();
-        queryCallDetailByCallIdRequest
-//        产品ID。取值：
-//        11000000300006：语音通知。
-//        11010000138001：语音验证码。
-//        11000000300005：语音IVR向指定号码发起交互式语音通话。
-//        11000000300009：语音SIP。
-//        11030000180001：智能外呼
-//        https://help.aliyun.com/zh/vms/developer-reference/api-dyvmsapi-2017-05-25-querycalldetailbycallid
-                .setCallId(callId)
-                .setProdId(prodId)
-                .setQueryDate(queryDate);
+        QueryCallDetailByCallIdRequest queryCallDetailByCallIdRequest = QueryCallDetailByCallIdRequest.builder()
+                .callId(callId)
+                .prodId(prodId)
+                .queryDate(queryDate)
+                .build();
         try {
-            QueryCallDetailByCallIdResponse queryCallDetailByCallIdResponse = client.queryCallDetailByCallIdWithOptions(queryCallDetailByCallIdRequest,new RuntimeOptions());
-            QueryCallDetailByCallIdResponseBody queryCallDetailByCallIdResponseBody = queryCallDetailByCallIdResponse.getBody();
+            CompletableFuture<QueryCallDetailByCallIdResponse> queryCallDetailByCallIdResponse = client.queryCallDetailByCallId(queryCallDetailByCallIdRequest);
+            QueryCallDetailByCallIdResponseBody queryCallDetailByCallIdResponseBody = queryCallDetailByCallIdResponse.get().getBody();
             log.info("call结果查寻：".concat(new ObjectMapper().writeValueAsString(queryCallDetailByCallIdResponseBody)));
-            QueryCallDetailByCallIdResponseBodyExposeVo detail = new QueryCallDetailByCallIdResponseBodyExposeVo();
+            QueryCallDetailByCallIdResponseBodyExposeVo detail = QueryCallDetailByCallIdResponseBodyExposeVo.builder().build();
             BeanUtils.copyProperties(queryCallDetailByCallIdResponseBody,detail);
             return Optional.ofNullable(detail);
         } catch (Exception e) {
