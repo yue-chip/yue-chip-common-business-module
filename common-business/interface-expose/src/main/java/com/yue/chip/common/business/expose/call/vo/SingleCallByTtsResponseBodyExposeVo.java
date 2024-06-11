@@ -1,7 +1,5 @@
 package com.yue.chip.common.business.expose.call.vo;
-
 import com.aliyun.dyvmsapi20170525.models.SingleCallByTtsResponseBody;
-
 import java.io.Serializable;
 
 /**
