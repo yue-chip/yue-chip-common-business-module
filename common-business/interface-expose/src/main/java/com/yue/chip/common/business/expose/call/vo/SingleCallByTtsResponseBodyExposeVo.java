@@ -1,5 +1,9 @@
 package com.yue.chip.common.business.expose.call.vo;
-import com.aliyun.dyvmsapi20170525.models.SingleCallByTtsResponseBody;
+
+import com.aliyun.core.annotation.NameInMap;
+import lombok.Builder;
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -7,5 +11,18 @@ import java.io.Serializable;
  * @description: TODO
  * @date 2023/11/27 下午3:34
  */
-public class SingleCallByTtsResponseBodyExposeVo extends SingleCallByTtsResponseBody implements Serializable {
+@Builder
+@Data
+public class SingleCallByTtsResponseBodyExposeVo implements Serializable {
+    @NameInMap("CallId")
+    private String callId;
+
+    @NameInMap("Code")
+    private String code;
+
+    @NameInMap("Message")
+    private String message;
+
+    @NameInMap("RequestId")
+    private String requestId;
 }
