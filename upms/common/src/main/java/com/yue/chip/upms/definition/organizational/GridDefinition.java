@@ -28,10 +28,10 @@ public class GridDefinition extends BaseDefinition {
     //@Schema(description = "用户id")
     private Long userId;
 
-    @Schema(description = "父节点id")
+//    @Schema(description = "父节点id")
     private Long parentId;
 
-    @Schema(description = "排序")
+//    @Schema(description = "排序")
     private Integer sort;
 
 }

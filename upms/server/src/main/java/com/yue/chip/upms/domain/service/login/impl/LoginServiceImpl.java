@@ -1,8 +1,9 @@
 package com.yue.chip.upms.domain.service.login.impl;
 
 //import com.yue.chip.authentication.YueChipAuthenticationToken;
+
+import com.yue.chip.authentication.YueChipAuthenticationToken;
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.core.tenant.jpa.TenantUtil;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
@@ -16,6 +17,7 @@ import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
@@ -80,7 +82,7 @@ public class LoginServiceImpl implements LoginService {
                     UserWeiXinPo.builder()
                             .openId(openId)
                             .phoneNumber(StringUtils.hasText(phoneNumber)?phoneNumber:null)
-                            .tenantNumber(TenantUtil.getTenantNumber())
+                            .tenantNumber(TenantNumberUtil.getTenantNumber())
                             .build());
             optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
         }

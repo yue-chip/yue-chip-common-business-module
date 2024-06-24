@@ -9,7 +9,6 @@ import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.application.service.TestApplicationService;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import lombok.extern.java.Log;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -32,7 +31,7 @@ import java.util.Map;
 @RequestMapping()
 @Validated
 //@Tag(name = "测试")
-@Log
+//@Log
 public class TestController  {
 
     @Resource
@@ -62,7 +61,7 @@ public class TestController  {
     @AuthorizationIgnore
     //@Operation(summary = "测试-1", description = "测试-1")
     public IResultData test(String name){
-        log.info("test");
+//        log.info("test");
         upmsApplication.test("刘方");
         return ResultData.builder().build();
     }
@@ -73,7 +72,7 @@ public class TestController  {
     //@Operation(summary = "测试文件", description = "测试文件")
     public IResultData testFile(String name){
         Map map = fileExposeService.getUrl(14L,"storePhoto","store",null);
-        log.info(map.toString());
+//        log.info(map.toString());
         return ResultData.builder().build();
     }
 
