@@ -2,10 +2,6 @@ package com.yue.chip.upms.infrastructure.po.organizational;
 
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.organizational.GridUserDefinition;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,6 +10,9 @@ import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Table;
 
 /**
  * @author xianming.chen
@@ -31,9 +30,10 @@ import javax.persistence.Column;
 public class GridUserPo extends GridUserDefinition {
 
 
+    private Long id;
+
     @Override
     @Comment("用户id")
-    @NotNull
     @Column(name = "USER_ID")
     public Long getUserId() {
         return super.getUserId();
@@ -41,7 +41,6 @@ public class GridUserPo extends GridUserDefinition {
 
     @Override
     @Comment("网格id")
-    @NotNull
     @Column(name = "GRID_ID")
     public Long getGridId() {
         return super.getGridId();
