@@ -350,17 +350,17 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         List<GridPo> gridPoList = gridDao.findAllByOrganizationalId(organizationalId);
         if (!CollectionUtils.isEmpty(gridPoList)) {
             List<GridVo2> gridVos = gridMapper.toListGridVo(gridPoList);
-            Set<Long> userIdList = new HashSet<>();
             gridVos.forEach(gridVo -> {
+                List<Long> userIdList = new ArrayList<>();
                 if (Objects.nonNull(gridVo.getUserId())) {
                     userIdList.add(gridVo.getUserId());
                 }
                 List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridVo.getId());
                 if (!CollectionUtils.isEmpty(gridUserPoList)) {
-                    Set<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toSet());
+                    List<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toList());
                     userIdList.addAll(userIds);
                 }
-                List<UserPo> userPoList = userDao.findAllByIdIn2(userIdList);
+                List<UserPo> userPoList = userDao.findAllByIdIn(userIdList);
                 if (!CollectionUtils.isEmpty(userPoList)) {
                     List<UserVo> listUserVo = userMapper.toListUser(userPoList);
                     gridVo.setUser(listUserVo);
