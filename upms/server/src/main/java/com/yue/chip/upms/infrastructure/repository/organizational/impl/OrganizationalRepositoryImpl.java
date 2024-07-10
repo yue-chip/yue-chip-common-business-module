@@ -350,8 +350,8 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         List<GridPo> gridPoList = gridDao.findAllByOrganizationalId(organizationalId);
         if (!CollectionUtils.isEmpty(gridPoList)) {
             List<GridVo2> gridVos = gridMapper.toListGridVo(gridPoList);
+            List<Long> userIdList = new ArrayList<>();
             gridVos.forEach(gridVo -> {
-                List<Long> userIdList = new ArrayList<>();
                 if (Objects.nonNull(gridVo.getUserId())) {
                     userIdList.add(gridVo.getUserId());
                 }
