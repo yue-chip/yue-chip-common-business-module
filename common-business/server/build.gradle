@@ -24,7 +24,7 @@ dependencies {
     api 'yue.chip:yue-chip-serve-starter'
     api 'yue.chip:yue-chip-business-starter'
 //    api 'yue.chip:yue-chip-security'
-    api "yue.chip:yue-chip-oauth2-resource-server"
+//    api "yue.chip:yue-chip-oauth2-resource-server"
     api 'io.minio:minio'
     api ('com.aliyun:alibabacloud-dysmsapi20170525') {
         exclude group: "org.dom4j", module: "dom4j"

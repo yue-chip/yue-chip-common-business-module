@@ -8,8 +8,6 @@ import com.yue.chip.common.business.interfaces.dto.enuns.EnumUtilDto;
 import com.yue.chip.common.business.interfaces.vo.enums.EnumUtilVo;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
-import com.yue.chip.core.controller.BaseController;
-import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -49,6 +47,7 @@ public class EnumUtilController   {
 
     @GetMapping("")
     @Operation(description = "获取枚举",summary = "获取枚举")
+    @AuthorizationIgnore
     public IResultData<EnumUtilVo> get(@NotBlank(message = "枚举编码不能为空") @Parameter(description = "枚举编码",name = "code",required = true)String code,
                                        @NotBlank(message = "枚举版本号不能为空") @Parameter(description = "枚举版本号",name = "version",required = true) String version) {
         Optional<EnumUtil> optional = enumUtilRepository.find(code,version);
