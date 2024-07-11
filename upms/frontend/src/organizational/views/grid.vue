@@ -254,7 +254,7 @@ function del(id: string[]) {
                     return qs.stringify(params, { indices: false })
                 }
             };
-            axios.axiosDelete("/upms/console/grid/delete", params, (data: any) => {
+            axios.axiosDelete("/security/pc/store/grid/delete", params, (data: any) => {
                 if (data.status === 200) {
                     message.info(data.message);
                     search();
