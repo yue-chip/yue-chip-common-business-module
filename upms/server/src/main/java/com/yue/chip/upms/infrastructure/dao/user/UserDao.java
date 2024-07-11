@@ -54,6 +54,7 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @return
      */
     List<UserPo> findAllByIdIn(@NotNull @Size(min = 1) List<Long> userIds);
+//    List<UserPo> findAllByIdIn2(@NotNull @Size(min = 1) Set<Long> userIds);
 
     /**
      * 根据name或手机号模糊查询

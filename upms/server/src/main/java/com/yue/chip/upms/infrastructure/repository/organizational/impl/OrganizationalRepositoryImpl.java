@@ -5,6 +5,7 @@ import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.exception.BusinessException;
+import com.yue.chip.grid.vo.GridTreeVo;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
@@ -351,10 +352,10 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
             List<GridVo2> gridVos = gridMapper.toListGridVo(gridPoList);
             gridVos.forEach(gridVo -> {
                 List<Long> userIdList = new ArrayList<>();
-                if (Objects.nonNull(gridVo.getUserId())) {
+                List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridVo.getId());
+                if (Objects.nonNull(gridVo.getUserId()) && CollectionUtils.isEmpty(gridUserPoList)) {
                     userIdList.add(gridVo.getUserId());
                 }
-                List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridVo.getId());
                 if (!CollectionUtils.isEmpty(gridUserPoList)) {
                     List<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toList());
                     userIdList.addAll(userIds);
@@ -371,6 +372,33 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
 
     }
 
+    @Override
+    public List<GridTreeVo> listGridTree2(Long organizationalId) {
+        List<GridTreeVo> tree = new ArrayList<>();
+        List<GridPo> gridPoList = gridDao.findAllByOrganizationalId(organizationalId);
+        if (!CollectionUtils.isEmpty(gridPoList)) {
+            List<GridTreeVo> gridVos = gridMapper.toListGridTreeVo(gridPoList);
+            gridVos.forEach(gridVo -> {
+                List<Long> userIdList = new ArrayList<>();
+                if (Objects.nonNull(gridVo.getUserId())) {
+                    userIdList.add(gridVo.getUserId());
+                }
+                List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridVo.getId());
+                if (!CollectionUtils.isEmpty(gridUserPoList)) {
+                    List<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toList());
+                    userIdList.addAll(userIds);
+                }
+                List<UserPo> userPoList = userDao.findAllByIdIn(userIdList);
+//                if (!CollectionUtils.isEmpty(userPoList)) {
+//                    List<UserVo> listUserVo = userMapper.toListUser(userPoList);
+//                    gridVo.setUser(listUserVo);
+//                }
+            });
+            tree = buildTree2(gridVos);
+        }
+        return tree;
+    }
+
     private List<GridVo2> buildTree(List<GridVo2> gridVos) {
         Map<Long, List<GridVo2>> map = new HashMap<>();
         for (GridVo2 gridVo : gridVos) {
@@ -382,6 +410,17 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         return buildTreeRecursive(map, 0L);
     }
 
+    private List<GridTreeVo> buildTree2(List<GridTreeVo> gridVos) {
+        Map<Long, List<GridTreeVo>> map = new HashMap<>();
+        for (GridTreeVo gridVo : gridVos) {
+            if (!map.containsKey(gridVo.getParentId())) {
+                map.put(gridVo.getParentId(), new ArrayList<>());
+            }
+            map.get(gridVo.getParentId()).add(gridVo);
+        }
+        return buildTreeRecursive2(map, 0L);
+    }
+
     private List<GridVo2> buildTreeRecursive(Map<Long, List<GridVo2>> map, Long parentId) {
         List<GridVo2> gridVos = map.get(parentId);
         if (gridVos == null) {
@@ -390,6 +429,18 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         gridVos.sort((a, b) -> a.getSort() - b.getSort());
         for (GridVo2 gridVo : gridVos) {
             gridVo.setChildren(buildTreeRecursive(map, gridVo.getId()));
+        }
+        return gridVos;
+    }
+
+    private List<GridTreeVo> buildTreeRecursive2(Map<Long, List<GridTreeVo>> map, Long parentId) {
+        List<GridTreeVo> gridVos = map.get(parentId);
+        if (gridVos == null) {
+            return new ArrayList<>();
+        }
+        gridVos.sort((a, b) -> a.getSort() - b.getSort());
+        for (GridTreeVo gridVo : gridVos) {
+            gridVo.setChildren(buildTreeRecursive2(map, gridVo.getId()));
         }
         return gridVos;
     }

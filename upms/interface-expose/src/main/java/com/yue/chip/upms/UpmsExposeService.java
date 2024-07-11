@@ -4,6 +4,8 @@ import com.yue.chip.core.Optional;
 import com.yue.chip.core.PageSerializable;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.grid.vo.GridExposeVo;
+import com.yue.chip.grid.vo.GridTreeVo;
+import com.yue.chip.grid.vo.GridVo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
@@ -114,6 +116,13 @@ public interface UpmsExposeService {
      * @return
      */
     public List<GridExposeVo> findByOrganizationalId(@NotNull Long organizationalId);
+
+    /**
+     * 获取机构下的网格树形结构
+     * @param organizationalId
+     * @return
+     */
+    List<GridTreeVo> findTreeByOrganizationalId(@NotNull Long organizationalId);
 
     /**
      * 根据网格id查询网格
