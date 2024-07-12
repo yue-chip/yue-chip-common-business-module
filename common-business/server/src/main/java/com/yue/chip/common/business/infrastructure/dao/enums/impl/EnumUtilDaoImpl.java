@@ -39,7 +39,7 @@ public class EnumUtilDaoImpl implements EnumUtilDaoEx {
             new ReturningWork<Boolean>() {
                 @Override
                 public Boolean execute(java.sql.Connection connection) throws SQLException {
-                    connection.setCatalog(upms+".t_tenant");
+                    connection.setCatalog(upms);
                     Statement stat =null;
                     ResultSet resultSet =null;
                     try {

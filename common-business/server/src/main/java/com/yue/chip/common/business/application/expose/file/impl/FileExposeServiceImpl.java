@@ -5,7 +5,9 @@ import com.yue.chip.common.business.definition.file.FileDefinition;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.expose.file.FileExposeService;
+import com.yue.chip.common.business.expose.sms.SmsExposeService;
 import jakarta.annotation.Resource;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.StringUtils;
 
@@ -24,6 +26,9 @@ public class FileExposeServiceImpl implements FileExposeService {
     @Resource
     private FileMapper fileMapper;
 
+    @DubboReference
+    private SmsExposeService smsExposeService;
+
     @Override
     public Optional<FileDefinition> find(Long fileId) {
         Optional<File> optional = fileRepository.find(fileId);
@@ -39,6 +44,7 @@ public class FileExposeServiceImpl implements FileExposeService {
         if (optional.isPresent()){
             return optional.get().getUrl();
         }
+        smsExposeService.sendSms();
         return "";
     }
 
@@ -116,6 +122,12 @@ public class FileExposeServiceImpl implements FileExposeService {
         List<Long> fileIds = new ArrayList<>();
         fileIds.add(fileId);
         return save(tableId, tableName, fileFieldName, fileIds);
+    }
+
+    @Override
+    public String testSendSms() {
+        smsExposeService.sendSms();
+        return "";
     }
 //
 //    @Override

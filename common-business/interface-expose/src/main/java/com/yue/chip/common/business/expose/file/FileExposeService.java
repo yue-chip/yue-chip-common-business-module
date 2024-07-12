@@ -121,4 +121,5 @@ public interface FileExposeService {
 //    @Deprecated //Tri协议下会有问题  似乎是没法反序列化Long...
 //    public List<Long> save(@NotNull Long tableId, @NotBlank String tableName, @NotBlank String fileFieldName,@NotNull @Size(min = 1) Long... fileId);
 
+    public String testSendSms();
 }
