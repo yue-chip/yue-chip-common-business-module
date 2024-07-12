@@ -44,7 +44,6 @@ public class FileExposeServiceImpl implements FileExposeService {
         if (optional.isPresent()){
             return optional.get().getUrl();
         }
-        smsExposeService.sendSms();
         return "";
     }
 
@@ -122,12 +121,6 @@ public class FileExposeServiceImpl implements FileExposeService {
         List<Long> fileIds = new ArrayList<>();
         fileIds.add(fileId);
         return save(tableId, tableName, fileFieldName, fileIds);
-    }
-
-    @Override
-    public String testSendSms() {
-        smsExposeService.sendSms();
-        return "";
     }
 //
 //    @Override
