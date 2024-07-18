@@ -1,5 +1,6 @@
 package com.yue.chip.common.business.interfaces.facade.file;
 
+import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.common.business.assembler.file.FileMapper;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
@@ -7,8 +8,6 @@ import com.yue.chip.common.business.domain.service.file.FileService;
 import com.yue.chip.common.business.interfaces.vo.file.FileVo;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
-import com.yue.chip.core.controller.BaseController;
-import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -43,6 +42,7 @@ public class FileController  {
 
     @PostMapping("/upload")
     @Operation(description = "上传文件(支持多文件)",summary = "上传文件(支持多文件)")
+    @AuthorizationIgnore
     public IResultData<List<FileVo>> upload(StandardMultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
         Map<String, MultipartFile> files = multipartHttpServletRequest.getFileMap();
         List<FileVo> fileList = new ArrayList<FileVo>();
