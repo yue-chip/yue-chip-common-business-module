@@ -54,7 +54,7 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
     }
 
     @Override
-    public void userOrganizational(Long userId, Long organizationalId) {
+    public void userOrganizational(Long userId, List<Long> organizationalId) {
         Optional<Organizational> optional = organizationalRepository.findByUserId(userId);
         if (optional.isPresent()) {
             Organizational organizational = optional.get();
@@ -64,13 +64,15 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
             }
         }
         organizationalRepository.deleteOrganizationalByUserId(userId);
-        if (Objects.nonNull(organizationalId)) {
-            organizationalRepository.saveOrganizationalUser(
-                    OrganizationalUserPo.builder()
-                    .organizationalId(organizationalId)
-                    .userId(userId)
-                    .build()
-            );
+        if (Objects.nonNull(organizationalId) && !organizationalId.isEmpty()) {
+            organizationalId.forEach(id -> {
+                organizationalRepository.saveOrganizationalUser(
+                        OrganizationalUserPo.builder()
+                                .organizationalId(id)
+                                .userId(userId)
+                                .build()
+                );
+            });
         }
     }
 

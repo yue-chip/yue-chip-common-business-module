@@ -10,6 +10,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 /**
  * @author Mr.Liu
  * @date 2023/4/20 下午3:19
@@ -22,8 +24,8 @@ import lombok.experimental.SuperBuilder;
 public class UserAddOrUpdateDto extends UserDefinition {
 
 //    @NotBlank(message = "组织机构ID不能为空",groups = {Validator.Insert.class,Validator.Update.class})
-    //@Schema(description = "组织机构ID")
-    private Long organizationalId;
+//    @Schema(description = "组织机构ID")
+    private List<Long> organizationalId;
 
     @NotBlank(message = "密码不能为空",groups = {Validator.Insert.class})
     //@Schema(description = "密码")
