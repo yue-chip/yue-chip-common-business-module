@@ -2,6 +2,8 @@ package com.yue.chip.upms.domain.service.upms;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 /**
  * @author Mr.Liu
  * @date 2023/3/6 上午11:26
@@ -20,5 +22,5 @@ public interface UpmsDomainService {
      * @param userId
      * @param organizationalId
      */
-    public void userOrganizational(@NotNull Long userId,Long organizationalId);
+    public void userOrganizational(@NotNull Long userId, List<Long> organizationalId);
 }
