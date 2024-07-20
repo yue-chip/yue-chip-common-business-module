@@ -15,7 +15,7 @@
             <a-form-item label="所属机构" name="organizationalId" ref="organizationalId">
                 <a-tree-select v-model:value="addOrUpdateModel.organizationalId" tree-data-simple-mode
                     style="width: 100%" :tree-data="treeData" allow-clear :show-checked-strategy="SHOW_PARENT"
-                    placeholder="请选择所属机构" tree-node-filter-prop="label" mode="tags" />
+                    placeholder="请选择所属机构" tree-node-filter-prop="label" multiple />
             </a-form-item>
             <a-form-item label="电话号码" name="phoneNumber" ref="phoneNumber">
                 <a-input placeholder="请输入电话号码" v-model:value="addOrUpdateModel.phoneNumber" />
