@@ -159,6 +159,9 @@ async function getInfo(id: string) {
         (data: any) => {
             if (data.status === 200) {
                 addOrUpdateModel.value = data.data;
+                addOrUpdateModel.value.organizationalId= addOrUpdateModel.value.organizationalList.map((item:string) => item.id);
+                console.log( addOrUpdateModel.value);
+                
             }
         }, null, null)
 }
