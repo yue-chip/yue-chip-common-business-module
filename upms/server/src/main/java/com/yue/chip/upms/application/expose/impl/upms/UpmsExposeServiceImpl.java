@@ -233,9 +233,9 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public Map<String, Long> bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList) {
-        Map<String, Long> gridUserPos = organizationalRepository.bindUserOrganizationalGird(voList);
-        return gridUserPos;
+    public UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList) {
+        UserGridVo map = organizationalRepository.bindUserOrganizationalGird(voList);
+        return map;
     }
 
 }

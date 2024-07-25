@@ -152,6 +152,6 @@ public interface UpmsExposeService {
      * 消防平台导入网格，用户，机构，网格创建或绑定
      * @return
      */
-    Map<String, Long> bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList);
+    UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList);
 
 }

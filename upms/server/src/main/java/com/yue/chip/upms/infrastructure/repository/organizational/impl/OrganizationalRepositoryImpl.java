@@ -31,6 +31,7 @@ import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.upms.vo.UserExposeVo;
+import com.yue.chip.upms.vo.UserGridVo;
 import com.yue.chip.upms.vo.UserOrganizationalGirdVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import javax.annotation.Resource;
@@ -489,7 +490,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public Map<String, Long> bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList) {
+    public UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList) {
         Map<String, Long> bindUserGird = new HashMap<>();
         if (!CollectionUtils.isEmpty(voList)) {
             // 过滤重复网格员
@@ -590,7 +591,9 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
                 }
             });
         }
-        return bindUserGird;
+        UserGridVo userGridVo = new UserGridVo();
+        userGridVo.setMap(bindUserGird);
+        return userGridVo;
     }
 
     private void findAllChildren(Long parentId,List<Organizational> organizationalList) {
