@@ -13,12 +13,15 @@ import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.vo.UserExposeVo;
+import com.yue.chip.upms.vo.UserOrganizationalGirdVo;
+
 import org.springframework.data.domain.Page;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -97,14 +100,14 @@ public interface OrganizationalRepository {
      * @param name
      * @return
      */
-    public List<OrganizationalTreeListVo> findTree(@NotNull Long parentId, @NotNull State state,String name);
+    public List<OrganizationalTreeListVo> findTree(@NotNull Long parentId, @NotNull State state, String name);
 
     /**
      * 查询树形结构（当前登录用户所属的机构）
      * @param state
      * @return
      */
-    public List<OrganizationalTreeListVo> findTree1( @NotNull State state);
+    public List<OrganizationalTreeListVo> findTree1(@NotNull State state);
 
     /**
      * 查村所有的子部门
@@ -244,4 +247,12 @@ public interface OrganizationalRepository {
      * @return
      */
     List<Grid> findGridByName(String name);
+
+    /**
+     * 用户，机构，网格创建或绑定
+     * @return
+     */
+    Map<String, Long> bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList);
+
+
 }
