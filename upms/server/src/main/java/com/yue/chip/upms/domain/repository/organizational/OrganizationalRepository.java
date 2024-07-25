@@ -13,6 +13,7 @@ import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.vo.UserExposeVo;
+import com.yue.chip.upms.vo.UserGridVo;
 import com.yue.chip.upms.vo.UserOrganizationalGirdVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -275,7 +276,7 @@ public interface OrganizationalRepository {
      * 用户，机构，网格创建或绑定
      * @return
      */
-    Map<String, Long> bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList);
+    UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList);
 
 
 }
