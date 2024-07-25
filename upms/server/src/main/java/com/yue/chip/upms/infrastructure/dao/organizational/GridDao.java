@@ -59,4 +59,6 @@ public interface GridDao extends BaseDao<GridPo>, GridDaoEx {
      */
     List<GridPo> findAllByParentId(Long id);
 
+    List<GridPo> findAllByNameIn(Set<String> gridNames);
+
 }

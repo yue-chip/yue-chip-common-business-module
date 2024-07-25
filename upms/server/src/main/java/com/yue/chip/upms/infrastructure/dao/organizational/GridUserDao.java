@@ -23,4 +23,7 @@ public interface GridUserDao extends BaseDao<GridUserPo> {
     @Transactional
     @Query("DELETE FROM GridUserPo e WHERE e.id IN :ids")
     void deleteByIds(@Param("ids") List<Long> ids);
+
+    List<GridUserPo> findAllByGridIdInAndUserId(List<Long> gridIds, Long userId);
+
 }

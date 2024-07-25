@@ -12,17 +12,17 @@ import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalUserMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
+import com.yue.chip.upms.definition.organizational.GridUserDefinition;
 import com.yue.chip.upms.domain.aggregates.Grid;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
-import com.yue.chip.upms.vo.OrganizationalExposeVo;
-import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
-import com.yue.chip.upms.vo.UserExposeVo;
+import com.yue.chip.upms.vo.*;
 import com.yue.chip.utils.CurrentUserUtil;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
@@ -230,6 +230,12 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public List<OrganizationalUserExposeVo> findUserAllByUserIdIn(Set<Long> userId) {
         List<OrganizationalUserPo> list = organizationalRepository.findUserAllByUserIdIn(userId);
         return organizationalUserMapper.toListOrganizationalUserExposeVo(list);
+    }
+
+    @Override
+    public Map<String, Long> bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList) {
+        Map<String, Long> gridUserPos = organizationalRepository.bindUserOrganizationalGird(voList);
+        return gridUserPos;
     }
 
 }

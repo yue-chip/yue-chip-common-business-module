@@ -6,6 +6,7 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.grid.vo.GridTreeVo;
+import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
@@ -24,11 +25,13 @@ import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.upms.vo.UserExposeVo;
+import com.yue.chip.upms.vo.UserOrganizationalGirdVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
@@ -64,6 +67,9 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
 
     @Resource
     private UpmsRepository upmsRepository;
+
+    @Resource
+    private UpmsApplication upmsApplication;
 
     @Resource
     private GridDao gridDao;
@@ -482,11 +488,116 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         return gridMapper.toGrid(list);
     }
 
-    private void findAllChildren(Long parentId,List<Organizational> organizationals) {
+    @Override
+    public Map<String, Long> bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList) {
+        Map<String, Long> bindUserGird = new HashMap<>();
+        if (!CollectionUtils.isEmpty(voList)) {
+            // 过滤重复网格员
+            Set<String> userList = voList.stream().map(UserOrganizationalGirdVo::getNameAndPhone).collect(Collectors.toSet());
+            // 筛选正确的网格员信息
+            List<String> phoneList = new ArrayList<>();
+            userList.forEach(vo -> {
+                String phone = vo.replaceAll("\\D", "");
+                if (!userDao.findFirstByUsername(phone).isPresent()) {
+                    phoneList.add(vo);
+                }
+            });
+            // 用户信息与机构id关联
+            Map<String, Long> userOrganizationalIdMap = new HashMap<>();
+            voList.forEach(vo -> {
+                userOrganizationalIdMap.put(vo.getNameAndPhone(), vo.getOrganizationalId());
+            });
+            // 添加未录入库的网格员
+            if (!CollectionUtils.isEmpty(phoneList)) {
+                phoneList.forEach(user -> {
+                    String name = user.replaceAll("\\d", "");
+                    String phone = user.replaceAll("\\D", "");
+                    UserAddOrUpdateDto userAddOrUpdateDto = new UserAddOrUpdateDto();
+                    userAddOrUpdateDto.setPasswordI(phone);
+                    userAddOrUpdateDto.setUsername(phone);
+                    userAddOrUpdateDto.setName(name);
+                    userAddOrUpdateDto.setPhoneNumber(phone);
+                    List<Long> organizationalIds = new ArrayList<>();
+                    organizationalIds.add(userOrganizationalIdMap.get(user));
+                    userAddOrUpdateDto.setOrganizationalId(organizationalIds);
+                    upmsApplication.saveUser(userAddOrUpdateDto);
+                });
+            }
+
+            voList.forEach(vo -> {
+                String phone = vo.getNameAndPhone().replaceAll("\\D", "");
+                UserPo user = userDao.findFirstByUsername(phone).get();
+                // 找出相似的网格
+                List<GridPo> gridPoList = gridDao.findAllByNameLike("%" + vo.getGirdName() + "%");
+                if (!CollectionUtils.isEmpty(gridPoList)) {
+                    // 网格与网格父节点关联
+                    Map<Long, Long> gridParentIdMap = gridPoList.stream().collect(Collectors.toMap(GridPo::getId, GridPo::getParentId));
+                    // 网格id
+                    List<Long> gridList = gridPoList.stream().map(GridPo::getId).collect(Collectors.toList());
+                    List<GridUserPo> gridUserList = gridUserDao.findAllByGridIdInAndUserId(gridList, user.getId());
+                    if (!CollectionUtils.isEmpty(gridUserList)) { // 默认网格员在类似网格名称中，只绑定一个网格
+                        // 网格员已与网格绑定
+                        bindUserGird.put(vo.getNameAndPhone(), gridUserList.get(0).getGridId());
+                    } else {
+                        // 网格员未在类似网格名称中绑定过网格
+                        // 最父级的网格
+                        Long parentGridId = 0L;
+                        for (GridPo gridUserPo : gridPoList) {
+                            if (gridParentIdMap.get(gridUserPo.getId()) == 0) {
+                                parentGridId = gridUserPo.getId();
+                            }
+                        }
+                        if (parentGridId > 0) {
+                            // 创建子网格
+                            int i = gridPoList.size();
+                            String gridName = vo.getGirdName() + i;
+                            Long organizationalId = userOrganizationalIdMap.get(vo.getNameAndPhone());
+                            GridPo gridPo = new GridPo();
+                            gridPo.setParentId(parentGridId);
+                            gridPo.setOrganizationalId(organizationalId);
+                            gridPo.setName(gridName);
+                            gridPo.setUserId(user.getId());
+                            gridPo.setSort(1);
+                            GridPo gridPo1 = gridDao.save(gridPo);
+                            GridUserPo userPo = new GridUserPo();
+                            userPo.setGridId(gridPo1.getId());
+                            userPo.setUserId(user.getId());
+                            gridUserDao.save(userPo);
+                            bindUserGird.put(vo.getNameAndPhone(), gridPo1.getId());
+                        }
+                    }
+                } else { // 一个类似网格名称都没有创建
+                    // 创建父节点网格
+                    Long organizationalId = userOrganizationalIdMap.get(vo.getNameAndPhone());
+                    GridPo gridPo = new GridPo();
+                    gridPo.setParentId(0L);
+                    gridPo.setOrganizationalId(organizationalId);
+                    gridPo.setSort(1);
+                    gridPo.setName(vo.getGirdName());
+                    GridPo parentGridPo = gridDao.save(gridPo);
+                    GridPo gridPo1 = new GridPo();
+                    gridPo1.setParentId(parentGridPo.getId());
+                    gridPo1.setOrganizationalId(organizationalId);
+                    gridPo1.setSort(1);
+                    gridPo1.setUserId(user.getId());
+                    gridPo1.setName(vo.getGirdName() + 1);
+                    GridPo gridPo2 = gridDao.save(gridPo);
+                    GridUserPo userPo = new GridUserPo();
+                    userPo.setGridId(gridPo2.getId());
+                    userPo.setUserId(user.getId());
+                    gridUserDao.save(userPo);
+                    bindUserGird.put(vo.getNameAndPhone(), gridPo2.getId());
+                }
+            });
+        }
+        return bindUserGird;
+    }
+
+    private void findAllChildren(Long parentId,List<Organizational> organizationalList) {
         List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
         list.forEach(organizationalPo -> {
-            organizationals.add(organizationalMapper.toOrganizational(organizationalPo));
-            findAllChildren(organizationalPo.getId(),organizationals);
+            organizationalList.add(organizationalMapper.toOrganizational(organizationalPo));
+            findAllChildren(organizationalPo.getId(),organizationalList);
         });
     }
 }

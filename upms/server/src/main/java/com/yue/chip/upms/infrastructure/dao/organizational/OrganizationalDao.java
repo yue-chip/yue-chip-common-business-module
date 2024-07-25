@@ -73,4 +73,7 @@ public interface OrganizationalDao extends BaseDao<OrganizationalPo> ,Organizati
     public int deleteLeader(@NotNull @Param("leaderId")   Long leaderId);
 
     public List<OrganizationalPo> findAllByIdIn(Set<Long> Ids);
+
+    List<OrganizationalPo> findAllByNameIn(Set<String> names);
+
 }
