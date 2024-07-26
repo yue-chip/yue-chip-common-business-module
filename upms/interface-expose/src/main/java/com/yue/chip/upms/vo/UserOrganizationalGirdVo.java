@@ -23,6 +23,8 @@ public class UserOrganizationalGirdVo implements Serializable {
 
     private Long organizationalId;
 
+    private String contact;
+
     private String girdName;
 
 }
