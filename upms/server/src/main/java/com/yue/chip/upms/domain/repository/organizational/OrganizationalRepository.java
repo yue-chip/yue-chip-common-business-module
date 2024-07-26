@@ -13,12 +13,15 @@ import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.vo.UserExposeVo;
+import com.yue.chip.upms.vo.UserGridVo;
+import com.yue.chip.upms.vo.UserOrganizationalGirdVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -55,42 +58,49 @@ public interface OrganizationalRepository {
 
     /**
      * 删除用户与组织机构的关联关系
+     *
      * @param userId
      */
     public void deleteOrganizationalByUserId(@NotNull Long userId);
 
     /**
      * 删除用户与组织机构的关联关系
+     *
      * @param organizationalId
      */
     public void deleteOrganizationalUserByOrganizationalId(@NotNull Long organizationalId);
 
     /**
      * 保存用户与组织架构的关联关系
+     *
      * @param organizationalUserPo
      */
     public void saveOrganizationalUser(@NotNull OrganizationalUserPo organizationalUserPo);
 
     /**
      * 保存组织架构
+     *
      * @param organizational
      */
     public void saveOrganizational(@NotNull OrganizationalPo organizational);
 
     /**
      * 删除祖籍机构
+     *
      * @param id
      */
     public void deleteOrganizationalById(@NotNull Long id);
 
     /**
      * 修改组织机构
+     *
      * @param organizational
      */
     public void updateOrganizational(@NotNull OrganizationalPo organizational);
 
     /**
      * 根据父节点id和机构名称查询机构
+     *
      * @param parentId
      * @param name
      * @return
@@ -105,17 +115,19 @@ public interface OrganizationalRepository {
      * @param name
      * @return
      */
-    public List<OrganizationalTreeListVo> findTree(@NotNull Long parentId, @NotNull State state,String name);
+    public List<OrganizationalTreeListVo> findTree(@NotNull Long parentId, @NotNull State state, String name);
 
     /**
      * 查询树形结构（当前登录用户所属的机构）
+     *
      * @param state
      * @return
      */
-    public List<OrganizationalTreeListVo> findTree1( @NotNull State state);
+    public List<OrganizationalTreeListVo> findTree1(@NotNull State state);
 
     /**
      * 查村所有的子部门
+     *
      * @param parentId
      * @return
      */
@@ -130,6 +142,7 @@ public interface OrganizationalRepository {
 
     /**
      * 查询机构id数组信息
+     *
      * @param ids
      * @return
      */
@@ -147,35 +160,42 @@ public interface OrganizationalRepository {
 
     /**
      * 新增网格
+     *
      * @param gridPo
      */
     public void saveGrid(@NotNull GridPo gridPo);
+
     /**
      * 新增网格2
+     *
      * @param gridPo
      */
     void saveGrid2(GridPo gridPo, List<Long> userIds);
 
     /**
      * 修改网格
+     *
      * @param gridPo
      */
     public void updateGrid(@NotNull GridPo gridPo, List<Long> userIds);
 
     /**
      * 删除网格
+     *
      * @param ids
      */
     public void deleteGrid(@NotNull @Size(min = 0) List<Long> ids);
 
     /**
      * 根据用户id删除网格
+     *
      * @param userId
      */
     public void deleteGridByUserId(@NotNull Long userId);
 
     /**
      * 根据机构id删除网格
+     *
      * @param organizationalId
      */
     public void deleteGridByOrganizationalId(@NotNull Long organizationalId);
@@ -201,6 +221,7 @@ public interface OrganizationalRepository {
 
     /**
      * 网格树形列表
+     *
      * @param organizationalId
      * @return
      */
@@ -220,6 +241,7 @@ public interface OrganizationalRepository {
 
     /**
      * 根据机构id查寻网格
+     *
      * @param organizationalId
      * @return
      */
@@ -227,6 +249,7 @@ public interface OrganizationalRepository {
 
     /**
      * 根据网格id查询网格
+     *
      * @param gridId
      * @return
      */
@@ -234,13 +257,16 @@ public interface OrganizationalRepository {
 
     /**
      * 根据机构id和用户id查询机构下的消防管理员
+     *
      * @param organizationalId
      * @param userId
      * @return
      */
     List<OrganizationalUserPo> findUserAllByOrganizationalIdAndUserIdIn(Long organizationalId, Set<Long> userId);
+
     /**
      * 根据用户id查询机构
+     *
      * @param userId
      * @return
      */
@@ -248,8 +274,17 @@ public interface OrganizationalRepository {
 
     /**
      * 通过名称查询网格
+     *
      * @param name
      * @return
      */
     List<Grid> findGridByName(String name);
+
+    /**
+     * 用户，机构，网格创建或绑定
+     * @return
+     */
+    UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList);
+
+
 }
