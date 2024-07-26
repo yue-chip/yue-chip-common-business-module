@@ -23,7 +23,7 @@ public class OrganizationalDaoImpl implements OrganizationalDaoEx {
     private BaseDao<OrganizationalPo> baseDao;
 
     @Override
-    public Optional<OrganizationalPo> findByUserId(Long userId) {
+    public Optional<OrganizationalPo> findByUserIdFist(Long userId) {
         if (Objects.isNull(userId)) {
             return Optional.empty();
         }
@@ -36,6 +36,19 @@ public class OrganizationalDaoImpl implements OrganizationalDaoEx {
             return Optional.ofNullable(list.get(0));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<OrganizationalPo> findByUserId(Long userId) {
+        if (Objects.isNull(userId)) {
+            return List.of();
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select o from OrganizationalPo o join OrganizationalUserPo ou on o.id=ou.organizationalId  where ou.userId = :userId ");
+        Map<String,Object> para = new HashMap<>();
+        para.put("userId",userId);
+        List<OrganizationalPo> list = (List<OrganizationalPo>) baseDao.findAll(sb.toString(),para);
+        return list;
     }
 
     @Override

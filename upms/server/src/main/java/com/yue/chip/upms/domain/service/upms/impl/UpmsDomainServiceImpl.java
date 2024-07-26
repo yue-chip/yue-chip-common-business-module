@@ -7,6 +7,8 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class UpmsDomainServiceImpl implements UpmsDomainService {
 
+    private static final Logger log = LoggerFactory.getLogger(UpmsDomainServiceImpl.class);
     @Resource
     private UpmsRepository upmsRepository;
 
@@ -31,7 +34,7 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
         List<RoleResourcesPo> list = new ArrayList<>();
         if (Objects.nonNull(resourcesIds)) {
             List<Long> newResourcesIds = new ArrayList<>();
-            newResourcesIds.addAll(Arrays.stream(resourcesIds).collect(Collectors.toList()));
+            newResourcesIds.addAll(Arrays.stream(resourcesIds).toList());
             for (Long id : resourcesIds) {
                 List<Long> allParentId = getAllParentId(id);
                 newResourcesIds.forEach(i->{
@@ -55,13 +58,14 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
 
     @Override
     public void userOrganizational(Long userId, List<Long> organizationalId) {
-        Optional<Organizational> optional = organizationalRepository.findByUserId(userId);
-        if (optional.isPresent()) {
-            Organizational organizational = optional.get();
-            if (!Objects.equals(organizationalId,organizational.getId()) ){
-                //清楚机构负责人
-                organizationalRepository.deleteLeader(userId);
-            }
+        List<Organizational> organizationalList = organizationalRepository.findByUserId(userId);
+        if (!organizationalList.isEmpty()) {
+            organizationalList.forEach(organizational -> {
+                if (!Objects.equals(organizationalId,organizational.getId()) ){
+                    //清楚机构负责人
+                    organizationalRepository.deleteLeader(userId);
+                }
+            });
         }
         organizationalRepository.deleteOrganizationalByUserId(userId);
         if (Objects.nonNull(organizationalId) && !organizationalId.isEmpty()) {

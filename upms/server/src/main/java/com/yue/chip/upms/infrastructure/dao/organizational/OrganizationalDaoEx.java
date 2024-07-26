@@ -1,7 +1,6 @@
 package com.yue.chip.upms.infrastructure.dao.organizational;
 
 import com.yue.chip.core.YueChipPage;
-import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,9 @@ public interface OrganizationalDaoEx {
      * @param userId
      * @return
      */
-    public Optional<OrganizationalPo> findByUserId(@NotNull Long userId);
+    public Optional<OrganizationalPo> findByUserIdFist(@NotNull Long userId);
+
+    public List<OrganizationalPo> findByUserId(@NotNull Long userId);
 
     public Page<OrganizationalPo> organizationalPoPage(List<Long> organizationalList, YueChipPage yueChipPage);
 

@@ -39,7 +39,15 @@ public interface OrganizationalRepository {
      * @param userId
      * @return
      */
-    public Optional<Organizational> findByUserId(@NotNull Long userId);
+    public List<Organizational> findByUserId(@NotNull Long userId);
+
+    /**
+     * 根据用户ID查询关联的组织机构
+     *
+     * @param userId
+     * @return
+     */
+    public Optional<Organizational> findByUserIdFist(@NotNull Long userId);
 
     /**
      * 根据ID查询关联的组织机构

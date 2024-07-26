@@ -21,11 +21,13 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.vo.OrganizationalExposeVo;
+import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import com.yue.chip.upms.vo.*;
 import com.yue.chip.utils.CurrentUserUtil;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 
@@ -154,9 +156,13 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         if (Objects.isNull(userId)) {
             return Collections.EMPTY_LIST;
         }
-        java.util.Optional<Organizational> optional = organizationalRepository.findByUserId(userId);
-        if (optional.isPresent()) {
-            return findOrganizationalAllChildrenByOrganizationalId(optional.get().getId());
+        List<Organizational> organizationalList = organizationalRepository.findByUserId(userId);
+        if (!organizationalList.isEmpty()) {
+            List<OrganizationalExposeVo> result = new ArrayList<>();
+            organizationalList.forEach(po -> {
+                result.addAll(findOrganizationalAllChildrenByOrganizationalId(po.getId()));
+            });
+            return result;
         }
         return Collections.EMPTY_LIST;
     }
