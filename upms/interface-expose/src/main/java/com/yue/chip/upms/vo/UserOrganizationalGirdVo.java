@@ -17,14 +17,24 @@ public class UserOrganizationalGirdVo implements Serializable {
 
     private String storeName;
 
-    private String nameAndPhone;
+    private String storeType;
+
+    private String place;
+
+    private String address;
 
     private String organizationalName;
 
-    private Long organizationalId;
+    private String girdName;
+
+    private String nameAndPhone;
+
+    private String fireWarden;
 
     private String contact;
 
-    private String girdName;
+    private String contactManager;
+
+    private Long organizationalId;
 
 }
