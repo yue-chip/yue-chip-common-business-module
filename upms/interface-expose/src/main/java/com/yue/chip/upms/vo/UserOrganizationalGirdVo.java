@@ -41,4 +41,6 @@ public class UserOrganizationalGirdVo implements Serializable {
 
     private String phone;
 
+    private String storeNameAndAddress;
+
 }
