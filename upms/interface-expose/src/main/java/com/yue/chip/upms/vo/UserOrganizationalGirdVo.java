@@ -25,12 +25,6 @@ public class UserOrganizationalGirdVo implements Serializable {
 
     private String nameAndPhone;
 
-    private String fireWarden;
-
-    private String contact;
-
-    private String contactManager;
-
     private Long organizationalId;
 
     private String name;
