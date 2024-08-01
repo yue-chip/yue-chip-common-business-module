@@ -17,10 +17,6 @@ public class UserOrganizationalGirdVo implements Serializable {
 
     private String storeName;
 
-    private String storeType;
-
-    private String place;
-
     private String address;
 
     private String organizationalName;
@@ -41,6 +37,5 @@ public class UserOrganizationalGirdVo implements Serializable {
 
     private String phone;
 
-    private String storeNameAndAddress;
 
 }
