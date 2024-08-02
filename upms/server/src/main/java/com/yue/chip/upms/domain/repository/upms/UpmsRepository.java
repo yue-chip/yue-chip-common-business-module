@@ -5,14 +5,13 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
-import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.validation.constraints.NotBlank;
@@ -35,6 +34,13 @@ public interface UpmsRepository {
      * @return
      */
     public Optional<User> findUserByUsername(@NotBlank String username);
+
+    /**
+     * 根据手机号码查询用户
+     * @param phoneNumber
+     * @return
+     */
+    public Optional<User> findUserByPhoneNumber(@NotBlank String phoneNumber);
 
     /**
      * 根据用户id查询用户
