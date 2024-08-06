@@ -150,5 +150,11 @@ public interface UpmsExposeService {
      * @return
      */
     UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList);
+    /**
+     * 根据网格id查询用户ids
+     * @param gridId
+     * @return
+     */
+    List<Long> findAllByGridId(@NotNull Long gridId);
 
 }
