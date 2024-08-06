@@ -17,9 +17,9 @@ import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.util.CollectionUtils;
 
+import java.util.*;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
@@ -53,6 +53,17 @@ public class GridExposeServiceImpl implements GridExposeService {
     public List<GridExposeVo> findGridByName(String name) {
         List<Grid> list = organizationalRepository.findGridByName(name);
         return gridMapper.toGridExposeVo(list);
+    }
+
+    @Override
+    public List<Long> findAllByGridId(Long gridId) {
+        List<Long> userIdList = new ArrayList<>();
+        List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridId);
+        if (!CollectionUtils.isEmpty(gridUserPoList)) {
+            List<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toList());
+            userIdList.addAll(userIds);
+        }
+        return userIdList;
     }
 
     @Override
