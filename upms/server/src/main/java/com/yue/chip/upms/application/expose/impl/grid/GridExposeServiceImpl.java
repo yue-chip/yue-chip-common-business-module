@@ -61,7 +61,9 @@ public class GridExposeServiceImpl implements GridExposeService {
         List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridId);
         if (!CollectionUtils.isEmpty(gridUserPoList)) {
             List<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toList());
-            userIdList.addAll(userIds);
+            if (!CollectionUtils.isEmpty(userIds)) {
+                userIdList.addAll(userIds);
+            }
         }
         return userIdList;
     }

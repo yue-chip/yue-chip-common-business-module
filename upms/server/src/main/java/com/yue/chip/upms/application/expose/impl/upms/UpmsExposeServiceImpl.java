@@ -19,6 +19,7 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
+import com.yue.chip.upms.infrastructure.dao.organizational.GridUserDao;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
@@ -58,6 +59,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
 
     @Resource
     private GridMapper gridMapper;
+    @Resource
+    private GridUserDao gridUserDao;
     @Resource
     private OrganizationalUserMapper organizationalUserMapper;
 
@@ -242,6 +245,19 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList) {
         UserGridVo map = organizationalRepository.bindUserOrganizationalGird(voList);
         return map;
+    }
+
+    @Override
+    public List<Long> findAllByGridId(Long gridId) {
+        List<Long> userIdList = new ArrayList<>();
+        List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridId);
+        if (!CollectionUtils.isEmpty(gridUserPoList)) {
+            List<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(userIds)) {
+                userIdList.addAll(userIds);
+            }
+        }
+        return userIdList;
     }
 
 }
