@@ -22,7 +22,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -262,6 +261,8 @@ public interface OrganizationalRepository {
      * @return
      */
     UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList);
+
+    Optional<Organizational> findRootOrganizational();
 
 
 }

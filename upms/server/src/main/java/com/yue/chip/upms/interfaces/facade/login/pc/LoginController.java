@@ -1,14 +1,15 @@
 package com.yue.chip.upms.interfaces.facade.login.pc;
 
+import cn.hutool.core.codec.Base64;
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
+import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.core.controller.BaseController;
 import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import com.yue.chip.upms.domain.service.login.LoginService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
+import com.yue.chip.utils.CurrentUserUtil;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
 import lombok.extern.java.Log;
@@ -28,12 +29,16 @@ import java.util.Map;
 @RestController()
 @RequestMapping()
 @Validated
-//@Tag(name = "登录")
+@Tag(name = "登录")
 @Log
 public class LoginController{
 
     @Resource
     private LoginService loginService;
+
+    @Resource
+    private UpmsApplication upmsApplication;
+
 
     @PostMapping("/login1")
     @AuthorizationIgnore
@@ -43,6 +48,23 @@ public class LoginController{
         String token = loginService.login(username,password);
         Map<String,String> map = new HashMap<>();
         map.put("token",token);
+        return ResultData.builder().data(map).build();
+    }
+
+    @PostMapping("/login2")
+    @AuthorizationIgnore
+    @Operation(summary = "登录", description = "登录")
+    public IResultData<String> login2(String data) {
+        CurrentUserUtil.setCurrentTenantNumber("48");
+        String str = Base64.decodeStr(data);
+        String username = str.split("&")[1].split("=")[1];
+        String name = str.split("&")[2].split("=")[1];
+        String password = "xiaowei123456";
+        upmsApplication.saveUser1( UserAddOrUpdateDto.builder().name(name).username(username).password(password).passwordI(password).build());
+        String token = loginService.login(username,password);
+        Map<String,String> map = new HashMap<>();
+        map.put("token",token);
+        CurrentUserUtil.cleanCurrentTenantNumber();
         return ResultData.builder().data(map).build();
     }
 
