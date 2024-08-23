@@ -607,6 +607,15 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         return userGridVo;
     }
 
+    @Override
+    public Optional<Organizational> findRootOrganizational() {
+        Optional<OrganizationalPo> optional = organizationalDao.findFirstByParentIdAndState(0L,State.NORMAL);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(organizationalMapper.toOrganizational(optional.get()));
+        }
+        return Optional.empty();
+    }
+
     private void findAllChildren(Long parentId,List<Organizational> organizationalList) {
         List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
         list.forEach(organizationalPo -> {

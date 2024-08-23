@@ -21,7 +21,6 @@ import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -285,6 +284,8 @@ public interface OrganizationalRepository {
      * @return
      */
     UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList);
+
+    Optional<Organizational> findRootOrganizational();
 
 
 }

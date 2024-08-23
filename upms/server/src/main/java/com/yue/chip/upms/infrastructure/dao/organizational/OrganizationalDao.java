@@ -36,6 +36,8 @@ public interface OrganizationalDao extends BaseDao<OrganizationalPo> ,Organizati
      */
     public List<OrganizationalPo> findAllByParentIdAndStateOrderBySortAsc(@NotNull Long parentId,@NotNull State state);
 
+    public Optional<OrganizationalPo> findFirstByParentIdAndState(@NotNull Long parentId,@NotNull State state);
+
     /**
      * 根据父节点id查询子节点
      * @param parentId
