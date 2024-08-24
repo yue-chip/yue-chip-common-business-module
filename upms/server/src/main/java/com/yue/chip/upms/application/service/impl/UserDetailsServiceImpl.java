@@ -63,11 +63,10 @@ public class UserDetailsServiceImpl implements YueChipUserDetailsService {
 
     @Override
     public UserDetails loadUserByPhoneNumber(String phoneNumber) {
-        Optional<User> optional = upmsRepository.findUserByPhoneNumber(phoneNumber);
-        if (!optional.isPresent()){
+        User user = upmsRepository.findByPhoneNumber(phoneNumber);
+        if (Objects.isNull(user)) {
             return null;
         }
-        User user = optional.get();
         YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
         return userDetails;
     }
