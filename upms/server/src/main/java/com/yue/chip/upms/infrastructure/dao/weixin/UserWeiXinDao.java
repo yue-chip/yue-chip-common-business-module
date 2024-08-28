@@ -5,6 +5,7 @@ import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserWeiXinDao extends BaseDao<UserWeiXinPo>, UserWeiXinDaoEx {
@@ -24,5 +25,5 @@ public interface UserWeiXinDao extends BaseDao<UserWeiXinPo>, UserWeiXinDaoEx {
      */
     public Optional<UserWeiXinPo> findFirstByOpenId(@NotBlank String openId);
 
-
+    List<UserWeiXinPo> findAllByPhoneNumber(@NotBlank String phoneNumber);
 }

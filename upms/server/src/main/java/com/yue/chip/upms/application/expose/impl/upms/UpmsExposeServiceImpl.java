@@ -20,8 +20,10 @@ import com.yue.chip.upms.domain.repository.organizational.OrganizationalReposito
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
 import com.yue.chip.upms.infrastructure.dao.organizational.GridUserDao;
+import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
@@ -63,6 +65,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     private GridUserDao gridUserDao;
     @Resource
     private OrganizationalUserMapper organizationalUserMapper;
+    @Resource
+    private UserWeiXinDao userWeiXinDao;
 
     @Override
     public List<UserExposeVo> findUserAllByIdIn(List<Long> userIds) {
@@ -258,6 +262,12 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
             }
         }
         return userIdList;
+    }
+
+    @Override
+    public List<String> findAllByWeiXinOpenIdByPhone(String phone) {
+        List<UserWeiXinPo> allByPhoneNumber = userWeiXinDao.findAllByPhoneNumber(phone);
+        return allByPhoneNumber.stream().map(UserWeiXinPo::getOpenId).collect(Collectors.toList());
     }
 
 }
