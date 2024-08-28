@@ -157,4 +157,6 @@ public interface UpmsExposeService {
      */
     List<Long> findAllByGridId(@NotNull Long gridId);
 
+    List<String> findAllByWeiXinOpenIdByPhone(@NotBlank String phone);
+
 }
