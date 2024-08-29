@@ -31,6 +31,8 @@ import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import com.yue.chip.upms.vo.*;
 import com.yue.chip.utils.CurrentUserUtil;
 import org.apache.dubbo.config.annotation.DubboService;
+import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
+import com.yue.chip.upms.vo.*;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 
@@ -266,7 +268,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
 
     @Override
     public List<String> findAllByWeiXinOpenIdByPhone(String phone) {
-        List<UserWeiXinPo> allByPhoneNumber = userWeiXinDao.findAllByPhoneNumber(phone);
+        List<UserWeiXinPo> allByPhoneNumber = userWeiXinDao.findAllByPhoneNumberOrderByCreateDateTimeDesc(phone);
         return allByPhoneNumber.stream().map(UserWeiXinPo::getOpenId).collect(Collectors.toList());
     }
 

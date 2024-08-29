@@ -2,8 +2,8 @@ package com.yue.chip.upms.infrastructure.dao.weixin;
 
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,5 +25,5 @@ public interface UserWeiXinDao extends BaseDao<UserWeiXinPo>, UserWeiXinDaoEx {
      */
     public Optional<UserWeiXinPo> findFirstByOpenId(@NotBlank String openId);
 
-    List<UserWeiXinPo> findAllByPhoneNumber(@NotBlank String phoneNumber);
+    List<UserWeiXinPo> findAllByPhoneNumberOrderByCreateDateTimeDesc(@NotBlank String phoneNumber);
 }
