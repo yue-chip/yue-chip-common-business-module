@@ -245,6 +245,7 @@ function del(id: string[]) {
 }
 
 function smsChange(data: any) {
+    data.organizationalId = data.organizationalList.map((item: string) => item.id);
     axios.axiosPut("/upms/console/user/update", data,
         (data: any) => {
             if (data.status === 200) {
@@ -255,6 +256,7 @@ function smsChange(data: any) {
 }
 
 function callChange(data: any) {
+    data.organizationalId = data.organizationalList.map((item: string) => item.id);
     axios.axiosPut("/upms/console/user/update", data,
         (data: any) => {
             if (data.status === 200) {
