@@ -6,7 +6,6 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.YueChipPageSerializable;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.grid.vo.GridTreeVo;
-import com.yue.chip.grid.vo.GridVo;
 import com.yue.chip.upms.UpmsExposeService;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
@@ -17,15 +16,18 @@ import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.infrastructure.dao.organizational.GridUserDao;
+import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
-import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
+import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.beans.BeanUtils;
+import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
+import com.yue.chip.upms.vo.*;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 
@@ -57,7 +59,11 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     @Resource
     private GridMapper gridMapper;
     @Resource
+    private GridUserDao gridUserDao;
+    @Resource
     private OrganizationalUserMapper organizationalUserMapper;
+    @Resource
+    private UserWeiXinDao userWeiXinDao;
 
     @Override
     public List<UserExposeVo> findUserAllByIdIn(List<Long> userIds) {
@@ -154,9 +160,13 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         if (Objects.isNull(userId)) {
             return Collections.EMPTY_LIST;
         }
-        java.util.Optional<Organizational> optional = organizationalRepository.findByUserId(userId);
-        if (optional.isPresent()) {
-            return findOrganizationalAllChildrenByOrganizationalId(optional.get().getId());
+        List<Organizational> organizationalList = organizationalRepository.findByUserId(userId);
+        if (!organizationalList.isEmpty()) {
+            List<OrganizationalExposeVo> result = new ArrayList<>();
+            organizationalList.forEach(po -> {
+                result.addAll(findOrganizationalAllChildrenByOrganizationalId(po.getId()));
+            });
+            return result;
         }
         return Collections.EMPTY_LIST;
     }
@@ -230,6 +240,31 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public List<OrganizationalUserExposeVo> findUserAllByUserIdIn(Set<Long> userId) {
         List<OrganizationalUserPo> list = organizationalRepository.findUserAllByUserIdIn(userId);
         return organizationalUserMapper.toListOrganizationalUserExposeVo(list);
+    }
+
+    @Override
+    public UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList) {
+        UserGridVo map = organizationalRepository.bindUserOrganizationalGird(voList);
+        return map;
+    }
+
+    @Override
+    public List<Long> findAllByGridId(Long gridId) {
+        List<Long> userIdList = new ArrayList<>();
+        List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridId);
+        if (!CollectionUtils.isEmpty(gridUserPoList)) {
+            List<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(userIds)) {
+                userIdList.addAll(userIds);
+            }
+        }
+        return userIdList;
+    }
+
+    @Override
+    public List<String> findAllByWeiXinOpenIdByPhone(String phone) {
+        List<UserWeiXinPo> allByPhoneNumber = userWeiXinDao.findAllByPhoneNumberOrderByCreateDateTimeDesc(phone);
+        return allByPhoneNumber.stream().map(UserWeiXinPo::getOpenId).collect(Collectors.toList());
     }
 
 }

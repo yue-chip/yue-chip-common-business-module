@@ -2,6 +2,7 @@ package com.yue.chip.upms.domain.aggregates;
 
 import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.common.business.expose.file.FileExposeService;
+import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
@@ -12,7 +13,6 @@ import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.utils.CurrentUserUtil;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Resource;
 import lombok.Builder;
 import lombok.Data;
@@ -53,11 +53,15 @@ public class User extends UserDefinition {
 
     @Builder.Default
     private ResourcesMapper resourcesMapper = ResourcesMapper.INSTANCE;
+    @Builder.Default
+    private OrganizationalMapper organizationalMapper = OrganizationalMapper.INSTANCE;
 
     /**
      * 组织架构
      */
     private Organizational organizational;
+
+    private List<Organizational> organizationalList;
 
     /**
      * 角色 - 值对象(此值对象非彼值对象) 意思意思
@@ -135,14 +139,20 @@ public class User extends UserDefinition {
             return this.organizational;
         }
         Assert.notNull(getId(),"id不能为空");
-        if (Objects.nonNull(organizational)) {
-            return this.organizational;
-        }
-        Optional<Organizational> optional = organizationalRepository.findByUserId(getId());
+        Optional<Organizational> optional = organizationalRepository.findByUserIdFist(getId());
         if (optional.isPresent()) {
             return optional.get();
         }
         return Organizational.builder().build();
+    }
+
+    public List<Organizational> getOrganizationalList() {
+        if (Objects.nonNull(organizationalList)) {
+            return this.organizationalList;
+        }
+        Assert.notNull(getId(),"id不能为空");
+        List<Organizational> list = organizationalRepository.findByUserId(getId());
+        return list;
     }
 
     public Tenant getTenant() {

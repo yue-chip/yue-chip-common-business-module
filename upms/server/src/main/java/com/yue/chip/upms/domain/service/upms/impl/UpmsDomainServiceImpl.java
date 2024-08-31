@@ -8,6 +8,8 @@ import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import jakarta.annotation.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,6 +21,7 @@ import java.util.*;
 @Service
 public class UpmsDomainServiceImpl implements UpmsDomainService {
 
+    private static final Logger log = LoggerFactory.getLogger(UpmsDomainServiceImpl.class);
     @Resource
     private UpmsRepository upmsRepository;
 
@@ -54,13 +57,14 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
 
     @Override
     public void userOrganizational(Long userId, List<Long> organizationalId) {
-        Optional<Organizational> optional = organizationalRepository.findByUserId(userId);
-        if (optional.isPresent()) {
-            Organizational organizational = optional.get();
-            if (!Objects.equals(organizationalId,organizational.getId()) ){
-                //清楚机构负责人
-                organizationalRepository.deleteLeader(userId);
-            }
+        List<Organizational> organizationalList = organizationalRepository.findByUserId(userId);
+        if (!organizationalList.isEmpty()) {
+            organizationalList.forEach(organizational -> {
+                if (!Objects.equals(organizationalId,organizational.getId()) ){
+                    //清楚机构负责人
+                    organizationalRepository.deleteLeader(userId);
+                }
+            });
         }
         organizationalRepository.deleteOrganizationalByUserId(userId);
         if (Objects.nonNull(organizationalId) && !organizationalId.isEmpty()) {

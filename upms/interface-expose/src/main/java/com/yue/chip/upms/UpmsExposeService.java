@@ -6,14 +6,13 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.grid.vo.GridTreeVo;
 import com.yue.chip.grid.vo.GridVo;
-import com.yue.chip.upms.vo.OrganizationalExposeVo;
-import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
-import com.yue.chip.upms.vo.UserExposeVo;
+import com.yue.chip.upms.vo.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -145,5 +144,19 @@ public interface UpmsExposeService {
      * @return
      */
     List<OrganizationalUserExposeVo> findUserAllByUserIdIn(@Size(min = 1)Set<Long> userId);
+
+    /**
+     * 消防平台导入网格，用户，机构，网格创建或绑定
+     * @return
+     */
+    UserGridVo bindUserOrganizationalGird(List<UserOrganizationalGirdVo> voList);
+    /**
+     * 根据网格id查询用户ids
+     * @param gridId
+     * @return
+     */
+    List<Long> findAllByGridId(@NotNull Long gridId);
+
+    List<String> findAllByWeiXinOpenIdByPhone(@NotBlank String phone);
 
 }

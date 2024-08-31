@@ -141,6 +141,25 @@ public class UpmsApplicationImpl implements UpmsApplication {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void saveUser1(UserAddOrUpdateDto userAddOrUpdateDto) {
+        User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
+        if (!user.checkUsernameIsExist()) {
+            //保存用户
+            User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
+            //保存用户与组织架构的关联关系
+            Optional<Organizational> optional = organizationalRepository.findRootOrganizational();
+            if (optional.isPresent()) {
+                upmsDomainService.userOrganizational(newUser.getId(),List.of(optional.get().getId()));
+            }
+            Optional<Role> optionalRole =  upmsRepository.findRoleByName("管理员");
+            if (optionalRole.isPresent()) {
+                upmsRepository.saveUserRole(optionalRole.get().getId(), new Long[]{newUser.getId()});
+            }
+        }
+    }
+
+    @Override
 //    @GlobalTransactional(rollbackFor = {Exception.class})
     @Transactional(rollbackFor = {Exception.class})
     public void updateUser(UserAddOrUpdateDto userAddOrUpdateDto) {

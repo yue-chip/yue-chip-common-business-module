@@ -2,11 +2,14 @@ package com.yue.chip.upms.interfaces.vo.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.user.UserDefinition;
+import com.yue.chip.upms.domain.aggregates.Organizational;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 /**
  * @author Mr.Liu
@@ -25,6 +28,8 @@ public class UserVo extends UserDefinition {
 
     @Schema(description = "组织机构id")
     private Long organizationalId;
+
+    private List<Organizational> organizationalList;
 
     @Schema(description = "租户名称")
     private String tenantName;
