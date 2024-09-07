@@ -25,6 +25,7 @@ import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
+import com.yue.chip.utils.Sm4Util;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,10 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -147,7 +145,9 @@ public class UpmsApplicationImpl implements UpmsApplication {
             //保存用户与组织架构的关联关系
             Optional<Organizational> optional = organizationalRepository.findRootOrganizational();
             if (optional.isPresent()) {
-                upmsDomainService.userOrganizational(newUser.getId(),List.of(optional.get().getId()));
+                List list = new ArrayList();
+                list.add(optional.get().getId());
+                upmsDomainService.userOrganizational(newUser.getId(),list);
             }
             Optional<Role> optionalRole =  upmsRepository.findRoleByName("管理员");
             if (optionalRole.isPresent()) {
@@ -175,8 +175,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Override
     public void updateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
 //        upmsRepository.updateUserPassword(CurrentUserUtil.getCurrentUserId(),passwordEncoder.encode(SecureUtil.md5(userUpdatePasswordDto.getPassword())));
-        upmsRepository.updateUserPassword(Objects.isNull(userUpdatePasswordDto.getUserId())?CurrentUserUtil.getCurrentUserId():userUpdatePasswordDto.getUserId(),
-                passwordEncoder.encode(userUpdatePasswordDto.getPassword()));
+        upmsRepository.updateUserPassword(Objects.isNull(userUpdatePasswordDto.getUserId())?CurrentUserUtil.getCurrentUserId(): userUpdatePasswordDto.getUserId(),
+                Sm4Util.encryptEcb("", passwordEncoder.encode(userUpdatePasswordDto.getPassword())));
     }
 
     @Override

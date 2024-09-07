@@ -11,7 +11,6 @@ import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
-import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
@@ -19,26 +18,25 @@ import com.yue.chip.upms.infrastructure.dao.role.RoleDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserRoleDao;
-import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
-import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
-import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
+import com.yue.chip.utils.Sm4Util;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
@@ -341,7 +339,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public User saveUser(UserPo userPo) {
-        userPo.setPassword(passwordEncoder.encode(userPo.getPassword()));
+        userPo.setPassword(Sm4Util.encryptEcb("", passwordEncoder.encode(userPo.getPassword())));
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);
@@ -364,6 +362,13 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public List<User> findAllByNameOrPhoneNumber(String name,String phoneNumber) {
         List<UserPo> allByNameOrPhoneNumber = userDao.findAllByNameLikeOrPhoneNumberLike(name,phoneNumber);
         List<User> userList = userMapper.toUserList(allByNameOrPhoneNumber);
+        return userList;
+    }
+
+    @Override
+    public List<User> findAll() {
+        List<UserPo> list = userDao.findAll();
+        List<User> userList = userMapper.toUserList(list);
         return userList;
     }
 

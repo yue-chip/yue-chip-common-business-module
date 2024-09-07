@@ -8,7 +8,10 @@ import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.application.service.TestApplicationService;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.utils.Sm4Util;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -45,6 +48,9 @@ public class TestController  {
 
     @DubboReference
     private FileExposeService fileExposeService;
+
+    @Resource
+    private UpmsRepository upmsRepository;
 
 
     @GetMapping("/sms")
@@ -103,6 +109,16 @@ public class TestController  {
 //        List<User> listGrid = new PodamFactoryImpl().manufacturePojo(List.class, User.class);
 //        return PageResultData.builder().data(new PodamFactoryImpl().manufacturePojo(List.class,UserVo.class)).build();
         return null;
+    }
+
+    @GetMapping("/jiami")
+    @AuthorizationIgnore
+    public IResultData jiami(){
+        List<User> list = upmsRepository.findAll();
+        list.forEach(user -> {
+            upmsRepository.updateUserPassword(user.getId(), Sm4Util.encryptEcb("", user.getPassword()));
+        });
+        return ResultData.builder().build();
     }
 
 }

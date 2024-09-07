@@ -1,5 +1,16 @@
 server:
   port: 0
+  tongweb:
+    #最大工作线程
+    max-threads: 2000
+    #最大连接数
+    max-connections: 10000
+    #最大等待队列
+    accept-count: 2000
+    #授权
+    license:
+      type: file
+      path: classpath:license-hw.dat
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -7,7 +18,7 @@ spring:
   nacos:
     group: XIAO-WEI-GROUP
     host: 192.168.11.184:8848
-    namespace: 1706918c-e809-426a-b633-e351101ed09d
+    namespace: 26a7e481-33dd-4e26-ace0-6bf8f7605d70
 #    group: YUE-CHIP-GROUP
 #    host: 192.168.177.129:8848
 #    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
