@@ -34,12 +34,12 @@ import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.upms.vo.UserGridVo;
 import com.yue.chip.upms.vo.UserOrganizationalGirdVo;
 import com.yue.chip.utils.CurrentUserUtil;
-import javax.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -89,7 +89,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         if (!list.isEmpty()) {
             return organizationalMapper.toOrganizational(list);
         }
-        return List.of();
+        return new ArrayList<>();
     }
 
     @Override

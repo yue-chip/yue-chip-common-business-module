@@ -1,5 +1,7 @@
 package com.yue.chip.upms.application.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.Assert;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.common.enums.State;
@@ -28,6 +30,7 @@ import com.yue.chip.utils.CurrentUserUtil;
 import com.yue.chip.utils.Sm4Util;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -158,14 +161,21 @@ public class UpmsApplicationImpl implements UpmsApplication {
 
     @Override
 //    @GlobalTransactional(rollbackFor = {Exception.class})
-    @Transactional(rollbackFor = {Exception.class})
+//    @Transactional(rollbackFor = {Exception.class})
     public void updateUser(UserAddOrUpdateDto userAddOrUpdateDto) {
         //更新头像
         if (Objects.nonNull(userAddOrUpdateDto.getProfilePhotoId())) {
             fileExposeService.save(userAddOrUpdateDto.getId(),UserPo.TABLE_NAME,UserPo.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhotoId(),CurrentUserUtil.getCurrentUserTenantNumber());
         }
         //修改用户
-        upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
+        java.util.Optional<User> optional1 = upmsRepository.findUserById(userAddOrUpdateDto.getId());
+        if (optional1.isPresent()) {
+            upmsRepository.deleteUser(optional1.get().getId());
+            User entity1  = optional1.get();
+            BeanUtil.copyProperties(userAddOrUpdateDto,entity1, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            BeanUtil.copyProperties(entity1,userAddOrUpdateDto, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        }
+        upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系
         upmsDomainService.userOrganizational(userAddOrUpdateDto.getId(),userAddOrUpdateDto.getOrganizationalId());
         //保存头像
@@ -227,7 +237,14 @@ public class UpmsApplicationImpl implements UpmsApplication {
         if (nameIsExist) {
             BusinessException.throwException("该机构名称已经存在");
         }
-        organizationalRepository.updateOrganizational(organizationalMapper.toOrganizationalPo(organizationalUpdateDto));
+        java.util.Optional<Organizational> optional1 = organizationalRepository.findById(organizationalUpdateDto.getId());
+        if (optional1.isPresent()) {
+            organizationalRepository.deleteOrganizationalById(optional1.get().getId());
+            Organizational entity1  = optional1.get();
+            BeanUtil.copyProperties(organizationalUpdateDto,entity1, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            BeanUtil.copyProperties(entity1,organizationalUpdateDto, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        }
+        organizationalRepository.saveOrganizational(organizationalMapper.toOrganizationalPo(organizationalUpdateDto));
     }
 
     @Override
