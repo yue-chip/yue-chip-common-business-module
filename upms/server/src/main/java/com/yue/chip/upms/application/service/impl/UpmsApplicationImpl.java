@@ -27,10 +27,9 @@ import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
-import com.yue.chip.utils.Sm4Util;
+import com.yue.chip.utils.Sm4Api;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -186,7 +185,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     public void updateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
 //        upmsRepository.updateUserPassword(CurrentUserUtil.getCurrentUserId(),passwordEncoder.encode(SecureUtil.md5(userUpdatePasswordDto.getPassword())));
         upmsRepository.updateUserPassword(Objects.isNull(userUpdatePasswordDto.getUserId())?CurrentUserUtil.getCurrentUserId(): userUpdatePasswordDto.getUserId(),
-                Sm4Util.encryptEcb("", passwordEncoder.encode(userUpdatePasswordDto.getPassword())));
+                new Sm4Api().symmKeyDataEnc(passwordEncoder.encode(userUpdatePasswordDto.getPassword())));
     }
 
     @Override

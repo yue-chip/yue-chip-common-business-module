@@ -11,7 +11,7 @@ import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import com.yue.chip.utils.Sm4Util;
+import com.yue.chip.utils.Sm4Api;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -111,12 +111,44 @@ public class TestController  {
         return null;
     }
 
-    @GetMapping("/jiami")
+    @GetMapping("/test111")
     @AuthorizationIgnore
-    public IResultData jiami(){
+    public IResultData test111(){
+        new Sm4Api().generalDataEnc();
+
+        String str = new Sm4Api().symmKeyDataEnc("测试");
+        System.out.println(str);
+        String str1 = new Sm4Api().generalDataDec(str);
+        System.out.println(str1);
+        return ResultData.builder().build();
+    }
+
+//    @GetMapping("/jiami")
+//    @AuthorizationIgnore
+//    public IResultData jiami(){
+//        List<User> list = upmsRepository.findAll();
+//        list.forEach(user -> {
+//            upmsRepository.updateUserPassword(user.getId(), Sm4Util.encryptEcb("", user.getPassword()));
+//        });
+//        return ResultData.builder().build();
+//    }
+//
+//    @GetMapping("/jiemi")
+//    @AuthorizationIgnore
+//    public IResultData jiemi(){
+//        List<User> list = upmsRepository.findAll();
+//        list.forEach(user -> {
+//            upmsRepository.updateUserPassword(user.getId(), Sm4Util.decryptEcb("", user.getPassword()));
+//        });
+//        return ResultData.builder().build();
+//    }
+
+    @GetMapping("/jiami1")
+    @AuthorizationIgnore
+    public IResultData jiami1(){
         List<User> list = upmsRepository.findAll();
         list.forEach(user -> {
-            upmsRepository.updateUserPassword(user.getId(), Sm4Util.encryptEcb("", user.getPassword()));
+            upmsRepository.updateUserPassword(user.getId(), new Sm4Api().symmKeyDataEnc(user.getPassword()) );
         });
         return ResultData.builder().build();
     }

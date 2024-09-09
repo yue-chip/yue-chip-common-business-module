@@ -28,7 +28,7 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
-import com.yue.chip.utils.Sm4Util;
+import com.yue.chip.utils.Sm4Api;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -339,7 +339,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public User saveUser(UserPo userPo) {
-        userPo.setPassword(Sm4Util.encryptEcb("", passwordEncoder.encode(userPo.getPassword())));
+        userPo.setPassword(new Sm4Api().symmKeyDataEnc(passwordEncoder.encode(userPo.getPassword())));
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);

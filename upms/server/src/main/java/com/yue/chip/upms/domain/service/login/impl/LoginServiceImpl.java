@@ -17,7 +17,7 @@ import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
-import com.yue.chip.utils.Sm4Util;
+import com.yue.chip.utils.Sm4Api;
 import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -69,7 +69,9 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("该账号不存在");
         }
         User user = optional.get();
-        if (!passwordEncoder.matches(password,Sm4Util.decryptEcb("",user.getPassword())) ) {
+        System.out.println(user.getPassword());
+        System.out.println(new Sm4Api().generalDataDec(user.getPassword()));
+        if (!passwordEncoder.matches(password,new Sm4Api().generalDataDec(user.getPassword()))) {
             throw new AuthenticationServiceException("密码错误");
         }
         return authority(user.getResources(),user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber());
