@@ -45,54 +45,95 @@
         </a-card>
 
         <a-card>
-            <a-table rowKey="id" :row-selection="rowSelection" :columns="columns" :data-source="dataList"
-                :pagination="pagination" :loading="loading" :scroll="{ y: 440 }">
-                <template #bodyCell="{ column, text, record }">
-                    <template v-if="column.key === 'isSms'">
-                        <a-switch @change="smsChange(record)" v-model:checked="record.isSms" checked-children="开"
-                            un-checked-children="关" />
-                    </template>
-                    <template v-if="column.key === 'isCall'">
-                        <a-switch @change="callChange(record)" v-model:checked="record.isCall" checked-children="开"
-                            un-checked-children="关" />
-                    </template>
-                    <template v-if="column.key === 'organizationalName'">
-                        <div v-for="(item) in record.organizationalList" :key="item.id">
-                            {{ item.name }}
-                        </div>
-                    </template>
-                    <template v-if="column.key === 'operation'">
+            <a-config-provider :theme="{
+               
+            }" :locale="zhCN">
+                <a-table rowKey="id" :row-selection="rowSelection" :columns="columns" :data-source="dataList"
+                    :pagination="pagination" :loading="loading">
+                    <template #bodyCell="{ column, text, record }">
+                        <template v-if="column.key === 'isSms'">
+                            <a-switch @change="smsChange(record)" v-model:checked="record.isSms" checked-children="开"
+                                un-checked-children="关" />
+                        </template>
+                        <template v-if="column.key === 'isCall'">
+                            <a-switch @change="callChange(record)" v-model:checked="record.isCall" checked-children="开"
+                                un-checked-children="关" />
+                        </template>
+                        <template v-if="column.key === 'organizationalName'">
+                            <div v-for="(item) in record.organizationalList" :key="item.id">
+                                {{ item.name }}
+                            </div>
+                        </template>
+                        <template v-if="column.key === 'operation'">
 
-                        <a-space :size="5">
-                            <a-button size="small" @click="edit(record.id)">
-                                <template #icon>
-                                    <EditOutlined />
-                                </template>
-                                修改
-                            </a-button>
-                            <a-button v-if="record.username !== 'admin'" size="small" type="primary" danger
-                                @click="del(record.id)">
-                                <template #icon>
-                                    <DeleteOutlined />
-                                </template>
-                                删除
-                            </a-button>
-                        </a-space>
+                            <a-space :size="5">
+                                <a-button size="small" @click="edit(record.id)">
+                                    <template #icon>
+                                        <EditOutlined />
+                                    </template>
+                                    修改
+                                </a-button>
+                                <a-button size="small" @click="resetPwd(record.id)">
+                                    <template #icon>
+                                        <UndoOutlined />
+                                    </template>
+                                    重置密码
+                                </a-button>
+                                <a-button v-if="record.username !== 'admin'" size="small" type="primary" danger
+                                    @click="del(record.id)">
+                                    <template #icon>
+                                        <DeleteOutlined />
+                                    </template>
+                                    删除
+                                </a-button>
+                            </a-space>
+                        </template>
                     </template>
-                </template>
-            </a-table>
+                </a-table>
+            </a-config-provider>
         </a-card>
+        <a-modal width="500px" v-model:visible="visibleUpdatePassword" title="重置密码" cancelText="取消" okText="保存"
+            :destroyOnClose="true" :mask="true" :maskClosable="false" @cancel="cancelUpdatePassword"
+            @ok="updatePassword">
+            <a-form ref="updatePasswordFrom" :rules="rulesUpdatePassword" :model="updateModel"
+                :labelCol="{ span: 6, offset: 0 }">
+                <a-row>
+                    <a-col :span="24">
+                        <a-form-item label="新密码" name="password" ref="password">
+                            <a-input-password placeholder="请输入新密码" v-model:value="updateModel.password" />
+                        </a-form-item>
+                    </a-col>
+                </a-row>
+                <a-row>
+                    <a-col :span="24">
+                        <a-form-item label="确认密码" name="password1" ref="password1">
+                            <a-input-password placeholder="请输入确认密码" v-model:value="updateModel.password1" />
+                        </a-form-item>
+                    </a-col>
+                </a-row>
+            </a-form>
+        </a-modal>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onActivated, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
-import { SearchOutlined, PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
+import { SearchOutlined, PlusOutlined, DeleteOutlined, EditOutlined, UndoOutlined } from '@ant-design/icons-vue';
 import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-import { TableProps, Modal, message } from "ant-design-vue";
+import { TableProps, Modal, message,FormInstance } from "ant-design-vue";
+import { Md5 } from 'ts-md5';
 import qs from "qs";
+import zhCN from "ant-design-vue/es/locale/zh_CN"
+import 'dayjs/locale/zh-cn';
 const _this: any = getCurrentInstance();
+const visibleUpdatePassword=ref(false)
+let updateModel = ref({
+    id:undefined,
+    password:undefined,
+    password1:undefined,
+})
+const updatePasswordFrom = ref<FormInstance>();
 const router = useRouter();
 let loading = ref(false);
 let searchModel = ref({ pageSize: 10, pageNumber: 1 });
@@ -169,11 +210,51 @@ const columns = [
         title: '操作',
         key: "operation",
         fixed: 'right',
-        width: '155px',
+        width: '205px',
     },
 ]
 let dataList = ref([]);
+const rulesUpdatePassword: any = {
+    password: [{ required: true, validator: validatePass, message: "请输入密码", trigger: 'blur' }],
+    password1: [{ validator: validatePass2, trigger: 'blur' }]
+};
 
+function validatePass(_rule: Rule, value: string) {
+    if (value && value === '') {
+        return Promise.reject('请输入密码');
+    } else {
+        if (updateModel.value.password1 && updateModel.value.password1 && updateModel.value.password1 !== '') {
+            updatePasswordFrom.value.validateFields('password1');
+        }
+        return Promise.resolve();
+    }
+};
+function validatePass2(_rule: Rule, value: string) {
+    if (!value || value === '') {
+        return Promise.reject('请输入确认密码');
+    }
+    if (value && value !== '' && value !== updateModel.value.password) {
+        return Promise.reject("两次输入的密码不一致!");
+    }
+    return Promise.resolve();
+};
+function cancelUpdatePassword() {
+    visibleUpdatePassword.value = false;
+    updateModel.value = {};
+}
+
+function updatePassword() {
+    updatePasswordFrom.value.validateFields().then(() => {
+        axios.axiosPut("/upms/console/user/update/password", { password: Md5.hashStr(updateModel.value.password),userId:updateModel.value.id },
+            (data: any) => {
+                if (data.status === 200) {
+                    cancelUpdatePassword();
+                    message.info(data.message);
+                }
+            }, null, null)
+    }).catch((err: any) => {
+    });
+}
 const pagination = ref({
     current: searchModel.value.pageNumber ? searchModel.value.pageNumber : 1,
     pageSize: searchModel.value.pageSize ? searchModel.value.pageSize : 30,
@@ -264,6 +345,10 @@ function callChange(data: any) {
                 search();
             }
         }, null, null)
+}
+const resetPwd = (id: string) => {
+    updateModel.value.id = id;
+    visibleUpdatePassword.value = true;
 }
 
 </script>

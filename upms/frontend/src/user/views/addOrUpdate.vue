@@ -178,6 +178,7 @@ function save() {
                 (data: any) => {
                     if (data.status === 200) {
                         message.info(data.message);
+                        router.go(-1);
                     }
                 }, null, null)
         } else {
@@ -187,6 +188,7 @@ function save() {
                 (data: any) => {
                     if (data.status === 200) {
                         message.info(data.message);
+                        router.go(-1);
                     }
                 }, null, null)
         }
