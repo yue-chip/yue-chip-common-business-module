@@ -8,12 +8,14 @@ import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.application.service.TestApplicationService;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.Sm4Api;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +53,9 @@ public class TestController  {
 
     @Resource
     private UpmsRepository upmsRepository;
+
+    @Resource
+    private UserMapper userMapper;
 
 
     @GetMapping("/sms")
@@ -149,6 +154,22 @@ public class TestController  {
         List<User> list = upmsRepository.findAll();
         list.forEach(user -> {
             upmsRepository.updateUserPassword(user.getId(), new Sm4Api().symmKeyDataEnc(user.getPassword()) );
+        });
+        return ResultData.builder().build();
+    }
+
+    @GetMapping("/jiami2")
+    @AuthorizationIgnore
+    public IResultData jiami2(){
+        List<User> list = upmsRepository.findAll();
+        list.forEach(user -> {
+            if (StringUtils.hasText(user.getName())) {
+                user.setName(new Sm4Api().symmKeyDataEnc(user.getName()));
+            }
+            if (StringUtils.hasText(user.getPhoneNumber())) {
+                user.setPhoneNumber(new Sm4Api().symmKeyDataEnc(user.getPhoneNumber()));
+            }
+            upmsRepository.saveUser1(userMapper.toUserPo(user));
         });
         return ResultData.builder().build();
     }

@@ -5,10 +5,12 @@ import com.yue.chip.upms.definition.user.UserDefinition;
 //import io.swagger.v3.oas.annotations.media.Schema;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 
+import com.yue.chip.utils.Sm4Api;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -44,4 +46,22 @@ public class UserVo extends UserDefinition {
 
     //@Schema(description = "数字大屏名称")
     private String bigScreenName;
+
+    @Override
+    public String getName() {
+        if (StringUtils.hasText(super.getName())) {
+            System.out.println(super.getName());
+            return new Sm4Api().generalDataDec( super.getName());
+        }
+        return super.getName();
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        if (StringUtils.hasText(super.getPhoneNumber())) {
+            System.out.println(super.getPhoneNumber());
+            return new Sm4Api().generalDataDec( super.getPhoneNumber());
+        }
+        return super.getPhoneNumber();
+    }
 }

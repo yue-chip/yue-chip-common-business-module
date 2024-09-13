@@ -1,5 +1,7 @@
 package com.yue.chip.upms.infrastructure.repository.upms.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
@@ -343,6 +345,18 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);
+    }
+
+    @Override
+    public void saveUser1(UserPo userPo) {
+        java.util.Optional<UserPo> optional1 = userDao.findById(userPo.getId());
+        if (optional1.isPresent()) {
+            userDao.deleteById(optional1.get().getId());
+            UserPo entity1  = optional1.get();
+            BeanUtil.copyProperties(userPo,entity1, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            BeanUtil.copyProperties(entity1,userPo, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        }
+        userDao.save(userPo);
     }
 
     @Override

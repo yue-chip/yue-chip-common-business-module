@@ -310,6 +310,8 @@ public interface UpmsRepository {
      */
     public User saveUser(@NotNull UserPo userPo);
 
+    public void saveUser1(@NotNull UserPo userPo);
+
     /**
      * 修改用户
      * @param userPo

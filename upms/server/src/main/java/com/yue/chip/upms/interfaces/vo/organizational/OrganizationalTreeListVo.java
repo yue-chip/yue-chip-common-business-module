@@ -1,15 +1,15 @@
 package com.yue.chip.upms.interfaces.vo.organizational;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
-//import io.swagger.v3.oas.annotations.media.Schema;
+import com.yue.chip.utils.Sm4Api;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -42,5 +42,12 @@ public class OrganizationalTreeListVo extends OrganizationalDefinition {
 
     public Boolean getStateTmp() {
         return Objects.equals(getState(), State.NORMAL);
+    }
+
+    public String getLeaderName() {
+        if (StringUtils.hasText(this.leaderName)) {
+            return new Sm4Api().generalDataDec( this.leaderName);
+        }
+        return this.leaderName;
     }
 }

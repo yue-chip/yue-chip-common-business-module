@@ -1,7 +1,6 @@
 package com.yue.chip.upms.vo;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -30,6 +29,7 @@ public class UserOrganizationalGirdVo implements Serializable {
     private String name;
 
     private String phone;
+
 
 
 }
