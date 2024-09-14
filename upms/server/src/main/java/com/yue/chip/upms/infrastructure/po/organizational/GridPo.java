@@ -37,7 +37,7 @@ public class GridPo extends GridDefinition {
     }
 
     @Override
-    @Column(unique = true, name = "NAME")
+    @Column( name = "NAME")
     public String getName() {
         return super.getName();
     }
@@ -45,6 +45,7 @@ public class GridPo extends GridDefinition {
     @Override
 //    @Comment("父节点id")
 //    @ColumnDefault("0")
+    @Column( name = "PARENT_ID")
     public Long getParentId() {
         return super.getParentId();
     }
@@ -52,6 +53,7 @@ public class GridPo extends GridDefinition {
     @Override
 //    @Comment("排序")
 //    @ColumnDefault("1")
+    @Column(name = "SORT")
     public Integer getSort() {
         return super.getSort();
     }

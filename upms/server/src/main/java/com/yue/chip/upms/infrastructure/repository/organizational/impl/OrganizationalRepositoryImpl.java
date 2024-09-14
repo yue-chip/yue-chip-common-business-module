@@ -394,7 +394,6 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     public List<GridTreeVo> listGridTree2(Long organizationalId) {
         List<GridTreeVo> tree = new ArrayList<>();
         List<GridPo> gridPoList = gridDao.findAllByOrganizationalId(organizationalId);
-        System.out.println(gridPoList.size());
         if (!CollectionUtils.isEmpty(gridPoList)) {
             List<GridTreeVo> gridVos = gridMapper.toListGridTreeVo(gridPoList);
             gridVos.forEach(gridVo -> {
