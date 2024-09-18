@@ -1,7 +1,9 @@
 package com.yue.chip.upms.interfaces.vo.resources;
 
+import com.yue.chip.utils.Sm4Api;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -18,4 +20,11 @@ public class ResourcesTreeVo {
     private Long key;
 
     private List<ResourcesTreeVo> children;
+
+    public String getTitle() {
+        if (StringUtils.hasText(this.title)) {
+            return new Sm4Api().generalDataDec( this.title);
+        }
+        return this.title;
+    }
 }

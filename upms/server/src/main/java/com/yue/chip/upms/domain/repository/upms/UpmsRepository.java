@@ -232,6 +232,10 @@ public interface UpmsRepository {
      */
     public List<Resources> findResourcesByRoleId(@NotNull Long roleId);
 
+    public List<ResourcesPo> findResourcesAll();
+
+    public List<RoleResourcesPo> findRoleResourcesAll();
+
     /**
      * 根据名称查询资源
      * @param name
@@ -261,6 +265,8 @@ public interface UpmsRepository {
      * @return
      */
     public Resources saveResources(@NotNull ResourcesPo resources);
+
+    public Resources saveResources1(@NotNull ResourcesPo resources);
 
     /**
      * 批量保存角色关联资源

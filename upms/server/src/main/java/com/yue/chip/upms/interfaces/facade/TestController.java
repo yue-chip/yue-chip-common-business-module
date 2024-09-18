@@ -11,6 +11,7 @@ import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.Sm4Api;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -170,6 +171,25 @@ public class TestController  {
                 user.setPhoneNumber(new Sm4Api().symmKeyDataEnc(user.getPhoneNumber()));
             }
             upmsRepository.saveUser1(userMapper.toUserPo(user));
+        });
+        return ResultData.builder().build();
+    }
+
+    @GetMapping("/jiami3")
+    @AuthorizationIgnore
+    public IResultData jiami3(){
+        List<ResourcesPo> list = upmsRepository.findResourcesAll();
+        list.forEach(resourcesPo -> {
+            if (StringUtils.hasText(resourcesPo.getCode())) {
+                resourcesPo.setCode(new Sm4Api().symmKeyDataEnc(resourcesPo.getCode()));
+            }
+            if (StringUtils.hasText(resourcesPo.getName())) {
+                resourcesPo.setName(new Sm4Api().symmKeyDataEnc(resourcesPo.getName()));
+            }
+            if (StringUtils.hasText(resourcesPo.getUrl())) {
+                resourcesPo.setUrl(new Sm4Api().symmKeyDataEnc(resourcesPo.getUrl()));
+            }
+            upmsRepository.saveResources1(resourcesPo);
         });
         return ResultData.builder().build();
     }

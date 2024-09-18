@@ -276,6 +276,18 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public List<ResourcesPo> findResourcesAll() {
+        List<ResourcesPo> list = resourcesDao.findAll();
+        return list;
+    }
+
+    @Override
+    public List<RoleResourcesPo> findRoleResourcesAll() {
+        List<RoleResourcesPo> list  = roleResourcesDao.findAll();
+        return list;
+    }
+
+    @Override
     public Optional<Resources> findResourcesByName(String name) {
         return convertResources(resourcesDao.findFirstByName(name));
     }
@@ -294,6 +306,19 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public Resources saveResources(@NotNull ResourcesPo resourcesPo) {
         resourcesPo = resourcesDao.save(resourcesPo);
         return resourcesMapper.toResources(resourcesPo);
+    }
+
+    @Override
+    public Resources saveResources1(ResourcesPo resources) {
+        java.util.Optional<ResourcesPo> optional1 = resourcesDao.findById(resources.getId());
+        if (optional1.isPresent()) {
+            resourcesDao.deleteById(optional1.get().getId());
+            ResourcesPo entity1  = optional1.get();
+            BeanUtil.copyProperties(resources,entity1, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            BeanUtil.copyProperties(entity1,resources, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        }
+        resourcesDao.save(resources);
+        return null;
     }
 
     @Override

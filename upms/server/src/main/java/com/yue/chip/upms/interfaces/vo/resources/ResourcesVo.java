@@ -1,12 +1,12 @@
 package com.yue.chip.upms.interfaces.vo.resources;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
-//import io.swagger.v3.oas.annotations.media.Schema;
+import com.yue.chip.utils.Sm4Api;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Mr.Liu
@@ -18,4 +18,28 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class ResourcesVo extends ResourcesDefinition {
+
+    @Override
+    public String getName() {
+        if (StringUtils.hasText(super.getName())) {
+            return new Sm4Api().generalDataDec( super.getName());
+        }
+        return super.getName();
+    }
+
+    @Override
+    public String getCode() {
+        if (StringUtils.hasText(super.getCode())) {
+            return new Sm4Api().generalDataDec( super.getCode());
+        }
+        return super.getCode();
+    }
+
+    @Override
+    public String getUrl() {
+        if (StringUtils.hasText(super.getUrl())) {
+            return new Sm4Api().generalDataDec( super.getUrl());
+        }
+        return super.getUrl();
+    }
 }
