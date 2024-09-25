@@ -124,7 +124,7 @@ public class TestController  {
 
         String str = new Sm4Api().symmKeyDataEnc("测试");
         System.out.println(str);
-        String str1 = new Sm4Api().generalDataDec(str);
+        String str1 = new Sm4Api().generalDataDec(str,"");
         System.out.println(str1);
         return ResultData.builder().build();
     }
@@ -188,6 +188,45 @@ public class TestController  {
             }
             if (StringUtils.hasText(resourcesPo.getUrl())) {
                 resourcesPo.setUrl(new Sm4Api().symmKeyDataEnc(resourcesPo.getUrl()));
+            }
+            upmsRepository.saveResources1(resourcesPo);
+        });
+        return ResultData.builder().build();
+    }
+
+
+    @GetMapping("/hmac")
+    @AuthorizationIgnore
+    public IResultData hmac(){
+        List<User> list = upmsRepository.findAll();
+        list.forEach(user -> {
+//            if (StringUtils.hasText(user.getName())) {
+//                user.setNameHmac(new Sm4Api().hmac( new Sm4Api().generalDataDec(user.getName(),"")));
+//            }
+//            if (StringUtils.hasText(user.getPhoneNumber())) {
+//                user.setPhoneNumberHmac(new Sm4Api().hmac( new Sm4Api().generalDataDec(user.getPhoneNumber(),"")));
+//            }
+            if (StringUtils.hasText(user.getPassword())) {
+                user.setPasswordHmac(new Sm4Api().hmac( new Sm4Api().generalDataDec(user.getPassword(),"")));
+            }
+            upmsRepository.saveUser1(userMapper.toUserPo(user));
+        });
+        return ResultData.builder().build();
+    }
+
+    @GetMapping("/hmac1")
+    @AuthorizationIgnore
+    public IResultData hmac1(){
+        List<ResourcesPo> list = upmsRepository.findResourcesAll();
+        list.forEach(resourcesPo -> {
+            if (StringUtils.hasText(resourcesPo.getCode())) {
+                resourcesPo.setCodeHmac(new Sm4Api().hmac(new Sm4Api().generalDataDec(resourcesPo.getCode(),"")));
+            }
+            if (StringUtils.hasText(resourcesPo.getName())) {
+                resourcesPo.setNameHmac(new Sm4Api().hmac(new Sm4Api().generalDataDec(resourcesPo.getName(),"")));
+            }
+            if (StringUtils.hasText(resourcesPo.getUrl())) {
+                resourcesPo.setUrlHmac(new Sm4Api().hmac(new Sm4Api().generalDataDec(resourcesPo.getUrl(),"")));
             }
             upmsRepository.saveResources1(resourcesPo);
         });

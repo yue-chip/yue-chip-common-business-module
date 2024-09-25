@@ -51,7 +51,7 @@ public class UserVo extends UserDefinition {
     public String getName() {
         if (StringUtils.hasText(super.getName())) {
             System.out.println(super.getName());
-            return new Sm4Api().generalDataDec( super.getName());
+            return new Sm4Api().generalDataDec( super.getName(),super.getNameHmac());
         }
         return super.getName();
     }
@@ -60,7 +60,7 @@ public class UserVo extends UserDefinition {
     public String getPhoneNumber() {
         if (StringUtils.hasText(super.getPhoneNumber())) {
             System.out.println(super.getPhoneNumber());
-            return new Sm4Api().generalDataDec( super.getPhoneNumber());
+            return new Sm4Api().generalDataDec( super.getPhoneNumber(),super.getPhoneNumberHmac());
         }
         return super.getPhoneNumber();
     }

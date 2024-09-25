@@ -50,6 +50,8 @@ public class UserDefinition extends BaseDefinition {
     //@Schema(description = "密码")
     private String password;
 
+    private String passwordHmac;
+
     //@Schema(description = "用户登陆账号")
     private  String username;
 
@@ -57,6 +59,11 @@ public class UserDefinition extends BaseDefinition {
     private String name;
 //    @Schema(description = "联系电话")
     private String phoneNumber;
+
+    //@Schema(description = "姓名")
+    private String nameHmac;
+    //    @Schema(description = "联系电话")
+    private String phoneNumberHmac;
 
 //    @Schema(description = "电子邮箱")
     private String email;

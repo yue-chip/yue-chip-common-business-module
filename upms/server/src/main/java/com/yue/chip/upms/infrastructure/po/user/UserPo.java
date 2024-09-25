@@ -128,4 +128,22 @@ public class UserPo extends UserDefinition {
     public String getIdentificationNumber() {
         return super.getIdentificationNumber();
     }
+
+    @Override
+    @Column(name = "PASSWORD_HMAC",length = 500)
+    public String getPasswordHmac() {
+        return super.getPasswordHmac();
+    }
+
+    @Override
+    @Column(name = "PHONE_NUMBER_HMAC",length = 500)
+    public String getPhoneNumberHmac() {
+        return super.getPhoneNumberHmac();
+    }
+
+    @Override
+    @Column(name = "NAME_HMAC",length = 500)
+    public String getNameHmac() {
+        return super.getNameHmac();
+    }
 }

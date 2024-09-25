@@ -70,8 +70,8 @@ public class LoginServiceImpl implements LoginService {
         }
         User user = optional.get();
         System.out.println(user.getPassword());
-        System.out.println(new Sm4Api().generalDataDec(user.getPassword()));
-        if (!passwordEncoder.matches(password,new Sm4Api().generalDataDec(user.getPassword()))) {
+        System.out.println(new Sm4Api().generalDataDec(user.getPassword(),user.getPasswordHmac()));
+        if (!passwordEncoder.matches(password,new Sm4Api().generalDataDec(user.getPassword(),user.getPasswordHmac()))) {
             throw new AuthenticationServiceException("密码错误");
         }
         return authority(user.getResources(),user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber());

@@ -29,8 +29,14 @@ public class ResourcesDefinition extends BaseDefinition {
     //@Schema(description = "资源编码")
     private String code;
 
+    //@Schema(description = "资源编码")
+    private String codeHmac;
+
     //@Schema(description = "资源名称")
     private String name;
+
+    //@Schema(description = "资源名称")
+    private String nameHmac;
 
     //@Schema(description = "作用域-(code:"+Scope.code+",version:"+Scope.version+")")
     @Builder.Default
@@ -53,6 +59,9 @@ public class ResourcesDefinition extends BaseDefinition {
 
     //@Schema(description = "url")
     private String url;
+
+    //@Schema(description = "url")
+    private String urlHmac;
 
     //@Schema(description = "备注")
     private String remark;

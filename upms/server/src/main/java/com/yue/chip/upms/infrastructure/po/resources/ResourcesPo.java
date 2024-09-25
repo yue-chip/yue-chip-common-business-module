@@ -91,4 +91,22 @@ public class ResourcesPo extends ResourcesDefinition {
         return super.getRemark();
     }
 
+
+    @Override
+    @Column(name = "URL_HMAC",length = 500)
+    public String getUrlHmac() {
+        return super.getUrlHmac();
+    }
+
+    @Override
+    @Column(name = "NAME_HMAC",length = 500)
+    public String getNameHmac() {
+        return super.getNameHmac();
+    }
+
+    @Override
+    @Column(name = "CODE_HMAC",length = 500)
+    public String getCodeHmac() {
+        return super.getCodeHmac();
+    }
 }

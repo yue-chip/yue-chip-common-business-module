@@ -46,7 +46,7 @@ public class OrganizationalTreeListVo extends OrganizationalDefinition {
 
     public String getLeaderName() {
         if (StringUtils.hasText(this.leaderName)) {
-            return new Sm4Api().generalDataDec( this.leaderName);
+            return new Sm4Api().generalDataDec( this.leaderName,"");
         }
         return this.leaderName;
     }

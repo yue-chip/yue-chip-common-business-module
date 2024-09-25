@@ -23,7 +23,7 @@ public class ResourcesTreeVo {
 
     public String getTitle() {
         if (StringUtils.hasText(this.title)) {
-            return new Sm4Api().generalDataDec( this.title);
+            return new Sm4Api().generalDataDec( this.title,"");
         }
         return this.title;
     }

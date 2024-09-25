@@ -304,6 +304,13 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public Resources saveResources(@NotNull ResourcesPo resourcesPo) {
+        resourcesPo.setUrl(new Sm4Api().symmKeyDataEnc(resourcesPo.getUrl()));
+        resourcesPo.setName(new Sm4Api().symmKeyDataEnc(resourcesPo.getName()));
+        resourcesPo.setCode(new Sm4Api().symmKeyDataEnc(resourcesPo.getCode()));
+
+        resourcesPo.setUrlHmac(new Sm4Api().hmac(resourcesPo.getUrl()));
+        resourcesPo.setNameHmac(new Sm4Api().hmac(resourcesPo.getName()));
+        resourcesPo.setCodeHmac(new Sm4Api().hmac(resourcesPo.getCode()));
         resourcesPo = resourcesDao.save(resourcesPo);
         return resourcesMapper.toResources(resourcesPo);
     }
@@ -328,6 +335,13 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public void updateResources(@NotNull ResourcesPo resourcesPo) {
+        resourcesPo.setUrl(new Sm4Api().symmKeyDataEnc(resourcesPo.getUrl()));
+        resourcesPo.setName(new Sm4Api().symmKeyDataEnc(resourcesPo.getName()));
+        resourcesPo.setCode(new Sm4Api().symmKeyDataEnc(resourcesPo.getCode()));
+
+        resourcesPo.setUrlHmac(new Sm4Api().hmac(resourcesPo.getUrl()));
+        resourcesPo.setNameHmac(new Sm4Api().hmac(resourcesPo.getName()));
+        resourcesPo.setCodeHmac(new Sm4Api().hmac(resourcesPo.getCode()));
         resourcesDao.update(resourcesPo);
     }
 
@@ -367,6 +381,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public User saveUser(UserPo userPo) {
         userPo.setPassword(new Sm4Api().symmKeyDataEnc(passwordEncoder.encode(userPo.getPassword())));
+        userPo.setName(new Sm4Api().symmKeyDataEnc(userPo.getName()));
+        userPo.setPhoneNumber(new Sm4Api().symmKeyDataEnc(userPo.getPhoneNumber()));
+        userPo.setPhoneNumberHmac(new Sm4Api().hmac(userPo.getPhoneNumber()));
+        userPo.setPasswordHmac(new Sm4Api().hmac(passwordEncoder.encode(userPo.getPassword())));
+        userPo.setNameHmac(new Sm4Api().hmac(userPo.getName()));
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);

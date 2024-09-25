@@ -27,7 +27,7 @@ public class ResourcesTreeListVo extends ResourcesDefinition {
     @Override
     public String getName() {
         if (StringUtils.hasText(super.getName())) {
-            return new Sm4Api().generalDataDec( super.getName());
+            return new Sm4Api().generalDataDec( super.getName(),super.getNameHmac());
         }
         return super.getName();
     }
@@ -35,7 +35,7 @@ public class ResourcesTreeListVo extends ResourcesDefinition {
     @Override
     public String getCode() {
         if (StringUtils.hasText(super.getCode())) {
-            return new Sm4Api().generalDataDec( super.getCode());
+            return new Sm4Api().generalDataDec( super.getCode(),super.getCodeHmac());
         }
         return super.getCode();
     }
@@ -43,7 +43,7 @@ public class ResourcesTreeListVo extends ResourcesDefinition {
     @Override
     public String getUrl() {
         if (StringUtils.hasText(super.getUrl())) {
-            return new Sm4Api().generalDataDec( super.getUrl());
+            return new Sm4Api().generalDataDec( super.getUrl(),super.getUrlHmac());
         }
         return super.getUrl();
     }
