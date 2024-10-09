@@ -54,6 +54,13 @@ public class ResourcesPo extends ResourcesDefinition {
     }
 
     @Override
+    @Comment("英文名称-不能为空")
+    @ColumnDefault("''")
+    public String getNameEn() {
+        return super.getNameEn();
+    }
+
+    @Override
     @Convert(converter = Scope.ScopeConverter.class)
     @Comment("作用域(0:app,1:后台,2:前端,3:微信)-不能为空")
     @ColumnDefault("1")
