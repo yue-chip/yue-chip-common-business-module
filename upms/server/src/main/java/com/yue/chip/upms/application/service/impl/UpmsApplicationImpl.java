@@ -184,8 +184,9 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Override
     public void updateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
 //        upmsRepository.updateUserPassword(CurrentUserUtil.getCurrentUserId(),passwordEncoder.encode(SecureUtil.md5(userUpdatePasswordDto.getPassword())));
+        String pass = passwordEncoder.encode(userUpdatePasswordDto.getPassword());
         upmsRepository.updateUserPassword(Objects.isNull(userUpdatePasswordDto.getUserId())?CurrentUserUtil.getCurrentUserId(): userUpdatePasswordDto.getUserId(),
-                new Sm4Api().symmKeyDataEnc(passwordEncoder.encode(userUpdatePasswordDto.getPassword())));
+                new Sm4Api().symmKeyDataEnc(pass), new Sm4Api().hmac(pass));
     }
 
     @Override

@@ -38,6 +38,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
@@ -142,8 +143,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public void updateUserPassword(Long userId, String password) {
-        userDao.updatePassword(userId,password);
+    public void updateUserPassword(Long userId, String password, @NotBlank String passwordHmac) {
+        userDao.updatePassword(userId,password,passwordHmac);
     }
 
     @Override
@@ -384,7 +385,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         userPo.setName(new Sm4Api().symmKeyDataEnc(userPo.getName()));
         userPo.setPhoneNumber(new Sm4Api().symmKeyDataEnc(userPo.getPhoneNumber()));
         userPo.setPhoneNumberHmac(new Sm4Api().hmac(userPo.getPhoneNumber()));
-        userPo.setPasswordHmac(new Sm4Api().hmac(passwordEncoder.encode(userPo.getPassword())));
+        userPo.setPasswordHmac(new Sm4Api().hmac(userPo.getPassword()));
         userPo.setNameHmac(new Sm4Api().hmac(userPo.getName()));
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
         userPo = userDao.save(userPo);

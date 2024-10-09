@@ -1,20 +1,17 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.core.persistence.curd.BaseDao;
-import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author Mr.Liu
@@ -44,9 +41,9 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @param password
      */
     @Modifying
-    @Query("update UserPo set password=:password where id =:id ")
+    @Query("update UserPo set password=:password ,passwordHmac=:passwordHmac where id =:id ")
     @Transactional
-    public void updatePassword(@NotNull @Param("id") Long id, @NotBlank @Param("password") String password);
+    public void updatePassword(@NotNull @Param("id") Long id, @NotBlank @Param("password") String password,@NotBlank String passwordHmac);
 
     /**
      * 根据ids查询所有用户

@@ -154,7 +154,7 @@ public class TestController  {
     public IResultData jiami1(){
         List<User> list = upmsRepository.findAll();
         list.forEach(user -> {
-            upmsRepository.updateUserPassword(user.getId(), new Sm4Api().symmKeyDataEnc(user.getPassword()) );
+            upmsRepository.updateUserPassword(user.getId(), new Sm4Api().symmKeyDataEnc(user.getPassword()), new Sm4Api().hmac(user.getPassword()));
         });
         return ResultData.builder().build();
     }
