@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8190
   tongweb:
     #最大工作线程
     max-threads: 2000

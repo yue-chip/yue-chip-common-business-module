@@ -200,15 +200,15 @@ public class TestController  {
     public IResultData hmac(){
         List<User> list = upmsRepository.findAll();
         list.forEach(user -> {
-//            if (StringUtils.hasText(user.getName())) {
-//                user.setNameHmac(new Sm4Api().hmac( new Sm4Api().generalDataDec(user.getName(),"")));
-//            }
-//            if (StringUtils.hasText(user.getPhoneNumber())) {
-//                user.setPhoneNumberHmac(new Sm4Api().hmac( new Sm4Api().generalDataDec(user.getPhoneNumber(),"")));
-//            }
-            if (StringUtils.hasText(user.getPassword())) {
-                user.setPasswordHmac(new Sm4Api().hmac( new Sm4Api().generalDataDec(user.getPassword(),"")));
+            if (StringUtils.hasText(user.getName())) {
+                user.setNameHmac(new Sm4Api().hmac( new Sm4Api().generalDataDec(user.getName(),"")));
             }
+            if (StringUtils.hasText(user.getPhoneNumber())) {
+                user.setPhoneNumberHmac(new Sm4Api().hmac( new Sm4Api().generalDataDec(user.getPhoneNumber(),"")));
+            }
+//            if (StringUtils.hasText(user.getPassword())) {
+//                user.setPasswordHmac(new Sm4Api().hmac( new Sm4Api().generalDataDec(user.getPassword(),"")));
+//            }
             upmsRepository.saveUser1(userMapper.toUserPo(user));
         });
         return ResultData.builder().build();
