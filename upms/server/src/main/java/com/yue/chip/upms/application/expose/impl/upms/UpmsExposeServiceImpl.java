@@ -248,8 +248,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public void logoutUser(String username) {
-        upmsRepository.logoutUser(username);
+    public void logoutUser(Long userId) {
+        upmsRepository.logoutUser(userId);
     }
 
 }

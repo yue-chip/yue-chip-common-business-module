@@ -398,13 +398,9 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public void logoutUser(String username) {
-        Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
-        if (firstByUsername.isPresent()) {
-            Long userId = firstByUsername.get().getId();
-            userDao.deleteById(userId);
-            userRoleDao.deleteByUserId(userId);
-        }
+    public void logoutUser(Long userId) {
+        userDao.deleteById(userId);
+        userRoleDao.deleteByUserId(userId);
     }
 
 

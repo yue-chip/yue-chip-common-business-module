@@ -168,8 +168,7 @@ public interface UpmsExposeService {
 
     /**
      * 注销账号
-     * @param username
      */
-    void logoutUser(@NotBlank String username);
+    void logoutUser(@NotNull Long userId);
 
 }
