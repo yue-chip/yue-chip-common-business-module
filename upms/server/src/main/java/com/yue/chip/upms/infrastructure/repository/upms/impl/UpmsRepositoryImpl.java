@@ -397,6 +397,16 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         return (IPageResultData<List<UserExposeVo>>) PageResultData.convert(page,userExposeVo);
     }
 
+    @Override
+    public void logoutUser(String username) {
+        Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
+        if (firstByUsername.isPresent()) {
+            Long userId = firstByUsername.get().getId();
+            userDao.deleteById(userId);
+            userRoleDao.deleteByUserId(userId);
+        }
+    }
+
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {
         if (optional.isPresent()) {

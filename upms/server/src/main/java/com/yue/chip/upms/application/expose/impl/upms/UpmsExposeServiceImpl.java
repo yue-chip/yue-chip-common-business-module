@@ -247,4 +247,9 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         organizationalRepository.register(phoneNumber, password, name, id);
     }
 
+    @Override
+    public void logoutUser(String username) {
+        upmsRepository.logoutUser(username);
+    }
+
 }

@@ -334,4 +334,5 @@ public interface UpmsRepository {
 
     IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, @NotNull YueChipPage yueChipPage);
 
+    void logoutUser(String username);
 }

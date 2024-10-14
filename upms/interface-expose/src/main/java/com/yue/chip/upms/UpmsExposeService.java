@@ -166,4 +166,10 @@ public interface UpmsExposeService {
      */
     void register(@NotBlank String phoneNumber, @NotBlank String password, String name, Long id);
 
+    /**
+     * 注销账号
+     * @param username
+     */
+    void logoutUser(@NotBlank String username);
+
 }
