@@ -36,6 +36,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
@@ -381,12 +382,14 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public User saveUser(UserPo userPo) {
-        userPo.setPassword(new Sm4Api().symmKeyDataEnc(passwordEncoder.encode(userPo.getPassword())));
-        userPo.setName(new Sm4Api().symmKeyDataEnc(userPo.getName()));
-        userPo.setPhoneNumber(new Sm4Api().symmKeyDataEnc(userPo.getPhoneNumber()));
-        userPo.setPhoneNumberHmac(new Sm4Api().hmac(userPo.getPhoneNumber()));
-        userPo.setPasswordHmac(new Sm4Api().hmac(userPo.getPassword()));
+        if (StringUtils.hasText(userPo.getPassword())) {
+            userPo.setPasswordHmac(new Sm4Api().hmac(userPo.getPassword()));
+            userPo.setPassword(new Sm4Api().symmKeyDataEnc(passwordEncoder.encode(userPo.getPassword())));
+        }
         userPo.setNameHmac(new Sm4Api().hmac(userPo.getName()));
+        userPo.setName(new Sm4Api().symmKeyDataEnc(userPo.getName()));
+        userPo.setPhoneNumberHmac(new Sm4Api().hmac(userPo.getPhoneNumber()));
+        userPo.setPhoneNumber(new Sm4Api().symmKeyDataEnc(userPo.getPhoneNumber()));
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);

@@ -3,10 +3,12 @@ package com.yue.chip.upms.interfaces.vo.organizational;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
 //import io.swagger.v3.oas.annotations.media.Schema;
+import com.yue.chip.utils.Sm4Api;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -40,4 +42,20 @@ public class OrganizationalTreeSelectVo extends OrganizationalDefinition {
 
 
     private List<OrganizationalTreeSelectVo> children;
+
+    public String getLabel() {
+        if (StringUtils.hasText(this.label)) {
+            return new Sm4Api().generalDataDec( this.label,"");
+        }
+        return this.label;
+    }
+
+    @Override
+    public String getName() {
+        if (StringUtils.hasText(super.getName())) {
+            System.out.println(super.getName());
+            return new Sm4Api().generalDataDec( super.getName(),"");
+        }
+        return super.getName();
+    }
 }

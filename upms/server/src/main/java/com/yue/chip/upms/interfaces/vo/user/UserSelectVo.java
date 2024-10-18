@@ -1,12 +1,10 @@
 package com.yue.chip.upms.interfaces.vo.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.yue.chip.upms.definition.user.UserDefinition;
-//import io.swagger.v3.oas.annotations.media.Schema;
+import com.yue.chip.utils.Sm4Api;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Mr.Liu
@@ -23,5 +21,12 @@ public class UserSelectVo {
 
     //@Schema(description = "用户姓名")
     private String label;
+
+    public String getLabel() {
+        if (StringUtils.hasText(this.label)) {
+            return new Sm4Api().generalDataDec( this.label,"");
+        }
+        return this.label;
+    }
     
 }

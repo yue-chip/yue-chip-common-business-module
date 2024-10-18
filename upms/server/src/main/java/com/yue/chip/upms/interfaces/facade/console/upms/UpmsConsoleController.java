@@ -1,18 +1,21 @@
 package com.yue.chip.upms.interfaces.facade.console.upms;
 
-import com.yue.chip.core.*;
+import com.yue.chip.core.IPageResultData;
+import com.yue.chip.core.IResultData;
+import com.yue.chip.core.ResultData;
+import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.Validator;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
+import com.yue.chip.upms.assembler.resources.ResourcesMapper;
+import com.yue.chip.upms.assembler.role.RoleMapper;
+import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.domain.aggregates.*;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
-import com.yue.chip.upms.assembler.resources.ResourcesMapper;
-import com.yue.chip.upms.assembler.role.RoleMapper;
-import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.interfaces.dto.organizational.*;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
@@ -26,26 +29,25 @@ import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeSelectVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalVo;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
+import com.yue.chip.upms.interfaces.vo.user.UserSelectVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.annotation.Resource;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author Mr.Liu
@@ -353,7 +355,7 @@ public class UpmsConsoleController {
 
     @GetMapping("/organizational/user/select/list")
     //@Operation(description = "组织机构-获取机构下的用户",summary = "组织机构-获取机构下的用户")
-    public IResultData<List<UserVo>> organizationalUserList(@NotNull(message = "机构id不能为空") @Parameter(description = "组织机构id",name="organizationalId",required = true)Long organizationalId){
+    public IResultData<List<UserSelectVo>> organizationalUserList(@NotNull(message = "机构id不能为空") @Parameter(description = "组织机构id",name="organizationalId",required = true)Long organizationalId){
         return ResultData.builder().data(userMapper.toUserSelectVo(upmsRepository.findUserByOrganizationalId(organizationalId))).build();
     }
 

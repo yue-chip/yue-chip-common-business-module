@@ -6,10 +6,8 @@ import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.HibernateSessionJdbcUtil;
+import com.yue.chip.utils.Sm4Api;
 import com.yue.chip.utils.TenantDatabaseUtil;
-import javax.validation.constraints.NotNull;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.NotNull;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -71,7 +70,7 @@ public class UserDaoImpl implements UserDaoEx {
         Map<String,Object> para = new HashMap<>();
         if (StringUtils.hasText(name)) {
             sb.append(" and u.name like :name ");
-            para.put("name","%"+name+"%");
+            para.put("name","%"+new Sm4Api().symmKeyDataEnc(name)+"%");
         }
         if (StringUtils.hasText(username)) {
             sb.append(" and u.username like :username ");
