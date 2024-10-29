@@ -12,7 +12,7 @@
             <a-form-item label="姓名" name="name" ref="name">
                 <a-input placeholder="请输入姓名" v-model:value="addOrUpdateModel.name" />
             </a-form-item>
-            <a-form-item label="所属机构" name="organizationalId" ref="organizationalId">
+            <a-form-item label="所属机构" name="organizationalId" ref="organizationalId" :rules="{ required: true, message: '请选择所属机构', trigger: 'change' }">
                 <a-tree-select v-model:value="addOrUpdateModel.organizationalId" tree-data-simple-mode
                     style="width: 100%" :tree-data="treeData" allow-clear :show-checked-strategy="SHOW_PARENT"
                     placeholder="请选择所属机构" tree-node-filter-prop="label" multiple />
