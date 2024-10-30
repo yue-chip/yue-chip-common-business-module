@@ -303,9 +303,9 @@ function del(id: string[]) {
     Modal.confirm({
         title: '是否要删除该数据?',
         // content: '',
-        okText: 'Yes',
+        okText: '确定',
         okType: 'danger',
-        cancelText: 'No',
+        cancelText: '取消',
         onOk() {
             const params = {
                 params: { ids: id },
