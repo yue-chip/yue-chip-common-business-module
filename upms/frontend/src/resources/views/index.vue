@@ -363,9 +363,9 @@ function del(id: string) {
     Modal.confirm({
         title: '是否要删除该数据?(错误的操作会带来灾难性的后果)',
         // content: '',
-        okText: 'Yes',
+        okText: '确定',
         okType: 'danger',
-        cancelText: 'No',
+        cancelText: '取消',
         onOk() {
             axios.axiosDelete("/upms/console/resources/delete", { params: { id: id } }, (data: any) => {
                 if (data.status === 200) {
