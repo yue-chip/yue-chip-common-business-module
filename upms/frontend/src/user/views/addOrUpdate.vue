@@ -1,7 +1,7 @@
 <template>
     <a-card class="card" :bordered="false">
-        <a-form ref="from" :rules="rules" :model="addOrUpdateModel" layout="horizontal" :label-col="{ span: 4, offset: 0 }"
-            :wrapper-col="{ span: 16, offset: 0 }">
+        <a-form ref="from" :rules="rules" :model="addOrUpdateModel" layout="horizontal"
+            :label-col="{ span: 4, offset: 0 }" :wrapper-col="{ span: 16, offset: 0 }">
             <a-form-item label="账号" name="username" ref="username">
                 <a-input placeholder="请输入账号" v-bind:disabled="usernameDisabled"
                     v-model:value="addOrUpdateModel.username" />
@@ -12,7 +12,8 @@
             <a-form-item label="姓名" name="name" ref="name">
                 <a-input placeholder="请输入姓名" v-model:value="addOrUpdateModel.name" />
             </a-form-item>
-            <a-form-item label="所属机构" name="organizationalId" ref="organizationalId" :rules="{ required: true, message: '请选择所属机构', trigger: 'change' }">
+            <a-form-item label="所属机构" name="organizationalId" ref="organizationalId"
+                :rules="{ required: true, message: '请选择所属机构', trigger: 'change' }">
                 <a-tree-select v-model:value="addOrUpdateModel.organizationalId" tree-data-simple-mode
                     style="width: 100%" :tree-data="treeData" allow-clear :show-checked-strategy="SHOW_PARENT"
                     placeholder="请选择所属机构" tree-node-filter-prop="label" multiple />
@@ -121,9 +122,7 @@ const rules: any = {
     name: [{ required: true, message: "请输入姓名", trigger: 'blur' }],
 };
 let headers = computed(() => {
-    const token = sessionStorage.getItem("token");
-    console.log(token);
-    
+    const token = sessionStorage.getItem("access_token");
     return { "Token": token };
 })
 onMounted(() => {
@@ -161,9 +160,11 @@ async function getInfo(id: string) {
         (data: any) => {
             if (data.status === 200) {
                 addOrUpdateModel.value = data.data;
-                addOrUpdateModel.value.organizationalId= addOrUpdateModel.value.organizationalList.map((item:string) => item.id);
-                console.log( addOrUpdateModel.value);
-                
+                addOrUpdateModel.value.organizationalId = addOrUpdateModel.value.organizationalList.map((item: string) => item.id);
+                imageUrl.value = "/api/file" + data.data.profilePhotoUrl;
+                otherPhotoUrl.value = "/api/file" + data.data.otherPhotoUrl;
+                console.log(addOrUpdateModel.value);
+
             }
         }, null, null)
 }
