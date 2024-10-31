@@ -23,7 +23,7 @@
             <a-form-item label="邮箱" name="email" ref="email">
                 <a-input placeholder="请输入电子邮箱" v-model:value="addOrUpdateModel.email" />
             </a-form-item>
-            <a-form-item label="证件类型" name="IdCardType" ref="IdCardType">
+            <a-form-item label="证件类型" name="idCardType" ref="idCardType">
                 <a-select v-model:value="addOrUpdateModel.IdCardType">
                     <a-select-option value="0">身份证</a-select-option>
                 </a-select>
