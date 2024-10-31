@@ -296,6 +296,7 @@ function edit(id: string) {
 
 
 function del(id: string[]) {
+
     if (!id || id.length === 0) {
         message.error("请选择要删除的数据！")
         return;
@@ -316,6 +317,7 @@ function del(id: string[]) {
             axios.axiosDelete("/upms/console/user/delete", params, (data: any) => {
                 if (data.status === 200) {
                     message.info(data.message);
+                    selectedRowKeys=[]
                     search();
                 }
             }, null, null);
