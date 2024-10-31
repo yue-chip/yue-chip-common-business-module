@@ -122,6 +122,8 @@ const rules: any = {
 };
 let headers = computed(() => {
     const token = sessionStorage.getItem("token");
+    console.log(token);
+    
     return { "Token": token };
 })
 onMounted(() => {
