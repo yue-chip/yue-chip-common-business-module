@@ -265,4 +265,15 @@ public class UserDaoImpl implements UserDaoEx {
         return result;
     }
 
+    @Override
+    public List<UserPo> findByUserName(String username) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u where ");
+        Map<String,Object> para = new HashMap<>();
+        sb.append(" u.username like :username ");
+        para.put("username","%"+username+"%");
+        sb.append(" and u.username <> 'superadmin' ");
+        return (List<UserPo>) baseDao.findAll(sb.toString(),para);
+    }
+
 }
