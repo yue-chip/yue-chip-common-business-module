@@ -5,6 +5,7 @@ import com.yue.chip.core.PageSerializable;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.YueChipPageSerializable;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.UpmsExposeService;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
@@ -181,8 +182,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public UserExposeVo findByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email) {
-        User byUsernameOrPhoneNumberOrEmail = upmsRepository.findByUsernameOrPhoneNumberOrEmail(username, phoneNumber, email);
+    public UserExposeVo findByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email, UserType userType) {
+        User byUsernameOrPhoneNumberOrEmail = upmsRepository.findByUsernameOrPhoneNumberOrEmail(username, phoneNumber, email,userType);
         return userMapper.toUserExposeVo(byUsernameOrPhoneNumberOrEmail);
     }
 
