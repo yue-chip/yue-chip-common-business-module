@@ -296,6 +296,7 @@ function edit(id: string) {
 
 
 function del(id: string[]) {
+
     if (!id || id.length === 0) {
         message.error("请选择要删除的数据！")
         return;
@@ -303,9 +304,9 @@ function del(id: string[]) {
     Modal.confirm({
         title: '是否要删除该数据?',
         // content: '',
-        okText: 'Yes',
+        okText: '确定',
         okType: 'danger',
-        cancelText: 'No',
+        cancelText: '取消',
         onOk() {
             const params = {
                 params: { ids: id },
@@ -316,6 +317,7 @@ function del(id: string[]) {
             axios.axiosDelete("/upms/console/user/delete", params, (data: any) => {
                 if (data.status === 200) {
                     message.info(data.message);
+                    selectedRowKeys=[]
                     search();
                 }
             }, null, null);
