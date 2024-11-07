@@ -377,7 +377,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public User findByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email) {
-        UserPo allByNameOrPhoneNumberOrEmail = userDao.findByUsernameOrPhoneNumberOrEmail(username,phoneNumber,email);
+        UserPo allByNameOrPhoneNumberOrEmail = userDao.findByUsernameOrPhoneNumberOrEmailAndUserType(username,phoneNumber,email,UserType.SYSTEM);
         User user = userMapper.toUser(allByNameOrPhoneNumberOrEmail);
         return user;
     }
