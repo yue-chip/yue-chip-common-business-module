@@ -30,6 +30,13 @@ dependencies {
         exclude group: "com.sun.xml.bind"
     }
     api 'com.tencentcloudapi:tencentcloud-sdk-java-sms'
+    api 'cn.com.kingbase:kingbase8:8.6.0'
+    api 'xiao.wei:hibernate:6.2'
+    api 'com.sun.messaging.mq:fscontext:4.6-b01'
+    api 'xiao.wei:postgresql:1.0.0'
+    implementation('org.springframework.boot:spring-boot-starter-data-jdbc') {
+        exclude group: 'org.springframework.data', module: 'spring-data-jdbc'
+    }
 //    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
