@@ -24,6 +24,7 @@ import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
@@ -182,9 +183,9 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public UserExposeVo findByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email, UserType userType) {
-        User byUsernameOrPhoneNumberOrEmail = upmsRepository.findByUsernameOrPhoneNumberOrEmail(username, phoneNumber, email,userType);
-        return userMapper.toUserExposeVo(byUsernameOrPhoneNumberOrEmail);
+    public PageSerializable<UserExposeVo> findByUsernameOrPhoneNumberOrEmailAndUserType(String nameLike, UserType userType, @NotNull YueChipPage yueChipPage) {
+        Page<User> page = upmsRepository.findByUsernameOrPhoneNumberOrEmailAndUserType(nameLike, userType, yueChipPage);
+        return new YueChipPageSerializable<UserExposeVo>(userMapper.toUserExposeVo(page.getContent()), page.getPageable(), page.getTotalElements());
     }
 
     @Override

@@ -143,6 +143,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
         Assert.isFalse(user.checkUsernameIsExist(), () -> {return new BusinessException("该帐号已存在");});
         userAddOrUpdateDto.setUserType(UserType.SYSTEM);
+        userAddOrUpdateDto.setUserType(UserType.ORDINARY);
         //保存用户
         User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系

@@ -96,4 +96,6 @@ public interface UserDaoEx {
      * @return
      */
     List<UserPo> findByUserName(String userName);
+
+    Page<UserPo> findByUsernameOrPhoneNumberOrEmailAndUserType(String name, UserType userType, YueChipPage yueChipPage);
 }

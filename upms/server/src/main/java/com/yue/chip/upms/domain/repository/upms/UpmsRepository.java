@@ -21,6 +21,7 @@ import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -330,7 +331,7 @@ public interface UpmsRepository {
 
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
 
-    User findByUsernameOrPhoneNumberOrEmail(@NotBlank String username, @NotBlank String phoneNumber, @NotBlank String email,UserType userType);
+    Page<User> findByUsernameOrPhoneNumberOrEmailAndUserType(@NotBlank String nameLike, UserType userType, YueChipPage yueChipPage);
     User findByPhoneNumber(@NotBlank String phoneNumber);
     User findByUsername(@NotBlank String phoneNumber);
 
