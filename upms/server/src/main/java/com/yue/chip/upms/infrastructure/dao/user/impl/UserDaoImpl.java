@@ -77,7 +77,7 @@ public class UserDaoImpl implements UserDaoEx {
             para.put("name","%"+username+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
-        sb.append(" ORDER BY u.createDateTime DESC");
+        sb.append(" ORDER BY u.createDateTime ASC ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
