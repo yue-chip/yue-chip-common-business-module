@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Mr.Liu
@@ -21,4 +22,14 @@ public interface FileDaoEx {
      * @return
      */
     public List<FilePo> find(@NotNull Long tableId,@NotBlank String fileFieldName, @NotBlank String tableName);
+
+    /**
+     * 查询多个文件
+     * @param tableIds
+     * @param fileFieldName
+     * @param tableName
+     * @return
+     */
+    public Map<String, String> find(@NotNull List<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName);
+
 }

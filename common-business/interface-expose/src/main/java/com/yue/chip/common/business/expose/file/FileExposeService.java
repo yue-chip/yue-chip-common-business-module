@@ -121,4 +121,14 @@ public interface FileExposeService {
 //    @Deprecated //Tri协议下会有问题  似乎是没法反序列化Long...
 //    public List<Long> save(@NotNull Long tableId, @NotBlank String tableName, @NotBlank String fileFieldName,@NotNull @Size(min = 1) Long... fileId);
 
+    /**
+     * 查找多个url路径
+     * @param tableIds
+     * @param fileFieldName
+     * @param tableName
+     * @param tenantNumber
+     * @return
+     */
+    public Map<String, String> getUrls(@NotNull List<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName,Long tenantNumber);
+
 }
