@@ -53,6 +53,12 @@ public class FileRepositoryImpl implements FileRepository {
     }
 
     @Override
+    public Map<String, String> find(List<Long> tableIds, String fileFieldName, String tableName) {
+        Map<String, String> list = fileDao.find(tableIds, fileFieldName, tableName);
+        return list;
+    }
+
+    @Override
     public void save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
         if (Objects.nonNull(tableId) && Objects.nonNull(tableName) && Objects.nonNull(fileFieldName) ) {
             fileRelationalDao.deleteByTableIdAndTableNameAndFileFieldName(tableId, tableName, fileFieldName);

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -38,6 +39,16 @@ public interface FileRepository {
      * @return
      */
     public List<File> find(@NotNull Long tableId,@NotBlank String fileFieldName,@NotBlank String tableName);
+
+    /**
+     * 查询多个文件
+     * @param tableIds
+     * @param fileFieldName
+     * @param tableName
+     * @return
+     */
+    public Map<String, String> find(@NotNull List<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName);
+
 
     /**
      * 保存表与文件的关联关系
