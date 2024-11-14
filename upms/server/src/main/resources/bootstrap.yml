@@ -6,7 +6,7 @@ spring:
     allow-circular-references: true
   nacos:
     group: IOT-BUSINESS-GROUP
-    host: 192.168.31.202:8848
+    host: 192.168.11.184:8848
     namespace: 050c0cfa-0e3d-409e-8bc6-d0c425ce4c94
     #    group: YUE-CHIP-GROUP
 #    host: 192.168.177.129:8848
