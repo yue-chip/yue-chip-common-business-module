@@ -280,10 +280,12 @@ public class UserDaoImpl implements UserDaoEx {
     public Page<UserPo> findByUsernameOrPhoneNumberOrEmailAndUserType(String name, UserType userType, YueChipPage yueChipPage) {
         StringBuffer sb = new StringBuffer();
         Map<String,Object> para = new HashMap<>();
-        sb.append(" select u from UserPo u where (u.username like :name or u.phoneNumber like :name or u.email like :name) ");
+        sb.append(" select u from UserPo u where u.username like :name ");
         para.put("name", "%" + name + "%");
-        sb.append(" and u.userType = :userType ");
-        para.put("userType", userType);
+        if (Objects.nonNull(userType)) {
+            sb.append(" and u.userType = :userType ");
+            para.put("userType", userType);
+        }
         sb.append(" and u.username <> 'superadmin' ");
         return (Page<UserPo>) baseDao.findNavigator(yueChipPage,sb.toString(),para);
     }
