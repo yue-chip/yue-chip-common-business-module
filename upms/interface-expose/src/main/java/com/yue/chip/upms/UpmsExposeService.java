@@ -108,8 +108,9 @@ public interface UpmsExposeService {
     public Set<Long> findOrganizationalAllChildrenOrganizationalIds(@NotNull Long parentId);
 
     List<UserExposeVo> findUserAllByNameOrPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber);
-    UserExposeVo findByUsernameOrPhoneNumberOrEmail(@NotBlank String username, @NotBlank String phoneNumber, @NotBlank String email);
+    PageSerializable<UserExposeVo> findByUsernameOrPhoneNumberOrEmailAndUserType(@NotBlank String nameLike, UserType userType, @NotNull YueChipPage yueChipPage);
     UserExposeVo findByPhoneNumber(@NotBlank String phoneNumber);
+    UserExposeVo findByUserName(@NotBlank String phoneNumber);
 
     public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(@NotNull Long parentId);
 

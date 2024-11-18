@@ -5,6 +5,7 @@ import com.yue.chip.core.PageSerializable;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.YueChipPageSerializable;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.UpmsExposeService;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
@@ -23,6 +24,7 @@ import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
@@ -181,15 +183,21 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public UserExposeVo findByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email) {
-        User byUsernameOrPhoneNumberOrEmail = upmsRepository.findByUsernameOrPhoneNumberOrEmail(username, phoneNumber, email);
-        return userMapper.toUserExposeVo(byUsernameOrPhoneNumberOrEmail);
+    public PageSerializable<UserExposeVo> findByUsernameOrPhoneNumberOrEmailAndUserType(String nameLike, UserType userType, @NotNull YueChipPage yueChipPage) {
+        Page<User> page = upmsRepository.findByUsernameOrPhoneNumberOrEmailAndUserType(nameLike, userType, yueChipPage);
+        return new YueChipPageSerializable<UserExposeVo>(userMapper.toUserExposeVo(page.getContent()), page.getPageable(), page.getTotalElements());
     }
 
     @Override
     public UserExposeVo findByPhoneNumber(String phoneNumber) {
         User byPhoneNumber = upmsRepository.findByPhoneNumber(phoneNumber);
         return userMapper.toUserExposeVo(byPhoneNumber);
+    }
+
+    @Override
+    public UserExposeVo findByUserName(String phoneNumber) {
+        User user = upmsRepository.findByUsername(phoneNumber);
+        return userMapper.toUserExposeVo(user);
     }
 
     @Override

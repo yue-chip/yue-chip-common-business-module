@@ -90,4 +90,12 @@ public interface UserDaoEx {
      */
     Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber);
 
+    /**
+     * 根据手机号精准查询UserName
+     * @param userName
+     * @return
+     */
+    List<UserPo> findByUserName(String userName);
+
+    Page<UserPo> findByUsernameOrPhoneNumberOrEmailAndUserType(String name, UserType userType, YueChipPage yueChipPage);
 }

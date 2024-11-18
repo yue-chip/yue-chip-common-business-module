@@ -30,6 +30,7 @@ import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
+import com.yue.chip.utils.I18nUtils;
 import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -141,6 +142,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
         //检查用户是否存在
         User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
         Assert.isFalse(user.checkUsernameIsExist(), () -> {return new BusinessException("该帐号已存在");});
+        userAddOrUpdateDto.setUserType(UserType.SYSTEM);
+        userAddOrUpdateDto.setUserType(UserType.ORDINARY);
         //保存用户
         User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系

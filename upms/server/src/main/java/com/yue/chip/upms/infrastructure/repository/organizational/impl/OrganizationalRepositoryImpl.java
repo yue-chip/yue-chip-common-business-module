@@ -324,6 +324,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         userAddOrUpdateDto.setPhoneNumber(phoneNumber);
         userAddOrUpdateDto.setUsername(phoneNumber);
         userAddOrUpdateDto.setPasswordI(password);
+        userAddOrUpdateDto.setState(State.NORMAL);
         userAddOrUpdateDto.setUserType(UserType.ORDINARY);
         if (StringUtils.hasText(name)) {
             userAddOrUpdateDto.setName(name);

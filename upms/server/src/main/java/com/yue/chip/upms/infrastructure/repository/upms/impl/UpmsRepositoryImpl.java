@@ -376,16 +376,23 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public User findByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email) {
-        UserPo allByNameOrPhoneNumberOrEmail = userDao.findByUsernameOrPhoneNumberOrEmail(username,phoneNumber,email);
-        User user = userMapper.toUser(allByNameOrPhoneNumberOrEmail);
-        return user;
+    public Page<User> findByUsernameOrPhoneNumberOrEmailAndUserType(String nameLike, UserType userType, YueChipPage yueChipPage) {
+        Page<UserPo> page = userDao.findByUsernameOrPhoneNumberOrEmailAndUserType(nameLike, userType, yueChipPage);
+        List<User> listUser = userMapper.toUser(page.getContent());
+        return (IPageResultData<List<User>>) PageResultData.convert(page, listUser);
     }
 
     @Override
     public User findByPhoneNumber(String phoneNumber) {
         UserPo byPhoneNumber = userDao.findByPhoneNumber(phoneNumber);
         User user = userMapper.toUser(byPhoneNumber);
+        return user;
+    }
+
+    @Override
+    public User findByUsername(String phoneNumber) {
+        List<UserPo> byUserName = userDao.findByUserName(phoneNumber);
+        User user = userMapper.toUser(byUserName.get(byUserName.size() - 1));
         return user;
     }
 

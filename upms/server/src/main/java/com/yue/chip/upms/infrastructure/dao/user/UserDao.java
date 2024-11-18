@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.validation.constraints.NotBlank;
@@ -70,18 +71,10 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
     List<UserPo> findAllByUsernameLikeOrPhoneNumberLikeOrEmailLike(String username,String phoneNumber,String email);
 
     /**
-     * 根据username或手机号或邮箱精准查询
-     * @param username
-     * @param phoneNumber
-     * @param email
-     * @return
-     */
-    UserPo findByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email);
-
-    /**
      * 根据手机号精准查询
      * @param phoneNumber
      * @return
      */
     UserPo findByPhoneNumber(String phoneNumber);
+
 }

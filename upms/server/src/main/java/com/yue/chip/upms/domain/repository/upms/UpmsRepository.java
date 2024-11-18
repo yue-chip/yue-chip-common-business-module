@@ -3,6 +3,7 @@ package com.yue.chip.upms.domain.repository.upms;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -20,6 +21,7 @@ import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -329,8 +331,9 @@ public interface UpmsRepository {
 
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
 
-    User findByUsernameOrPhoneNumberOrEmail(@NotBlank String username,@NotBlank String phoneNumber,@NotBlank String email);
+    Page<User> findByUsernameOrPhoneNumberOrEmailAndUserType(@NotBlank String nameLike, UserType userType, YueChipPage yueChipPage);
     User findByPhoneNumber(@NotBlank String phoneNumber);
+    User findByUsername(@NotBlank String phoneNumber);
 
     IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, @NotNull YueChipPage yueChipPage);
 
