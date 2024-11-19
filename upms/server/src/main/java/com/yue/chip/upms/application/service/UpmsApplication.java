@@ -6,12 +6,13 @@ import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
+import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto1;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import org.springframework.cache.annotation.Cacheable;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.springframework.cache.annotation.Cacheable;
-
 import java.util.List;
 
 /**
@@ -67,6 +68,8 @@ public interface UpmsApplication {
      * @param userUpdatePasswordDto
      */
     public void updateUserPassword(@NotNull UserUpdatePasswordDto userUpdatePasswordDto);
+
+    public void updateUserPassword(@NotNull UserUpdatePasswordDto1 userUpdatePasswordDto);
 
     /**
      * 删除用户

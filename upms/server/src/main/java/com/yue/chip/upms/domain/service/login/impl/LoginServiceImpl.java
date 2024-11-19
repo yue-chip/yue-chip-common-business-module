@@ -5,6 +5,7 @@ package com.yue.chip.upms.domain.service.login.impl;
 import com.yue.chip.authentication.YueChipAuthenticationToken;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.exception.BusinessException;
+import com.yue.chip.exception.PasswordExpirationException;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
@@ -33,6 +34,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -69,6 +72,14 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("该账号不存在");
         }
         User user = optional.get();
+
+        if (Objects.isNull( user.getUpdatePasswordTime()) ){
+            throw new PasswordExpirationException("密码已过期，请修改密码");
+        }
+        Duration duration = Duration.between(user.getUpdatePasswordTime(), LocalDateTime.now());
+        if (duration.toDays()>=90) {
+            throw new PasswordExpirationException("密码已过期，请修改密码");
+        }
         System.out.println(user.getPassword());
         System.out.println(new Sm4Api().generalDataDec(user.getPassword(),user.getPasswordHmac()));
         if (!passwordEncoder.matches(password,new Sm4Api().generalDataDec(user.getPassword(),user.getPasswordHmac()))) {

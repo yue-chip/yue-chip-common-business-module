@@ -101,4 +101,6 @@ public class UserDefinition extends BaseDefinition {
 
     private  Boolean enabled;
 
+    private LocalDateTime updatePasswordTime;
+
 }

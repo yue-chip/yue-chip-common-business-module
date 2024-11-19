@@ -1,5 +1,6 @@
 package com.yue.chip.upms.interfaces.facade.console.upms;
 
+import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
@@ -25,6 +26,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
+import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto1;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeSelectVo;
@@ -295,6 +297,14 @@ public class UpmsConsoleController {
     @PutMapping("/user/update/password")
     //@Operation(description = "用户-修改用户密码",summary = "用户-修改用户密码")
     public IResultData updateUserPassword(@RequestBody @Validated UserUpdatePasswordDto userUpdatePasswordDto) {
+        upmsApplication.updateUserPassword(userUpdatePasswordDto);
+        return ResultData.builder().build();
+    }
+
+    @PostMapping("/user/update/password1")
+    @AuthorizationIgnore
+    //@Operation(description = "用户-修改用户密码",summary = "用户-修改用户密码")
+    public IResultData updateUserPassword1(@RequestBody @Validated UserUpdatePasswordDto1 userUpdatePasswordDto) {
         upmsApplication.updateUserPassword(userUpdatePasswordDto);
         return ResultData.builder().build();
     }

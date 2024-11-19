@@ -106,6 +106,8 @@ public interface UpmsRepository {
      */
     public void updateUserPassword(@NotNull Long userId,@NotBlank String password,@NotBlank String passwordHmac);
 
+    public void updateUserPassword1(@NotNull String username,@NotBlank String password,@NotBlank String passwordHmac);
+
     /**
      * 根据角色删除用户与角色的绑定关系
      * @param roleId

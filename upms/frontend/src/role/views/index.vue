@@ -5,12 +5,12 @@
         <a-row :gutter="24">
           <a-col :span="6">
             <a-form-item label="名称" name="name" ref="name" >
-              <a-input placeholder="请输入名称" v-model:value="searchModel.name" />
+              <a-input :maxlength="20" :showCount="true" placeholder="请输入名称" v-model:value="searchModel.name" />
             </a-form-item>
           </a-col>
           <a-col :span="6">
             <a-form-item label="编码" name="code" ref="code" >
-              <a-input placeholder="请输入编码" v-model:value="searchModel.code" />
+              <a-input :maxlength="20" :showCount="true" placeholder="请输入编码" v-model:value="searchModel.code" />
             </a-form-item>
           </a-col>
           <a-col :span="6">
@@ -74,19 +74,19 @@
         <a-row >
           <a-col :span="12">
             <a-form-item label="名称" name="name" ref="name">
-              <a-input placeholder="请输入名称" v-model:value="addOrUpdateModel.name" />
+              <a-input :maxlength="20" :showCount="true" placeholder="请输入名称" v-model:value="addOrUpdateModel.name" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="编码" name="code" ref="code">
-              <a-input placeholder="请输入编码" v-model:value="addOrUpdateModel.code" />
+              <a-input :maxlength="20" :showCount="true" placeholder="请输入编码" v-model:value="addOrUpdateModel.code" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row>
           <a-col :span="24">
             <a-form-item :labelCol="{span: 1.9,offset:0}" label="备注" name="remark" ref="remark">
-              <a-textarea placeholder="请输入备注" :auto-size="{ minRows: 5, maxRows: 5 }" v-model:value="addOrUpdateModel.remark" />
+              <a-textarea :maxlength="255" :showCount="true" placeholder="请输入备注" :auto-size="{ minRows: 5, maxRows: 5 }" v-model:value="addOrUpdateModel.remark" />
             </a-form-item>
           </a-col>
         </a-row>

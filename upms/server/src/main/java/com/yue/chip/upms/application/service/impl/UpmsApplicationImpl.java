@@ -25,6 +25,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
+import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto1;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import com.yue.chip.utils.Sm4Api;
@@ -33,6 +34,7 @@ import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
@@ -44,6 +46,11 @@ import java.util.*;
  */
 @Service
 public class UpmsApplicationImpl implements UpmsApplication {
+
+    /**
+     * 密码必须包含大写、小写、数字和特殊字符，且长度是6位以上
+     */
+    private static final String PWD_REGEX = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[`~!@#$%^&*()-=_+;':\",./<>?])(?=\\S+$).{8,}$";
 
     @Resource
     private UpmsDomainService upmsDomainService;
@@ -184,9 +191,24 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Override
     public void updateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
 //        upmsRepository.updateUserPassword(CurrentUserUtil.getCurrentUserId(),passwordEncoder.encode(SecureUtil.md5(userUpdatePasswordDto.getPassword())));
+
         String pass = passwordEncoder.encode(userUpdatePasswordDto.getPassword());
         upmsRepository.updateUserPassword(Objects.isNull(userUpdatePasswordDto.getUserId())?CurrentUserUtil.getCurrentUserId(): userUpdatePasswordDto.getUserId(),
                 new Sm4Api().symmKeyDataEnc(pass), new Sm4Api().hmac(pass));
+    }
+
+    @Override
+    public void updateUserPassword(UserUpdatePasswordDto1 userUpdatePasswordDto) {
+        Optional<User> optional = upmsRepository.findUserByUsername(userUpdatePasswordDto.getUsername());
+        if (!optional.isPresent()) {
+            BusinessException.throwException("用户不存在");
+        }
+        User user = optional.get();
+        if (!passwordEncoder.matches(userUpdatePasswordDto.getOldPassword(),new Sm4Api().generalDataDec(user.getPassword(),""))) {
+            BusinessException.throwException("旧密码不正确");
+        }
+        String pass = passwordEncoder.encode(userUpdatePasswordDto.getNewPassword());
+        upmsRepository.updateUserPassword1(userUpdatePasswordDto.getUsername(),new Sm4Api().symmKeyDataEnc(pass), new Sm4Api().hmac(pass));
     }
 
     @Override
@@ -293,5 +315,16 @@ public class UpmsApplicationImpl implements UpmsApplication {
         return fileExposeService.getUrlSingle(tableId, fileFieldName, tableName,tenantNumber);
     }
 
+    /**
+     * 密码复杂度校验，判断有效性
+     * @param password 密码信息
+     * @return 校验密码是否合规有效
+     */
+    public static boolean isValidPassword(String password) {
+        if (!StringUtils.hasText(password)) {
+            return false;
+        }
+        return password.matches(PWD_REGEX);
+    }
 
 }

@@ -146,4 +146,10 @@ public class UserPo extends UserDefinition {
     public String getNameHmac() {
         return super.getNameHmac();
     }
+
+    @Override
+    @Column(name = "UPDATE_PASSWORD_TIME",length = 500)
+    public LocalDateTime getUpdatePasswordTime() {
+        return super.getUpdatePasswordTime();
+    }
 }
