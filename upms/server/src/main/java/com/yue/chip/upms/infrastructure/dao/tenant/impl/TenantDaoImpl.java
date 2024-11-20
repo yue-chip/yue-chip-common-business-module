@@ -5,6 +5,7 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDaoEx;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
+import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
@@ -28,6 +29,9 @@ public class TenantDaoImpl implements TenantDaoEx {
 
     @Resource
     private BaseDao<TenantPo> baseDao;
+
+    @Resource
+    private BaseDao<TenantStatePo> baseDao1;
 
     @Value("${multiTenant.dataBase.upms:upms}")
     private String upms;
@@ -66,128 +70,145 @@ public class TenantDaoImpl implements TenantDaoEx {
 
     @Override
     public void updateOtherDataBase(State state, Long tenantNumber) {
-        Object result = baseDao.getSession().doReturningWork(
-            new ReturningWork<Boolean>() {
-                @Override
-                public Boolean execute(java.sql.Connection connection) throws SQLException {
-                    Statement stat = null;
-                    try {
-                        stat =  connection.createStatement();
-                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
-                        stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
-                        return true;
-                    }finally {
-                        HibernateSessionJdbcUtil.close(stat);
-                    }
-
-                }
-            });
+//        Object result = baseDao.getSession().doReturningWork(
+//            new ReturningWork<Boolean>() {
+//                @Override
+//                public Boolean execute(java.sql.Connection connection) throws SQLException {
+//                    Statement stat = null;
+//                    try {
+//                        stat =  connection.createStatement();
+//                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+//                        stat.executeUpdate("update t_tenant_state set state = "+state.getKey()+";");
+//                        return true;
+//                    }finally {
+//                        HibernateSessionJdbcUtil.close(stat);
+//                    }
+//
+//                }
+//            });
+        StringBuffer sb = new StringBuffer();
+        sb.append(" update TenantStatePo t set t.state = :state ");
+        Map<String,Object> para = new HashMap<>();
+        para.put("state",state);
+        baseDao1.update(sb.toString(),para);
     }
 
     @Override
     public void insertOtherDataBase(State state, Long tenantNumber) {
-        Object result = baseDao.getSession().doReturningWork(
-                new ReturningWork<Boolean>() {
-                    @Override
-                    public Boolean execute(java.sql.Connection connection) throws SQLException {
-                        Statement stat = null;
-                        try {
-                            stat =  connection.createStatement();
-                            stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
-                            stat.executeUpdate("insert t_tenant_state (state) values("+state.getKey()+")");
-                            return true;
-                        }finally {
-                            HibernateSessionJdbcUtil.close(stat);
-                        }
-
-                    }
-                });
+//        Object result = baseDao.getSession().doReturningWork(
+//                new ReturningWork<Boolean>() {
+//                    @Override
+//                    public Boolean execute(java.sql.Connection connection) throws SQLException {
+//                        Statement stat = null;
+//                        try {
+//                            stat =  connection.createStatement();
+//                            stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+//                            stat.executeUpdate("insert t_tenant_state (state) values("+state.getKey()+")");
+//                            return true;
+//                        }finally {
+//                            HibernateSessionJdbcUtil.close(stat);
+//                        }
+//
+//                    }
+//                });
+        TenantStatePo po = new TenantStatePo();
+        po.setState(state);
+        baseDao1.save(po);
     }
 
     @Override
     public List<TenantPo> findAllByState(State state) {
-        List<TenantPo> result = baseDao.getSession().doReturningWork(
-            new ReturningWork<List<TenantPo>>() {
-                @Override
-                public List<TenantPo> execute(java.sql.Connection connection) throws SQLException {
-                    Statement stat = null;
-                    PreparedStatement prepareStatement = null;
-                    ResultSet resultSet = null;
-                    try {
-                        stat =  connection.createStatement();
-                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(null)).concat("`"));
-                        prepareStatement =  connection.prepareStatement("select * from t_tenant where state = ?");
-                        prepareStatement.setInt(1,state.getKey());
-                        resultSet = prepareStatement.executeQuery();
-                        List<TenantPo> list = new ArrayList<>();
-                        while (resultSet.next()) {
-                            list.add(TenantPo.builder()
-                                    .manager(Objects.nonNull(resultSet.getObject("manager"))?resultSet.getString("manager"):null)
-                                    .id(resultSet.getLong("id"))
-                                    .isDefault(Objects.nonNull(resultSet.getObject("is_default"))?resultSet.getBoolean("is_default"):null)
-                                    .abbreviation(Objects.nonNull(resultSet.getObject("abbreviation"))?resultSet.getString("abbreviation"):null)
-                                    .requestDomain(Objects.nonNull(resultSet.getObject("request_domain"))?resultSet.getString("request_domain"):null)
-                                    .phoneNumber(Objects.nonNull(resultSet.getObject("phone_number"))?resultSet.getString("phone_number"):null)
-                                    .name(Objects.nonNull(resultSet.getObject("name"))?resultSet.getString("name"):null)
-                                    .tenantNumber(Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null)
-                                    .build());
-                        }
-                        return list;
-                    }finally {
-                        HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
-                    }
+//        List<TenantPo> result = baseDao.getSession().doReturningWork(
+//            new ReturningWork<List<TenantPo>>() {
+//                @Override
+//                public List<TenantPo> execute(java.sql.Connection connection) throws SQLException {
+//                    Statement stat = null;
+//                    PreparedStatement prepareStatement = null;
+//                    ResultSet resultSet = null;
+//                    try {
+//                        stat =  connection.createStatement();
+//                        stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(null)).concat("`"));
+//                        prepareStatement =  connection.prepareStatement("select * from t_tenant where state = ?");
+//                        prepareStatement.setInt(1,state.getKey());
+//                        resultSet = prepareStatement.executeQuery();
+//                        List<TenantPo> list = new ArrayList<>();
+//                        while (resultSet.next()) {
+//                            list.add(TenantPo.builder()
+//                                    .manager(Objects.nonNull(resultSet.getObject("manager"))?resultSet.getString("manager"):null)
+//                                    .id(resultSet.getLong("id"))
+//                                    .isDefault(Objects.nonNull(resultSet.getObject("is_default"))?resultSet.getBoolean("is_default"):null)
+//                                    .abbreviation(Objects.nonNull(resultSet.getObject("abbreviation"))?resultSet.getString("abbreviation"):null)
+//                                    .requestDomain(Objects.nonNull(resultSet.getObject("request_domain"))?resultSet.getString("request_domain"):null)
+//                                    .phoneNumber(Objects.nonNull(resultSet.getObject("phone_number"))?resultSet.getString("phone_number"):null)
+//                                    .name(Objects.nonNull(resultSet.getObject("name"))?resultSet.getString("name"):null)
+//                                    .tenantNumber(Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null)
+//                                    .build());
+//                        }
+//                        return list;
+//                    }finally {
+//                        HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
+//                    }
+//
+//                }
+//            });
 
-                }
-            });
-        return result;
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select t from TenantPo t where t.state = :state ");
+        Map<String,Object> para = new HashMap<>();
+        para.put("state",state);
+        return (List<TenantPo>) baseDao.findAll(sb.toString(), para);
+//        return result;
     }
 
     @Override
     public Optional<TenantPo> findTenantByTenantNumber(Long tenantNumber) {
-        TenantPo result = baseDao.getSession().doReturningWork(
-                new ReturningWork<TenantPo>() {
-                    @Override
-                    public TenantPo execute(java.sql.Connection connection) throws SQLException {
-                        Statement stat = null;
-                        PreparedStatement prepareStatement = null;
-                        ResultSet resultSet = null;
-                        try {
-                            stat =  connection.createStatement();
-                            stat.execute(" use `".concat(upms).concat("`"));
-                            String sql = "select * from t_tenant where tenant_number = ?";
-                            Object[] params = new Object[]{tenantNumber};
-                            if (Objects.isNull(tenantNumber)) {
-                                sql = "select * from t_tenant where tenant_number is null ";
-                                params = new Object[]{};
-                            }
+//        TenantPo result = baseDao.getSession().doReturningWork(
+//                new ReturningWork<TenantPo>() {
+//                    @Override
+//                    public TenantPo execute(java.sql.Connection connection) throws SQLException {
+//                        Statement stat = null;
+//                        PreparedStatement prepareStatement = null;
+//                        ResultSet resultSet = null;
+//                        try {
+//                            stat =  connection.createStatement();
+//                            String upms1 = upms;
+//                            stat.execute(" use `".concat(upms1).concat("`"));
+//                            String sql = "select * from t_tenant where tenant_number = ?";
+//                            Object[] params = new Object[]{tenantNumber};
+//                            if (Objects.isNull(tenantNumber)) {
+//                                sql = "select * from t_tenant where tenant_number is null ";
+//                                params = new Object[]{};
+//                            }
+//
+//                            prepareStatement =  connection.prepareStatement(sql);
+//                            if (Objects.nonNull(tenantNumber)) {
+//                                prepareStatement.setLong(1,tenantNumber);
+//                            }
+//                            resultSet = prepareStatement.executeQuery();
+//                            TenantPo tenantPo = null;
+//                            while (resultSet.next()) {
+//                                tenantPo = TenantPo.builder()
+//                                        .manager(Objects.nonNull(resultSet.getObject("manager"))?resultSet.getString("manager"):null)
+//                                        .id(resultSet.getLong("id"))
+//                                        .isDefault(Objects.nonNull(resultSet.getObject("is_default"))?resultSet.getBoolean("is_default"):null)
+//                                        .abbreviation(Objects.nonNull(resultSet.getObject("abbreviation"))?resultSet.getString("abbreviation"):null)
+//                                        .requestDomain(Objects.nonNull(resultSet.getObject("request_domain"))?resultSet.getString("request_domain"):null)
+//                                        .phoneNumber(Objects.nonNull(resultSet.getObject("phone_number"))?resultSet.getString("phone_number"):null)
+//                                        .name(Objects.nonNull(resultSet.getObject("name"))?resultSet.getString("name"):null)
+//                                        .tenantNumber(Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null)
+//                                        .bigScreenName(Objects.nonNull(resultSet.getObject("big_screen_name"))?resultSet.getString("big_screen_name"):null)
+//                                        .build();
+//                            }
+//                            return tenantPo;
+//                        }finally {
+//                            HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
+//                        }
+//
+//                    }
+//                });
+        return baseDao.findById(1L);
 
-                            prepareStatement =  connection.prepareStatement(sql);
-                            if (Objects.nonNull(tenantNumber)) {
-                                prepareStatement.setLong(1,tenantNumber);
-                            }
-                            resultSet = prepareStatement.executeQuery();
-                            TenantPo tenantPo = null;
-                            while (resultSet.next()) {
-                                tenantPo = TenantPo.builder()
-                                        .manager(Objects.nonNull(resultSet.getObject("manager"))?resultSet.getString("manager"):null)
-                                        .id(resultSet.getLong("id"))
-                                        .isDefault(Objects.nonNull(resultSet.getObject("is_default"))?resultSet.getBoolean("is_default"):null)
-                                        .abbreviation(Objects.nonNull(resultSet.getObject("abbreviation"))?resultSet.getString("abbreviation"):null)
-                                        .requestDomain(Objects.nonNull(resultSet.getObject("request_domain"))?resultSet.getString("request_domain"):null)
-                                        .phoneNumber(Objects.nonNull(resultSet.getObject("phone_number"))?resultSet.getString("phone_number"):null)
-                                        .name(Objects.nonNull(resultSet.getObject("name"))?resultSet.getString("name"):null)
-                                        .tenantNumber(Objects.nonNull(resultSet.getObject("tenant_number"))?resultSet.getLong("tenant_number"):null)
-                                        .bigScreenName(Objects.nonNull(resultSet.getObject("big_screen_name"))?resultSet.getString("big_screen_name"):null)
-                                        .build();
-                            }
-                            return tenantPo;
-                        }finally {
-                            HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
-                        }
-
-                    }
-                });
-        return Optional.ofNullable(result);
+//        return Optional.ofNullable(result);
     }
 
 
