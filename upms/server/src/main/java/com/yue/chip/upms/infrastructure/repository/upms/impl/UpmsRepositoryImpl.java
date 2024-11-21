@@ -39,6 +39,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -78,6 +79,16 @@ public class UpmsRepositoryImpl implements UpmsRepository {
             return Optional.ofNullable(user);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void updateLastLoginTime(String username) {
+        userDao.updateLastLoginTime(username, LocalDateTime.now());
+    }
+
+    @Override
+    public void updateUserState(Long userId, State state) {
+        userDao.updateUserState(userId, state);
     }
 
     @Override
@@ -144,6 +155,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public void updateUserPassword(Long userId, String password) {
         userDao.updatePassword(userId,password);
+        userDao.updateLastPasswordTime(userId, LocalDateTime.now());
     }
 
     @Override
@@ -343,6 +355,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public User saveUser(UserPo userPo) {
         userPo.setPassword(passwordEncoder.encode(userPo.getPassword()));
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
+        userPo.setLastPasswordTime(LocalDateTime.now());
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);
     }

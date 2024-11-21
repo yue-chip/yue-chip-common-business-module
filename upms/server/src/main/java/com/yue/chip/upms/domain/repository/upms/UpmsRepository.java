@@ -2,6 +2,7 @@ package com.yue.chip.upms.domain.repository.upms;
 
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -35,6 +36,17 @@ public interface UpmsRepository {
      * @return
      */
     public Optional<User> findUserByUsername(@NotBlank String username);
+
+    /**
+     * 更新最后登录时间
+     * @param username
+     */
+    public void updateLastLoginTime(@NotBlank String username);
+
+    /**
+     * 更新用户状态
+     */
+    public void updateUserState(@NotNull Long userId, @NotNull State state);
 
     /**
      * 根据用户id查询用户
