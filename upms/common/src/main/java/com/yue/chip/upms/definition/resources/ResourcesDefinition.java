@@ -5,6 +5,7 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.enums.Type;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Transient;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +23,19 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class ResourcesDefinition extends BaseDefinition {
+
+    /**
+     * 存放于 FileRelationalPo(t_file_relational)表中的字段名 头像  任何表的文件关联都方在 common-business 微服务的 t_file_relational 表
+     */
+    public static final String ICON_PHOTO_FIELD_NAME = "iconPhoto";
+
+    @Schema(description = "头像id")
+    @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
+    private Long iconId;
+
+    @Transient //放这里其实是无效的，UserPo 不Override get方法也不会在表中创建字段，写在这里只是告诉你该字段不应该也不会出现在表中
+    @Schema(description = "头像url")
+    private String iconUrl;
 
     @Schema(description = "父节点ID")
     private Long parentId;
