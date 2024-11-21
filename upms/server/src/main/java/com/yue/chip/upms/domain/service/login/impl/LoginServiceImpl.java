@@ -71,7 +71,7 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("密码错误");
         }
         if (Objects.nonNull(user.getLastPasswordTime())) {
-            if (LocalDateTime.now().minusDays(90).isBefore(user.getLastPasswordTime())) {
+            if (LocalDateTime.now().minusDays(90).isAfter(user.getLastPasswordTime())) {
                 upmsRepository.updateUserState(user.getId(), State.DISABLE);
                 throw new AuthenticationServiceException("密码超过90天未修改！该账号已被禁用！请联系管理员！");
             }

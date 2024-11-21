@@ -172,7 +172,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         //保存用户与组织架构的关联关系
         upmsDomainService.userOrganizational(userAddOrUpdateDto.getId(),userAddOrUpdateDto.getOrganizationalId());
         //保存头像
-        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber());
+//        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber());
     }
 
     @Override
