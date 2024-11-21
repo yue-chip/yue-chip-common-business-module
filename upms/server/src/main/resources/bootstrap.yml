@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8819
 spring:
   main:
     allow-bean-definition-overriding: true

@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
@@ -12,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -37,6 +39,21 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @return
      */
     public Optional<UserPo> findFirstByUsername(@NotBlank String username);
+
+    @Modifying
+    @Query("update UserPo set lastLoginTime = :lastLoginTime where username = :username ")
+    @Transactional
+    public void updateLastLoginTime(@NotBlank @Param("username") String username, @NotBlank @Param("lastLoginTime")LocalDateTime lastLoginTime);
+
+    @Modifying
+    @Query("update UserPo set lastPasswordTime = :lastPasswordTime where id = :id ")
+    @Transactional
+    public void updateLastPasswordTime(@NotNull @Param("id") Long id, @NotBlank @Param("lastPasswordTime")LocalDateTime lastPasswordTime);
+
+    @Modifying
+    @Query("update UserPo set state = :state where id = :id ")
+    @Transactional
+    public void updateUserState(@NotNull @Param("id") Long id, @NotNull @Param("state") State state);
 
     /**
      * 修改用户密码

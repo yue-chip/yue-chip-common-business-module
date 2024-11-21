@@ -39,6 +39,17 @@ public interface UpmsRepository {
     public Optional<User> findUserByUsername(@NotBlank String username);
 
     /**
+     * 更新最后登录时间
+     * @param username
+     */
+    public void updateLastLoginTime(@NotBlank String username);
+
+    /**
+     * 更新用户状态
+     */
+    public void updateUserState(@NotNull Long userId, @NotNull State state);
+
+    /**
      * 根据用户id查询用户
      *
      * @param id

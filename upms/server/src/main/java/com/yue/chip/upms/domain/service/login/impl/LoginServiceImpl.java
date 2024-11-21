@@ -30,6 +30,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,10 +67,21 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("该账号不存在");
         }
         User user = optional.get();
-        if (!passwordEncoder.matches(password,user.getPassword()) ) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new AuthenticationServiceException("密码错误");
         }
-        return authority(user.getResources(),user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber());
+        if (Objects.nonNull(user.getLastPasswordTime())) {
+            if (LocalDateTime.now().minusDays(90).isBefore(user.getLastPasswordTime())) {
+                upmsRepository.updateUserState(user.getId(), State.DISABLE);
+                throw new AuthenticationServiceException("密码超过90天未修改！该账号已被禁用！请联系管理员！");
+            }
+        }
+        if (Objects.nonNull(user.getState())) {
+            if (user.getState() == State.DISABLE) {
+                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
+            }
+        }
+        return authority(user.getResources(), user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber());
     }
 
     @Override
@@ -79,7 +91,7 @@ public class LoginServiceImpl implements LoginService {
             UserWeiXinPo userWeiXinPo = userWeiXinRepository.saveUserWeiXin(
                     UserWeiXinPo.builder()
                             .openId(openId)
-                            .phoneNumber(StringUtils.hasText(phoneNumber)?phoneNumber:null)
+                            .phoneNumber(StringUtils.hasText(phoneNumber) ? phoneNumber : null)
                             .tenantNumber(TenantNumberUtil.getTenantNumber())
                             .build());
             optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
@@ -91,7 +103,7 @@ public class LoginServiceImpl implements LoginService {
                 throw new AuthenticationServiceException("请绑定手机号码！");
             }
         }
-        if (StringUtils.hasText(phoneNumber) && !Objects.equals(phoneNumber,userWeixin.getPhoneNumber()) ){
+        if (StringUtils.hasText(phoneNumber) && !Objects.equals(phoneNumber, userWeixin.getPhoneNumber())) {
             userWeixin.setPhoneNumber(phoneNumber);
             userWeiXinRepository.updateUserWeiXin(userWeiXinMapper.toUserWeiXinPo(userWeixin));
         }
@@ -99,7 +111,7 @@ public class LoginServiceImpl implements LoginService {
         if (Objects.isNull(userWeixin)) {
             throw new AuthenticationServiceException("用户鉴权失败！");
         }
-        return authority(new ArrayList<Resources>(),userWeixin.getId(),userWeixin.getPhoneNumber(),"",userWeixin.getTenantNumber());
+        return authority(new ArrayList<Resources>(), userWeixin.getId(), userWeixin.getPhoneNumber(), "", userWeixin.getTenantNumber());
     }
 
     @Override
@@ -119,7 +131,8 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
-    private String authority(List<Resources> resourcesList,Long id, String username ,String password,Long tenantNumber) {
+    private String authority(List<Resources> resourcesList, Long id, String username, String password, Long tenantNumber) {
+        upmsRepository.updateLastLoginTime(username);
         List<GrantedAuthority> authoritiesList = AuthorityUtils.createAuthorityList();
         resourcesList.forEach(resources -> {
             YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
@@ -128,8 +141,8 @@ public class LoginServiceImpl implements LoginService {
         });
         YueChipAuthenticationToken token = new YueChipAuthenticationToken(username, authoritiesList);
         SecurityContextHolder.getContext().setAuthentication(token);
-        YueChipUserDetails userDetails = new YueChipUserDetails(id,username,password, tenantNumber,authoritiesList);
-        YueChipRedisTokenStoreUtil.store(userDetails,token.getToken());
+        YueChipUserDetails userDetails = new YueChipUserDetails(id, username, password, tenantNumber, authoritiesList);
+        YueChipRedisTokenStoreUtil.store(userDetails, token.getToken());
         return token.getToken();
     }
 
@@ -137,7 +150,7 @@ public class LoginServiceImpl implements LoginService {
         Optional<TenantStatePo> optional = tenantRepository.findTenantStateFirst();
         if (optional.isEmpty()) {
             BusinessException.throwException("该租户状态不可用");
-        }else {
+        } else {
             TenantStatePo tenantStatePo = optional.get();
             if (Objects.equals(tenantStatePo.getState(), State.DISABLE)) {
                 BusinessException.throwException("该租户状态不可用");
