@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.repository.upms.impl;
 
+import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
@@ -8,6 +9,7 @@ import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
+import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -33,6 +35,7 @@ import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -69,6 +72,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private UserWeiXinMapper userWeiXinMapper;
     @Resource
     private PasswordEncoder passwordEncoder;
+    @DubboReference
+    private FileExposeService fileExposeService;
 
     @Override
     public Optional<User> findUserByUsername(String username) {
@@ -293,6 +298,10 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public Resources saveResources(@NotNull ResourcesPo resourcesPo) {
         resourcesPo = resourcesDao.save(resourcesPo);
+        if (Objects.nonNull(resourcesPo.getIconId())) {
+            //保存头像
+            fileExposeService.save(resourcesPo.getId(), ResourcesPo.TABLE_NAME, ResourcesPo.ICON_PHOTO_FIELD_NAME, resourcesPo.getIconId(),CurrentUserUtil.getCurrentUserTenantNumber());
+        }
         return resourcesMapper.toResources(resourcesPo);
     }
 
@@ -304,6 +313,10 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public void updateResources(@NotNull ResourcesPo resourcesPo) {
         resourcesDao.update(resourcesPo);
+        if (Objects.nonNull(resourcesPo.getIconId())) {
+            //保存头像
+            fileExposeService.save(resourcesPo.getId(), ResourcesPo.TABLE_NAME, ResourcesPo.ICON_PHOTO_FIELD_NAME, resourcesPo.getIconId(),CurrentUserUtil.getCurrentUserTenantNumber());
+        }
     }
 
     @Override
