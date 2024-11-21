@@ -23,7 +23,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true,value = {"updateDateTime","password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId"})
+@JsonIgnoreProperties(ignoreUnknown = true,value = {"updatePasswordTime","updateDateTime","password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId"})
 public class UserVo extends UserDefinition {
 
     //@Schema(description = "组织机构名称")
