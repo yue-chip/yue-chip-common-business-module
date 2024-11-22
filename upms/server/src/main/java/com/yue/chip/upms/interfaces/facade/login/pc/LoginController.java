@@ -4,11 +4,15 @@ import cn.hutool.core.codec.Base64;
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
+import com.yue.chip.core.SystemLogService;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.utils.CurrentUserUtil;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +23,7 @@ import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -28,7 +33,7 @@ import java.util.Map;
 @RequestMapping()
 @Validated
 //@Tag(name = "登录")
-@Log
+@Log4j2
 public class LoginController{
 
     @Resource
@@ -36,6 +41,12 @@ public class LoginController{
 
     @Resource
     private UpmsApplication upmsApplication;
+
+    @DubboReference
+    private SystemLogService systemLogService;
+
+    @Resource
+    private UpmsRepository upmsRepository;
 
 
     @PostMapping("/login1")
@@ -46,6 +57,10 @@ public class LoginController{
         String token = loginService.login(username,password);
         Map<String,String> map = new HashMap<>();
         map.put("token",token);
+        Optional<User> optional = upmsRepository.findUserByUsername(username);
+        if(optional.isPresent()) {
+            systemLogService.save("登陆",username,optional.get().getId());
+        }
         return ResultData.builder().data(map).build();
     }
 
@@ -67,9 +82,14 @@ public class LoginController{
     }
 
     @GetMapping("/login/out")
-    @AuthorizationIgnore
+//    @AuthorizationIgnore
     //@Operation(summary = "退出登录", description = "退出登录")
     public IResultData<String> loginOut() {
+        log.info("退出登陆");
+        Optional<User> optional = upmsRepository.findUserById(CurrentUserUtil.getCurrentUserId());
+        if(optional.isPresent()) {
+            systemLogService.save("退出登陆",optional.get().getUsername(),optional.get().getId());
+        }
         loginService.loginOut();
         return ResultData.builder().build();
     }
