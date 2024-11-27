@@ -531,7 +531,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
                     userAddOrUpdateDto.setPhoneNumber(phone);
                     List<Long> organizationalIds = new ArrayList<>();
                     organizationalIds.add(userOrganizationalIdMap.get(user));
-                    userAddOrUpdateDto.setOrganizationalId(organizationalIds);
+                    userAddOrUpdateDto.setOrganizationalIds(organizationalIds);
                     upmsApplication.saveUser(userAddOrUpdateDto);
                 });
             }

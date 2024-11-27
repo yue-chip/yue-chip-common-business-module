@@ -1,6 +1,11 @@
 package com.yue.chip.upms.interfaces.vo.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.yue.chip.upms.definition.user.UserDefinition;
 //import io.swagger.v3.oas.annotations.media.Schema;
 import com.yue.chip.upms.domain.aggregates.Organizational;
@@ -63,5 +68,21 @@ public class UserVo extends UserDefinition {
             return new Sm4Api().generalDataDec( super.getPhoneNumber(),super.getPhoneNumberHmac());
         }
         return super.getPhoneNumber();
+    }
+
+    @Override
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public LocalDateTime getLastLoginTime() {
+        return super.getLastLoginTime();
+    }
+
+    @Override
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public LocalDateTime getCreateDateTime() {
+        return super.getCreateDateTime();
     }
 }
