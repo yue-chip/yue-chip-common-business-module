@@ -64,4 +64,12 @@ public class UserVo extends UserDefinition {
     public LocalDateTime getLastLoginTime() {
         return super.getLastLoginTime();
     }
+
+    @Override
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public LocalDateTime getCreateDateTime() {
+        return super.getCreateDateTime();
+    }
 }
