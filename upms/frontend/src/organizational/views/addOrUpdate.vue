@@ -144,6 +144,7 @@
           (data:any)=>{
             if (data.status === 200 ) {
               message.info(data.message);
+              back()
             }
           },null,null)
       }else {
@@ -151,6 +152,7 @@
           (data:any)=>{
             if (data.status === 200 ) {
               message.info(data.message);
+              back()
             }
           },null,null)
       }
