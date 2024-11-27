@@ -31,7 +31,7 @@ public class UserAddOrUpdateDto extends UserDefinition {
 
 //    @NotBlank(message = "组织机构ID不能为空",groups = {Validator.Insert.class,Validator.Update.class})
     @Schema(description = "组织机构ID")
-    private List<Long> organizationalIds;
+    private List<Long> organizationalId;
 
     @NotBlank(message = "密码不能为空",groups = {Validator.Insert.class})
     @Schema(description = "密码")
