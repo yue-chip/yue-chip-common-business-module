@@ -60,11 +60,11 @@
                 :pagination="undefined" :loading="loading" :scroll="{ y: 440 }">
                 <template #bodyCell="{ column, text, record }">
                     <template v-if="column.key === 'username'">
-                       <div v-for="item in record.user" :key="item.id">
-                        {{ item.name }} {{ item.phoneNumber }} 
-                       </div>
+                        <div v-for="item in record.user" :key="item.id">
+                            {{ item.name }} {{ item.phoneNumber }}
+                        </div>
                     </template>
-                    
+
                     <template v-if="column.key === 'operation'">
                         <a-space :size="5">
                             <a-button size="small" @click="edit(record)">
@@ -94,28 +94,28 @@
                 <a-row>
                     <a-col :span="24">
                         <a-form-item label="上级网格" name="userId" ref="userId">
-                            <a-tree-select v-model:value="addOrUpdateModel.parentId" show-search
-                                style="width: 100%" :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                                placeholder="选择上级网格" allow-clear tree-default-expand-all :tree-data="dataList"
-                                tree-node-filter-prop="label" :field-names="{
-                children: 'children',
-                label: 'name',
-                value: 'id',
-            }">
+                            <a-tree-select v-model:value="addOrUpdateModel.parentId" style="width: 100%"
+                                :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }" placeholder="选择上级网格"
+                                allow-clear tree-default-expand-all :tree-data="dataList" tree-node-filter-prop="label"
+                                :field-names="{
+                                    children: 'children',
+                                    label: 'name',
+                                    value: 'id',
+                                }" :show-checked-strategy="SHOW_PARENT">
                             </a-tree-select>
 
                         </a-form-item>
                         <a-form-item label="名称" name="name" ref="name">
                             <a-input placeholder="请输入网格名称" v-model:value="addOrUpdateModel.name" />
                         </a-form-item>
-                        
+
                     </a-col>
                 </a-row>
                 <a-row>
                     <a-col :span="24">
                         <a-form-item label="网格员" name="userId" ref="userId">
-                            <a-select :options="options" allowClear v-model:value="addOrUpdateModel.userIds" mode="tags"
-                                placeholder="选择网格员">
+                            <a-select :options="options" allowClear v-model:value="addOrUpdateModel.userIds"
+                                mode="multiple" placeholder="选择网格员" >
                             </a-select>
                         </a-form-item>
                     </a-col>
@@ -131,12 +131,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onActivated, getCurrentInstance } from 'vue'
+import { ref, onActivated, getCurrentInstance, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { SearchOutlined, PlusOutlined, DeleteOutlined, EditOutlined, LeftOutlined } from '@ant-design/icons-vue';
 import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
 import { TableProps, Modal, message, FormInstance } from "ant-design-vue";
+import { TreeSelect } from 'ant-design-vue';
 import qs from "qs";
+import { debounce } from 'lodash-es';
 const _this: any = getCurrentInstance();
 const router = useRouter();
 const route = useRoute();
@@ -148,6 +150,7 @@ let visible = ref<boolean>(false);
 let addOrUpdateModel = ref({})
 let organizationalId: string = undefined;
 let options: any[] = ref<any>([]);
+const SHOW_PARENT = TreeSelect.SHOW_PARENT;
 const columns = [
     {
         title: '网格名称',
@@ -157,7 +160,7 @@ const columns = [
     },
     {
         title: '网格员',
-        
+
         key: 'username',
     },
     {
@@ -189,7 +192,26 @@ function search() {
     loading.value = true;
     searchModel.value.organizationalId = organizationalId;
     axios.axiosGet("/upms/console/grid/list/tree", { params: searchModel.value }, (data: any) => {
-        dataList.value = data.data;
+
+        dataList.value = data.data.map((item: any) => {
+            // 处理当前层级
+            const newItem = {
+                ...item,
+                disabled: item.id === addOrUpdateModel.value.id ? true : false,
+            };
+
+            // 如果存在 children 属性，递归地处理每个子项
+            if (item.children && item.children.length > 0) {
+                newItem.children = item.children.map((child: any) => {
+                    return {
+                        ...child,
+                        disabled: child.id === addOrUpdateModel.value.id ? true : false,
+                    };
+                });
+            }
+
+            return newItem;
+        });
 
         loading.value = false;
     }, null, null)
@@ -223,14 +245,15 @@ function edit(item: any) {
     visible.value = true;
     addOrUpdateModel.value = {
         name: item.name,
-        parentId: item.parentId==0?undefined:item.parentId,
-        userIds: item.user?item.user.map((user: any) => user.id):undefined,
+        parentId: item.parentId == 0 ? undefined : item.parentId,
+        userIds: item.user ? item.user.map((user: any) => user.id) : undefined,
         sort: item.sort,
         id: item.id,
-        organizationalId:item.organizationalId
+        organizationalId: item.organizationalId
     };
-    showUserSelect(); 
-    
+    showUserSelect();
+    search();
+
     /* axios.axiosGet("/upms/console/grid/details", { params: { id: id } }, (data: any) => {
         addOrUpdateModel.value = data.data;
     }, null, null) */
@@ -272,12 +295,20 @@ function add() {
     showUserSelect();
 }
 
-async function showUserSelect() {
-    await axios.axiosGet("/upms/console/organizational/user/select/list", { params: { organizationalId: organizationalId } }, (data: any) => {
+function showUserSelect() {
+    axios.axiosGet("/upms/console/organizational/user/select/list", { params: { organizationalId: organizationalId } }, (data: any) => {
         options.value = data.data;
     }, null, null)
 }
-
+/* const handleSearch = debounce((name: string) => {
+    console.log(name);
+    const newOptions = options.value.filter((item: any) => {
+        return item.label==name
+    });
+    options.value=newOptions
+    console.log(options.value);
+    
+}, 300); */
 function cancel() {
     visible.value = false;
     addOrUpdateModel.value = {};
