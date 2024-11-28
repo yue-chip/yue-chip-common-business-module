@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
  * @date 2023/1/14 上午10:30
  * @description UserRoleDao
  */
-public interface UserRoleDao extends BaseDao<UserRolePo> {
+public interface UserRoleDao extends BaseDao<UserRolePo>, UserRoleDaoEx {
 
     /**
      * 根据角色删除用户与角色的绑定关系

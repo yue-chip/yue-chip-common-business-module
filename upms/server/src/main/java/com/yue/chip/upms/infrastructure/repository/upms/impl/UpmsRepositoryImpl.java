@@ -28,6 +28,7 @@ import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.upms.interfaces.dto.user.UseRoleListDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
@@ -41,6 +42,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -183,8 +185,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public IPageResultData<List<RoleVo>> roleList(String name, String code, YueChipPage pageable) {
-        Page<RolePo> page = roleDao.list(name,code, pageable);
+    public IPageResultData<List<RoleVo>> roleList(String name, String code, State state,YueChipPage pageable) {
+        Page<RolePo> page = roleDao.list(name,code,state, pageable);
         return (IPageResultData<List<RoleVo>>) PageResultData.convert(page,roleMapper.toRoleListVo(page.getContent()));
     }
 
@@ -214,6 +216,23 @@ public class UpmsRepositoryImpl implements UpmsRepository {
             return Optional.ofNullable(roleMapper.toRole(optional.get()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public IPageResultData<List<UserVo>> roleUseList(UseRoleListDto useRoleListDto, Pageable pageable) {
+        Optional<RolePo> optional = roleDao.findById(useRoleListDto.getRoleId());
+        Page<UserPo> page = null;
+        if (optional.isPresent()) {
+            page = userRoleDao.roleUseList(useRoleListDto, pageable);
+            List<UserVo> userListVo = userMapper.toUserListVo(userMapper.toUserList(page.getContent()));
+            userListVo.forEach(userVo -> {
+                if (CollectionUtils.isEmpty(userVo.getOrganizationalList())) {
+                    userVo.setOrganizationalList(Collections.EMPTY_LIST);
+                }
+            });
+            return (IPageResultData<List<UserVo>>) PageResultData.convert(page, userListVo);
+        }
+        return (IPageResultData<List<UserVo>>) PageResultData.convert(page, new ArrayList<>());
     }
 
     @Override
