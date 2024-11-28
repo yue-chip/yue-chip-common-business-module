@@ -12,6 +12,7 @@ import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.UseRoleListDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
@@ -153,7 +154,7 @@ public interface UpmsRepository {
      * @param pageable
      * @return
      */
-    public IPageResultData<List<RoleVo>> roleList(String name, String code,@NotNull YueChipPage pageable);
+    public IPageResultData<List<RoleVo>> roleList(String name, String code, State state, @NotNull YueChipPage pageable);
 
     /**
      * 根据名称查询角色
@@ -176,6 +177,14 @@ public interface UpmsRepository {
      * @return
      */
     public Optional<Role> findRoleById(@NotNull Long id);
+
+    /**
+     *
+     * @param roleId
+     * @param page
+     * @return
+     */
+    public IPageResultData<List<UserVo>> roleUseList(UseRoleListDto useRoleListDto, Pageable pageable);
 
     /**
      * 新增

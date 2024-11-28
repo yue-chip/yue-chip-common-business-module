@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.dao.role;
 
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,7 +26,7 @@ public interface RoleDaoEx {
      * @param pageable
      * @return
      */
-    public Page<RolePo> list(String name, String code,@NotNull Pageable pageable);
+    public Page<RolePo> list(String name, String code, State state,@NotNull Pageable pageable);
 
     /**
      * 根据用户id查询关联的角色

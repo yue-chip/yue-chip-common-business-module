@@ -19,6 +19,7 @@ import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
+import com.yue.chip.upms.interfaces.dto.user.UseRoleListDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
@@ -100,9 +101,10 @@ public class UpmsConsoleController {
     @GetMapping("/role/list")
     @Operation(description = "角色-角色列表",summary = "角色-角色列表")
     public IPageResultData<List<RoleVo>> roleList(@Parameter(description = "名称",name = "name")String name,
-                                                  @Parameter(description = "编码",name = "code") String code,
+                                                  @Parameter(description = "编码",name = "code")String code,
+                                                  @Parameter(description = "状态",name = "state")State state,
                                                   YueChipPage pageable) {
-        return (IPageResultData<List<RoleVo>>) upmsRepository.roleList(name,code,pageable);
+        return (IPageResultData<List<RoleVo>>) upmsRepository.roleList(name,code,state,pageable);
     }
 
     @Operation(description = "角色-判断角色名称是否存在",summary = "角色-判断角色名称是否存在")
@@ -171,6 +173,13 @@ public class UpmsConsoleController {
         }
         return resultData;
 
+    }
+
+    @Operation(description = "角色-获取角色已绑定的用户列表",summary = "角色-获取角色已绑定的用户列表")
+    @GetMapping("/role/user/list")
+    public IPageResultData<List<UserVo>> roleUseList(@Validated UseRoleListDto useRoleListDto, YueChipPage page){
+        IPageResultData<List<UserVo>> pageResultData = upmsRepository.roleUseList(useRoleListDto,page);
+        return pageResultData;
     }
 
     @Operation(description = "用户-用户绑定角色(全量，先删后增)",summary = "用户-用户绑定角色(全量，先删后增)")
