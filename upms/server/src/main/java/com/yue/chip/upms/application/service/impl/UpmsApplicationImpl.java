@@ -223,6 +223,9 @@ public class UpmsApplicationImpl implements UpmsApplication {
 
     @Override
     public void updateOrganizational(OrganizationalUpdateDto organizationalUpdateDto) {
+        if (Objects.isNull(organizationalUpdateDto.getParentId())) {
+            organizationalUpdateDto.setParentId(0L);
+        }
         //检查结构名称是否存在
         Boolean nameIsExist = Organizational.builder()
                 .parentId(organizationalUpdateDto.getParentId())
