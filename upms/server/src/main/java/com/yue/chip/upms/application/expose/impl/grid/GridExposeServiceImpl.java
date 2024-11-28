@@ -99,6 +99,7 @@ public class GridExposeServiceImpl implements GridExposeService {
                 gridDao.deleteById(id);
                 List<Long> idList = gridUserDao.findAllByGridId(id).stream().map(GridUserPo::getId).collect(Collectors.toList());
                 if (!CollectionUtils.isEmpty(idList)) {
+                    gridUserDao.deleteByIds(idList);
                     idList.forEach(idd -> {
                         gridDao.deleteById(idd);
                     });

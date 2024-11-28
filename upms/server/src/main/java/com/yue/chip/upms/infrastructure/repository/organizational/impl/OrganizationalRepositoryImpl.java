@@ -282,6 +282,9 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         if (Objects.isNull(gridPo.getParentId())) {
             gridPo.setParentId(0L);
         }
+        if (Objects.equals(gridPo.getId(), gridPo.getParentId())) {
+            BusinessException.throwException("父级网格不能选本身");
+        }
         gridDao.update(gridPo);
         List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridPo.getId());
         if (!CollectionUtils.isEmpty(gridUserPoList)) {
