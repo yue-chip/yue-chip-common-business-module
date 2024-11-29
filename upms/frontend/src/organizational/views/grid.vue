@@ -10,7 +10,7 @@
         </a-card>
         <a-card>
             <a-form ref="from" :model="searchModel" :label-col="{ span: 4, offset: 0 }">
-                <a-row>
+                <!--  <a-row>
                     <a-col :span="6">
                         <a-form-item label="网格名称" name="name" ref="name">
                             <a-input placeholder="请输入网格名称" v-model:value="searchModel.name" />
@@ -24,18 +24,18 @@
                     <a-col :span="6">
                     </a-col>
                     <a-col :span="6">
-                    </a-col>
-                </a-row>
+                    </a-col> -->
+                <!--  </a-row> -->
                 <a-row style="height: 20px;">
                     <a-col :span="24" style="text-align:right;">
                         <a-form-item>
                             <a-space :size="5">
-                                <a-button type="primary" @click="searchModel.pageNumber = 1; search()">
+                                <!--  <a-button type="primary" @click="searchModel.pageNumber = 1; search()">
                                     <template #icon>
                                         <SearchOutlined />
                                     </template>
                                     查询
-                                </a-button>
+                                </a-button> -->
                                 <a-button type="primary" @click="add()">
                                     <template #icon>
                                         <PlusOutlined />
@@ -115,7 +115,7 @@
                     <a-col :span="24">
                         <a-form-item label="网格员" name="userId" ref="userId">
                             <a-select :options="options" allowClear v-model:value="addOrUpdateModel.userIds"
-                                mode="multiple" placeholder="选择网格员" >
+                                mode="multiple" placeholder="选择网格员">
                             </a-select>
                         </a-form-item>
                     </a-col>
@@ -264,29 +264,42 @@ function del(id: string[]) {
         message.error("请选择要删除的数据！")
         return;
     }
+    /*  if(typeof id === "string"){
+         id = [id];
+     } */
     Modal.confirm({
         title: '是否要删除该数据?',
         // content: '',
-        okText: 'Yes',
+        okText: '确实',
         okType: 'danger',
-        cancelText: 'No',
+        cancelText: '取消',
         onOk() {
-            const params = {
-                params: { ids: id },
-                paramsSerializer: (params: any) => {
-                    return qs.stringify(params, { indices: false })
-                }
+            let params: any = {
+                ids: [id]
             };
-            axios.axiosDelete("/security/pc/store/grid/delete", params, (data: any) => {
-                if (data.status === 200) {
-                    message.info(data.message);
-                    search();
-                }
-            }, null, null);
-        },
-        onCancel() {
-        },
-    });
+            if (id instanceof Array) {
+                params.ids = id
+            } else {
+                params = {
+                    ids: [id]
+                };
+            }
+                /*  const params = {
+                     params: { ids: id },
+                     paramsSerializer: (params: any) => {
+                         return qs.stringify(params, { indices: false })
+                     }
+                 }; */
+                axios.axiosDelete("/security/pc/store/grid/delete", { data: params }, (data: any) => {
+                    if (data.status === 200) {
+                        message.info(data.message);
+                        search();
+                    }
+                }, null, null);
+            },
+            onCancel() {
+            },
+        });
 }
 
 function add() {
