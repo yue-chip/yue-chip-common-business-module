@@ -39,7 +39,7 @@ public class GridAddDto2 extends GridDefinition {
     }
 
     @Schema(description = "用户ids")
-    @NotNull(message = "用户ids不能为空")
+    @NotNull(message = "网格员不能为空")
     private List<Long> userIds;
 
     @Override
