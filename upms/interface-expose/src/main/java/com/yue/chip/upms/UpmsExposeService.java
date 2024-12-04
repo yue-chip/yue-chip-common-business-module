@@ -128,7 +128,7 @@ public interface UpmsExposeService {
      * @param gridId
      * @return
      */
-    List<GridExposeVo> findByGridId(Set<Long> gridId);
+    List<GridExposeVo> findByGridId(@NotNull Set<Long> gridId);
 
     /**
      * 根据机构id和用户id查询机构下的消防管理员
