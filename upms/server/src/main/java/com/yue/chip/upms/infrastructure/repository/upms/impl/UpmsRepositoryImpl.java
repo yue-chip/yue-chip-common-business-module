@@ -19,19 +19,25 @@ import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleResourcesDao;
+import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserRoleDao;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
+import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.upms.interfaces.dto.user.SafetyUpdateDto;
+import com.yue.chip.upms.interfaces.dto.user.UseRoleLDeleteDto;
 import com.yue.chip.upms.interfaces.dto.user.UseRoleListDto;
+import com.yue.chip.upms.interfaces.dto.user.UserListDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
+import com.yue.chip.upms.interfaces.vo.user.SafetyVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
@@ -77,6 +83,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private PasswordEncoder passwordEncoder;
     @DubboReference
     private FileExposeService fileExposeService;
+    @Resource
+    private SafetyDao safetyDao;
 
     @Override
     public Optional<User> findUserByUsername(String username) {
@@ -231,7 +239,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public IPageResultData<List<UserVo>> roleUseList(UseRoleListDto useRoleListDto, Pageable pageable) {
+    public IPageResultData<List<UserVo>> roleUserList(UseRoleListDto useRoleListDto, Pageable pageable) {
         Optional<RolePo> optional = roleDao.findById(useRoleListDto.getRoleId());
         Page<UserPo> page = null;
         if (optional.isPresent()) {
@@ -245,6 +253,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
             return (IPageResultData<List<UserVo>>) PageResultData.convert(page, userListVo);
         }
         return (IPageResultData<List<UserVo>>) PageResultData.convert(page, new ArrayList<>());
+    }
+
+    @Override
+    public void roleUserDelete(UseRoleLDeleteDto dto) {
+        userRoleDao.deleteAllByRoleIdAndUserIdIn(dto.getRoleId(), dto.getUserIds());
     }
 
     @Override
@@ -370,8 +383,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public IPageResultData<List<UserVo>> userList(String name, Pageable pageable) {
-        Page<UserPo> page = userDao.find(name,null,pageable);
+    public IPageResultData<List<UserVo>> userList(UserListDto userListDto, Pageable pageable) {
+        Page<UserPo> page = userDao.find(userListDto,pageable);
         List<User> listUser = userMapper.toUserList(page.getContent());
         return (IPageResultData<List<UserVo>>) PageResultData.convert(page,userMapper.toUserListVo(listUser));
     }
@@ -410,6 +423,22 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         List<UserPo> allByNameOrPhoneNumber = userDao.findAllByNameLikeOrPhoneNumberLike(name,phoneNumber);
         List<User> userList = userMapper.toUserList(allByNameOrPhoneNumber);
         return userList;
+    }
+
+    @Override
+    public SafetyVo safetyDetail() {
+        Optional<SafetyPo> optional = safetyDao.findById(1L);
+        if (optional.isPresent()) {
+            return userMapper.toSafetyVo(optional.get());
+        }
+        return null;
+    }
+
+    @Override
+    public void safetyUpdate(SafetyUpdateDto safetyUpdateDto) {
+        SafetyPo safetyPo = userMapper.toSafetyPo(safetyUpdateDto);
+        safetyPo.setId(1L);
+        safetyDao.save(safetyPo);
     }
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {

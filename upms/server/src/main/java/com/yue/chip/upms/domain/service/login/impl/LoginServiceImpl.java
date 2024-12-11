@@ -2,6 +2,8 @@ package com.yue.chip.upms.domain.service.login.impl;
 
 import com.yue.chip.authentication.YueChipAuthenticationToken;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
+import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
@@ -57,6 +59,9 @@ public class LoginServiceImpl implements LoginService {
     @Resource
     private UserWeiXinMapper userWeiXinMapper;
 
+    @Resource
+    private SafetyDao safetyDao;
+
 
     @Override
     public String login(String username, String password) {
@@ -71,9 +76,12 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("密码错误");
         }
         if (Objects.nonNull(user.getLastPasswordTime())) {
-            if (LocalDateTime.now().minusDays(90).isAfter(user.getLastPasswordTime())) {
-                upmsRepository.updateUserState(user.getId(), State.DISABLE);
-                throw new AuthenticationServiceException("密码超过90天未修改！该账号已被禁用！请联系管理员！");
+            Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
+            if (optionalSafetyPo.isPresent()) {
+                if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
+                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
+                    throw new AuthenticationServiceException("密码超过"+optionalSafetyPo.get().getPasswordTime()+"天未修改！该账号已被禁用！请联系管理员！");
+                }
             }
         }
         if (Objects.nonNull(user.getState())) {

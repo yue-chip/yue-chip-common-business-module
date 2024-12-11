@@ -12,15 +12,20 @@ import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.SafetyUpdateDto;
+import com.yue.chip.upms.interfaces.dto.user.UseRoleLDeleteDto;
 import com.yue.chip.upms.interfaces.dto.user.UseRoleListDto;
+import com.yue.chip.upms.interfaces.dto.user.UserListDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
+import com.yue.chip.upms.interfaces.vo.user.SafetyVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
@@ -179,12 +184,18 @@ public interface UpmsRepository {
     public Optional<Role> findRoleById(@NotNull Long id);
 
     /**
-     *
-     * @param roleId
-     * @param page
+     * 角色-获取角色已绑定的用户列表
+     * @param useRoleListDto
+     * @param pageable
      * @return
      */
-    public IPageResultData<List<UserVo>> roleUseList(UseRoleListDto useRoleListDto, Pageable pageable);
+    public IPageResultData<List<UserVo>> roleUserList(UseRoleListDto useRoleListDto, Pageable pageable);
+
+    /**
+     * 角色-用户解除授权
+     * @param dto
+     */
+    public void roleUserDelete(UseRoleLDeleteDto dto);
 
     /**
      * 新增
@@ -321,7 +332,7 @@ public interface UpmsRepository {
      * @param name
      * @return
      */
-    public IPageResultData<List<UserVo>> userList(String name, @NotNull Pageable pageable);
+    public IPageResultData<List<UserVo>> userList(UserListDto userListDto, @NotNull Pageable pageable);
 
     public IPageResultData<List<User>> userList(List<Long> organizationalIds, String name, @NotNull Pageable pageable);
 
@@ -347,4 +358,8 @@ public interface UpmsRepository {
 
 
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
+
+    SafetyVo safetyDetail();
+
+    void safetyUpdate(SafetyUpdateDto safetyUpdateDto);
 }

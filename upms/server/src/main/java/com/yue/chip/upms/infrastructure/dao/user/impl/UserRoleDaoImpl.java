@@ -27,7 +27,7 @@ public class UserRoleDaoImpl implements UserRoleDaoEx {
         Map<String,Object> para = new HashMap<>();
         para.put("roleId", useRoleListDto.getRoleId());
         if (StringUtils.hasText(useRoleListDto.getName())) {
-            sb.append(" and u.name like :name");
+            sb.append(" and ( u.name like :name or u.username like :name ) ");
             para.put("name", "%"+useRoleListDto.getName()+"%");
         }
         if (StringUtils.hasText(useRoleListDto.getPhone())) {

@@ -4,6 +4,7 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.UserListDto;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
@@ -73,6 +74,28 @@ public class UserDaoImpl implements UserDaoEx {
         if (StringUtils.hasText(username)) {
             sb.append(" and u.username like :username ");
             para.put("name","%"+username+"%");
+        }
+        sb.append(" and u.username <> 'superadmin' ");
+        sb.append(" ORDER BY u.createDateTime ASC ");
+        return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
+    }
+
+    @Override
+    public Page<UserPo> find(UserListDto userListDto, Pageable pageable) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u where 1=1 ");
+        Map<String,Object> para = new HashMap<>();
+        if (StringUtils.hasText(userListDto.getName())) {
+            sb.append(" and u.name like :name ");
+            para.put("name","%"+userListDto.getName()+"%");
+        }
+        if (StringUtils.hasText(userListDto.getUsername())) {
+            sb.append(" and u.username like :username ");
+            para.put("name","%"+userListDto.getUsername()+"%");
+        }
+        if (StringUtils.hasText(userListDto.getPhone())) {
+            sb.append(" and u.phoneNumber like :phoneNumber ");
+            para.put("phoneNumber","%"+userListDto.getPhone()+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
         sb.append(" ORDER BY u.createDateTime ASC ");
