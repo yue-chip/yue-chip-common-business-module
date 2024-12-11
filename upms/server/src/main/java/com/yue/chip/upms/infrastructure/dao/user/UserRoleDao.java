@@ -4,6 +4,8 @@ import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 /**
  * @author Mr.Liu
  * @date 2023/1/14 上午10:30
@@ -24,4 +26,7 @@ public interface UserRoleDao extends BaseDao<UserRolePo>, UserRoleDaoEx {
      * @return
      */
     public int deleteByUserId(@NotNull Long userId);
+
+    public void deleteAllByRoleIdAndUserIdIn(@NotNull Long roleId, List<Long> userIds);
+
 }
