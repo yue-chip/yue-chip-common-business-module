@@ -12,10 +12,7 @@ import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import com.yue.chip.upms.interfaces.dto.user.SafetyUpdateDto;
-import com.yue.chip.upms.interfaces.dto.user.UseRoleLDeleteDto;
-import com.yue.chip.upms.interfaces.dto.user.UseRoleListDto;
-import com.yue.chip.upms.interfaces.dto.user.UserListDto;
+import com.yue.chip.upms.interfaces.dto.user.*;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
@@ -196,6 +193,8 @@ public interface UpmsRepository {
      * @param dto
      */
     public void roleUserDelete(UseRoleLDeleteDto dto);
+
+    public void userBindRoleAdd(RoleUserAddDto roleUserAddDto);
 
     /**
      * 新增

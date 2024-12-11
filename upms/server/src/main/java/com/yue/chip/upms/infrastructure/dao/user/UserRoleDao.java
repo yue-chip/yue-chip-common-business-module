@@ -29,4 +29,6 @@ public interface UserRoleDao extends BaseDao<UserRolePo>, UserRoleDaoEx {
 
     public void deleteAllByRoleIdAndUserIdIn(@NotNull Long roleId, List<Long> userIds);
 
+    public UserRolePo findFirstByRoleIdAndUserId(@NotNull Long roleId, Long userId);
+
 }
