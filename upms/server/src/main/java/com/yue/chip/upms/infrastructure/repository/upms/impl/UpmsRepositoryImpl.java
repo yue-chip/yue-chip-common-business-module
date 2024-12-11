@@ -30,10 +30,7 @@ import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
-import com.yue.chip.upms.interfaces.dto.user.SafetyUpdateDto;
-import com.yue.chip.upms.interfaces.dto.user.UseRoleLDeleteDto;
-import com.yue.chip.upms.interfaces.dto.user.UseRoleListDto;
-import com.yue.chip.upms.interfaces.dto.user.UserListDto;
+import com.yue.chip.upms.interfaces.dto.user.*;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
@@ -46,6 +43,7 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -258,6 +256,18 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public void roleUserDelete(UseRoleLDeleteDto dto) {
         userRoleDao.deleteAllByRoleIdAndUserIdIn(dto.getRoleId(), dto.getUserIds());
+    }
+
+    @Override
+    public void userBindRoleAdd(RoleUserAddDto roleUserAddDto) {
+        UserRolePo po = userRoleDao.findFirstByRoleIdAndUserId(roleUserAddDto.getRoleId(), roleUserAddDto.getUserId());
+        if (Objects.nonNull(po)) {
+            throw new AuthenticationServiceException("该用户已绑定该角色");
+        }
+        UserRolePo userRolePo = new UserRolePo();
+        userRolePo.setRoleId(roleUserAddDto.getRoleId());
+        userRolePo.setUserId(roleUserAddDto.getUserId());
+        userRoleDao.save(userRolePo);
     }
 
     @Override

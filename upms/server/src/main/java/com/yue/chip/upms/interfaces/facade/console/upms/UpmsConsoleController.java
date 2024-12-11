@@ -187,6 +187,13 @@ public class UpmsConsoleController {
         return ResultData.builder().build();
     }
 
+    @Operation(description = "用户-用户绑定角色",summary = "用户-用户绑定角色")
+    @PostMapping("/user/role/add")
+    public IResultData UserRoleAdd(@RequestBody @Validated RoleUserAddDto roleUserAddDto){
+        upmsRepository.userBindRoleAdd(roleUserAddDto);
+        return ResultData.builder().build();
+    }
+
     @Operation(description = "用户-用户绑定角色(全量，先删后增)",summary = "用户-用户绑定角色(全量，先删后增)")
     @PostMapping("/user/role")
     public IResultData roleUserAdd(@RequestBody @Validated UserRoleAddDto userRoleAddDto){
