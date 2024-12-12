@@ -19,9 +19,7 @@ import com.yue.chip.upms.interfaces.dto.resources.ResourcesUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
-import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
-import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
-import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
+import com.yue.chip.upms.interfaces.dto.user.*;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeSelectVo;
@@ -30,6 +28,7 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
+import com.yue.chip.upms.interfaces.vo.user.SafetyVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -100,9 +99,10 @@ public class UpmsConsoleController {
     @GetMapping("/role/list")
     @Operation(description = "角色-角色列表",summary = "角色-角色列表")
     public IPageResultData<List<RoleVo>> roleList(@Parameter(description = "名称",name = "name")String name,
-                                                  @Parameter(description = "编码",name = "code") String code,
+                                                  @Parameter(description = "编码",name = "code")String code,
+                                                  @Parameter(description = "状态",name = "state")State state,
                                                   YueChipPage pageable) {
-        return (IPageResultData<List<RoleVo>>) upmsRepository.roleList(name,code,pageable);
+        return (IPageResultData<List<RoleVo>>) upmsRepository.roleList(name,code,state,pageable);
     }
 
     @Operation(description = "角色-判断角色名称是否存在",summary = "角色-判断角色名称是否存在")
@@ -171,6 +171,34 @@ public class UpmsConsoleController {
         }
         return resultData;
 
+    }
+
+    @Operation(description = "角色-获取角色未绑定的用户列表",summary = "角色-获取角色未绑定的用户列表")
+    @GetMapping("/role/user/unbind/list")
+    public IPageResultData<List<UserVo>> roleUserUnbindList(@Validated UseRoleListDto useRoleListDto, YueChipPage page){
+        IPageResultData<List<UserVo>> pageResultData = upmsRepository.roleUserUnbindList(useRoleListDto,page);
+        return pageResultData;
+    }
+
+    @Operation(description = "角色-获取角色已绑定的用户列表",summary = "角色-获取角色已绑定的用户列表")
+    @GetMapping("/role/user/list")
+    public IPageResultData<List<UserVo>> roleUserList(@Validated UseRoleListDto useRoleListDto, YueChipPage page){
+        IPageResultData<List<UserVo>> pageResultData = upmsRepository.roleUserList(useRoleListDto,page);
+        return pageResultData;
+    }
+
+    @Operation(description = "角色-用户解除授权",summary = "角色-用户解除授权")
+    @PostMapping("/role/user/delete")
+    public IResultData roleUserDelete(@RequestBody @Validated UseRoleLDeleteDto dto){
+        upmsRepository.roleUserDelete(dto);
+        return ResultData.builder().build();
+    }
+
+    @Operation(description = "用户-用户绑定角色",summary = "用户-用户绑定角色")
+    @PostMapping("/user/role/add")
+    public IResultData UserRoleAdd(@RequestBody @Validated RoleUserAddDto roleUserAddDto){
+        upmsRepository.userBindRoleAdd(roleUserAddDto);
+        return ResultData.builder().build();
     }
 
     @Operation(description = "用户-用户绑定角色(全量，先删后增)",summary = "用户-用户绑定角色(全量，先删后增)")
@@ -263,8 +291,8 @@ public class UpmsConsoleController {
 
     @GetMapping("/user/list")
     @Operation(description = "用户-用户列表",summary = "用户-用户列表")
-    public IPageResultData<List<UserVo>> userList(@Parameter(description = "姓名",name="name")String name, YueChipPage page) {
-        IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(name,page);
+    public IPageResultData<List<UserVo>> userList(UserListDto userListDto , YueChipPage page) {
+        IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(userListDto,page);
         return pageResultData;
     }
 
@@ -415,4 +443,19 @@ public class UpmsConsoleController {
         Optional<Grid> optional = organizationalRepository.gridDetails(id);
         return ResultData.builder().data(optional.isPresent()?gridMapper.toGridVo(optional.get()):null).build();
     }
+
+    @GetMapping("/safety/detail")
+    @Operation(description = "获取安全设置",summary = "获取安全设置")
+    public IResultData<SafetyVo> safetyDetail() {
+        SafetyVo vo = upmsRepository.safetyDetail();
+        return ResultData.builder().data(vo).build();
+    }
+
+    @GetMapping("/safety/update")
+    @Operation(description = "编辑安全设置",summary = "编辑安全设置")
+    public IResultData safetyUpdate(SafetyUpdateDto safetyUpdateDto) {
+        upmsRepository.safetyUpdate(safetyUpdateDto);
+        return ResultData.builder().build();
+    }
+
 }

@@ -89,6 +89,9 @@ public class UserDefinition extends BaseDefinition {
     @Schema(description = "最后登录时间")
     private LocalDateTime lastLoginTime;
 
+    @Schema(description = "最后密码修改时间")
+    private LocalDateTime lastPasswordTime;
+
     @Schema(description = "租户id")
     @JsonIgnore
     private Long tenantNumber;

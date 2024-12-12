@@ -10,27 +10,28 @@ import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
-import com.yue.chip.upms.domain.aggregates.Resources;
-import com.yue.chip.upms.domain.aggregates.Role;
-import com.yue.chip.upms.domain.aggregates.User;
-import com.yue.chip.upms.domain.aggregates.UserWeixin;
+import com.yue.chip.upms.domain.aggregates.*;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleResourcesDao;
+import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserRoleDao;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
+import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.upms.interfaces.dto.user.*;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
+import com.yue.chip.upms.interfaces.vo.user.SafetyVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
@@ -39,10 +40,14 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Mr.Liu
@@ -74,6 +79,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private PasswordEncoder passwordEncoder;
     @DubboReference
     private FileExposeService fileExposeService;
+    @Resource
+    private SafetyDao safetyDao;
 
     @Override
     public Optional<User> findUserByUsername(String username) {
@@ -83,6 +90,16 @@ public class UpmsRepositoryImpl implements UpmsRepository {
             return Optional.ofNullable(user);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void updateLastLoginTime(String username) {
+        userDao.updateLastLoginTime(username, LocalDateTime.now());
+    }
+
+    @Override
+    public void updateUserState(Long userId, State state) {
+        userDao.updateUserState(userId, state);
     }
 
     @Override
@@ -149,6 +166,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public void updateUserPassword(Long userId, String password) {
         userDao.updatePassword(userId,password);
+        userDao.updateLastPasswordTime(userId, LocalDateTime.now());
     }
 
     @Override
@@ -183,8 +201,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public IPageResultData<List<RoleVo>> roleList(String name, String code, YueChipPage pageable) {
-        Page<RolePo> page = roleDao.list(name,code, pageable);
+    public IPageResultData<List<RoleVo>> roleList(String name, String code, State state,YueChipPage pageable) {
+        Page<RolePo> page = roleDao.list(name,code,state, pageable);
         return (IPageResultData<List<RoleVo>>) PageResultData.convert(page,roleMapper.toRoleListVo(page.getContent()));
     }
 
@@ -214,6 +232,71 @@ public class UpmsRepositoryImpl implements UpmsRepository {
             return Optional.ofNullable(roleMapper.toRole(optional.get()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public IPageResultData<List<UserVo>> roleUserUnbindList(UseRoleListDto useRoleListDto, Pageable pageable) {
+        Optional<RolePo> optional = roleDao.findById(useRoleListDto.getRoleId());
+        Page<UserPo> page = null;
+        if (optional.isPresent()) {
+            List<UserRolePo> userRolePos = userRoleDao.findAllByRoleId(useRoleListDto.getRoleId());
+            List<Long> allUserIds = userDao.findAll().stream().map(UserPo::getId).collect(Collectors.toList());
+            List<Long> userIds = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(userRolePos)) {
+                List<Long> poUserIds = userRolePos.stream().map(UserRolePo::getUserId).collect(Collectors.toList());
+                userIds.addAll(allUserIds.stream()
+                        .filter(id -> !poUserIds.contains(id))
+                        .collect(Collectors.toList()));
+            } else {
+                userIds.addAll(allUserIds);
+            }
+
+            page = userRoleDao.roleUseList(userIds, useRoleListDto, pageable);
+            List<UserVo> userListVo = userMapper.toUserListVo(userMapper.toUserList(page.getContent()));
+            userListVo.forEach(userVo -> {
+                if (!CollectionUtils.isEmpty(userVo.getOrganizationalList())) {
+                    List<String> nameList = userVo.getOrganizationalList().stream().map(Organizational::getName).collect(Collectors.toList());
+                    userVo.setOrganizationalName(String.join(",", nameList));
+                }
+            });
+            return (IPageResultData<List<UserVo>>) PageResultData.convert(page, userListVo);
+        }
+        return (IPageResultData<List<UserVo>>) PageResultData.convert(page, new ArrayList<>());
+    }
+
+    @Override
+    public IPageResultData<List<UserVo>> roleUserList(UseRoleListDto useRoleListDto, Pageable pageable) {
+        Optional<RolePo> optional = roleDao.findById(useRoleListDto.getRoleId());
+        Page<UserPo> page = null;
+        if (optional.isPresent()) {
+            page = userRoleDao.roleUseList(useRoleListDto, pageable);
+            List<UserVo> userListVo = userMapper.toUserListVo(userMapper.toUserList(page.getContent()));
+            userListVo.forEach(userVo -> {
+                if (!CollectionUtils.isEmpty(userVo.getOrganizationalList())) {
+                    List<String> nameList = userVo.getOrganizationalList().stream().map(Organizational::getName).collect(Collectors.toList());
+                    userVo.setOrganizationalName(String.join(",", nameList));
+                }
+            });
+            return (IPageResultData<List<UserVo>>) PageResultData.convert(page, userListVo);
+        }
+        return (IPageResultData<List<UserVo>>) PageResultData.convert(page, new ArrayList<>());
+    }
+
+    @Override
+    public void roleUserDelete(UseRoleLDeleteDto dto) {
+        userRoleDao.deleteAllByRoleIdAndUserIdIn(dto.getRoleId(), dto.getUserIds());
+    }
+
+    @Override
+    public void userBindRoleAdd(RoleUserAddDto roleUserAddDto) {
+        UserRolePo po = userRoleDao.findFirstByRoleIdAndUserId(roleUserAddDto.getRoleId(), roleUserAddDto.getUserId());
+        if (Objects.nonNull(po)) {
+            throw new AuthenticationServiceException("该用户已绑定该角色");
+        }
+        UserRolePo userRolePo = new UserRolePo();
+        userRolePo.setRoleId(roleUserAddDto.getRoleId());
+        userRolePo.setUserId(roleUserAddDto.getUserId());
+        userRoleDao.save(userRolePo);
     }
 
     @Override
@@ -339,8 +422,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public IPageResultData<List<UserVo>> userList(String name, Pageable pageable) {
-        Page<UserPo> page = userDao.find(name,null,pageable);
+    public IPageResultData<List<UserVo>> userList(UserListDto userListDto, Pageable pageable) {
+        Page<UserPo> page = userDao.find(userListDto,pageable);
         List<User> listUser = userMapper.toUserList(page.getContent());
         return (IPageResultData<List<UserVo>>) PageResultData.convert(page,userMapper.toUserListVo(listUser));
     }
@@ -356,6 +439,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public User saveUser(UserPo userPo) {
         userPo.setPassword(passwordEncoder.encode(userPo.getPassword()));
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
+        userPo.setLastPasswordTime(LocalDateTime.now());
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);
     }
@@ -378,6 +462,22 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         List<UserPo> allByNameOrPhoneNumber = userDao.findAllByNameLikeOrPhoneNumberLike(name,phoneNumber);
         List<User> userList = userMapper.toUserList(allByNameOrPhoneNumber);
         return userList;
+    }
+
+    @Override
+    public SafetyVo safetyDetail() {
+        Optional<SafetyPo> optional = safetyDao.findById(1L);
+        if (optional.isPresent()) {
+            return userMapper.toSafetyVo(optional.get());
+        }
+        return null;
+    }
+
+    @Override
+    public void safetyUpdate(SafetyUpdateDto safetyUpdateDto) {
+        SafetyPo safetyPo = userMapper.toSafetyPo(safetyUpdateDto);
+        safetyPo.setId(1L);
+        safetyDao.save(safetyPo);
     }
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {

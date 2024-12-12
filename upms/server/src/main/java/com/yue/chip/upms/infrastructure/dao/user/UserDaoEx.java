@@ -2,6 +2,7 @@ package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.UserListDto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,9 @@ public interface UserDaoEx {
      * @param pageable
      * @return
      */
-    public Page<UserPo> find( String name, String username,@NotNull Pageable pageable);
+    public Page<UserPo> find(String name, String username,@NotNull Pageable pageable);
+
+    public Page<UserPo> find(UserListDto userListDto, @NotNull Pageable pageable);
 
     public Page<UserPo> find(List<Long> ids, String name,@NotNull Pageable pageable);
 

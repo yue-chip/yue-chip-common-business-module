@@ -1,8 +1,11 @@
 package com.yue.chip.upms.assembler.user;
 
 import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.SafetyUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
+import com.yue.chip.upms.interfaces.vo.user.SafetyVo;
 import com.yue.chip.upms.interfaces.vo.user.UserSelectVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.upms.vo.UserExposeVo;
@@ -64,4 +67,8 @@ public interface UserMapper {
     UserExposeVo toUserExposeVo(User userPo);
 
     List<UserExposeVo> toUserExposeVo(List<User> userList);
+
+    SafetyVo toSafetyVo(SafetyPo safetyPo);
+
+    SafetyPo toSafetyPo(SafetyUpdateDto safetyUpdateDto);
 }
