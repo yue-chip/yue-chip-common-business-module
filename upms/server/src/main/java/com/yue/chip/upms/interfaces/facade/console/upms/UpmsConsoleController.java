@@ -189,7 +189,7 @@ public class UpmsConsoleController {
 
     @Operation(description = "角色-用户解除授权",summary = "角色-用户解除授权")
     @PostMapping("/role/user/delete")
-    public IResultData roleUserDelete(@Validated UseRoleLDeleteDto dto){
+    public IResultData roleUserDelete(@RequestBody @Validated UseRoleLDeleteDto dto){
         upmsRepository.roleUserDelete(dto);
         return ResultData.builder().build();
     }
