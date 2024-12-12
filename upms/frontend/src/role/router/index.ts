@@ -10,6 +10,12 @@ export const router = createRouter({
       component: () => import('../views/index.vue'),
       meta: {keepAlive: true }
     },
+    {
+        path: '/roleAssignment',
+        name: 'roleAssignment',
+        component: () => import('../views/roleAssignment.vue'),
+        meta: {keepAlive: false }
+      },
   ],
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),

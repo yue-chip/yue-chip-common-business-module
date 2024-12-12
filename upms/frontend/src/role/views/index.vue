@@ -14,6 +14,14 @@
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
+                        <a-form-item label="状态" name="code" ref="code">
+                            <a-select ref="select" v-model:value="searchModel.state" placeholder="状态分类"
+                                style="width: 200px" allow-clear>
+                                <a-select-option :value="item.name" v-for="item in enumlist"
+                                    :key="item.name">{{ item.desc }}
+                                </a-select-option>
+                            </a-select>
+                        </a-form-item>
                     </a-col>
                     <a-col :span="6">
                     </a-col>
@@ -57,13 +65,13 @@
                                 </template>
                                 修改
                             </a-button>
-                            <a-button size="small" @click="permissions(record.id)">
+                            <a-button size="small" @click="permissions(record.id, record.name)">
                                 <template #icon>
                                     <FilterOutlined />
                                 </template>
                                 权限
                             </a-button>
-                            <a-button size="small" @click="user(record.id)">
+                            <a-button size="small" @click="user(record.id, record.name)">
                                 <template #icon>
                                     <UserAddOutlined />
                                 </template>
@@ -95,6 +103,16 @@
                     <a-col :span="12">
                         <a-form-item label="编码" name="code" ref="code">
                             <a-input placeholder="请输入编码" v-model:value="addOrUpdateModel.code" />
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-item label="状态" name="state" ref="code">
+                            <a-select ref="select" v-model:value="addOrUpdateModel.state" placeholder="选择状态"
+                                style="width: 200px" allow-clear>
+                                <a-select-option :value="item.name" v-for="item in enumlist"
+                                    :key="item.name">{{ item.desc }}
+                                </a-select-option>
+                            </a-select>
                         </a-form-item>
                     </a-col>
                 </a-row>
@@ -130,6 +148,9 @@ import { ref, onActivated } from 'vue'
 import { FormInstance, message, Modal } from "ant-design-vue";
 import { SearchOutlined, PlusOutlined, UserAddOutlined, FilterOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const enumlist = ref<any>([]);
 const fromAddOrUpdate = ref<FormInstance>();
 let loading = ref(false);
 let searchModel = ref({ pageSize: 10, pageNumber: 1 });
@@ -144,7 +165,8 @@ let roleUser = ref<string[]>([]);
 let userOptions = ref<any>([]);
 const rules: any = {
     code: [{ required: true, message: "请输入编码", trigger: 'blur' }],
-    name: [{ required: true, message: "请输入名称", trigger: 'blur' }]
+    name: [{ required: true, message: "请输入名称", trigger: 'blur' }],
+    state: [{ required: true, message: "请选择状态", trigger: 'blur' }]
 };
 const columns = [
     {
@@ -157,6 +179,11 @@ const columns = [
         title: '编码',
         dataIndex: 'code',
         key: 'code',
+    },
+    {
+        title: '状态',
+        dataIndex: ['state', 'desc'],
+        // key: 'code',
     },
     {
         title: '备注',
@@ -263,7 +290,8 @@ function del(id: string) {
 }
 
 
-function permissions(_roleId: string) {
+function permissions(_roleId: string,name:string) {
+    
     permissionsVisible.value = true;
     roleId = _roleId;
     axios.axiosGet("/upms/console/resources/tree", { params: {} }, (data: any) => {
@@ -291,7 +319,9 @@ function permissionsSave() {
     }, null, null)
 }
 
-function user(_roleId: string) {
+function user(_roleId: string,name:string) {
+    router.push({path: '/roleAssignment', query: { roleId: _roleId, name: name }})
+    return;
     roleId = _roleId;
     userVisible.value = true;
     axios.axiosGet("/upms/console/user/list", { params: { pageNumber: 1, pageSize: 99999 } }, (data: any) => {
@@ -321,8 +351,12 @@ function userSave(_roleId: string) {
         }
     }, null, null)
 }
-
-
+const getEnumList = () => {
+    axios.axiosGet("/common/enum", { params: { code: "state", version: 1 } }, (data: any) => {
+        enumlist.value = JSON.parse(data.data.value);
+    }, null, null)
+}
+getEnumList()
 </script>
 
 <style scoped></style>
