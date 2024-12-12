@@ -173,6 +173,13 @@ public class UpmsConsoleController {
 
     }
 
+    @Operation(description = "角色-获取角色未绑定的用户列表",summary = "角色-获取角色未绑定的用户列表")
+    @GetMapping("/role/user/unbind/list")
+    public IPageResultData<List<UserVo>> roleUserUnbindList(@Validated UseRoleListDto useRoleListDto, YueChipPage page){
+        IPageResultData<List<UserVo>> pageResultData = upmsRepository.roleUserUnbindList(useRoleListDto,page);
+        return pageResultData;
+    }
+
     @Operation(description = "角色-获取角色已绑定的用户列表",summary = "角色-获取角色已绑定的用户列表")
     @GetMapping("/role/user/list")
     public IPageResultData<List<UserVo>> roleUserList(@Validated UseRoleListDto useRoleListDto, YueChipPage page){
