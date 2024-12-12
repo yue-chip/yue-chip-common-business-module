@@ -31,4 +31,6 @@ public interface UserRoleDao extends BaseDao<UserRolePo>, UserRoleDaoEx {
 
     public UserRolePo findFirstByRoleIdAndUserId(@NotNull Long roleId, Long userId);
 
+    public List<UserRolePo> findAllByRoleId(@NotNull Long roleId);
+
 }

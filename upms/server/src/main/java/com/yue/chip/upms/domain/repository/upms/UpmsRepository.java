@@ -180,6 +180,8 @@ public interface UpmsRepository {
      */
     public Optional<Role> findRoleById(@NotNull Long id);
 
+    public IPageResultData<List<UserVo>> roleUserUnbindList(UseRoleListDto useRoleListDto, Pageable pageable);
+
     /**
      * 角色-获取角色已绑定的用户列表
      * @param useRoleListDto

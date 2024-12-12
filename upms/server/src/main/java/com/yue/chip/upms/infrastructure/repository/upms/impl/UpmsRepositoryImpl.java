@@ -10,10 +10,7 @@ import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
-import com.yue.chip.upms.domain.aggregates.Resources;
-import com.yue.chip.upms.domain.aggregates.Role;
-import com.yue.chip.upms.domain.aggregates.User;
-import com.yue.chip.upms.domain.aggregates.UserWeixin;
+import com.yue.chip.upms.domain.aggregates.*;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
@@ -50,6 +47,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Mr.Liu
@@ -237,6 +235,36 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public IPageResultData<List<UserVo>> roleUserUnbindList(UseRoleListDto useRoleListDto, Pageable pageable) {
+        Optional<RolePo> optional = roleDao.findById(useRoleListDto.getRoleId());
+        Page<UserPo> page = null;
+        if (optional.isPresent()) {
+            List<UserRolePo> userRolePos = userRoleDao.findAllByRoleId(useRoleListDto.getRoleId());
+            List<Long> allUserIds = userDao.findAll().stream().map(UserPo::getId).collect(Collectors.toList());
+            List<Long> userIds = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(userRolePos)) {
+                List<Long> poUserIds = userRolePos.stream().map(UserRolePo::getUserId).collect(Collectors.toList());
+                userIds.addAll(allUserIds.stream()
+                        .filter(id -> !poUserIds.contains(id))
+                        .collect(Collectors.toList()));
+            } else {
+                userIds.addAll(allUserIds);
+            }
+
+            page = userRoleDao.roleUseList(userIds, useRoleListDto, pageable);
+            List<UserVo> userListVo = userMapper.toUserListVo(userMapper.toUserList(page.getContent()));
+            userListVo.forEach(userVo -> {
+                if (!CollectionUtils.isEmpty(userVo.getOrganizationalList())) {
+                    List<String> nameList = userVo.getOrganizationalList().stream().map(Organizational::getName).collect(Collectors.toList());
+                    userVo.setOrganizationalName(String.join(",", nameList));
+                }
+            });
+            return (IPageResultData<List<UserVo>>) PageResultData.convert(page, userListVo);
+        }
+        return (IPageResultData<List<UserVo>>) PageResultData.convert(page, new ArrayList<>());
+    }
+
+    @Override
     public IPageResultData<List<UserVo>> roleUserList(UseRoleListDto useRoleListDto, Pageable pageable) {
         Optional<RolePo> optional = roleDao.findById(useRoleListDto.getRoleId());
         Page<UserPo> page = null;
@@ -244,8 +272,9 @@ public class UpmsRepositoryImpl implements UpmsRepository {
             page = userRoleDao.roleUseList(useRoleListDto, pageable);
             List<UserVo> userListVo = userMapper.toUserListVo(userMapper.toUserList(page.getContent()));
             userListVo.forEach(userVo -> {
-                if (CollectionUtils.isEmpty(userVo.getOrganizationalList())) {
-                    userVo.setOrganizationalList(Collections.EMPTY_LIST);
+                if (!CollectionUtils.isEmpty(userVo.getOrganizationalList())) {
+                    List<String> nameList = userVo.getOrganizationalList().stream().map(Organizational::getName).collect(Collectors.toList());
+                    userVo.setOrganizationalName(String.join(",", nameList));
                 }
             });
             return (IPageResultData<List<UserVo>>) PageResultData.convert(page, userListVo);
