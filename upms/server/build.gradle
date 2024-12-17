@@ -65,6 +65,7 @@ dependencies {
 //    api 'yue.chip:yue-chip-security'
 //    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
+    api 'org.apache.poi:poi-ooxml:4.1.2'
     api "org.springframework.statemachine:spring-statemachine-starter"
     api "org.springframework.statemachine:spring-statemachine-data-redis"
     api "org.springframework.statemachine:spring-statemachine-data-jpa"
