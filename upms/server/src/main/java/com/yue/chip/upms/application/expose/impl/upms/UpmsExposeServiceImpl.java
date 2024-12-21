@@ -17,19 +17,27 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.dao.organizational.GridUserDao;
+import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.upms.util.TestYueChipRedisTokenStoreUtil;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.dubbo.config.annotation.DubboService;
 import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
 import com.yue.chip.upms.vo.*;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
@@ -64,6 +72,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     private OrganizationalUserMapper organizationalUserMapper;
     @Resource
     private UserWeiXinDao userWeiXinDao;
+    @Resource
+    private SafetyDao safetyDao;
 
     @Override
     public List<UserExposeVo> findUserAllByIdIn(List<Long> userIds) {
@@ -265,6 +275,16 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public List<String> findAllByWeiXinOpenIdByPhone(String phone) {
         List<UserWeiXinPo> allByPhoneNumber = userWeiXinDao.findAllByPhoneNumberOrderByCreateDateTimeDesc(phone);
         return allByPhoneNumber.stream().map(UserWeiXinPo::getOpenId).collect(Collectors.toList());
+    }
+
+    @Override
+    public Long getTimeout() {
+        Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
+        Long time = 0L;
+        if (optionalSafetyPo.isPresent()) {
+            time = optionalSafetyPo.get().getTimeout();
+        }
+        return time > 0 ? time : 0L;
     }
 
 }

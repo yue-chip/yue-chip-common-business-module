@@ -159,4 +159,6 @@ public interface UpmsExposeService {
 
     List<String> findAllByWeiXinOpenIdByPhone(@NotBlank String phone);
 
+    Long getTimeout();
+
 }
