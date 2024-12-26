@@ -3,6 +3,9 @@ package com.yue.chip.upms.infrastructure.dao.user;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +30,9 @@ public interface UserRoleDao extends BaseDao<UserRolePo>, UserRoleDaoEx {
      */
     public int deleteByUserId(@NotNull Long userId);
 
+    @Modifying
+    @Query("delete from UserRolePo where roleId = :roleId and userId in :userIds")
+    @Transactional
     public void deleteAllByRoleIdAndUserIdIn(@NotNull Long roleId, List<Long> userIds);
 
     public UserRolePo findFirstByRoleIdAndUserId(@NotNull Long roleId, Long userId);
