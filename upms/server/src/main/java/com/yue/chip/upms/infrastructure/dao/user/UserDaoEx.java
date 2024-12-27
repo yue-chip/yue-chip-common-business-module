@@ -90,4 +90,7 @@ public interface UserDaoEx {
      */
     Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber);
 
+
+    List<UserPo> findAllByGridIdAndTenantNumber(Long id, Long tenantNumber);
+
 }

@@ -17,9 +17,11 @@ import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.dao.organizational.GridUserDao;
+import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
@@ -64,6 +66,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     private OrganizationalUserMapper organizationalUserMapper;
     @Resource
     private UserWeiXinDao userWeiXinDao;
+    @Resource
+    private SafetyDao safetyDao;
 
     @Override
     public List<UserExposeVo> findUserAllByIdIn(List<Long> userIds) {
@@ -106,6 +110,12 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
             return com.yue.chip.core.Optional.ofNullable(userMapper.toUserExposeVo(optional.get()));
         }
         return com.yue.chip.core.Optional.empty();
+    }
+
+    @Override
+    public List<UserExposeVo> findAllByGridIdAndTenantNumber(Long id, Long tenantNumber) {
+        List<User> list = upmsRepository.findAllByGridIdAndTenantNumber(id,tenantNumber);
+        return userMapper.toUserExposeVo(list);
     }
 
     @Override
@@ -265,6 +275,16 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public List<String> findAllByWeiXinOpenIdByPhone(String phone) {
         List<UserWeiXinPo> allByPhoneNumber = userWeiXinDao.findAllByPhoneNumberOrderByCreateDateTimeDesc(phone);
         return allByPhoneNumber.stream().map(UserWeiXinPo::getOpenId).collect(Collectors.toList());
+    }
+
+    @Override
+    public Long getTimeout() {
+        Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
+        Long time = 0L;
+        if (optionalSafetyPo.isPresent()) {
+            time = optionalSafetyPo.get().getTimeout();
+        }
+        return time > 0 ? time : 0L;
     }
 
 }
