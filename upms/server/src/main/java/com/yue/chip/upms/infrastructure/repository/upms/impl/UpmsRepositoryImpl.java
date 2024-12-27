@@ -130,6 +130,12 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public List<User> findAllByGridIdAndTenantNumber(Long id, Long tenantNumber) {
+        List<UserPo> allByGridIdAndTenantNumber = userDao.findAllByGridIdAndTenantNumber(id, tenantNumber);
+        return userMapper.toUser(allByGridIdAndTenantNumber);
+    }
+
+    @Override
     public List<User> findUserByIds(List<Long> userIds) {
         List<UserPo> userPoList = userDao.findAllByIdIn(userIds);
         return userMapper.toUser(userPoList);

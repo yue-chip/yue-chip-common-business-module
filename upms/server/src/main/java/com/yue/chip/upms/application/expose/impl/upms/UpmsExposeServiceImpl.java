@@ -113,6 +113,12 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
+    public List<UserExposeVo> findAllByGridIdAndTenantNumber(Long id, Long tenantNumber) {
+        List<User> list = upmsRepository.findAllByGridIdAndTenantNumber(id,tenantNumber);
+        return userMapper.toUserExposeVo(list);
+    }
+
+    @Override
     public com.yue.chip.core.Optional<OrganizationalExposeVo> findOrganizationalById(Long id) {
         java.util.Optional<Organizational> optional = organizationalRepository.findById(id);
         if (optional.isPresent()) {
