@@ -63,6 +63,8 @@ public interface UpmsExposeService {
      */
     Optional<UserExposeVo> findByGridIdAndTenantNumber(@NotNull Long id,Long tenantNumber);
 
+    List<UserExposeVo> findAllByGridIdAndTenantNumber(@NotNull Long id,Long tenantNumber);
+
 
     /**
      * 根据id查询机构

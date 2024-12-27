@@ -77,6 +77,8 @@ public interface UpmsRepository {
      */
     Optional<User> findByGridIdAndTenantNumber(@NotNull Long id, Long tenantNumber);
 
+    List<User> findAllByGridIdAndTenantNumber(@NotNull Long id, Long tenantNumber);
+
     /**
      * 根据用户id查询用户
      * @param userIds
