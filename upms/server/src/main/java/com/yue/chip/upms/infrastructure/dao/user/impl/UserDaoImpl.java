@@ -248,36 +248,42 @@ public class UserDaoImpl implements UserDaoEx {
     @Override
     public List<UserPo> findAllByGridIdAndTenantNumber(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
-        List<UserPo> result =baseDao.getSession().doReturningWork(
-                new ReturningWork<List<UserPo>>() {
-                    @Override
-                    public List<UserPo> execute(java.sql.Connection connection) throws SQLException {
-                        Statement stat = null;
-                        PreparedStatement prepareStatement = null;
-                        ResultSet resultSet = null;
-                        try {
-                            stat =  connection.createStatement();
-                            stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
-                            prepareStatement =  connection.prepareStatement("select u.* from t_user u join grid_user g on u.id = g.user_id where g.grid_id = ?");
-                            prepareStatement.setLong(1,id);
-                            resultSet = prepareStatement.executeQuery();
-                            List<UserPo> userPos = new ArrayList<>();
-                            while (resultSet.next()) {
-                                userPos.add(UserPo.builder()
-                                        .id(resultSet.getLong("id"))
-                                        .name(resultSet.getString("name"))
-                                        .isSms(resultSet.getBoolean("is_sms"))
-                                        .isCall(resultSet.getBoolean("is_call"))
-                                        .phoneNumber(resultSet.getString("phone_number"))
-                                        .build());
-                            }
-                            return userPos;
-                        }finally {
-                            HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
-                        }
-
-                    }
-                });
+//        List<UserPo> result =baseDao.getSession().doReturningWork(
+//                new ReturningWork<List<UserPo>>() {
+//                    @Override
+//                    public List<UserPo> execute(java.sql.Connection connection) throws SQLException {
+//                        Statement stat = null;
+//                        PreparedStatement prepareStatement = null;
+//                        ResultSet resultSet = null;
+//                        try {
+//                            stat =  connection.createStatement();
+//                            stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+//                            prepareStatement =  connection.prepareStatement("select u.* from t_user u join grid_user g on u.id = g.user_id where g.grid_id = ?");
+//                            prepareStatement.setLong(1,id);
+//                            resultSet = prepareStatement.executeQuery();
+//                            List<UserPo> userPos = new ArrayList<>();
+//                            while (resultSet.next()) {
+//                                userPos.add(UserPo.builder()
+//                                        .id(resultSet.getLong("id"))
+//                                        .name(resultSet.getString("name"))
+//                                        .isSms(resultSet.getBoolean("is_sms"))
+//                                        .isCall(resultSet.getBoolean("is_call"))
+//                                        .phoneNumber(resultSet.getString("phone_number"))
+//                                        .build());
+//                            }
+//                            return userPos;
+//                        }finally {
+//                            HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
+//                        }
+//
+//                    }
+//                });
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u join GridUserPo g on u.id = g.userId  " +
+                "  where g.gridId = :gridId ");
+        Map<String,Object> para = new HashMap<>();
+        para.put("gridId", id);
+        List<UserPo> result = (List<UserPo>) baseDao.findAll(sb.toString(),para);
         return result;
     }
 
