@@ -356,6 +356,8 @@ function del(id: string[], roleId: string) {
     });
 }
 const save = (id: any) => {
+    console.log(111);
+    
     if (!id || id.length === 0) {
         message.error("请选择要授权的用户！")
         return;
@@ -377,7 +379,7 @@ const save = (id: any) => {
                     userIds: [id]
                 };
             }
-            axios.axiosPost("/upms/console/user/role/add", { ...params, roleId: useRoute().query.roleId }, (data: any) => {
+            axios.axiosPost("/upms/console/user/role/add", { ...params, roleId: route.query.roleId }, (data: any) => {
                 if (data.status === 200) {
                     message.info(data.message);
                     selectedRowKeys1 = []
