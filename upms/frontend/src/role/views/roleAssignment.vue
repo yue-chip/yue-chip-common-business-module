@@ -384,6 +384,7 @@ const save = (id: any) => {
                     message.info(data.message);
                     selectedRowKeys1 = []
                     search1();
+                    search()
                 }
             }, null, null);
         },
