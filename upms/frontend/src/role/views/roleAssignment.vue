@@ -36,28 +36,33 @@
                             <a-button type="primary" @click="searchdata">搜索</a-button>
                             <a-button @click="reset">重置</a-button>
                             <a-button type="primary" @click="add">添加授权账号</a-button>
-                            <a-button type="primary" danger @click="del(selectedRowKeys,$route.query.roleId)">批量取消授权</a-button>
+                            <a-button type="primary" danger
+                                @click="del(selectedRowKeys, $route.query.roleId)">批量取消授权</a-button>
                         </a-space>
                     </a-col>
                 </a-row>
             </a-card>
             <a-card style="margin-bottom: 20px;border: 0;">
-                <a-table rowKey="id" :row-selection="rowSelection" :columns="columns" :data-source="dataList"
-                    :pagination="pagination" :loading="loading" >
-                    <template #bodyCell="{ column, text, record }">
-                        <template v-if="column.key === 'operation'">
+                <a-config-provider :theme="{
 
-                            <a-button type="primary" danger @click="del(record.id,$route.query.roleId)">
+                }" :locale="zhCN">
+                    <a-table rowKey="id" :row-selection="rowSelection" :columns="columns" :data-source="dataList"
+                        :pagination="pagination" :loading="loading">
+                        <template #bodyCell="{ column, text, record }">
+                            <template v-if="column.key === 'operation'">
 
-                                取消授权
-                            </a-button>
+                                <a-button type="primary" danger @click="del(record.id, $route.query.roleId)">
 
+                                    取消授权
+                                </a-button>
+
+                            </template>
                         </template>
-                    </template>
-                </a-table>
+                    </a-table>
+                </a-config-provider>
             </a-card>
-            <a-modal v-model:open="open" title="授权账号"  width="1000px" cancelText="取消" okText="保存"
-            @ok="save(selectedRowKeys1)">
+            <a-modal v-model:open="open" title="授权账号" width="1000px" cancelText="取消" okText="保存"
+                @ok="save(selectedRowKeys1)">
                 <a-row :gutter="[20, 20]" style="margin-bottom: 20px;">
                     <a-col :xs="12" :lg="4" :md="6" :sm="6">
                         <a-config-provider :theme="{
@@ -86,16 +91,17 @@
 
                     <a-col :flex="'150px'">
                         <a-space>
-                            <a-button type="primary" @click="searchdata">搜索</a-button>
-                            <a-button @click="reset">重置</a-button>
+                            <a-button type="primary" @click="searchdata1">搜索</a-button>
+                            <a-button @click="reset1">重置</a-button>
                         </a-space>
                     </a-col>
                 </a-row>
-
-                <a-table rowKey="id" :row-selection="rowSelection1" :columns="columns1" :data-source="dataList1"
-                    :pagination="pagination1" :loading="loading">
-
-                </a-table>
+                <a-config-provider :theme="{
+                }" :locale="zhCN">
+                    <a-table rowKey="id" :row-selection="rowSelection1" :columns="columns1" :data-source="dataList1"
+                        :pagination="pagination1" :loading="loading">
+                    </a-table>
+                </a-config-provider>
 
             </a-modal>
         </a-page-header>
@@ -107,6 +113,7 @@ import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
 import { TableProps, Modal, message, FormInstance } from "ant-design-vue";
+import zhCN from "ant-design-vue/es/locale/zh_CN"
 let selectedRowKeys: string[] = [];
 let selectedRowKeys1: string[] = [];
 const loading = ref(false);
@@ -128,12 +135,13 @@ const rowSelection1: any = {
      }), */
 };
 const router = useRouter();
+const route = useRoute();
 let searchModel = ref({ pageSize: 10, pageNumber: 1 });
 let searchModel1 = ref({ pageSize: 10, pageNumber: 1 });
 const dataList = ref<any[]>([]);
 const dataList1 = ref<any[]>([]);
 const searchinfo = ref<any>({
-    roleId: useRoute().query.roleId,
+    roleId: route.query.roleId,
     name: undefined,
     phone: undefined,
 })
@@ -194,7 +202,7 @@ const columns: any = [
     },
 ]
 const columns1: any = [
-{
+    {
         title: '账号',
         dataIndex: 'username',
         fixed: 'left',
@@ -239,6 +247,7 @@ const columns1: any = [
 
 ]
 const searchinfo1 = ref<any>({
+    roleId: route.query.roleId,
     name: undefined,
     phone: undefined,
 })
@@ -258,8 +267,11 @@ const search = () => {
     }, null, null)
 }
 const search1 = () => {
+    console.log(searchinfo1.value);
+    console.log(route.query.roleId);
+
     loading.value = true;
-    axios.axiosGet("/upms/console/role/user/unbind/list", { params: { ...searchModel.value, ...searchinfo.value } }, (data: any) => {
+    axios.axiosGet("/upms/console/role/user/unbind/list", { params: { ...searchModel1.value, ...searchinfo1.value } }, (data: any) => {
         dataList1.value = data.data;
         pagination1.value.total = data.totalElements;
         pagination1.value.current = data.pageNumber;
@@ -267,11 +279,28 @@ const search1 = () => {
     }, null, null)
 }
 const searchdata = () => {
+    pagination.value.current = 1;
     search()
 }
 const reset = () => {
+    pagination.value.current = 1;
+    pagination.value.pageSize = 10;
     searchinfo.value = {
         roleId: useRoute().query.roleId,
+        name: undefined,
+        phone: undefined,
+    }
+    search()
+}
+const searchdata1 = () => {
+    pagination1.value.current = 1;
+    search1()
+}
+const reset1 = () => {
+    pagination1.value.current = 1;
+    pagination1.value.pageSize = 10;
+    searchinfo1.value = {
+        roleId: route.query.roleId,
         name: undefined,
         phone: undefined,
     }
@@ -285,12 +314,13 @@ const add = () => {
     search1()
     selectedRowKeys1 = [];
     searchinfo1.value = {
+        roleId: route.query.roleId,
         name: undefined,
         phone: undefined,
     }
     open.value = true;
 }
-function del(id: string[],roleId:string) {
+function del(id: string[], roleId: string) {
 
     if (!id || id.length === 0) {
         message.error("请选择要删除的数据！")
@@ -313,7 +343,7 @@ function del(id: string[],roleId:string) {
                     userIds: [id]
                 };
             }
-            axios.axiosPost("/upms/console/role/user/delete", {...params, roleId: roleId }, (data: any) => {
+            axios.axiosPost("/upms/console/role/user/delete", { ...params, roleId: roleId }, (data: any) => {
                 if (data.status === 200) {
                     message.info(data.message);
                     selectedRowKeys = []
@@ -325,7 +355,7 @@ function del(id: string[],roleId:string) {
         },
     });
 }
-const save=(id:any)=>{
+const save = (id: any) => {
     if (!id || id.length === 0) {
         message.error("请选择要授权的用户！")
         return;
@@ -347,7 +377,7 @@ const save=(id:any)=>{
                     userIds: [id]
                 };
             }
-            axios.axiosPost("/upms/console/user/role/add", {...params, roleId: useRoute().query.roleId }, (data: any) => {
+            axios.axiosPost("/upms/console/user/role/add", { ...params, roleId: useRoute().query.roleId }, (data: any) => {
                 if (data.status === 200) {
                     message.info(data.message);
                     selectedRowKeys1 = []
