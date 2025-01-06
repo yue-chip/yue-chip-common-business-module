@@ -2,6 +2,7 @@ package com.yue.chip.upms.interfaces.vo.organizational;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
+import com.yue.chip.upms.util.CCSPUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,4 +41,16 @@ public class OrganizationalTreeSelectVo extends OrganizationalDefinition {
 
 
     private List<OrganizationalTreeSelectVo> children;
+
+    @Override
+    public String getPhoneNumber() {
+        String encrypt = super.getPhoneNumberEncrypt();
+        String hmac = super.getPhoneNumberHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
+    }
 }

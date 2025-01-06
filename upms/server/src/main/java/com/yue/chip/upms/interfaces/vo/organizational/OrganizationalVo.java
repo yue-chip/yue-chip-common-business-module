@@ -1,6 +1,7 @@
 package com.yue.chip.upms.interfaces.vo.organizational;
 
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
+import com.yue.chip.upms.util.CCSPUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -21,4 +22,17 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 public class OrganizationalVo extends OrganizationalDefinition {
+
+    @Override
+    public String getPhoneNumber() {
+        String encrypt = super.getPhoneNumberEncrypt();
+        String hmac = super.getPhoneNumberHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
+    }
+
 }

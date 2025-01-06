@@ -4,6 +4,7 @@ import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
+import com.yue.chip.upms.util.CCSPUtil;
 import jakarta.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -72,5 +73,17 @@ public class Organizational extends OrganizationalDefinition {
     public User getLeader() {
         // TODO
         return leader;
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        String encrypt = super.getPhoneNumberEncrypt();
+        String hmac = super.getPhoneNumberHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
     }
 }

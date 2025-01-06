@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
+import com.yue.chip.upms.util.CCSPUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,5 +43,17 @@ public class OrganizationalTreeListVo extends OrganizationalDefinition {
 
     public Boolean getStateTmp() {
         return Objects.equals(getState(), State.NORMAL);
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        String encrypt = super.getPhoneNumberEncrypt();
+        String hmac = super.getPhoneNumberHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
     }
 }

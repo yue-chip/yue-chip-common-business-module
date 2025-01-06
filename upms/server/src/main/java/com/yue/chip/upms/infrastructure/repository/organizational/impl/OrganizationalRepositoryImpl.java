@@ -30,6 +30,7 @@ import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo2;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.upms.vo.UserGridVo;
 import com.yue.chip.upms.vo.UserOrganizationalGirdVo;
@@ -39,6 +40,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -127,6 +129,8 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
 
     @Override
     public void saveOrganizational(OrganizationalPo organizational) {
+        organizational.setPhoneNumberEncrypt(CCSPUtil.SM4encrypt(organizational.getPhoneNumber()));
+        organizational.setPhoneNumberHmac(CCSPUtil.getHMac(organizational.getPhoneNumber()));
         organizationalDao.save(organizational);
     }
 
@@ -137,6 +141,10 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
 
     @Override
     public void updateOrganizational(OrganizationalPo organizational) {
+        if (StringUtils.hasText(organizational.getPhoneNumber())) {
+            organizational.setPhoneNumberEncrypt(CCSPUtil.SM4encrypt(organizational.getPhoneNumber()));
+            organizational.setPhoneNumberHmac(CCSPUtil.getHMac(organizational.getPhoneNumber()));
+        }
         organizationalDao.update(organizational);
     }
 
@@ -208,24 +216,72 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     @Override
     public List<OrganizationalPo> findByIdList(Set<Long> ids) {
         List<OrganizationalPo> allByIdIn = organizationalDao.findAllByIdIn(ids);
+        allByIdIn.forEach(organizationalPo -> {
+            if (StringUtils.hasText(organizationalPo.getPhoneNumber())) {
+                String encrypt = organizationalPo.getPhoneNumberEncrypt();
+                String hmac = organizationalPo.getPhoneNumberHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    organizationalPo.setPhoneNumber(decrypt);
+                } else {
+                    organizationalPo.setPhoneNumber("数据被篡改");
+                }
+            }
+        });
         return allByIdIn;
     }
 
     @Override
     public List<OrganizationalPo> findAll() {
         List<OrganizationalPo> organizationalPoList = organizationalDao.findAll();
+        organizationalPoList.forEach(organizationalPo -> {
+            if (StringUtils.hasText(organizationalPo.getPhoneNumber())) {
+                String encrypt = organizationalPo.getPhoneNumberEncrypt();
+                String hmac = organizationalPo.getPhoneNumberHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    organizationalPo.setPhoneNumber(decrypt);
+                } else {
+                    organizationalPo.setPhoneNumber("数据被篡改");
+                }
+            }
+        });
         return organizationalPoList;
     }
 
     @Override
     public List<OrganizationalPo> findChildren(Long parentId) {
         List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
+        list.forEach(organizationalPo -> {
+            if (StringUtils.hasText(organizationalPo.getPhoneNumber())) {
+                String encrypt = organizationalPo.getPhoneNumberEncrypt();
+                String hmac = organizationalPo.getPhoneNumberHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    organizationalPo.setPhoneNumber(decrypt);
+                } else {
+                    organizationalPo.setPhoneNumber("数据被篡改");
+                }
+            }
+        });
         return list;
     }
 
     @Override
     public Page<OrganizationalPo> organizationalPoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
         Page<OrganizationalPo> organizationalPos = organizationalDao.organizationalPoPage(organizationalList, yueChipPage);
+        organizationalPos.getContent().forEach(organizationalPo -> {
+            if (StringUtils.hasText(organizationalPo.getPhoneNumber())) {
+                String encrypt = organizationalPo.getPhoneNumberEncrypt();
+                String hmac = organizationalPo.getPhoneNumberHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    organizationalPo.setPhoneNumber(decrypt);
+                } else {
+                    organizationalPo.setPhoneNumber("数据被篡改");
+                }
+            }
+        });
         return organizationalPos;
     }
 

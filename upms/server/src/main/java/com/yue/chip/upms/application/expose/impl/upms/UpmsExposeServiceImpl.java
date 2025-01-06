@@ -23,6 +23,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.upms.util.TestYueChipRedisTokenStoreUtil;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
@@ -139,6 +140,16 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         List<OrganizationalExposeVo> list = new ArrayList<>();
         if (!CollectionUtils.isEmpty(byIdList)) {
             byIdList.forEach(po -> {
+                if (StringUtils.hasText(po.getPhoneNumber())) {
+                    String encrypt = po.getPhoneNumberEncrypt();
+                    String hmac = po.getPhoneNumberHmac();
+                    String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                    if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                        po.setPhoneNumber(decrypt);
+                    } else {
+                        po.setPhoneNumber("数据被篡改");
+                    }
+                }
                 OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
                 list.add(organizationalExposeVo);
             });
@@ -152,6 +163,16 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         List<OrganizationalExposeVo> list = new ArrayList<>();
         if (!CollectionUtils.isEmpty(organizationalPoList)) {
             organizationalPoList.forEach(po -> {
+                if (StringUtils.hasText(po.getPhoneNumber())) {
+                    String encrypt = po.getPhoneNumberEncrypt();
+                    String hmac = po.getPhoneNumberHmac();
+                    String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                    if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                        po.setPhoneNumber(decrypt);
+                    } else {
+                        po.setPhoneNumber("数据被篡改");
+                    }
+                }
                 OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
                 list.add(organizationalExposeVo);
             });
@@ -214,6 +235,16 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         List<OrganizationalPo> children = organizationalRepository.findChildren(parentId);
         if (!CollectionUtils.isEmpty(children)) {
             children.forEach(po -> {
+                if (StringUtils.hasText(po.getPhoneNumber())) {
+                    String encrypt = po.getPhoneNumberEncrypt();
+                    String hmac = po.getPhoneNumberHmac();
+                    String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                    if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                        po.setPhoneNumber(decrypt);
+                    } else {
+                        po.setPhoneNumber("数据被篡改");
+                    }
+                }
                 OrganizationalExposeVo organizationalExposeVo = organizationalMapper.toOrganizationalExposeVo(po);
                 list.add(organizationalExposeVo);
             });
@@ -224,7 +255,20 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     @Override
     public PageSerializable<OrganizationalExposeVo> organizationalExposeVoPage(List<Long> organizationalList, YueChipPage yueChipPage) {
         Page<OrganizationalPo> page = organizationalRepository.organizationalPoPage(organizationalList, yueChipPage);
-        List<OrganizationalExposeVo> organizationalExposeVoList = organizationalMapper.toOrganizationalExposeVoList(page.getContent());
+        List<OrganizationalPo> list = page.getContent();
+        list.forEach(po -> {
+            if (StringUtils.hasText(po.getPhoneNumber())) {
+                String encrypt = po.getPhoneNumberEncrypt();
+                String hmac = po.getPhoneNumberHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    po.setPhoneNumber(decrypt);
+                } else {
+                    po.setPhoneNumber("数据被篡改");
+                }
+            }
+        });
+        List<OrganizationalExposeVo> organizationalExposeVoList = organizationalMapper.toOrganizationalExposeVoList(list);
         return new YueChipPageSerializable<OrganizationalExposeVo>(organizationalExposeVoList, page.getPageable(),page.getTotalElements());
     }
 
