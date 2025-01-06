@@ -45,14 +45,14 @@ public class UserWeiXinPo extends UserWeiXinDefinition {
 
     @Override
     @Comment("联系电话加密")
-    public String getPhoneEncrypt() {
-        return super.getPhoneEncrypt();
+    public String getPhoneNumberEncrypt() {
+        return super.getPhoneNumberEncrypt();
     }
 
     @Override
     @Comment("联系电话校验")
-    public String getPhoneHmac() {
-        return super.getPhoneHmac();
+    public String getPhoneNumberHmac() {
+        return super.getPhoneNumberHmac();
     }
 
     @Override

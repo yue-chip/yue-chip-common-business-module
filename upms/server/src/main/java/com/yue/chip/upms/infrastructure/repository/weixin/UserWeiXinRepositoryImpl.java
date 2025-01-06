@@ -5,9 +5,11 @@ import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.upms.util.CCSPUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -49,11 +51,17 @@ public class UserWeiXinRepositoryImpl implements UserWeiXinRepository {
 
     @Override
     public UserWeiXinPo saveUserWeiXin(UserWeiXinPo userWeiXinPo) {
+        userWeiXinPo.setPhoneNumberEncrypt(CCSPUtil.SM4encrypt(userWeiXinPo.getPhoneNumber()));
+        userWeiXinPo.setPhoneNumberHmac(CCSPUtil.getHMac(userWeiXinPo.getPhoneNumber()));
         return userWeiXinDao.save(userWeiXinPo);
     }
 
     @Override
     public void updateUserWeiXin(UserWeiXinPo userWeiXinPo) {
+        if (StringUtils.hasText(userWeiXinPo.getPhoneNumber())) {
+            userWeiXinPo.setPhoneNumberEncrypt(CCSPUtil.SM4encrypt(userWeiXinPo.getPhoneNumber()));
+            userWeiXinPo.setPhoneNumberHmac(CCSPUtil.getHMac(userWeiXinPo.getPhoneNumber()));
+        }
         userWeiXinDao.update(userWeiXinPo);
     }
 

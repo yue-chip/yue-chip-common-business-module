@@ -57,10 +57,10 @@ public class UserWeiXinDefinition extends BaseDefinition {
     private String phoneNumber;
 
     @Schema(description = "手机号码加密")
-    private String phoneEncrypt;
+    private String phoneNumberEncrypt;
 
     @Schema(description = "手机号码校验")
-    private String phoneHmac;
+    private String phoneNumberHmac;
 
     @Schema(description = "租户编码")
     @JsonIgnore

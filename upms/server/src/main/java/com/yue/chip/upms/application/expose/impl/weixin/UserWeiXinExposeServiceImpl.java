@@ -4,11 +4,13 @@ import com.yue.chip.core.Optional;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
+import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.weixin.UserWeiXinExposeService;
 import com.yue.chip.weixin.vo.UserWeiXinExposeVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -28,7 +30,18 @@ public class UserWeiXinExposeServiceImpl implements UserWeiXinExposeService {
         }
         java.util.Optional<UserWeixin> optional = userWeiXinRepository.findById(id,tenantNumber);
         if (optional.isPresent()) {
-           return Optional.ofNullable(userWeiXinMapper.toUserWeiXinExposeVo(optional.get()));
+            UserWeixin userWeixin = optional.get();
+            if (StringUtils.hasText(userWeixin.getPhoneNumber())) {
+                String encrypt = userWeixin.getPhoneNumberEncrypt();
+                String hmac = userWeixin.getPhoneNumberHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    userWeixin.setPhoneNumber(decrypt);
+                } else {
+                    userWeixin.setPhoneNumber("数据被篡改");
+                }
+            }
+            return Optional.ofNullable(userWeiXinMapper.toUserWeiXinExposeVo(userWeixin));
         }
         return Optional.empty();
     }
