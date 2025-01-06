@@ -44,6 +44,18 @@ public class UserWeiXinPo extends UserWeiXinDefinition {
     }
 
     @Override
+    @Comment("联系电话加密")
+    public String getPhoneEncrypt() {
+        return super.getPhoneEncrypt();
+    }
+
+    @Override
+    @Comment("联系电话校验")
+    public String getPhoneHmac() {
+        return super.getPhoneHmac();
+    }
+
+    @Override
     @Comment("租户编码")
     public Long getTenantNumber() {
         return super.getTenantNumber();

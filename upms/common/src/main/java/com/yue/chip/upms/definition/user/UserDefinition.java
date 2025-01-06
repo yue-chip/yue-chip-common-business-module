@@ -56,14 +56,32 @@ public class UserDefinition extends BaseDefinition {
     @Schema(description = "密码")
     private String password;
 
+    @Schema(description = "密码加密")
+    private String passwordEncrypt;
+
+    @Schema(description = "密码校验")
+    private String passwordHmac;
+
     @Schema(description = "用户登陆账号")
     private  String username;
 
     @Schema(description = "姓名")
     private String name;
 
+    @Schema(description = "姓名加密")
+    private String nameEncrypt;
+
+    @Schema(description = "姓名校验")
+    private String nameHmac;
+
     @Schema(description = "联系电话")
     private String phoneNumber;
+
+    @Schema(description = "联系电话加密")
+    private String phoneNumberEncrypt;
+
+    @Schema(description = "联系电话校验")
+    private String phoneNumberHmac;
 
     @Schema(description = "电子邮箱")
     private String email;
@@ -76,6 +94,12 @@ public class UserDefinition extends BaseDefinition {
 
     @Schema(description = "身份证号码")
     private String identificationNumber;
+
+    @Schema(description = "身份证号码加密")
+    private String identificationNumberEncrypt;
+
+    @Schema(description = "身份证号码校验")
+    private String identificationNumberHmac;
 
     @Schema(description = "状态")
     private State state;

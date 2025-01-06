@@ -49,10 +49,34 @@ public class TenantPo extends TenantDefinition {
     }
 
     @Override
+    @Comment("负责人加密")
+    public String getManagerEncrypt() {
+        return super.getManagerEncrypt();
+    }
+
+    @Override
+    @Comment("负责人校验")
+    public String getManagerHmac() {
+        return super.getManagerHmac();
+    }
+
+    @Override
     @Comment("负责人联系电话-不能为空")
     @ColumnDefault("''")
     public String getPhoneNumber() {
         return super.getPhoneNumber();
+    }
+
+    @Override
+    @Comment("负责人联系电话加密")
+    public String getPhoneNumberEncrypt() {
+        return super.getPhoneNumberEncrypt();
+    }
+
+    @Override
+    @Comment("负责人联系电话校验")
+    public String getPhoneNumberHmac() {
+        return super.getPhoneNumberHmac();
     }
 
     @Override

@@ -46,6 +46,18 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
+    @Comment("密码加密")
+    public String getPasswordEncrypt() {
+        return super.getPasswordEncrypt();
+    }
+
+    @Override
+    @Comment("密码校验")
+    public String getPasswordHmac() {
+        return super.getPasswordHmac();
+    }
+
+    @Override
     @Column(updatable = false,unique = true)
     @NotNull
     @Comment("登录帐号-不能为空")
@@ -61,6 +73,18 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
+    @Comment("姓名加密")
+    public String getNameEncrypt() {
+        return super.getNameEncrypt();
+    }
+
+    @Override
+    @Comment("姓名校验")
+    public String getNameHmac() {
+        return super.getNameHmac();
+    }
+
+    @Override
     @Convert(converter = State.StateConverter.class)
     @ColumnDefault("1")
     @Comment("状态(0:禁用,1:正常)-不能为空")
@@ -73,6 +97,18 @@ public class UserPo extends UserDefinition {
     @Comment("联系电话")
     public String getPhoneNumber() {
         return super.getPhoneNumber();
+    }
+
+    @Override
+    @Comment("联系电话加密")
+    public String getPhoneNumberEncrypt() {
+        return super.getPhoneNumberEncrypt();
+    }
+
+    @Override
+    @Comment("联系电话校验")
+    public String getPhoneNumberHmac() {
+        return super.getPhoneNumberHmac();
     }
 
     @Override
@@ -156,5 +192,17 @@ public class UserPo extends UserDefinition {
     @ColumnDefault("''")
     public String getIdentificationNumber() {
         return super.getIdentificationNumber();
+    }
+
+    @Override
+    @Comment("身份证号码加密")
+    public String getIdentificationNumberEncrypt() {
+        return super.getIdentificationNumberEncrypt();
+    }
+
+    @Override
+    @Comment("身份证号码校验")
+    public String getIdentificationNumberHmac() {
+        return super.getIdentificationNumberHmac();
     }
 }

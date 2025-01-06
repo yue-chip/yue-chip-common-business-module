@@ -32,8 +32,20 @@ public class TenantDefinition extends BaseDefinition {
     @Schema(description = "负责人")
     private String manager;
 
+    @Schema(description = "负责人加密")
+    private String managerEncrypt;
+
+    @Schema(description = "负责人校验")
+    private String managerHmac;
+
     @Schema(description = "负责人联系电话")
     private String phoneNumber;
+
+    @Schema(description = "负责人联系电话加密")
+    private String phoneNumberEncrypt;
+
+    @Schema(description = "负责人联系电话校验")
+    private String phoneNumberHmac;
 
     @Schema(description = "访问地址(xxx.xxx.com/120.102.25.45)-用户区分租户")
     private String requestDomain;

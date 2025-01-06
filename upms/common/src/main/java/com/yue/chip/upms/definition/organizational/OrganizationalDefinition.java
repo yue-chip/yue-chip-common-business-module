@@ -43,4 +43,10 @@ public class OrganizationalDefinition extends BaseDefinition {
     @Schema(description = "紧急联系电话")
     private String phoneNumber;
 
+    @Schema(description = "紧急联系电话加密")
+    private String phoneNumberEncrypt;
+
+    @Schema(description = "紧急联系电话校验")
+    private String phoneNumberHmac;
+
 }

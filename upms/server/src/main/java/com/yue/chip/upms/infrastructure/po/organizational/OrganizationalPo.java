@@ -71,4 +71,16 @@ public class OrganizationalPo extends OrganizationalDefinition {
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }
+
+    @Override
+    @Comment("紧急联系电话加密")
+    public String getPhoneNumberEncrypt() {
+        return super.getPhoneNumberEncrypt();
+    }
+
+    @Override
+    @Comment("紧急联系电话校验")
+    public String getPhoneNumberHmac() {
+        return super.getPhoneNumberHmac();
+    }
 }
