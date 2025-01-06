@@ -3,6 +3,7 @@ package com.yue.chip.upms.domain.aggregates;
 import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.tenant.TenantDefinition;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
+import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.utils.AssertUtil;
 import jakarta.annotation.Resource;
 import lombok.Data;
@@ -61,5 +62,30 @@ public class Tenant extends TenantDefinition {
             }
         }
         return false;
+    }
+
+
+    @Override
+    public String getManager() {
+        String encrypt = super.getManagerEncrypt();
+        String hmac = super.getManagerHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        String encrypt = super.getPhoneNumberEncrypt();
+        String hmac = super.getPhoneNumberHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
     }
 }

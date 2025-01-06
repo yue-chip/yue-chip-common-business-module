@@ -12,11 +12,13 @@ import com.yue.chip.upms.infrastructure.dao.tenant.TenantStateDao;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.interfaces.vo.tenant.TenantVo;
+import com.yue.chip.upms.util.CCSPUtil;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -46,6 +48,10 @@ public class TenantRepositoryImpl implements TenantRepository {
 
     @Override
     public TenantPo saveTenant(TenantPo tenantPo) {
+        tenantPo.setManagerEncrypt(CCSPUtil.SM4encrypt(tenantPo.getManager()));
+        tenantPo.setManagerHmac(CCSPUtil.getHMac(tenantPo.getManager()));
+        tenantPo.setPhoneNumberEncrypt(CCSPUtil.SM4encrypt(tenantPo.getPhoneNumber()));
+        tenantPo.setPhoneNumberHmac(CCSPUtil.getHMac(tenantPo.getPhoneNumber()));
         tenantPo = tenantDao.save(tenantPo);
         tenantPo.setTenantNumber(tenantPo.getId());
         return tenantPo;
@@ -54,6 +60,14 @@ public class TenantRepositoryImpl implements TenantRepository {
     @Override
     @Transactional(rollbackFor = {Exception.class},propagation = Propagation.REQUIRES_NEW)
     public void updateTenant(TenantPo tenantPo) {
+        if (StringUtils.hasText(tenantPo.getManager())) {
+            tenantPo.setManagerEncrypt(CCSPUtil.SM4encrypt(tenantPo.getManager()));
+            tenantPo.setManagerHmac(CCSPUtil.getHMac(tenantPo.getManager()));
+        }
+        if (StringUtils.hasText(tenantPo.getPhoneNumber())){
+            tenantPo.setPhoneNumberEncrypt(CCSPUtil.SM4encrypt(tenantPo.getPhoneNumber()));
+            tenantPo.setPhoneNumberHmac(CCSPUtil.getHMac(tenantPo.getPhoneNumber()));
+        }
         tenantDao.update(tenantPo);
     }
 
@@ -72,7 +86,28 @@ public class TenantRepositoryImpl implements TenantRepository {
     public Optional<Tenant> findTenantByName(String name) {
         Optional<TenantPo> optional = tenantDao.findFirstByName(name);
         if (optional.isPresent()) {
-            return Optional.ofNullable(tenantMapper.toTenant(optional.get()));
+            TenantPo tenantPo = optional.get();
+            if (StringUtils.hasText(tenantPo.getManager())) {
+                String encrypt = tenantPo.getManagerEncrypt();
+                String hmac = tenantPo.getManagerHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    tenantPo.setManager(decrypt);
+                } else {
+                    tenantPo.setManager("数据被篡改");
+                }
+            }
+            if (StringUtils.hasText(tenantPo.getPhoneNumber())) {
+                String encrypt = tenantPo.getPhoneNumberEncrypt();
+                String hmac = tenantPo.getPhoneNumberHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    tenantPo.setPhoneNumber(decrypt);
+                } else {
+                    tenantPo.setPhoneNumber("数据被篡改");
+                }
+            }
+            return Optional.ofNullable(tenantMapper.toTenant(tenantPo));
         }
         return Optional.empty();
     }
