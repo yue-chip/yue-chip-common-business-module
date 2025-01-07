@@ -43,6 +43,7 @@ public class ResourcesDaoImpl implements ResourcesDaoEx {
                 "where ro.roleId = :roleId ");
         Map<String, Object> para = new HashMap<>();
         para.put("roleId",roleId);
+        sb.append(" ORDER BY re.id ASC");
         List<ResourcesPo> list = (List<ResourcesPo>) baseDao.findAll(sb.toString(),para);
         return list;
 //        QueryRunner queryRunner = new QueryRunner(dataSource);
