@@ -4,6 +4,7 @@ import com.yue.chip.authentication.YueChipAuthenticationToken;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
 import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
+import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
@@ -72,6 +73,12 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("该账号不存在");
         }
         User user = optional.get();
+//        String decrypt = CCSPUtil.SM4decrypt(user.getPasswordEncrypt());
+//        if (CCSPUtil.checkoutHMac(decrypt, user.getPasswordHmac())) {
+//            user.setPassword(decrypt);
+//        } else {
+//            throw new AuthenticationServiceException("密码数据被篡改");
+//        }
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new AuthenticationServiceException("密码错误");
         }

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Organizational;
+import com.yue.chip.upms.util.CCSPUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -71,5 +72,42 @@ public class UserVo extends UserDefinition {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime getCreateDateTime() {
         return super.getCreateDateTime();
+    }
+
+
+    @Override
+    public String getName() {
+        String encrypt = super.getNameEncrypt();
+        String hmac = super.getNameHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        String encrypt = super.getPhoneNumberEncrypt();
+        String hmac = super.getPhoneNumberHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
+    }
+
+    @Override
+    public String getIdentificationNumber() {
+        String encrypt = super.getIdentificationNumberEncrypt();
+        String hmac = super.getIdentificationNumberHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
     }
 }

@@ -12,6 +12,7 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
+import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import lombok.Builder;
@@ -164,5 +165,41 @@ public class User extends UserDefinition {
             return optional.get();
         }
         return Tenant.builder().build();
+    }
+
+    @Override
+    public String getName() {
+        String encrypt = super.getNameEncrypt();
+        String hmac = super.getNameHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        String encrypt = super.getPhoneNumberEncrypt();
+        String hmac = super.getPhoneNumberHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
+    }
+
+    @Override
+    public String getIdentificationNumber() {
+        String encrypt = super.getIdentificationNumberEncrypt();
+        String hmac = super.getIdentificationNumberHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
     }
 }

@@ -61,9 +61,11 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @param password
      */
     @Modifying
-    @Query("update UserPo set password=:password where id =:id ")
+    @Query("update UserPo set password=:password, passwordEncrypt = :passwordEncrypt, " +
+            " passwordHmac=:passwordHmac where id =:id ")
     @Transactional
-    public void updatePassword(@NotNull @Param("id") Long id, @NotBlank @Param("password") String password);
+    public void updatePassword(@NotNull @Param("id") Long id, @NotBlank @Param("password") String password,
+                               @NotBlank @Param("passwordEncrypt") String passwordEncrypt, @NotBlank @Param("passwordHmac") String passwordHmac);
 
     /**
      * 根据ids查询所有用户

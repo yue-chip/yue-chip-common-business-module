@@ -17,6 +17,6 @@ public class UserListDto {
     private String username;
 
     @Schema(description = "电话号码")
-    private String phone;
+    private String phoneNumber;
 
 }

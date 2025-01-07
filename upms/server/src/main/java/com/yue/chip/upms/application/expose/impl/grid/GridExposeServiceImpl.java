@@ -14,11 +14,13 @@ import com.yue.chip.upms.infrastructure.dao.organizational.GridDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.GridUserDao;
 import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
+import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,6 +77,38 @@ public class GridExposeServiceImpl implements GridExposeService {
         List<Grid> gridList = organizationalRepository.findByGridId(gridIds);
         Set<Long> userIds = gridList.stream().map(Grid::getUserId).collect(Collectors.toSet());
         IPageResultData<List<UserExposeVo>> pageResultData = organizationalRepository.findByUserIdIn(userIds, name, yueChipPage);
+        pageResultData.getData().forEach(userExposeVo -> {
+            if (StringUtils.hasText(userExposeVo.getName())) {
+                String encrypt = userExposeVo.getNameEncrypt();
+                String hmac = userExposeVo.getNameHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    userExposeVo.setName(decrypt);
+                } else {
+                    userExposeVo.setName("数据被篡改");
+                }
+            }
+            if (StringUtils.hasText(userExposeVo.getIdentificationNumber())) {
+                String encrypt = userExposeVo.getIdentificationNumberEncrypt();
+                String hmac = userExposeVo.getIdentificationNumberHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    userExposeVo.setIdentificationNumber(decrypt);
+                } else {
+                    userExposeVo.setIdentificationNumber("数据被篡改");
+                }
+            }
+            if (StringUtils.hasText(userExposeVo.getPhoneNumber())) {
+                String encrypt = userExposeVo.getPhoneNumberEncrypt();
+                String hmac = userExposeVo.getPhoneNumberHmac();
+                String decrypt = CCSPUtil.SM4decrypt(encrypt);
+                if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+                    userExposeVo.setPhoneNumber(decrypt);
+                } else {
+                    userExposeVo.setPhoneNumber("数据被篡改");
+                }
+            }
+        });
         return new YueChipPageSerializable(pageResultData.getData(),pageResultData.getPageable(),pageResultData.getTotalElements());
     }
 

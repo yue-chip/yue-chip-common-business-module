@@ -93,9 +93,9 @@ public class UserDaoImpl implements UserDaoEx {
             sb.append(" and u.username like :username ");
             para.put("name","%"+userListDto.getUsername()+"%");
         }
-        if (StringUtils.hasText(userListDto.getPhone())) {
+        if (StringUtils.hasText(userListDto.getPhoneNumber())) {
             sb.append(" and u.phoneNumber like :phoneNumber ");
-            para.put("phoneNumber","%"+userListDto.getPhone()+"%");
+            para.put("phoneNumber","%"+userListDto.getPhoneNumber()+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
         sb.append(" ORDER BY u.createDateTime ASC ");

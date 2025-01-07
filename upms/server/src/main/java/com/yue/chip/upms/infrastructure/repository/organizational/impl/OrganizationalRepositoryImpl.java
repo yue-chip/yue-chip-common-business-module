@@ -465,7 +465,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
                     List<Long> userIds = gridUserPoList.stream().map(GridUserPo::getUserId).collect(Collectors.toList());
                     userIdList.addAll(userIds);
                 }
-                List<UserPo> userPoList = userDao.findAllByIdIn(userIdList);
+//                List<UserPo> userPoList = userDao.findAllByIdIn(userIdList);
 //                if (!CollectionUtils.isEmpty(userPoList)) {
 //                    List<UserVo> listUserVo = userMapper.toListUser(userPoList);
 //                    gridVo.setUser(listUserVo);

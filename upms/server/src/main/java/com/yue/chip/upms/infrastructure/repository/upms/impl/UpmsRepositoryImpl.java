@@ -33,6 +33,7 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.SafetyVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -44,6 +45,7 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -171,7 +173,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public void updateUserPassword(Long userId, String password) {
-        userDao.updatePassword(userId,password);
+        userDao.updatePassword(userId,password,CCSPUtil.SM4encrypt(password),CCSPUtil.getHMac(password));
         userDao.updateLastPasswordTime(userId, LocalDateTime.now());
     }
 
@@ -442,6 +444,12 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public User saveUser(UserPo userPo) {
         userPo.setPassword(passwordEncoder.encode(userPo.getPassword()));
+        userPo.setPasswordEncrypt(CCSPUtil.SM4encrypt(userPo.getPassword()));
+        userPo.setPasswordHmac(CCSPUtil.getHMac(userPo.getPassword()));
+        userPo.setNameEncrypt(CCSPUtil.SM4encrypt(userPo.getName()));
+        userPo.setNameHmac(CCSPUtil.getHMac(userPo.getName()));
+        userPo.setIdentificationNumberEncrypt(CCSPUtil.SM4encrypt(userPo.getIdentificationNumber()));
+        userPo.setIdentificationNumberHmac(CCSPUtil.getHMac(userPo.getIdentificationNumber()));
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
         userPo.setLastPasswordTime(LocalDateTime.now());
         userPo = userDao.save(userPo);
@@ -452,6 +460,18 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     //    @CachePut(value = User.CACHE_KEY,key = "#userPo.id")
     @CacheEvict(value = User.CACHE_KEY, key = "#userPo.id")
     public void updateUser(UserPo userPo) {
+        if (StringUtils.hasText(userPo.getPassword())) {
+            userPo.setPasswordEncrypt(CCSPUtil.SM4encrypt(userPo.getPassword()));
+            userPo.setPasswordHmac(CCSPUtil.getHMac(userPo.getPassword()));
+        }
+        if (StringUtils.hasText(userPo.getName())) {
+            userPo.setNameEncrypt(CCSPUtil.SM4encrypt(userPo.getName()));
+            userPo.setNameHmac(CCSPUtil.getHMac(userPo.getName()));
+        }
+        if (StringUtils.hasText(userPo.getIdentificationNumber())) {
+            userPo.setIdentificationNumberEncrypt(CCSPUtil.SM4encrypt(userPo.getIdentificationNumber()));
+            userPo.setIdentificationNumberHmac(CCSPUtil.getHMac(userPo.getIdentificationNumber()));
+        }
         userDao.update(userPo);
     }
 
