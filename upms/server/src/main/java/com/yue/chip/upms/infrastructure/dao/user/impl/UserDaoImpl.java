@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDaoEx {
             para.put("name","%"+username+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
-        sb.append(" ORDER BY u.createDateTime ASC ");
+        sb.append(" ORDER BY u.id ASC ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
@@ -98,7 +98,7 @@ public class UserDaoImpl implements UserDaoEx {
             para.put("phoneNumber","%"+userListDto.getPhoneNumber()+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
-        sb.append(" ORDER BY u.createDateTime ASC ");
+        sb.append(" ORDER BY u.id ASC ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
@@ -116,6 +116,7 @@ public class UserDaoImpl implements UserDaoEx {
             para.put("name","%"+name+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
+        sb.append(" ORDER BY u.id ASC ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
@@ -128,6 +129,7 @@ public class UserDaoImpl implements UserDaoEx {
         sb.append(" select u from UserPo u join UserRolePo ur on u.id = ur.userId where ur.roleId = :roleId");
         Map<String,Object> para = new HashMap<>();
         para.put("roleId",roleId);
+        sb.append(" ORDER BY u.id ASC");
         return (List<UserPo>) baseDao.findAll(sb.toString(),para);
     }
 
@@ -142,6 +144,7 @@ public class UserDaoImpl implements UserDaoEx {
         Map<String,Object> para = new HashMap<>();
         para.put("organizationalId",organizationalId);
         para.put("state",state);
+        sb.append(" ORDER BY u.id ASC");
         return (List<UserPo>) baseDao.findAll(sb.toString(),para);
     }
 
@@ -156,6 +159,7 @@ public class UserDaoImpl implements UserDaoEx {
         Map<String,Object> para = new HashMap<>();
         para.put("organizationalId",organizationalIds);
         para.put("state",state);
+        sb.append(" ORDER BY u.id ASC");
         List<UserPo> list = (List<UserPo>) baseDao.findAll(sb.toString(),para);
         return list;
     }
@@ -170,6 +174,7 @@ public class UserDaoImpl implements UserDaoEx {
                 "  where g.id in :gridId");
         Map<String,Object> para = new HashMap<>();
         para.put("gridId",gridId);
+        sb.append(" ORDER BY u.id ASC");
         List<UserPo> list = (List<UserPo>) baseDao.findAll(sb.toString(),para);
         return list;
     }
