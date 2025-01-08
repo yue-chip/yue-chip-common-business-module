@@ -1,16 +1,23 @@
 package com.yue.chip.upms.interfaces.facade.login.weixin;
 
+import com.security.log.LogExposeService;
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.annotation.SystemLog;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.domain.service.login.LoginService;
+import com.yue.chip.upms.infrastructure.dao.user.UserDao;
+import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.java.Log;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -34,6 +42,15 @@ public class LoginController {
     @Resource
     private LoginService loginService;
 
+    @DubboReference
+    private LogExposeService logExposeService;
+
+    @Resource
+    private UserDao userDao;
+
+    @Resource
+    private UserWeiXinDao userWeiXinDao;
+
     @PostMapping("/login")
     @AuthorizationIgnore
     @SystemLog(value = "登录账号")
@@ -43,27 +60,46 @@ public class LoginController {
         String token = loginService.login(username,password);
         Map<String,String> map = new HashMap<>();
         map.put("token",token);
+        Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
+        try {
+            if (firstByUsername.isPresent()) {
+                logExposeService.saveLogId("登录账号", firstByUsername.get().getId(), "pc");
+            }
+        } catch (Exception e) {
+            System.out.println("---------------");
+            System.out.println(e.getMessage());
+            System.out.println("---------------");
+        }
         return ResultData.builder().data(map).build();
     }
 
     @PostMapping("/login1")
     @AuthorizationIgnore
     @Operation(summary = "登录1", description = "登录1")
-    @SystemLog(value = "登录账号")
     public IResultData<String> login1(@Parameter(description = "手机号码",name = "phoneNumber")String phoneNumber,
             @NotBlank(message = "openId不能为空") @Parameter(description = "openId",name = "openId",required = true)String openId) {
         String token = loginService.login1(phoneNumber,openId);
         Map<String,String> map = new HashMap<>();
         map.put("token",token);
+        Optional<UserWeiXinPo> firstByUsername = userWeiXinDao.findFirstByOpenIdAndPhoneNumber(openId,phoneNumber);
+        try {
+            if (firstByUsername.isPresent()) {
+                logExposeService.saveLogId("登录账号", firstByUsername.get().getId(), "wx");
+            }
+        } catch (Exception e) {
+            System.out.println("---------------");
+            System.out.println(e.getMessage());
+            System.out.println("---------------");
+        }
         return ResultData.builder().data(map).build();
     }
 
     @GetMapping("/login/out")
     @AuthorizationIgnore
     @Operation(summary = "退出登录", description = "退出登录")
-    @SystemLog(value = "退出登录")
     public IResultData<String> loginOut() {
         loginService.loginOut();
+        logExposeService.saveLog("退出登录");
         return ResultData.builder().build();
     }
 
