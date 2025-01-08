@@ -76,7 +76,6 @@ public class LoginServiceImpl implements LoginService {
         String decrypt = CCSPUtil.SM4decrypt(user.getPasswordEncrypt());
         System.out.println(decrypt);
         if (CCSPUtil.checkoutHMac(decrypt, user.getPasswordHmac())) {
-//            user.setPassword(decrypt);
             System.out.println("密码校验成功");
         } else {
             throw new AuthenticationServiceException("密码数据被篡改");

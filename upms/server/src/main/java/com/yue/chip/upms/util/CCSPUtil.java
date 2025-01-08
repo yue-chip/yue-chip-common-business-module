@@ -79,10 +79,11 @@ public class CCSPUtil {
      */
     public static Boolean checkoutHMac(String input, String hmacStr) {
         boolean result = false;
+        if (input.length() == 0 && hmacStr.length() == 0) {
+            return true;
+        }
         if (input.length() > 0) {
             String hMac = getHMac(input);
-            System.out.println(hMac);
-            System.out.println(hmacStr);
             if (hMac.equals(hmacStr)) {
                 result = true;
             }
