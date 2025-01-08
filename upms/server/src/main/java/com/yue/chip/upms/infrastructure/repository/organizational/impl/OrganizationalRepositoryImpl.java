@@ -323,6 +323,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         if (Objects.isNull(gridPo.getParentId())) {
             gridPo.setParentId(0L);
         }
+        gridPo.setUserId(userIds.get(0));
         GridPo save = gridDao.save(gridPo);
         userIds.forEach(userId -> {
             GridUserPo gridUserPo = new GridUserPo();
