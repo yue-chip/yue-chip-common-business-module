@@ -1,5 +1,6 @@
 package com.yue.chip.upms.interfaces.facade.console.tenant;
 
+import com.yue.chip.annotation.SystemLog;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
@@ -50,6 +51,7 @@ public class TenantConsoleController {
 
     @GetMapping("/list")
     @Operation(description = "租户-租户列表",summary = "租户-租户列表")
+    @SystemLog(value = "查询租户列表")
     public IPageResultData<List<TenantVo>> list(@Parameter(description = "名称",name = "name")String name,
                                                     @Parameter(description = "负责人",name = "manager") String manager,
                                                     @Parameter(description = "状态",name = "state") State state,
@@ -60,6 +62,7 @@ public class TenantConsoleController {
 
     @Operation(description = "租户-新建租户",summary = "租户-新建租户")
     @PostMapping("/add")
+    @SystemLog(value = "新建租户")
     public IResultData add(@RequestBody @Validated TenantAddDTO tenantAddDTO){
         tenantApplication.save(tenantAddDTO);
         return ResultData.builder().build();
@@ -67,6 +70,7 @@ public class TenantConsoleController {
 
     @Operation(description = "租户-修改租户",summary = "租户-修改租户")
     @PutMapping("/update")
+    @SystemLog(value = "编辑租户信息")
     public IResultData update(@RequestBody @Validated TenantUpdateDTO tenantUpdateDTO){
         tenantApplication.update(tenantUpdateDTO);
         return ResultData.builder().build();
@@ -74,6 +78,7 @@ public class TenantConsoleController {
 
     @Operation(description = "租户-修改租户状态",summary = "租户-修改租户状态")
     @PutMapping("/update/state")
+    @SystemLog(value = "修改租户状态")
     public IResultData updateState(@Parameter(description = "状态",name = "状态",required = true) @NotNull(message = "状态不能为空") State state,
                                    @Parameter(description = "id",name = "id",required = true) @NotNull(message = "id不能为空") Long id){
         tenantApplication.update(id,state);
@@ -82,6 +87,7 @@ public class TenantConsoleController {
 
     @Operation(description = "租户-删除租户",summary = "租户-删除租户)")
     @DeleteMapping("/delete")
+    @SystemLog(value = "删除租户")
     public IResultData roleDelete(@Size(min = 1,message = "请选择要删除的租户") @Parameter(description = "租户id",name = "id",required = true)@RequestParam("ids") List<Long> ids){
         tenantApplication.delete(ids);
         return ResultData.builder().build();
@@ -89,6 +95,7 @@ public class TenantConsoleController {
 
     @GetMapping("/details")
     @Operation(description = "租户-租户详情",summary = "租户-租户详情")
+    @SystemLog(value = "查询租户详情")
     public IResultData<TenantVo> details(@Parameter(description = "修改需要传id，新增则不需要传",name = "id") @NotNull(message = "id不能为空")Long id) {
         Optional<Tenant> optional = tenantRepository.tenantDetails(id);
         if (optional.isPresent()) {
@@ -99,6 +106,7 @@ public class TenantConsoleController {
 
     @Operation(description = "租户-判断租户名称是否存在",summary = "租户-判断租户名称是否存在")
     @GetMapping("/check/name/exist")
+    @SystemLog(value = "判断租户名称是否存在")
     public IResultData<Boolean> roleCheckNameIsExist(@NotBlank(message = "名称不能为空") @Parameter(description = "名称",required = true,name = "name")String name,
                                                      @Parameter(description = "修改需要传id，新增则不需要传",name = "id") Long id){
         ResultData resultData = ResultData.builder().data(false).build();

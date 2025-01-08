@@ -62,6 +62,7 @@ dependencies {
         exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-el')
         exclude(group:'org.apache.tomcat.embed',module:'tomcat-embed-websocket')
     }
+    api "xiao.wei:xiao-wei-security-interface-expose:1.0.0-SNAPSHOT"
 //    api 'yue.chip:yue-chip-security'
 //    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'

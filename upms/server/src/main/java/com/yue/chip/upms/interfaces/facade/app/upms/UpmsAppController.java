@@ -1,5 +1,6 @@
 package com.yue.chip.upms.interfaces.facade.app.upms;
 
+import com.yue.chip.annotation.SystemLog;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.common.enums.State;
@@ -53,6 +54,7 @@ public class UpmsAppController {
 
     @GetMapping("/organizational/tree/select")
     @Operation(description = "组织机构-树形结构下拉框选择",summary = "组织机构-树形结构下拉框选择")
+    @SystemLog(value = "组织机构-树形结构下拉框选择")
     public IResultData<List<OrganizationalTreeSelectVo>> organizationalTreeSelect(){
         List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree(0L, State.NORMAL,null );
         return ResultData.builder().data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
@@ -60,6 +62,7 @@ public class UpmsAppController {
 
     @GetMapping("/current/user/details")
     @Operation(summary = "用户-当前登录用户详情", description = "用户-当前登录用户详情")
+    @SystemLog(value = "用户-当前登录用户详情")
     public IResultData<UserVo> userPermissions(){
         Optional<User> optional = upmsRepository.findUserById(CurrentUserUtil.getCurrentUserId());
         return ResultData.builder().data(optional.isPresent()?userMapper.toUserVo(optional.get()):null).build();
@@ -67,6 +70,7 @@ public class UpmsAppController {
 
     @PutMapping("/user/update")
     @Operation(description = "用户-修改用户",summary = "用户-修改用户")
+    @SystemLog(value = "用户-修改用户")
     public IResultData updateUser(@RequestBody @Validated({Validator.Update.class}) UserAddOrUpdateDto userAddOrUpdateDto) {
         upmsApplication.updateUser(userAddOrUpdateDto);
         return ResultData.builder().build();
@@ -74,6 +78,7 @@ public class UpmsAppController {
 
     @PutMapping("/user/update/password")
     @Operation(description = "用户-修改用户密码",summary = "用户-修改用户密码")
+    @SystemLog(value = "用户-修改用户密码")
     public IResultData updateUserPassword(@RequestBody @Validated UserUpdatePasswordDto userUpdatePasswordDto) {
         upmsApplication.updateUserPassword(userUpdatePasswordDto);
         return ResultData.builder().build();

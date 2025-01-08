@@ -1,6 +1,7 @@
 package com.yue.chip.upms.interfaces.facade.login.weixin;
 
 import com.yue.chip.annotation.AuthorizationIgnore;
+import com.yue.chip.annotation.SystemLog;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.domain.service.login.LoginService;
@@ -35,6 +36,7 @@ public class LoginController {
 
     @PostMapping("/login")
     @AuthorizationIgnore
+    @SystemLog(value = "登录账号")
     @Operation(summary = "登录", description = "登录")
     public IResultData<String> login(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username,
                                      @NotBlank(message = "密码不能为空") @Parameter(description = "密码(MD5编码)",name = "password",required = true)String password) {
@@ -47,6 +49,7 @@ public class LoginController {
     @PostMapping("/login1")
     @AuthorizationIgnore
     @Operation(summary = "登录1", description = "登录1")
+    @SystemLog(value = "登录账号")
     public IResultData<String> login1(@Parameter(description = "手机号码",name = "phoneNumber")String phoneNumber,
             @NotBlank(message = "openId不能为空") @Parameter(description = "openId",name = "openId",required = true)String openId) {
         String token = loginService.login1(phoneNumber,openId);
@@ -58,6 +61,7 @@ public class LoginController {
     @GetMapping("/login/out")
     @AuthorizationIgnore
     @Operation(summary = "退出登录", description = "退出登录")
+    @SystemLog(value = "退出登录")
     public IResultData<String> loginOut() {
         loginService.loginOut();
         return ResultData.builder().build();
