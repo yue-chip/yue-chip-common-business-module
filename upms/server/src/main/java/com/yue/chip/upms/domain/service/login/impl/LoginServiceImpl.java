@@ -73,12 +73,14 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("该账号不存在");
         }
         User user = optional.get();
-//        String decrypt = CCSPUtil.SM4decrypt(user.getPasswordEncrypt());
-//        if (CCSPUtil.checkoutHMac(decrypt, user.getPasswordHmac())) {
+        String decrypt = CCSPUtil.SM4decrypt(user.getPasswordEncrypt());
+        System.out.println(decrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, user.getPasswordHmac())) {
 //            user.setPassword(decrypt);
-//        } else {
-//            throw new AuthenticationServiceException("密码数据被篡改");
-//        }
+            System.out.println("密码校验成功");
+        } else {
+            throw new AuthenticationServiceException("密码数据被篡改");
+        }
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new AuthenticationServiceException("密码错误");
         }

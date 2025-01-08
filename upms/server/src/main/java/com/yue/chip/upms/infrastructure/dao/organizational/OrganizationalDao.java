@@ -78,4 +78,10 @@ public interface OrganizationalDao extends BaseDao<OrganizationalPo> ,Organizati
 
     List<OrganizationalPo> findAllByNameIn(Set<String> names);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE OrganizationalPo e SET e.phoneNumberEncrypt = :phoneNumberEncrypt, e.phoneNumberHmac = :phoneNumberHmac WHERE e.id = :id")
+    void updateEncrypt(@Param("phoneNumberEncrypt") String phoneNumberEncrypt, @Param("phoneNumberHmac") String phoneNumberHmac,
+                       @Param("id") Long id);
+
 }

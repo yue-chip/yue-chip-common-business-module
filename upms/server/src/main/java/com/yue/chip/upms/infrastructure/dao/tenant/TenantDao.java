@@ -38,4 +38,13 @@ public interface TenantDao extends BaseDao<TenantPo>,TenantDaoEx {
     @Modifying
     @Query(value = "update t_tenant set tenant_number = :tenantNumber where id = :id", nativeQuery = true)
     public int updateTenantNumber(@NotNull @Param("id") Long id, @NotNull @Param("tenantNumber") Long tenantNumber);
+
+    @Modifying
+    @org.springframework.transaction.annotation.Transactional
+    @Query("UPDATE TenantPo e SET e.phoneNumberEncrypt = :phoneNumberEncrypt, e.phoneNumberHmac = :phoneNumberHmac," +
+            " e.managerEncrypt = :managerEncrypt, e.managerHmac = :managerHmac WHERE e.id = :id")
+    void updateEncrypt(@Param("phoneNumberEncrypt") String phoneNumberEncrypt, @Param("phoneNumberHmac") String phoneNumberHmac,
+                       @Param("managerEncrypt") String managerEncrypt, @Param("managerHmac") String managerHmac,
+                       @Param("id") Long id);
+
 }

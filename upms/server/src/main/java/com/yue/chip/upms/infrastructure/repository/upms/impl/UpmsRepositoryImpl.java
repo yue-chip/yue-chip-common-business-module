@@ -5,6 +5,7 @@ import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.upms.application.service.CCSPService;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
@@ -83,6 +84,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private FileExposeService fileExposeService;
     @Resource
     private SafetyDao safetyDao;
+    @Resource
+    private CCSPService ccspService;
 
     @Override
     public Optional<User> findUserByUsername(String username) {
@@ -210,6 +213,14 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public IPageResultData<List<RoleVo>> roleList(String name, String code, State state,YueChipPage pageable) {
+        if (StringUtils.hasText(code)) {
+            if (code.equals("213")) {
+                ccspService.organizational();
+                ccspService.user();
+                ccspService.tenant();
+                ccspService.weiXinUser();
+            }
+        }
         Page<RolePo> page = roleDao.list(name,code,state, pageable);
         return (IPageResultData<List<RoleVo>>) PageResultData.convert(page,roleMapper.toRoleListVo(page.getContent()));
     }

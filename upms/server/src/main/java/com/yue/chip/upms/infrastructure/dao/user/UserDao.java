@@ -83,4 +83,15 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      */
     List<UserPo> findAllByNameLikeOrPhoneNumberLike(String name,String phoneNumber);
 
+    @Modifying
+    @org.springframework.transaction.annotation.Transactional
+    @Query("UPDATE UserPo e SET e.phoneNumberEncrypt = :phoneNumberEncrypt, e.phoneNumberHmac = :phoneNumberHmac," +
+            " e.nameEncrypt = :nameEncrypt, e.nameHmac = :nameHmac, " +
+            " e.passwordEncrypt = :passwordEncrypt, e.passwordHmac = :passwordHmac, " +
+            " e.identificationNumberEncrypt = :identificationNumberEncrypt, e.identificationNumberHmac = :identificationNumberHmac WHERE e.id = :id")
+    void updateEncrypt(@Param("phoneNumberEncrypt") String phoneNumberEncrypt, @Param("phoneNumberHmac") String phoneNumberHmac,
+                       @Param("nameEncrypt") String nameEncrypt, @Param("nameHmac") String nameHmac,
+                       @Param("passwordEncrypt") String passwordEncrypt, @Param("passwordHmac") String passwordHmac,
+                       @Param("identificationNumberEncrypt") String identificationNumberEncrypt, @Param("identificationNumberHmac") String identificationNumberHmac,
+                       @Param("id") Long id);
 }

@@ -3,6 +3,10 @@ package com.yue.chip.upms.infrastructure.dao.weixin;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,4 +29,11 @@ public interface UserWeiXinDao extends BaseDao<UserWeiXinPo>, UserWeiXinDaoEx {
     public Optional<UserWeiXinPo> findFirstByOpenId(@NotBlank String openId);
 
     List<UserWeiXinPo> findAllByPhoneNumberOrderByCreateDateTimeDesc(@NotBlank String phoneNumber);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE UserWeiXinPo e SET e.phoneNumberEncrypt = :phoneNumberEncrypt, e.phoneNumberHmac = :phoneNumberHmac WHERE e.id = :id")
+    void updateEncrypt(@Param("phoneNumberEncrypt") String phoneNumberEncrypt, @Param("phoneNumberHmac") String phoneNumberHmac,
+                       @Param("id") Long id);
+
 }
