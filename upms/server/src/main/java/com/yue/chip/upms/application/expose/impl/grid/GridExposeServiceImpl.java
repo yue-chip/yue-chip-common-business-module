@@ -149,4 +149,18 @@ public class GridExposeServiceImpl implements GridExposeService {
             }
         }
     }
+
+    @Override
+    public List<GridExposeVo> userIdFindAllGridList(Long userId) {
+        List<GridUserPo> userDaoAllByUser = gridUserDao.findAllByUserId(userId);
+        if (!CollectionUtils.isEmpty(userDaoAllByUser)) {
+            Set<Long> gridIds = userDaoAllByUser.stream().map(GridUserPo::getGridId).collect(Collectors.toSet());
+            List<GridPo> gridPoList = gridDao.findAllByIdIn(gridIds);
+            if (!CollectionUtils.isEmpty(gridPoList)) {
+                return gridMapper.toGridExposeVo(gridMapper.toGrid(gridPoList));
+            }
+        }
+        return new ArrayList<>();
+    }
+
 }
