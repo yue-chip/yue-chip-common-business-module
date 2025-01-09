@@ -1,15 +1,11 @@
 package com.yue.chip.grid;
 
-import com.yue.chip.core.IResultData;
 import com.yue.chip.core.PageSerializable;
-import com.yue.chip.core.ResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Set;
@@ -50,4 +46,11 @@ public interface GridExposeService {
      * @param ids
      */
     void deleteGrid(@NotNull @Size(min = 0) List<Long> ids);
+
+    /**
+     * 根据用户id查询所以网格
+     * @param userId
+     * @return
+     */
+    List<GridExposeVo> userIdFindAllGridList(Long userId);
 }
