@@ -74,13 +74,13 @@ public class LoginServiceImpl implements LoginService {
         }
         User user = optional.get();
         String decrypt = CCSPUtil.SM4decrypt(user.getPasswordEncrypt());
-        System.out.println(decrypt);
-        if (CCSPUtil.checkoutHMac(decrypt, user.getPasswordHmac())) {
+        String hMac = CCSPUtil.getHMac(decrypt);
+        if (hMac.equals(user.getPasswordHmac())) {
             System.out.println("密码校验成功");
         } else {
             throw new AuthenticationServiceException("密码数据被篡改");
         }
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, decrypt)) {
             throw new AuthenticationServiceException("密码错误");
         }
         if (Objects.nonNull(user.getLastPasswordTime())) {
