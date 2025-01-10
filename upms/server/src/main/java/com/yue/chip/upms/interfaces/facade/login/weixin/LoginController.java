@@ -5,6 +5,7 @@ import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.annotation.SystemLog;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
+import com.yue.chip.core.SystemLogService;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
@@ -42,8 +43,8 @@ public class LoginController {
     @Resource
     private LoginService loginService;
 
-    @DubboReference
-    private LogExposeService logExposeService;
+    @Resource
+    private SystemLogService systemLogService;
 
     @Resource
     private UserDao userDao;
@@ -63,7 +64,7 @@ public class LoginController {
         Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
         try {
             if (firstByUsername.isPresent()) {
-                logExposeService.saveLogId("登录账号", firstByUsername.get().getId(), "pc");
+                systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
             }
         } catch (Exception e) {
             System.out.println("---------------");
@@ -84,7 +85,7 @@ public class LoginController {
         Optional<UserWeiXinPo> firstByUsername = userWeiXinDao.findFirstByOpenIdAndPhoneNumber(openId,phoneNumber);
         try {
             if (firstByUsername.isPresent()) {
-                logExposeService.saveLogId("登录账号", firstByUsername.get().getId(), "wx");
+                systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "wx");
             }
         } catch (Exception e) {
             System.out.println("---------------");
@@ -97,9 +98,9 @@ public class LoginController {
     @GetMapping("/login/out")
     @AuthorizationIgnore
     @Operation(summary = "退出登录", description = "退出登录")
+    @SystemLog(value = "退出登录")
     public IResultData<String> loginOut() {
         loginService.loginOut();
-        logExposeService.saveLog("退出登录");
         return ResultData.builder().build();
     }
 
