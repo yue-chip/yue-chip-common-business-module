@@ -260,4 +260,9 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         upmsRepository.logoutUser(userId);
     }
 
+    @Override
+    public UserExposeVo findUserByUsername(String username) {
+        return userMapper.toUserExposeVo(upmsRepository.findByUsername(username));
+    }
+
 }

@@ -172,4 +172,6 @@ public interface UpmsExposeService {
      */
     void logoutUser(@NotNull Long userId);
 
+    UserExposeVo findUserByUsername(@NotBlank String username);
+
 }
