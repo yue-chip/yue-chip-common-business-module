@@ -26,6 +26,11 @@ public class SystemLogServiceImpl implements SystemLogService {
     }
 
     @Override
+    public void saveLog(String actionName, Long userId, String type) {
+        logExposeService.saveLogId(actionName, userId, type);
+    }
+
+    @Override
     public Page<? extends Object> list(LocalDateTime localDateTime, LocalDateTime localDateTime1, Pageable pageable) {
         return null;
     }
