@@ -106,7 +106,6 @@ public class LoginController{
     @GetMapping("/login/out")
     @AuthorizationIgnore
     @Operation(summary = "退出登录", description = "退出登录")
-    @SystemLog(value = "退出登录")
     public IResultData<String> loginOut() {
         loginService.loginOut();
         return ResultData.builder().build();
