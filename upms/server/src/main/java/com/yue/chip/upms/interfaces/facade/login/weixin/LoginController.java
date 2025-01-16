@@ -54,7 +54,6 @@ public class LoginController {
 
     @PostMapping("/login")
     @AuthorizationIgnore
-    @SystemLog(value = "登录账号")
     @Operation(summary = "登录", description = "登录")
     public IResultData<String> login(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username,
                                      @NotBlank(message = "密码不能为空") @Parameter(description = "密码(MD5编码)",name = "password",required = true)String password) {
@@ -98,7 +97,6 @@ public class LoginController {
     @GetMapping("/login/out")
     @AuthorizationIgnore
     @Operation(summary = "退出登录", description = "退出登录")
-    @SystemLog(value = "退出登录")
     public IResultData<String> loginOut() {
         loginService.loginOut();
         return ResultData.builder().build();
