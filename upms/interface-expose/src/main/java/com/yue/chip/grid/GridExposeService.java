@@ -27,6 +27,7 @@ public interface GridExposeService {
      * @return
      */
     List<GridExposeVo> findGridByName(String name);
+    List<GridExposeVo> findAllByGridUserId(Long userId);
 
     /**
      * 根据网格id查询用户ids

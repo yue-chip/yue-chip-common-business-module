@@ -83,6 +83,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
 
 
 
+
     @Override
     public List<Organizational> findByUserId(Long userId) {
         List<OrganizationalPo> list = organizationalDao.findByUserId(userId);
@@ -267,6 +268,37 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         if (Objects.isNull(gridPo.getParentId())) {
             gridPo.setParentId(0L);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        gridPo.setUserId(userIds.get(0));
         GridPo save = gridDao.save(gridPo);
         userIds.forEach(userId -> {
             GridUserPo gridUserPo = new GridUserPo();
@@ -497,6 +529,11 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     @Override
     public List<Grid> findGridByName(String name) {
         List<GridPo> list = gridDao.findAllByNameLike(name);
+        return gridMapper.toGrid(list);
+    }
+    @Override
+    public List<Grid> findGridByUserId(Long userid) {
+        List<GridPo> list = gridDao.findAllByUserId(userid);
         return gridMapper.toGrid(list);
     }
 

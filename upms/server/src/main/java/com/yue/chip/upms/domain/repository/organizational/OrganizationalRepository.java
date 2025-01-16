@@ -278,6 +278,7 @@ public interface OrganizationalRepository {
      * @return
      */
     List<Grid> findGridByName(String name);
+     List<Grid> findGridByUserId(Long userid);
 
     /**
      * 用户，机构，网格创建或绑定

@@ -52,6 +52,11 @@ public class GridExposeServiceImpl implements GridExposeService {
     }
 
     @Override
+    public List<GridExposeVo> findAllByGridUserId(Long userId) {
+        List<Grid> gridUserPoList = organizationalRepository.findGridByUserId(userId);
+        return gridMapper.toGridExposeVo(gridUserPoList);
+    }
+    @Override
     public List<Long> findAllByGridId(Long gridId) {
         List<Long> userIdList = new ArrayList<>();
         List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridId);

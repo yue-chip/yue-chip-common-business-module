@@ -31,6 +31,7 @@ public interface GridDao extends BaseDao<GridPo>, GridDaoEx {
      * @return
      */
     public int deleteAllByUserId(@NotNull Long userId);
+    List<GridPo> findAllByUserId(@NotNull Long UserId);
 
     /**
      * 根据机构id查寻网格
