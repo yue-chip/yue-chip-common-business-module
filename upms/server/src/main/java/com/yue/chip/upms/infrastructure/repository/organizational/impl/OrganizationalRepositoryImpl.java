@@ -268,36 +268,6 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         if (Objects.isNull(gridPo.getParentId())) {
             gridPo.setParentId(0L);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         gridPo.setUserId(userIds.get(0));
         GridPo save = gridDao.save(gridPo);
         userIds.forEach(userId -> {
@@ -313,6 +283,9 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     public void updateGrid(GridPo gridPo, List<Long> userIds) {
         if (Objects.isNull(gridPo.getParentId())) {
             gridPo.setParentId(0L);
+        }
+        if (Objects.equals(gridPo.getId(), gridPo.getParentId())) {
+            BusinessException.throwException("父级网格不能选本身");
         }
         gridDao.update(gridPo);
         List<GridUserPo> gridUserPoList = gridUserDao.findAllByGridId(gridPo.getId());

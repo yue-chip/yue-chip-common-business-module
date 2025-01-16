@@ -60,7 +60,7 @@ public class TenantDaoImpl implements TenantDaoEx {
             para.put("state",state);
         }
         sb.append(" and t.isDefault = false");
-
+        sb.append(" ORDER BY t.id ASC");
         return (Page<TenantPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 

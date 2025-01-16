@@ -104,6 +104,7 @@ public class GridExposeServiceImpl implements GridExposeService {
                 gridDao.deleteById(id);
                 List<Long> idList = gridUserDao.findAllByGridId(id).stream().map(GridUserPo::getId).collect(Collectors.toList());
                 if (!CollectionUtils.isEmpty(idList)) {
+                    gridUserDao.deleteByIds(idList);
                     idList.forEach(idd -> {
                         gridDao.deleteById(idd);
                     });
@@ -119,4 +120,18 @@ public class GridExposeServiceImpl implements GridExposeService {
             }
         }
     }
+
+    @Override
+    public List<GridExposeVo> userIdFindAllGridList(Long userId) {
+        List<GridUserPo> userDaoAllByUser = gridUserDao.findAllByUserId(userId);
+        if (!CollectionUtils.isEmpty(userDaoAllByUser)) {
+            Set<Long> gridIds = userDaoAllByUser.stream().map(GridUserPo::getGridId).collect(Collectors.toSet());
+            List<GridPo> gridPoList = gridDao.findAllByIdIn(gridIds);
+            if (!CollectionUtils.isEmpty(gridPoList)) {
+                return gridMapper.toGridExposeVo(gridMapper.toGrid(gridPoList));
+            }
+        }
+        return new ArrayList<>();
+    }
+
 }

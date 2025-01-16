@@ -3,13 +3,18 @@ package com.yue.chip.upms.infrastructure.dao.user;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author Mr.Liu
  * @date 2023/1/14 上午10:30
  * @description UserRoleDao
  */
-public interface UserRoleDao extends BaseDao<UserRolePo> {
+public interface UserRoleDao extends BaseDao<UserRolePo>, UserRoleDaoEx {
 
     /**
      * 根据角色删除用户与角色的绑定关系
@@ -24,4 +29,14 @@ public interface UserRoleDao extends BaseDao<UserRolePo> {
      * @return
      */
     public int deleteByUserId(@NotNull Long userId);
+
+    @Modifying
+    @Query("delete from UserRolePo where roleId = :roleId and userId in :userIds")
+    @Transactional
+    public void deleteAllByRoleIdAndUserIdIn(@NotNull Long roleId, List<Long> userIds);
+
+    public UserRolePo findFirstByRoleIdAndUserId(@NotNull Long roleId, Long userId);
+
+    public List<UserRolePo> findAllByRoleId(@NotNull Long roleId);
+
 }

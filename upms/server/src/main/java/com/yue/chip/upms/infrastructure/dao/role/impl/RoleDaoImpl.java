@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.dao.role.impl;
 
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleDaoEx;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
@@ -21,7 +22,7 @@ public class RoleDaoImpl implements RoleDaoEx {
     private BaseDao<RolePo> baseDao;
 
     @Override
-    public Page<RolePo> list(String name, String code, Pageable pageable) {
+    public Page<RolePo> list(String name, String code, State state, Pageable pageable) {
         StringBuffer sb = new StringBuffer();
         Map<String, Object> para = new HashMap<>();
         sb.append("select r from RolePo r where 1=1 ");
@@ -33,7 +34,12 @@ public class RoleDaoImpl implements RoleDaoEx {
             sb.append(" and r.code like :code ");
             para.put("code","%"+code+"%");
         }
+        if (Objects.nonNull(state)) {
+            sb.append(" and r.state = :state ");
+            para.put("state", state);
+        }
         sb.append(" and r.code <> 'superadmin' ");
+        sb.append(" ORDER BY r.id ASC");
         return (Page<RolePo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
@@ -46,6 +52,7 @@ public class RoleDaoImpl implements RoleDaoEx {
         Map<String, Object> para = new HashMap<>();
         sb.append("select r from RolePo r join UserRolePo ur on r.id = ur.roleId where ur.userId = :userId ");
         para.put("userId",userId);
+        sb.append(" ORDER BY r.id ASC");
         return (List<RolePo>) baseDao.findAll(sb.toString(),para);
 
 //        QueryRunner queryRunner = new QueryRunner(dataSource);

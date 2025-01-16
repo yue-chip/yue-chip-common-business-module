@@ -142,6 +142,22 @@
                         </a-form-item>
                     </a-col>
                 </a-row>
+                <a-row>
+                    <a-col :span="12">
+                        <a-form-item label="图标">
+                            <a-upload v-model:file-list="fileList" name="avatar" list-type="picture-card"
+                                class="avatar-uploader" :show-upload-list="false" action="/api/common/file/upload"
+                                :before-upload="beforeUpload" :headers="headers" @change="handleChange">
+                                <img width="100" height="100" v-if="imageUrl" :src="imageUrl" alt="avatar" />
+                                <div v-else>
+                                    <loading-outlined v-if="loading1"></loading-outlined>
+                                    <plus-outlined v-else></plus-outlined>
+                                    <div class="ant-upload-text">Upload</div>
+                                </div>
+                            </a-upload>
+                        </a-form-item>
+                    </a-col>
+                </a-row>
             </a-form>
         </a-modal>
     </div>
@@ -150,7 +166,7 @@
 <script setup lang="ts">
 import { ref, onActivated, getCurrentInstance } from 'vue'
 import { SearchOutlined, PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Modal, message, FormInstance } from "ant-design-vue";
+import { Modal, message, FormInstance,UploadChangeParam } from "ant-design-vue";
 import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
 const _this: any = getCurrentInstance();
 const fromAddOrUpdate = ref<FormInstance>();
@@ -159,6 +175,9 @@ let permissionsVisible = ref<boolean>(false);
 const searchModel = ref({ scope: "CONSOLE" })
 let addOrUpdateModel = ref({})
 const loading = ref(false);
+const fileList = ref([]);
+const loading1 = ref<boolean>(false);
+let imageUrl = ref<string>('');
 const columns = [
     {
         title: '名称',
@@ -317,6 +336,8 @@ function add(id: string, parentId: string, scope: string, type: string) {
 function cancel() {
     visible.value = false;
     addOrUpdateModel.value = {};
+    fileList.value = [];
+    imageUrl.value = '';
 }
 
 function save() {
@@ -354,6 +375,7 @@ function details(id: string) {
                 addOrUpdateModel.value.scope = data.data.scope.name;
                 addOrUpdateModel.value.type = data.data.type.name;
                 addOrUpdateModel.value.state = data.data.state.name;
+                imageUrl.value = data.data.iconUrl?'/api/file'+ data.data.iconUrl:'';
                 visible.value = true;
             }
         }, null, null)
@@ -377,6 +399,47 @@ function del(id: string) {
         onCancel() {
         },
     });
+}
+const handleChange = (info: UploadChangeParam) => {
+    if (info.file.status === 'uploading') {
+        loading1.value = true;
+        return;
+    }
+    if (info.file.status === 'done') {
+        if (info.file.response.status === 200) {
+            const data = info.file.response.data;
+            addOrUpdateModel.value.iconId = data[0].id;
+            // profilePhoto.value = "/api"+data[0].url;
+            getBase64(info.file.originFileObj, (base64Url: string) => {
+                imageUrl.value = base64Url;
+                loading1.value = false;
+            });
+        }
+
+
+    }
+    if (info.file.status === 'error') {
+        loading.value = false;
+        message.error('upload error');
+    }
+};
+
+const beforeUpload = (file: UploadProps['fileList'][number]) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
+    if (!isJpgOrPng) {
+        message.error('请上传正确的图标文件(jpeg/png/jpg)!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 10;
+    if (!isLt2M) {
+        message.error('请上传小与10MB的图像!');
+    }
+    return isJpgOrPng && isLt2M;
+};
+
+function getBase64(img: Blob, callback: (base64Url: string) => void) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
 }
 </script>
 

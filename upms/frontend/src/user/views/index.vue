@@ -1,7 +1,7 @@
 <template>
     <div>
         <a-card>
-            <a-form ref="from" :model="searchModel" :label-col="{ span: 4, offset: 0 }">
+            <a-form ref="from" :model="searchModel" :label-col="{ span: 5, offset: 0 }">
                 <a-row>
                     <a-col :span="6">
                         <a-form-item label="姓名" name="name" ref="name">
@@ -9,8 +9,14 @@
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
+                        <a-form-item label="账号" name="name" ref="name">
+                            <a-input placeholder="请输入账号" v-model:value="searchModel.username" />
+                        </a-form-item>
                     </a-col>
                     <a-col :span="6">
+                        <a-form-item label="号码" name="号码" ref="name">
+                            <a-input placeholder="请输入号码" v-model:value="searchModel.phoneNumber" />
+                        </a-form-item>
                     </a-col>
                     <a-col :span="6">
                     </a-col>

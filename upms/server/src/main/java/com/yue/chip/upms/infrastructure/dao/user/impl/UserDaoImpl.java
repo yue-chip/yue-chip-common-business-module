@@ -4,6 +4,7 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.UserListDto;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
@@ -75,6 +76,29 @@ public class UserDaoImpl implements UserDaoEx {
             para.put("name","%"+username+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
+        sb.append(" ORDER BY u.id ASC ");
+        return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
+    }
+
+    @Override
+    public Page<UserPo> find(UserListDto userListDto, Pageable pageable) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u where 1=1 ");
+        Map<String,Object> para = new HashMap<>();
+        if (StringUtils.hasText(userListDto.getName())) {
+            sb.append(" and u.name like :name ");
+            para.put("name","%"+userListDto.getName()+"%");
+        }
+        if (StringUtils.hasText(userListDto.getUsername())) {
+            sb.append(" and u.username like :username ");
+            para.put("name","%"+userListDto.getUsername()+"%");
+        }
+        if (StringUtils.hasText(userListDto.getPhoneNumber())) {
+            sb.append(" and u.phoneNumber like :phoneNumber ");
+            para.put("phoneNumber","%"+userListDto.getPhoneNumber()+"%");
+        }
+        sb.append(" and u.username <> 'superadmin' ");
+        sb.append(" ORDER BY u.id ASC ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
@@ -92,6 +116,7 @@ public class UserDaoImpl implements UserDaoEx {
             para.put("name","%"+name+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
+        sb.append(" ORDER BY u.id ASC ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
@@ -104,6 +129,7 @@ public class UserDaoImpl implements UserDaoEx {
         sb.append(" select u from UserPo u join UserRolePo ur on u.id = ur.userId where ur.roleId = :roleId");
         Map<String,Object> para = new HashMap<>();
         para.put("roleId",roleId);
+        sb.append(" ORDER BY u.id ASC");
         return (List<UserPo>) baseDao.findAll(sb.toString(),para);
     }
 
@@ -118,6 +144,7 @@ public class UserDaoImpl implements UserDaoEx {
         Map<String,Object> para = new HashMap<>();
         para.put("organizationalId",organizationalId);
         para.put("state",state);
+        sb.append(" ORDER BY u.id ASC");
         return (List<UserPo>) baseDao.findAll(sb.toString(),para);
     }
 
@@ -132,6 +159,7 @@ public class UserDaoImpl implements UserDaoEx {
         Map<String,Object> para = new HashMap<>();
         para.put("organizationalId",organizationalIds);
         para.put("state",state);
+        sb.append(" ORDER BY u.id ASC");
         List<UserPo> list = (List<UserPo>) baseDao.findAll(sb.toString(),para);
         return list;
     }
@@ -146,6 +174,7 @@ public class UserDaoImpl implements UserDaoEx {
                 "  where g.id in :gridId");
         Map<String,Object> para = new HashMap<>();
         para.put("gridId",gridId);
+        sb.append(" ORDER BY u.id ASC");
         List<UserPo> list = (List<UserPo>) baseDao.findAll(sb.toString(),para);
         return list;
     }
@@ -218,6 +247,42 @@ public class UserDaoImpl implements UserDaoEx {
 
                 }
             });
+        return result;
+    }
+
+    @Override
+    public List<UserPo> findAllByGridIdAndTenantNumber(Long id, Long tenantNumber) {
+        AssertUtil.nonNull(id,"用户id不能为空");
+        List<UserPo> result =baseDao.getSession().doReturningWork(
+                new ReturningWork<List<UserPo>>() {
+                    @Override
+                    public List<UserPo> execute(java.sql.Connection connection) throws SQLException {
+                        Statement stat = null;
+                        PreparedStatement prepareStatement = null;
+                        ResultSet resultSet = null;
+                        try {
+                            stat =  connection.createStatement();
+                            stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+                            prepareStatement =  connection.prepareStatement("select u.* from t_user u join grid_user g on u.id = g.user_id where g.grid_id = ?");
+                            prepareStatement.setLong(1,id);
+                            resultSet = prepareStatement.executeQuery();
+                            List<UserPo> userPos = new ArrayList<>();
+                            while (resultSet.next()) {
+                                userPos.add(UserPo.builder()
+                                        .id(resultSet.getLong("id"))
+                                        .name(resultSet.getString("name"))
+                                        .isSms(resultSet.getBoolean("is_sms"))
+                                        .isCall(resultSet.getBoolean("is_call"))
+                                        .phoneNumber(resultSet.getString("phone_number"))
+                                        .build());
+                            }
+                            return userPos;
+                        }finally {
+                            HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
+                        }
+
+                    }
+                });
         return result;
     }
 

@@ -44,6 +44,7 @@ public class GridDaoImpl implements GridDaoEx {
             sql.append(" and u.name like :userName ");
             para.put("userName","%"+userName+"%");
         }
+        sql.append(" ORDER BY g.id DESC");
         return (Page<GridPo>) baseDao.findNavigator(yueChipPage,sql.toString(),para);
     }
 
@@ -80,6 +81,7 @@ public class GridDaoImpl implements GridDaoEx {
             para.put("date1", startTime);
             para.put("date2", endTime);
         }
+        sql.append(" ORDER BY g.id DESC");
         return (Page<GridPo>) baseDao.findNavigator(yueChipPage,sql.toString(),para);
     }
 }

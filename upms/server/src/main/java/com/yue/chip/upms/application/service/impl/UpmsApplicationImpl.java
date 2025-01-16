@@ -1,6 +1,8 @@
 package com.yue.chip.upms.application.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.exception.BusinessException;
@@ -23,6 +25,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
+import com.yue.chip.upms.interfaces.vo.user.UserAddFailVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.seata.spring.annotation.GlobalTransactional;
@@ -32,14 +35,15 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.skywalking.apm.toolkit.trace.Tag;
 import org.apache.skywalking.apm.toolkit.trace.Tags;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author Mr.Liu
@@ -141,6 +145,48 @@ public class UpmsApplicationImpl implements UpmsApplication {
     }
 
     @Override
+    public List<UserAddFailVo> excel(Long organizationalId, MultipartFile excel) throws IOException {
+        if (excel.isEmpty()) {
+            BusinessException.throwException("文件为空！");
+        }
+        // 设备导入
+        List<UserAddFailVo> failVoList = new ArrayList<>();
+        ExcelReader reader = ExcelUtil.getReader(excel.getInputStream());
+        List<UserAddOrUpdateDto> userAddOrUpdateDtos = reader.readAll(UserAddOrUpdateDto.class);
+
+        if (!CollectionUtils.isEmpty(userAddOrUpdateDtos)) {
+            userAddOrUpdateDtos.forEach(userAddOrUpdateDto -> {
+                try {
+                    List<Long> longs = new ArrayList<>();
+                    longs.add(organizationalId);
+                    userAddOrUpdateDto.setOrganizationalId(longs);
+                    //检查用户是否存在
+                    User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
+                    Assert.isFalse(user.checkUsernameIsExist(), () -> {return new BusinessException("该帐号已存在");});
+                    //保存用户
+                    User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
+                    //保存用户与组织架构的关联关系
+                    upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
+                    //保存头像
+
+                } catch (DataIntegrityViolationException e) {
+                    UserAddFailVo vo = new UserAddFailVo();
+                    vo.setPhone(userAddOrUpdateDto.getUsername());
+                    vo.setCause("设备串号已录入");
+                    failVoList.add(vo);
+                } catch (Exception e) {
+                    UserAddFailVo vo = new UserAddFailVo();
+                    vo.setPhone(userAddOrUpdateDto.getUsername());
+                    vo.setCause("设备录入失败");
+                    failVoList.add(vo);
+                }
+            });
+        }
+
+        return failVoList;
+    }
+
+    @Override
     @Transactional(rollbackFor = {Exception.class})
     public void saveUser1(UserAddOrUpdateDto userAddOrUpdateDto) {
         User user = User.builder().username(userAddOrUpdateDto.getUsername()).build();
@@ -170,9 +216,11 @@ public class UpmsApplicationImpl implements UpmsApplication {
         //修改用户
         upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系
-        upmsDomainService.userOrganizational(userAddOrUpdateDto.getId(),userAddOrUpdateDto.getOrganizationalId());
+        if (!CollectionUtils.isEmpty(userAddOrUpdateDto.getOrganizationalId())) {
+            upmsDomainService.userOrganizational(userAddOrUpdateDto.getId(), userAddOrUpdateDto.getOrganizationalId());
+        }
         //保存头像
-        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber());
+//        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber());
     }
 
     @Override
@@ -220,6 +268,9 @@ public class UpmsApplicationImpl implements UpmsApplication {
 
     @Override
     public void updateOrganizational(OrganizationalUpdateDto organizationalUpdateDto) {
+        if (Objects.isNull(organizationalUpdateDto.getParentId())) {
+            organizationalUpdateDto.setParentId(0L);
+        }
         //检查结构名称是否存在
         Boolean nameIsExist = Organizational.builder()
                 .parentId(organizationalUpdateDto.getParentId())

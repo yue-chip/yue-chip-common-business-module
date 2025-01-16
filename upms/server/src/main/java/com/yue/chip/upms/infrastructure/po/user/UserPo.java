@@ -1,5 +1,10 @@
 package com.yue.chip.upms.infrastructure.po.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.user.UserDefinition;
@@ -12,6 +17,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -86,6 +92,11 @@ public class UserPo extends UserDefinition {
     @Override
     public LocalDateTime getLastLoginTime() {
         return super.getLastLoginTime();
+    }
+
+    @Override
+    public LocalDateTime getLastPasswordTime() {
+        return super.getLastPasswordTime();
     }
 
     @Override

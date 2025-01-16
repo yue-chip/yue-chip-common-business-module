@@ -44,9 +44,11 @@ dependencies {
 //    api 'yue.chip:yue-chip-security'
 //    api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
+    api 'org.apache.poi:poi-ooxml:4.1.2'
     api "org.springframework.statemachine:spring-statemachine-starter"
     api "org.springframework.statemachine:spring-statemachine-data-redis"
     api "org.springframework.statemachine:spring-statemachine-data-jpa"
+    api "xiao.wei:xiao-wei-security-interface-expose:1.0.0-SNAPSHOT"
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"
