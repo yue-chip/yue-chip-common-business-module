@@ -1,6 +1,5 @@
 package com.yue.chip.upms.interfaces.facade.login.weixin;
 
-import com.security.log.LogExposeService;
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.annotation.SystemLog;
 import com.yue.chip.core.IResultData;
