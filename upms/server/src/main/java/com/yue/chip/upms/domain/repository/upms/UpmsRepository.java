@@ -334,6 +334,7 @@ public interface UpmsRepository {
     Page<User> findByUsernameOrPhoneNumberOrEmailAndUserType(@NotBlank String nameLike, UserType userType, YueChipPage yueChipPage);
     User findByPhoneNumber(@NotBlank String phoneNumber);
     User findByUsername(@NotBlank String phoneNumber);
+    User findByUserName(String userName);
 
     IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, @NotNull YueChipPage yueChipPage);
 

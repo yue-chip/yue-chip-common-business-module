@@ -77,4 +77,10 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      */
     UserPo findByPhoneNumber(String phoneNumber);
 
+    /**
+     * 根据账号精准查询
+     * @return
+     */
+    UserPo findByUsername(String username);
+
 }

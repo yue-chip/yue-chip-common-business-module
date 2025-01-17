@@ -395,6 +395,14 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         User user = userMapper.toUser(byUserName.get(byUserName.size() - 1));
         return user;
     }
+    @Override
+    public User findByUserName(String userName) {
+        UserPo byUserName = userDao.findByUsername(userName);
+        if (Objects.nonNull(byUserName)) {
+            return userMapper.toUser(byUserName);
+        }
+        return null;
+    }
 
     @Override
     public IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage) {

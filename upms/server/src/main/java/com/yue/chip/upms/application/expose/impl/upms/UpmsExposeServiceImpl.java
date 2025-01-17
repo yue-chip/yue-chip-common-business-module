@@ -262,7 +262,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
 
     @Override
     public UserExposeVo findUserByUsername(String username) {
-        return userMapper.toUserExposeVo(upmsRepository.findByUsername(username));
+        return userMapper.toUserExposeVo(upmsRepository.findByUserName(username));
     }
 
 }
