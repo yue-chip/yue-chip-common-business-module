@@ -57,7 +57,7 @@ public class OrganizationalDaoImpl implements OrganizationalDaoEx {
             Map<String,Object> para = new HashMap<>();
             sb.append("select r from OrganizationalPo r where id in :ids ");
             para.put("ids", organizationalList);
-            sb.append(" ORDER BY o.id ASC ");
+            sb.append(" ORDER BY r.id ASC ");
             return (Page<OrganizationalPo>) baseDao.findNavigator(yueChipPage, sb.toString(), para);
         }
         return null;
