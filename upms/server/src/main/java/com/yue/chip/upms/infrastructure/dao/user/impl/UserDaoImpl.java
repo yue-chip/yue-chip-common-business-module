@@ -182,35 +182,44 @@ public class UserDaoImpl implements UserDaoEx {
     @Override
     public Optional<UserPo> findByIdAndTenantNumber(Long id, Long tenantNumber) {
         AssertUtil.nonNull(id,"用户id不能为空");
-        Optional<UserPo> result =baseDao.getSession().doReturningWork(
-                new ReturningWork<Optional<UserPo>>() {
-                    @Override
-                    public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
-                        Statement stat = null;
-                        PreparedStatement prepareStatement = null;
-                        ResultSet resultSet = null;
-                        try {
-                            stat =  connection.createStatement();
-                            stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
-                            prepareStatement =  connection.prepareStatement("select * from t_user where id = ?");
-                            prepareStatement.setLong(1,id);
-                            resultSet = prepareStatement.executeQuery();
-                            UserPo userPo = null;
-                            while (resultSet.next()) {
-                                userPo = UserPo.builder()
-                                        .id(resultSet.getLong("id"))
-                                        .isSms(resultSet.getBoolean("is_sms"))
-                                        .isCall(resultSet.getBoolean("is_call"))
-                                        .name(resultSet.getString("name"))
-                                        .phoneNumber(resultSet.getString("phone_number"))
-                                        .build();
-                            }
-                            return Optional.ofNullable(userPo);
-                        }finally {
-                            HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
-                        }
-                    }
-                });
+//        Optional<UserPo> result =baseDao.getSession().doReturningWork(
+//                new ReturningWork<Optional<UserPo>>() {
+//                    @Override
+//                    public Optional<UserPo> execute(java.sql.Connection connection) throws SQLException {
+//                        Statement stat = null;
+//                        PreparedStatement prepareStatement = null;
+//                        ResultSet resultSet = null;
+//                        try {
+//                            stat =  connection.createStatement();
+//                            stat.execute("use `".concat(TenantDatabaseUtil.tenantDatabaseName(tenantNumber)).concat("`"));
+//                            prepareStatement =  connection.prepareStatement("select * from t_user where id = ?");
+//                            prepareStatement.setLong(1,id);
+//                            resultSet = prepareStatement.executeQuery();
+//                            UserPo userPo = null;
+//                            while (resultSet.next()) {
+//                                userPo = UserPo.builder()
+//                                        .id(resultSet.getLong("id"))
+//                                        .isSms(resultSet.getBoolean("is_sms"))
+//                                        .isCall(resultSet.getBoolean("is_call"))
+//                                        .name(resultSet.getString("name"))
+//                                        .phoneNumber(resultSet.getString("phone_number"))
+//                                        .build();
+//                            }
+//                            return Optional.ofNullable(userPo);
+//                        }finally {
+//                            HibernateSessionJdbcUtil.close(stat,prepareStatement,resultSet);
+//                        }
+//                    }
+//                });
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo where id = :id ");
+        Map<String,Object> para = new HashMap<>();
+        para.put("id", id);
+        List<UserPo> list = (List<UserPo>) baseDao.findAll(sb.toString(),para);
+        Optional<UserPo> result = null;
+        if (!CollectionUtils.isEmpty(list)) {
+            result = Optional.ofNullable(list.get(0));
+        }
         return result;
     }
 
