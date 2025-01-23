@@ -17,13 +17,13 @@ spring:
     name: upms
   cloud:
     nacos:
+      username: ${spring.nacos.username}
+      password: ${spring.nacos.password}
+      server-addr: ${spring.nacos.host}
       config:
-        server-addr: ${spring.nacos.host}
         file-extension: yaml
         namespace: ${spring.nacos.namespace}
         group: ${spring.nacos.group}
-        username: ${spring.nacos.username}
-        password: ${spring.nacos.password}
         extension-configs:
           - data-id: common.${spring.cloud.nacos.config.file-extension}
             refresh: true
