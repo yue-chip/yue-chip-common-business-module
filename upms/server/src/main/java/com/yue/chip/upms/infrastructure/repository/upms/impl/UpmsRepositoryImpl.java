@@ -391,10 +391,13 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public User findByUsername(String phoneNumber) {
-        List<UserPo> byUserName = userDao.findByUserName(phoneNumber);
-        User user = userMapper.toUser(byUserName.get(byUserName.size() - 1));
-        return user;
+        UserPo byUserName = userDao.findByUsername(phoneNumber);
+        if (Objects.nonNull(byUserName)) {
+            return userMapper.toUser(byUserName);
+        }
+        return null;
     }
+
     @Override
     public User findByUserName(String userName) {
         UserPo byUserName = userDao.findByUsername(userName);
