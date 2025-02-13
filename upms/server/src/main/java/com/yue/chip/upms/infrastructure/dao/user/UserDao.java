@@ -81,4 +81,6 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      */
     List<UserPo> findAllByNameLikeOrPhoneNumberLike(String name,String phoneNumber);
 
+    List<UserPo> findAllByNameLike(String name);
+
 }

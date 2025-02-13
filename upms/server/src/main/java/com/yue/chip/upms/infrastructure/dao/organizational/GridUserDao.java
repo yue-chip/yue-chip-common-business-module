@@ -28,4 +28,6 @@ public interface GridUserDao extends BaseDao<GridUserPo> {
 
     List<GridUserPo> findAllByUserId(Long userId);
 
+    List<GridUserPo> findAllByUserIdIn(List<Long> userIds);
+
 }
