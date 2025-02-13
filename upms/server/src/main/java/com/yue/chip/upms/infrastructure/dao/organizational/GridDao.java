@@ -40,6 +40,10 @@ public interface GridDao extends BaseDao<GridPo>, GridDaoEx {
      */
     public List<GridPo> findAllByOrganizationalId(@NotNull Long organizationalId);
 
+    public List<GridPo> findAllByOrganizationalIdAndNameLike(@NotNull Long organizationalId, String name);
+
+    public List<GridPo> findAllByOrganizationalIdAndIdIn(@NotNull Long organizationalId, @NotNull List<Long> ids);
+
     /**
      * 根据网格id查询网格
      * @param gridId

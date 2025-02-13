@@ -285,6 +285,11 @@ public class UpmsApplicationImpl implements UpmsApplication {
     }
 
     @Override
+    public void updateOrganizationalState(Long organizationalId, State state) {
+        organizationalRepository.updateOrganizationalState(organizationalId, state);
+    }
+
+    @Override
     @Transactional(rollbackFor = {Throwable.class})
     public void deleteOrganizational(List<Long> ids) {
         ids.forEach(id ->{

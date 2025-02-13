@@ -36,6 +36,20 @@ public interface OrganizationalDao extends BaseDao<OrganizationalPo> ,Organizati
      */
     public List<OrganizationalPo> findAllByParentIdAndStateOrderBySortAsc(@NotNull Long parentId,@NotNull State state);
 
+    public List<OrganizationalPo> findAllByNameLikeOrderBySortAsc(String name);
+
+    public List<OrganizationalPo> findAllByParentIdAndNameLikeOrderBySortAsc(Long parentId, String name);
+
+    public List<OrganizationalPo> findAllByNameLikeAndStateOrderBySortAsc(String name, State state);
+
+    public List<OrganizationalPo> findAllByParentIdAndNameLikeAndStateOrderBySortAsc(Long parentId, String name, State state);
+
+    @Query(" update OrganizationalPo set state=:state where id = :id")
+    @Modifying
+    @Transactional
+    int updateState(@Param("id") Long id, @Param("state") State state);
+
+
     public Optional<OrganizationalPo> findFirstByParentIdAndState(@NotNull Long parentId,@NotNull State state);
 
     /**

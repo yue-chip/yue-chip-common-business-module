@@ -48,6 +48,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -397,6 +398,15 @@ public class UpmsConsoleController {
         return ResultData.builder().build();
     }
 
+    @PutMapping("/organizational/update/state")
+    @Operation(description = "组织机构-修改组织机构状态",summary = "组织机构-修改组织机构状态")
+    @SystemLog(value = "组织机构-修改组织机构状态")
+    public IResultData updateOrganizationalState(@NotNull(message = "机构id不能为空") @Parameter(description = "组织机构id",name="organizationalId",required = true)Long organizationalId,
+                                                 @NotNull(message = "状态不能为空") State state) {
+        upmsApplication.updateOrganizationalState(organizationalId, state);
+        return ResultData.builder().build();
+    }
+
     @DeleteMapping("/organizational/delete")
     @Operation(description = "组织机构-删除组织机构",summary = "组织机构-删除组织机构")
     @SystemLog(value = "组织机构-删除组织机构")
@@ -408,8 +418,13 @@ public class UpmsConsoleController {
     @GetMapping("/organizational/tree/list")
     @Operation(description = "组织机构-树形结构列表",summary = "组织机构-树形结构列表")
     @SystemLog(value = "组织机构-树形结构列表")
-    public IResultData<List<OrganizationalTreeListVo>> organizationalTreeList(@Parameter(description = "组织机构名称",name="name")String name){
-        return ResultData.builder().data(organizationalRepository.findTree(0L, null,name )).build();
+    public IResultData<List<OrganizationalTreeListVo>> organizationalTreeList(@Parameter(description = "组织机构名称",name="name")String name,
+                                                                             State state){
+        Long parentId = 0L;
+        if (Objects.nonNull(name)) {
+            parentId = null;
+        }
+        return ResultData.builder().data(organizationalRepository.findTree(parentId, state, name)).build();
     }
 
     @GetMapping("/organizational/tree/select")
@@ -468,8 +483,9 @@ public class UpmsConsoleController {
     @GetMapping("/grid/list/tree")
     @Operation(description = "网格-网格列表-树形",summary = "网格-网格列表-树形")
     @SystemLog(value = "网格-查询网格列表-树形")
-    public IResultData<List<GridVo>> gridList(@NotNull(message = "机构id不能为空") Long organizationalId) {
-        return ResultData.builder().data(organizationalRepository.listGridTree(organizationalId)).build();
+    public IResultData<List<GridVo>> gridList(@NotNull(message = "机构id不能为空") Long organizationalId,
+                                              String gridName, String userName) {
+        return ResultData.builder().data(organizationalRepository.listGridTree(organizationalId, gridName, userName)).build();
     }
 
     @PutMapping("/grid/update")
