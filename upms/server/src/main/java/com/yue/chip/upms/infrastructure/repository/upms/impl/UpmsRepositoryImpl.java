@@ -136,6 +136,12 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public List<User> findAllByUsernameLike(String username) {
+        List<UserPo> allByNameLike = userDao.findAllByNameLike("%" + username + "%");
+        return userMapper.toUser(allByNameLike);
+    }
+
+    @Override
     public List<User> findUserByIds(List<Long> userIds) {
         List<UserPo> userPoList = userDao.findAllByIdIn(userIds);
         return userMapper.toUser(userPoList);

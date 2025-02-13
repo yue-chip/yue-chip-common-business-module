@@ -297,9 +297,16 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         IPageResultData<List<User>> page = upmsRepository.userList(userIdList, name, yueChipPage);
 
         List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(page.getData());
-        Map<Long, Long> map = organizationalIdIn.stream().collect(Collectors.toMap(OrganizationalUserPo::getUserId, OrganizationalUserPo::getOrganizationalId));
+//        Map<Long, Long> map = organizationalIdIn.stream().collect(Collectors.toMap(OrganizationalUserPo::getUserId, OrganizationalUserPo::getOrganizationalId));
         userExposeVo.forEach(user -> {
-            user.setOrganizationalId(map.get(user.getId()));
+            organizationalIdIn.forEach(organizationalUserPo -> {
+                List<Long> organizationalIdList = new ArrayList<>();
+                if (Objects.equals(user.getId(), organizationalUserPo.getUserId())) {
+                    organizationalIdList.add(organizationalUserPo.getOrganizationalId());
+                    user.setOrganizationalId(organizationalUserPo.getOrganizationalId());
+                }
+                user.setOrganizationalIds(organizationalIdList);
+            });
         });
 
         return new PageResultData(userExposeVo,page.getPageable(),page.getTotalElements());
