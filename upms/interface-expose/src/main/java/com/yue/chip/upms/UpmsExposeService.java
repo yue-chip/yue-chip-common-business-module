@@ -162,4 +162,6 @@ public interface UpmsExposeService {
 
     Long getTimeout();
 
+    List<UserExposeVo> findAllByUsernameLike(@NotBlank String username);
+
 }

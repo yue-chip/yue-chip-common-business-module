@@ -337,4 +337,9 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         return time > 0 ? time : 0L;
     }
 
+    @Override
+    public List<UserExposeVo> findAllByUsernameLike(String username) {
+        return userMapper.toUserExposeVo(upmsRepository.findAllByUsernameLike(username));
+    }
+
 }

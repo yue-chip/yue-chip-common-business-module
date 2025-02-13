@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author xianming.chen
@@ -26,6 +27,8 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true,value = {"updateDateTime","password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId","lastLoginTime","lastPasswordTime"})
 public class UserExposeVo extends UserDefinition {
     private Long organizationalId;
+
+    private List<Long> organizationalIds;
 
     @Override
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
