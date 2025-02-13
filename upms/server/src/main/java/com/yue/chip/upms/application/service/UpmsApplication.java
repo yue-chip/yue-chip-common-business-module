@@ -1,5 +1,6 @@
 package com.yue.chip.upms.application.service;
 
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
@@ -91,6 +92,9 @@ public interface UpmsApplication {
      * @param organizationalUpdateDto
      */
     public void updateOrganizational(@NotNull OrganizationalUpdateDto organizationalUpdateDto);
+
+    public void updateOrganizationalState(@NotNull Long organizationalId, State state);
+
 
     /**
      * 删除组织机构

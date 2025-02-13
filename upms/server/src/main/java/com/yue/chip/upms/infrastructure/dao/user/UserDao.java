@@ -94,4 +94,7 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
                        @Param("passwordEncrypt") String passwordEncrypt, @Param("passwordHmac") String passwordHmac,
                        @Param("identificationNumberEncrypt") String identificationNumberEncrypt, @Param("identificationNumberHmac") String identificationNumberHmac,
                        @Param("id") Long id);
+
+    List<UserPo> findAllByNameLike(String name);
+
 }

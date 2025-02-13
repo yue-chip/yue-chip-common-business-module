@@ -37,6 +37,7 @@ import com.yue.chip.upms.vo.UserOrganizationalGirdVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -149,6 +150,14 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
+    public void updateOrganizationalState(Long organizationalId, State state) {
+        if(!organizationalDao.findById(organizationalId).isPresent()) {
+            BusinessException.throwException("该机构不存在");
+        }
+        organizationalDao.updateState(organizationalId, state);
+    }
+
+    @Override
     public Optional<Organizational> findByParentIdAndName(Long parentId, String name) {
         Optional<OrganizationalPo> optional = organizationalDao.findFirstByParentIdAndName(parentId,name);
         if (optional.isPresent()) {
@@ -161,14 +170,64 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     public List<OrganizationalTreeListVo> findTree(Long parentId, State state, String name) {
         List<OrganizationalTreeListVo> treeListVos = new ArrayList<OrganizationalTreeListVo>();
         List<OrganizationalPo> list = new ArrayList<>();
-        if (Objects.nonNull(state)) {
-            list = organizationalDao.findAllByParentIdAndStateOrderBySortAsc(parentId,state);
-        }else {
-            list = organizationalDao.findAllByParentIdOrderBySortAsc(parentId);
+        if (Objects.nonNull(state) && StringUtils.hasText(name)) {
+            List<OrganizationalPo> poList = new ArrayList<>();
+            if (Objects.isNull(parentId)) {
+                poList = organizationalDao.findAllByNameLikeAndStateOrderBySortAsc("%" + name + "%", state);
+            } else {
+                poList = organizationalDao.findAllByParentIdAndNameLikeAndStateOrderBySortAsc(parentId, "%" + name + "%", state);
+            }
+            if (list.isEmpty()) {
+                list.addAll(poList);
+            } else {
+                list.retainAll(poList);
+            }
+            if (CollectionUtils.isEmpty(list)) {
+                return new ArrayList<>();
+            }
+        }
+        if (Objects.nonNull(state) && !StringUtils.hasText(name)) {
+            List<OrganizationalPo> poList = organizationalDao.findAllByParentIdAndStateOrderBySortAsc(parentId, state);
+            if (list.isEmpty()) {
+                list.addAll(poList);
+            } else {
+                list.retainAll(poList);
+            }
+            if (CollectionUtils.isEmpty(list)) {
+                return new ArrayList<>();
+            }
+        }
+        if (StringUtils.hasText(name) && Objects.isNull(state)) {
+            List<OrganizationalPo> poList = new ArrayList<>();
+            if (Objects.isNull(parentId)) {
+                poList = organizationalDao.findAllByNameLikeOrderBySortAsc("%" + name + "%");
+            } else {
+                poList = organizationalDao.findAllByParentIdAndNameLikeOrderBySortAsc(parentId, "%" + name + "%");
+            }
+            if (list.isEmpty()) {
+                list.addAll(poList);
+            } else {
+                list.retainAll(poList);
+            }
+            if (CollectionUtils.isEmpty(list)) {
+                return new ArrayList<>();
+            }
+        }
+        if (Objects.isNull(state) && !StringUtils.hasText(name)) {
+            List<OrganizationalPo> poList = organizationalDao.findAllByParentIdOrderBySortAsc(parentId);
+            if (list.isEmpty()) {
+                list.addAll(poList);
+            } else {
+                list.retainAll(poList);
+            }
+            if (CollectionUtils.isEmpty(list)) {
+                return new ArrayList<>();
+            }
         }
         treeListVos = organizationalMapper.toOrganizationalTreeListVo(list);
+        String finalName = name;
         treeListVos.forEach(organizationalTreeListVo -> {
-            organizationalTreeListVo.setChildren(findTree(organizationalTreeListVo.getId(),state, name));
+            organizationalTreeListVo.setChildren(findTree(organizationalTreeListVo.getId(),state, finalName));
             if (Objects.nonNull(organizationalTreeListVo.getLeaderId())) {
                 Optional<User> optional = upmsRepository.findUserById(organizationalTreeListVo.getLeaderId());
                 if (optional.isPresent()) {
@@ -423,9 +482,44 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     }
 
     @Override
-    public List<GridVo2> listGridTree(Long organizationalId) {
+    public List<GridVo2> listGridTree(Long organizationalId, String gridName, String userName) {
         List<GridVo2> tree = new ArrayList<>();
-        List<GridPo> gridPoList = gridDao.findAllByOrganizationalId(organizationalId);
+        List<GridPo> gridPoList = new ArrayList<>();
+        if (StringUtils.hasText(gridName)) {
+            List<GridPo> gridPos = gridDao.findAllByOrganizationalIdAndNameLike(organizationalId, "%" + gridName + "%");
+            if (gridPoList.isEmpty()) {
+                gridPoList.addAll(gridPos);
+            } else {
+                gridPoList.retainAll(gridPos);
+            }
+            if (CollectionUtils.isEmpty(gridPoList)) {
+                return new ArrayList<>();
+            }
+        }
+        if (StringUtils.hasText(userName)) {
+            List<Long> userIds = userDao.findAllByNameLike("%" + userName + "%").stream().map(UserPo::getId).collect(Collectors.toList());
+            List<Long> ids = gridUserDao.findAllByUserIdIn(userIds).stream().map(GridUserPo::getGridId).collect(Collectors.toList());
+            List<GridPo> gridPos = gridDao.findAllByOrganizationalIdAndIdIn(organizationalId, ids) ;
+            if (gridPoList.isEmpty()) {
+                gridPoList.addAll(gridPos);
+            } else {
+                gridPoList.retainAll(gridPos);
+            }
+            if (CollectionUtils.isEmpty(gridPoList)) {
+                return new ArrayList<>();
+            }
+        }
+        else {
+            List<GridPo> gridPos = gridDao.findAllByOrganizationalId(organizationalId);
+            if (gridPoList.isEmpty()) {
+                gridPoList.addAll(gridPos);
+            } else {
+                gridPoList.retainAll(gridPos);
+            }
+            if (CollectionUtils.isEmpty(gridPoList)) {
+                return new ArrayList<>();
+            }
+        }
         if (!CollectionUtils.isEmpty(gridPoList)) {
             List<GridVo2> gridVos = gridMapper.toListGridVo(gridPoList);
             gridVos.forEach(gridVo -> {

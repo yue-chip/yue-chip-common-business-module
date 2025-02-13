@@ -91,7 +91,7 @@ public class UserDaoImpl implements UserDaoEx {
         }
         if (StringUtils.hasText(userListDto.getUsername())) {
             sb.append(" and u.username like :username ");
-            para.put("name","%"+userListDto.getUsername()+"%");
+            para.put("username","%"+userListDto.getUsername()+"%");
         }
         if (StringUtils.hasText(userListDto.getPhoneNumber())) {
             sb.append(" and u.phoneNumber like :phoneNumber ");
