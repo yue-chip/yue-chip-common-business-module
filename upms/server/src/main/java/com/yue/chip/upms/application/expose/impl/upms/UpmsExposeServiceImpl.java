@@ -8,6 +8,7 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.upms.UpmsExposeService;
+import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalUserMapper;
@@ -19,6 +20,7 @@ import com.yue.chip.upms.domain.repository.organizational.OrganizationalReposito
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
@@ -57,6 +59,8 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     private GridMapper gridMapper;
     @Resource
     private OrganizationalUserMapper organizationalUserMapper;
+    @Resource
+    private UpmsApplication upmsApplication;
 
     @Override
     public List<UserExposeVo> findUserAllByIdIn(List<Long> userIds) {
@@ -263,6 +267,14 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     @Override
     public UserExposeVo findUserByUsername(String username) {
         return userMapper.toUserExposeVo(upmsRepository.findByUserName(username));
+    }
+
+    @Override
+    public void updateUserPassword(Long userId, String password) {
+        UserUpdatePasswordDto userUpdatePasswordDto = new UserUpdatePasswordDto();
+        userUpdatePasswordDto.setPassword(password);
+        userUpdatePasswordDto.setUserId(userId);
+        upmsApplication.updateUserPassword(userUpdatePasswordDto);
     }
 
 }

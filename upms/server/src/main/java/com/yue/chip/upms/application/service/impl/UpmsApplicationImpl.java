@@ -30,6 +30,8 @@ import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
+import com.yue.chip.utils.I18nUtils;
+//import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboReference;

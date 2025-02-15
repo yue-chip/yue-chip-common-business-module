@@ -174,4 +174,6 @@ public interface UpmsExposeService {
 
     UserExposeVo findUserByUsername(@NotBlank String username);
 
+    void updateUserPassword(@NotNull Long userId, @NotNull String password);
+
 }
