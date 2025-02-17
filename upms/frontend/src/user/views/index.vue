@@ -37,6 +37,7 @@
                                     </template>
                                     添加
                                 </a-button>
+
                                 <a-button type="primary" danger @click="del(selectedRowKeys)">
                                     <template #icon>
                                         <DeleteOutlined />
@@ -52,7 +53,7 @@
 
         <a-card>
             <a-config-provider :theme="{
-               
+
             }" :locale="zhCN">
                 <a-table rowKey="id" :row-selection="rowSelection" :columns="columns" :data-source="dataList"
                     :pagination="pagination" :loading="loading">
@@ -78,6 +79,16 @@
                                         <EditOutlined />
                                     </template>
                                     修改
+                                </a-button>
+                                <a-button size="small" @click="changestate('DISABLE', record.id)"
+                                    v-if="record.state?.name == 'NORMAL'" :loading="btnLoading">
+
+                                    禁用
+                                </a-button>
+                                <a-button  size="small" @click="changestate('NORMAL', record.id)"
+                                    v-else :loading="btnLoading">
+
+                                    解禁
                                 </a-button>
                                 <a-button size="small" @click="resetPwd(record.id)">
                                     <template #icon>
@@ -127,17 +138,17 @@ import { ref, onActivated, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import { SearchOutlined, PlusOutlined, DeleteOutlined, EditOutlined, UndoOutlined } from '@ant-design/icons-vue';
 import axios from "@yue-chip/yue-chip-frontend-core/axios/axios";
-import { TableProps, Modal, message,FormInstance } from "ant-design-vue";
+import { TableProps, Modal, message, FormInstance } from "ant-design-vue";
 import { Md5 } from 'ts-md5';
 import qs from "qs";
 import zhCN from "ant-design-vue/es/locale/zh_CN"
 import 'dayjs/locale/zh-cn';
 const _this: any = getCurrentInstance();
-const visibleUpdatePassword=ref(false)
+const visibleUpdatePassword = ref(false)
 let updateModel = ref({
-    id:undefined,
-    password:undefined,
-    password1:undefined,
+    id: undefined,
+    password: undefined,
+    password1: undefined,
 })
 const updatePasswordFrom = ref<FormInstance>();
 const router = useRouter();
@@ -251,7 +262,7 @@ function cancelUpdatePassword() {
 
 function updatePassword() {
     updatePasswordFrom.value.validateFields().then(() => {
-        axios.axiosPut("/upms/console/user/update/password", { password: Md5.hashStr(updateModel.value.password),userId:updateModel.value.id },
+        axios.axiosPut("/upms/console/user/update/password", { password: Md5.hashStr(updateModel.value.password), userId: updateModel.value.id },
             (data: any) => {
                 if (data.status === 200) {
                     cancelUpdatePassword();
@@ -323,7 +334,7 @@ function del(id: string[]) {
             axios.axiosDelete("/upms/console/user/delete", params, (data: any) => {
                 if (data.status === 200) {
                     message.info(data.message);
-                    selectedRowKeys=[]
+                    selectedRowKeys = []
                     search();
                 }
             }, null, null);
@@ -358,7 +369,18 @@ const resetPwd = (id: string) => {
     updateModel.value.id = id;
     visibleUpdatePassword.value = true;
 }
-
+const btnLoading = ref(false);
+const changestate = (state: string, id: string) => {
+    // btnLoading.value = true;
+    axios.axiosPut(`/upms/console/user/update/state`, { state: state, userId: id },
+        (data: any) => {
+            if (data.status === 200) {
+                message.info(data.message);
+                btnLoading.value = false;
+                search();
+            }
+        }, null, null)
+}
 </script>
 
 <style scoped></style>
