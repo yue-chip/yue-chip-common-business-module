@@ -9,33 +9,33 @@
             </a-button>
         </a-card>
         <a-card>
-            <a-form ref="from" :model="searchModel" :label-col="{ span: 4, offset: 0 }">
-                <!--  <a-row>
+            <a-form ref="from" :model="searchModel" :label-col="{ span: 6, offset: 0 }">
+                 <a-row>
                     <a-col :span="6">
                         <a-form-item label="网格名称" name="name" ref="name">
-                            <a-input placeholder="请输入网格名称" v-model:value="searchModel.name" />
+                            <a-input placeholder="请输入网格名称" v-model:value="searchModel.gridName" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
-                        <a-form-item label="姓名" name="userName" ref="userName">
-                            <a-input placeholder="请输入姓名" v-model:value="searchModel.userName" />
+                        <a-form-item label="网格员" name="userName" ref="userName">
+                            <a-input placeholder="请输入网格员" v-model:value="searchModel.userName" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
                     </a-col>
                     <a-col :span="6">
-                    </a-col> -->
-                <!--  </a-row> -->
+                    </a-col>
+                 </a-row>
                 <a-row style="height: 20px;">
                     <a-col :span="24" style="text-align:right;">
                         <a-form-item>
                             <a-space :size="5">
-                                <!--  <a-button type="primary" @click="searchModel.pageNumber = 1; search()">
+                                 <a-button type="primary" @click="searchModel.pageNumber = 1; search()">
                                     <template #icon>
                                         <SearchOutlined />
                                     </template>
                                     查询
-                                </a-button> -->
+                                </a-button>
                                 <a-button type="primary" @click="add()">
                                     <template #icon>
                                         <PlusOutlined />

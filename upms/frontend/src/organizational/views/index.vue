@@ -1,11 +1,36 @@
 <template>
     <div>
         <a-card>
-            <a-form ref="from" :model="searchModel" :label-col="{ span: 4, offset: 0 }">
+
+            <a-form ref="from" :model="searchModel" :label-col="{ span: 5, offset: 0 }">
+                <a-row>
+                    <a-col :span="6">
+                        <a-form-item label="机构名称" name="name" ref="name">
+                            <a-input placeholder="请输入机构名称" v-model:value="searchModel.name" />
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="6">
+                        <a-form-item label="状态" name="name" ref="name">
+                            <!--   <a-input placeholder="请输入账号" v-model:value="searchModel.username" /> -->
+                            <a-select ref="select" v-model:value="searchModel.state" placeholder="当前状态"
+                                style="width: 100%" allow-clear>
+                                <a-select-option :value="item.name" v-for="item in stateList"
+                                    :key="item.name">{{ item.desc }}</a-select-option>
+                            </a-select>
+                        </a-form-item>
+                    </a-col>
+
+                </a-row>
                 <a-row style="height: 20px;">
                     <a-col :span="24" style="text-align:right;">
                         <a-form-item>
                             <a-space :size="5">
+                                <a-button type="primary" @click="searchModel.pageNumber = 1; search()">
+                                    <template #icon>
+                                        <SearchOutlined />
+                                    </template>
+                                    查询
+                                </a-button>
                                 <a-button type="primary" @click="add()">
                                     <template #icon>
                                         <PlusOutlined />
@@ -30,7 +55,7 @@
                 <template #bodyCell="{ column, text, record }">
                     <template v-if="column.key === 'state'">
                         <a-switch
-                            @change="stateChange(record.id, record.stateTmp, record.phoneNumber, record.name, record.parentId)"
+                            @change="stateChange(record.id, record?.state.name, record.stateTmp)"
                             v-model:checked="record.stateTmp" checked-children="正常" un-checked-children="禁用" />
                     </template>
                     <template v-if="column.key === 'operation'">
@@ -47,7 +72,8 @@
                                 </template>
                                 设置负责人
                             </a-button>
-                            <a-button v-if="record.children === undefined" @click="grid(record.id)" size="small">
+                            <a-button v-if="record.children === undefined || record.children.length === 0"
+                                @click="grid(record.id)" size="small">
                                 <template #icon>
                                     <MehOutlined />
                                 </template>
@@ -92,11 +118,12 @@ import qs from "qs";
 const _this: any = getCurrentInstance();
 const router = useRouter();
 let loading = ref(false);
-let searchModel = ref({ pageSize: 10, pageNumber: 1 });
+let searchModel = ref<any>({ pageSize: 10, pageNumber: 1 });
 let selectedRowKeys: string[] = [];
 let visible = ref<boolean>(false);
 let addOrUpdateModel = ref({})
 let options: any[] = ref<any>([]);
+const stateList = ref<any>([]);
 const columns = [
     {
         title: '机构名称',
@@ -189,9 +216,9 @@ function del(id: string[]) {
     });
 }
 
-function stateChange(id: string, stateTmp: any, phoneNumber: string, name: string, parentId: number) {
-    let state = stateTmp ? 1 : 0;
-    axios.axiosPut("/upms/console/organizational/update", { "id": id, "state": state, phoneNumber: phoneNumber, name: name, parentId: parentId },
+function stateChange(id: string,state:string ,stateTmp:boolean) {
+    const state1=stateTmp?'NORMAL':'DISABLE';
+    axios.axiosPut(`/upms/console/organizational/update/state?organizationalId=${id}&state=${state1}`, { "organizationalId": id, "state": state1},
         (data: any) => {
             if (data.status === 200) {
                 message.info(data.message);
@@ -232,6 +259,13 @@ function grid(id: string) {
     router.push({ path: '/grid', query: { organizationalId: id } });
 }
 
+const getstatelist = () => {
+    axios.axiosGet("/common/enum", { params: { code: 'state', version: 1 } }, (data: any) => {
+
+        stateList.value = JSON.parse(data.data.value);
+    }, null, null)
+}
+getstatelist()
 </script>
 
 <style scoped></style>
