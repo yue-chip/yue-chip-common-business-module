@@ -49,7 +49,7 @@ public class TenantApplicationImpl implements TenantApplication {
     @Transactional(rollbackFor = {Exception.class})
     public TenantPo save(TenantAddDTO tenantAddDTO) {
         //判断租户名称时候存在
-        AssertUtil.isTrue(Tenant.builder().name(tenantAddDTO.getName()).build().checkNameIsExist(),"该租户名称已存在");
+        AssertUtil.isFalse(Tenant.builder().name(tenantAddDTO.getName()).build().checkNameIsExist(),"该租户名称已存在");
         //判断租户登录域存不存在
         AssertUtil.isTrue(tenantService.checkDomainIsExist(null, tenantAddDTO.getRequestDomain()),"该登录域已存在");
         //保存租户

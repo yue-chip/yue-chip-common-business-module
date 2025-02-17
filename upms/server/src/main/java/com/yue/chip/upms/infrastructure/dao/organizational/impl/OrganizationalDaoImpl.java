@@ -45,6 +45,7 @@ public class OrganizationalDaoImpl implements OrganizationalDaoEx {
         sb.append(" select o from OrganizationalPo o join OrganizationalUserPo ou on o.id=ou.organizationalId  where ou.userId = :userId ");
         Map<String,Object> para = new HashMap<>();
         para.put("userId",userId);
+        sb.append(" ORDER BY o.id ASC");
         List<OrganizationalPo> list = (List<OrganizationalPo>) baseDao.findAll(sb.toString(),para);
         return list;
     }
@@ -56,7 +57,7 @@ public class OrganizationalDaoImpl implements OrganizationalDaoEx {
             Map<String,Object> para = new HashMap<>();
             sb.append("select r from OrganizationalPo r where id in :ids ");
             para.put("ids", organizationalList);
-            sb.append(" ORDER BY r.createDateTime ASC ");
+            sb.append(" ORDER BY r.id ASC ");
             return (Page<OrganizationalPo>) baseDao.findNavigator(yueChipPage, sb.toString(), para);
         }
         return null;

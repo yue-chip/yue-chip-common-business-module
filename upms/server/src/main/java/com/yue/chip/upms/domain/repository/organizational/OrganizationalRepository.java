@@ -97,6 +97,8 @@ public interface OrganizationalRepository {
      */
     public void updateOrganizational(@NotNull OrganizationalPo organizational);
 
+    public void updateOrganizationalState(Long organizationalId, State state);
+
     /**
      * 根据父节点id和机构名称查询机构
      *
@@ -224,7 +226,7 @@ public interface OrganizationalRepository {
      * @param organizationalId
      * @return
      */
-    List<GridVo2> listGridTree(@NotNull Long organizationalId);
+    List<GridVo2> listGridTree(@NotNull Long organizationalId, String gridName, String userName);
 
     List<GridTreeVo> listGridTree2(@NotNull Long organizationalId);
 
@@ -278,6 +280,7 @@ public interface OrganizationalRepository {
      * @return
      */
     List<Grid> findGridByName(String name);
+     List<Grid> findGridByUserId(Long userid);
 
     /**
      * 用户，机构，网格创建或绑定

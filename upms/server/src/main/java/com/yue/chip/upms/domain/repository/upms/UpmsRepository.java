@@ -79,6 +79,8 @@ public interface UpmsRepository {
 
     List<User> findAllByGridIdAndTenantNumber(@NotNull Long id, Long tenantNumber);
 
+    List<User> findAllByUsernameLike(@NotBlank String username);
+
     /**
      * 根据用户id查询用户
      * @param userIds

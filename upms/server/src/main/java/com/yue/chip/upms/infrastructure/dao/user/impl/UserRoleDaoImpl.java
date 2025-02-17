@@ -36,6 +36,7 @@ public class UserRoleDaoImpl implements UserRoleDaoEx {
             para.put("phone", "%"+useRoleListDto.getPhone()+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
+        sb.append(" ORDER BY u.id ASC");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
@@ -54,6 +55,7 @@ public class UserRoleDaoImpl implements UserRoleDaoEx {
             para.put("phone", "%"+useRoleListDto.getPhone()+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
+        sb.append(" ORDER BY u.id ASC");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 }

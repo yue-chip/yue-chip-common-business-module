@@ -136,6 +136,12 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public List<User> findAllByUsernameLike(String username) {
+        List<UserPo> allByNameLike = userDao.findAllByNameLike("%" + username + "%");
+        return userMapper.toUser(allByNameLike);
+    }
+
+    @Override
     public List<User> findUserByIds(List<Long> userIds) {
         List<UserPo> userPoList = userDao.findAllByIdIn(userIds);
         return userMapper.toUser(userPoList);
@@ -295,14 +301,12 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public void userBindRoleAdd(RoleUserAddDto roleUserAddDto) {
-        UserRolePo po = userRoleDao.findFirstByRoleIdAndUserId(roleUserAddDto.getRoleId(), roleUserAddDto.getUserId());
-        if (Objects.nonNull(po)) {
-            throw new AuthenticationServiceException("该用户已绑定该角色");
-        }
-        UserRolePo userRolePo = new UserRolePo();
-        userRolePo.setRoleId(roleUserAddDto.getRoleId());
-        userRolePo.setUserId(roleUserAddDto.getUserId());
-        userRoleDao.save(userRolePo);
+        roleUserAddDto.getUserIds().forEach(userId -> {
+            UserRolePo userRolePo = new UserRolePo();
+            userRolePo.setRoleId(roleUserAddDto.getRoleId());
+            userRolePo.setUserId(userId);
+            userRoleDao.save(userRolePo);
+        });
     }
 
     @Override

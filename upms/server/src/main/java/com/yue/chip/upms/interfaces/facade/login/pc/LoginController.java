@@ -4,10 +4,12 @@ import cn.hutool.core.codec.Base64;
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
+import com.yue.chip.core.SystemLogService;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.domain.service.login.LoginService;
+import com.yue.chip.upms.infrastructure.dao.user.UserDao;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
-import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -40,6 +43,11 @@ public class LoginController{
     @Resource
     private UpmsApplication upmsApplication;
 
+    @Resource
+    private SystemLogService systemLogService;
+
+    @Resource
+    private UserDao userDao;
 
     @PostMapping("/login1")
     @AuthorizationIgnore
@@ -49,6 +57,16 @@ public class LoginController{
         String token = loginService.login(username,password);
         Map<String,String> map = new HashMap<>();
         map.put("token",token);
+        Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
+        try {
+            if (firstByUsername.isPresent()) {
+                systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
+            }
+        } catch (Exception e) {
+            System.out.println("---------------");
+            System.out.println(e.getMessage());
+            System.out.println("---------------");
+        }
         return ResultData.builder().data(map).build();
     }
 
@@ -56,7 +74,7 @@ public class LoginController{
     @AuthorizationIgnore
     @Operation(summary = "登录", description = "登录")
     public IResultData<String> login2(String data) {
-        CurrentUserUtil.setCurrentTenantNumber("48");
+//        CurrentUserUtil.setCurrentTenantNumber("48");
         String str = Base64.decodeStr(data);
         String username = str.split("&")[1].split("=")[1];
         String name = str.split("&")[2].split("=")[1];
@@ -65,7 +83,17 @@ public class LoginController{
         String token = loginService.login(username,password);
         Map<String,String> map = new HashMap<>();
         map.put("token",token);
-        CurrentUserUtil.cleanCurrentTenantNumber();
+//        CurrentUserUtil.cleanCurrentTenantNumber();
+        Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
+        try {
+            if (firstByUsername.isPresent()) {
+                systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
+            }
+        } catch (Exception e) {
+            System.out.println("---------------");
+            System.out.println(e.getMessage());
+            System.out.println("---------------");
+        }
         return ResultData.builder().data(map).build();
     }
 

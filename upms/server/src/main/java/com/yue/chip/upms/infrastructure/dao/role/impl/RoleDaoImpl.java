@@ -39,6 +39,7 @@ public class RoleDaoImpl implements RoleDaoEx {
             para.put("state", state);
         }
         sb.append(" and r.code <> 'superadmin' ");
+        sb.append(" ORDER BY r.id ASC");
         return (Page<RolePo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
@@ -51,6 +52,7 @@ public class RoleDaoImpl implements RoleDaoEx {
         Map<String, Object> para = new HashMap<>();
         sb.append("select r from RolePo r join UserRolePo ur on r.id = ur.roleId where ur.userId = :userId ");
         para.put("userId",userId);
+        sb.append(" ORDER BY r.id ASC");
         return (List<RolePo>) baseDao.findAll(sb.toString(),para);
 
 //        QueryRunner queryRunner = new QueryRunner(dataSource);
