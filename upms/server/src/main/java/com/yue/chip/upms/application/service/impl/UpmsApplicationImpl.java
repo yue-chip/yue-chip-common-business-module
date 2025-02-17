@@ -25,6 +25,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
+import com.yue.chip.upms.interfaces.dto.user.UserUpdateStateDto;
 import com.yue.chip.upms.interfaces.vo.user.UserAddFailVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
@@ -228,6 +229,11 @@ public class UpmsApplicationImpl implements UpmsApplication {
 //        upmsRepository.updateUserPassword(CurrentUserUtil.getCurrentUserId(),passwordEncoder.encode(SecureUtil.md5(userUpdatePasswordDto.getPassword())));
         upmsRepository.updateUserPassword(Objects.isNull(userUpdatePasswordDto.getUserId())?CurrentUserUtil.getCurrentUserId():userUpdatePasswordDto.getUserId(),
                 passwordEncoder.encode(userUpdatePasswordDto.getPassword()));
+    }
+
+    @Override
+    public void updateUserState(UserUpdateStateDto userUpdateStateDto) {
+        upmsRepository.updateUserState(userUpdateStateDto.getUserId(),userUpdateStateDto.getState());
     }
 
     @Override
