@@ -40,4 +40,24 @@ public class SafetyPo extends SafetyDefinition {
         return super.getPasswordTime();
     }
 
+    @Override
+    @Comment("密码最小长度-不能为空")
+    @NotNull
+    public Long getPasswordLength() {
+        return super.getPasswordLength();
+    }
+
+    @Override
+    @Comment("是否禁止连续使用同一字符-不能为空")
+    @NotNull
+    public Boolean getSameChar() {
+        return super.getSameChar();
+    }
+
+    @Override
+    @Comment("是否包含三种字符以上-不能为空")
+    @NotNull
+    public Boolean getThreeChar() {
+        return super.getThreeChar();
+    }
 }
