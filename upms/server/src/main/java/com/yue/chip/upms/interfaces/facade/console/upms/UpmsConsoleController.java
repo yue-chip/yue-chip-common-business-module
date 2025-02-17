@@ -1,5 +1,6 @@
 package com.yue.chip.upms.interfaces.facade.console.upms;
 
+import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.annotation.SystemLog;
 import com.yue.chip.core.*;
 import com.yue.chip.core.common.enums.State;
@@ -367,6 +368,14 @@ public class UpmsConsoleController {
         return ResultData.builder().build();
     }
 
+    @PutMapping("/user/update/state")
+    @Operation(description = "用户-修改用户状态",summary = "用户-修改用户状态")
+    @SystemLog(value = "用户-修改用户状态")
+    public IResultData updateUserState(@RequestBody @Validated UserUpdateStateDto userUpdateStateDto) {
+        upmsApplication.updateUserState(userUpdateStateDto);
+        return ResultData.builder().build();
+    }
+
     @DeleteMapping("/user/delete")
     @Operation(description = "用户-删除用户",summary = "用户-删除用户")
     @SystemLog(value = "用户-删除用户")
@@ -522,6 +531,7 @@ public class UpmsConsoleController {
     @GetMapping("/safety/detail")
     @Operation(description = "获取安全设置",summary = "获取安全设置")
     @SystemLog(value = "获取安全设置")
+    @AuthorizationIgnore
     public IResultData<SafetyVo> safetyDetail() {
         SafetyVo vo = upmsRepository.safetyDetail();
         return ResultData.builder().data(vo).build();

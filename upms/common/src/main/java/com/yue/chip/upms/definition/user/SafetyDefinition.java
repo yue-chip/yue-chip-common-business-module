@@ -23,4 +23,13 @@ public class SafetyDefinition extends BaseDefinition {
     @Schema(description = "更新密码时间设置")
     private Long passwordTime;
 
+    @Schema(description = "密码最小长度")
+    private Long passwordLength;
+
+    @Schema(description = "是否禁止连续使用同一字符")
+    private Boolean sameChar;
+
+    @Schema(description = "是否包含三种字符以上")
+    private Boolean threeChar;
+
 }
