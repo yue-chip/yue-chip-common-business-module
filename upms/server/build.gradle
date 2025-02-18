@@ -38,15 +38,15 @@ dependencies {
     api project(':interface-expose')
 //    api project(':authentication')
     api platform("yue.chip:starter:${yueChipPlatformVersion}")
-    api 'yue.chip:yue-chip-serve-starter'
+    api 'yue.chip:yue-chip-server-starter'
     api 'yue.chip:yue-chip-business-starter'
     api "yue.chip:yue-chip-common-business-interface-expose:${commonBusinessVersion}"
 //    api 'yue.chip:yue-chip-security'
     api "yue.chip:yue-chip-oauth2-resource-server"
 //    implementation 'org.springframework.boot:spring-boot-devtools'
-    api "org.springframework.statemachine:spring-statemachine-starter"
-    api "org.springframework.statemachine:spring-statemachine-data-redis"
-    api "org.springframework.statemachine:spring-statemachine-data-jpa"
+//    api "org.springframework.statemachine:spring-statemachine-starter"
+//    api "org.springframework.statemachine:spring-statemachine-data-redis"
+//    api "org.springframework.statemachine:spring-statemachine-data-jpa"
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"

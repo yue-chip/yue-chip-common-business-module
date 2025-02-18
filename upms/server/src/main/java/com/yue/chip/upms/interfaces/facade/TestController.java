@@ -8,6 +8,7 @@ import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.application.service.TestApplicationService;
 import com.yue.chip.upms.application.service.UpmsApplication;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +57,8 @@ public class TestController  {
     @AuthorizationIgnore
     @Operation(summary = "测试-sms", description = "测试-sms")
     public IResultData sms(){
-        smsExposeService.sendSms("1400813276", "小未科技", "1795028", "test^test^test", "+8618928025540");
+        User.builder().build().getTenant();
+//        smsExposeService.sendSms("1400813276", "小未科技", "1795028", "test^test^test", "+8618928025540");
         return ResultData.builder().build();
     }
 
@@ -65,6 +67,7 @@ public class TestController  {
 //    @AuthorizationIgnore
     @Operation(summary = "测试-1", description = "测试-1")
     public IResultData test(String name){
+
         CurrentUserUtil.getCurrentUserUsername();
         CurrentUserUtil.getCurrentUserTenantNumber();
         log.info("test");

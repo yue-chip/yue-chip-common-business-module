@@ -1,6 +1,6 @@
 package com.yue.chip.common.business.interfaces.vo.enums;
 
-import com.yue.chip.common.business.definition.enums.EnumUtilDefinition;
+import com.yue.chip.core.common.enums.EnumUtilDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
