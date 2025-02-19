@@ -64,9 +64,9 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public com.yue.chip.core.Optional<UserExposeVo> findUserById(Long userId) {
         Optional<User> optional = upmsRepository.findUserById(userId);
         if (optional.isPresent()) {
-            return com.yue.chip.core.Optional.ofNullable(userMapper.toUserExposeVo(optional.get()));
+            return com.yue.chip.core.Optional.builder().build().ofNullable(userMapper.toUserExposeVo(optional.get()));
         }
-        return com.yue.chip.core.Optional.empty();
+        return com.yue.chip.core.Optional.builder().build().empty();
     }
 
     @Override
@@ -84,27 +84,27 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public com.yue.chip.core.Optional<UserExposeVo> findByIdAndTenantNumber(Long id, Long tenantNumber) {
         Optional<User> optional = upmsRepository.findByIdAndTenantNumber(id,tenantNumber);
         if (optional.isPresent()) {
-            return com.yue.chip.core.Optional.ofNullable(userMapper.toUserExposeVo(optional.get()));
+            return com.yue.chip.core.Optional.builder().build().ofNullable(userMapper.toUserExposeVo(optional.get()));
         }
-        return com.yue.chip.core.Optional.empty();
+        return com.yue.chip.core.Optional.builder().build().empty();
     }
 
     @Override
     public com.yue.chip.core.Optional<UserExposeVo> findByGridIdAndTenantNumber(Long id, Long tenantNumber) {
         Optional<User> optional = upmsRepository.findByGridIdAndTenantNumber(id,tenantNumber);
         if (optional.isPresent()) {
-            return com.yue.chip.core.Optional.ofNullable(userMapper.toUserExposeVo(optional.get()));
+            return com.yue.chip.core.Optional.builder().build().ofNullable(userMapper.toUserExposeVo(optional.get()));
         }
-        return com.yue.chip.core.Optional.empty();
+        return com.yue.chip.core.Optional.builder().build().empty();
     }
 
     @Override
     public com.yue.chip.core.Optional<OrganizationalExposeVo> findOrganizationalById(Long id) {
         java.util.Optional<Organizational> optional = organizationalRepository.findById(id);
         if (optional.isPresent()) {
-            return com.yue.chip.core.Optional.ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
+            return com.yue.chip.core.Optional.builder().build().ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
         }
-        return com.yue.chip.core.Optional.empty();
+        return com.yue.chip.core.Optional.builder().build().empty();
     }
 
     @Override

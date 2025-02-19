@@ -41,8 +41,8 @@ public class EnumPersistenceServiceExposeImpl implements EnumPersistenceExposeSe
             enumUtilOptional = enumUtilRepository.find(code);
         }
         if (enumUtilOptional.isPresent()) {
-            return Optional.ofNullable(enumUtilMapper.toEnumUtilPo(enumUtilOptional.get()));
+            return Optional.builder().build().ofNullable(enumUtilMapper.toEnumUtilPo(enumUtilOptional.get()));
         }
-        return Optional.empty();
+        return Optional.builder().build().empty();
     }
 }

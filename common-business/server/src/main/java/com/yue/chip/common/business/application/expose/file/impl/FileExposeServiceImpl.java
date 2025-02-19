@@ -25,17 +25,17 @@ public class FileExposeServiceImpl implements FileExposeService {
     private FileMapper fileMapper;
 
     @Override
-    public Optional<FileDefinition> find(Long fileId) {
+    public com.yue.chip.core.Optional<FileDefinition> find(Long fileId) {
         Optional<File> optional = fileRepository.find(fileId);
         if (optional.isPresent()) {
-            Optional.ofNullable(fileMapper.toFileDefinition(optional.get()));
+            com.yue.chip.core.Optional.builder().build().ofNullable(fileMapper.toFileDefinition(optional.get()));
         }
-        return Optional.empty();
+        return com.yue.chip.core.Optional.builder().build().empty();
     }
 
     @Override
     public String getUrl(Long fileId) {
-        Optional<FileDefinition> optional = find(fileId);
+        com.yue.chip.core.Optional<FileDefinition> optional = find(fileId);
         if (optional.isPresent()){
             return optional.get().getUrl();
         }

@@ -26,18 +26,18 @@ public class TenantExposeServiceImpl implements TenantExposeService {
     public com.yue.chip.core.Optional<TenantDefinition> getTenantDefinition(@NotBlank String url) {
         Optional<Tenant> optional = tenantRepository.findTenantByUrl(url);
         if(optional.isPresent()){
-            return com.yue.chip.core.Optional.ofNullable(tenantMapper.toTenantDefinition(optional.get()));
+            return com.yue.chip.core.Optional.builder().build().ofNullable(tenantMapper.toTenantDefinition(optional.get()));
         }
         return com.yue.chip.core.Optional.empty();
     }
 
     @Override
-    public TenantDefinition findTenantByTenantNumber(@NotNull Long tenantNumber) {
+    public com.yue.chip.core.Optional<TenantDefinition> findTenantByTenantNumber(@NotNull Long tenantNumber) {
         Optional<Tenant> optional = tenantRepository.findTenantByTenantNumber(tenantNumber);
         if(optional.isPresent()){
-            return tenantMapper.toTenantDefinition(optional.get());
+            return com.yue.chip.core.Optional.builder().build().ofNullable(tenantMapper.toTenantDefinition(optional.get()));
         }
-        return null;
+        return com.yue.chip.core.Optional.empty();
     }
 }
 

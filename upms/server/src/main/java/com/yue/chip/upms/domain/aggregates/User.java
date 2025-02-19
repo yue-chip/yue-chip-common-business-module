@@ -145,7 +145,10 @@ public class User extends UserDefinition {
         if (Objects.nonNull(this.tenantDefinition)) {
             return this.tenantDefinition;
         }
-        TenantDefinition tenant = tenantExposeService.findTenantByTenantNumber(null);
-        return tenant;
+        com.yue.chip.core.Optional<TenantDefinition> optional = tenantExposeService.findTenantByTenantNumber(null);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        return null;
     }
 }
