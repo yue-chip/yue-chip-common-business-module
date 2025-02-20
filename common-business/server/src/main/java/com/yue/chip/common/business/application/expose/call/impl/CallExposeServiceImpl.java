@@ -50,7 +50,7 @@ public class CallExposeServiceImpl implements CallExposeService {
             log.info("call结果：".concat(new ObjectMapper().writeValueAsString(body)));
             SingleCallByTtsResponseBodyExposeVo detail = SingleCallByTtsResponseBodyExposeVo.builder().build();
             BeanUtils.copyProperties(body,detail);
-            return Optional.ofNullable(detail);
+            return Optional.builder().build().ofNullable(detail);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -69,7 +69,7 @@ public class CallExposeServiceImpl implements CallExposeService {
             log.info("call结果查寻：".concat(new ObjectMapper().writeValueAsString(queryCallDetailByCallIdResponseBody)));
             QueryCallDetailByCallIdResponseBodyExposeVo detail = QueryCallDetailByCallIdResponseBodyExposeVo.builder().build();
             BeanUtils.copyProperties(queryCallDetailByCallIdResponseBody,detail);
-            return Optional.ofNullable(detail);
+            return Optional.builder().build().ofNullable(detail);
         } catch (Exception e) {
             log.info("call结果查寻失败");
             e.printStackTrace();

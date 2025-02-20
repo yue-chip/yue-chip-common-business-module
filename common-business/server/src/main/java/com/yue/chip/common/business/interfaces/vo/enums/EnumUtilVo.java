@@ -1,6 +1,5 @@
 package com.yue.chip.common.business.interfaces.vo.enums;
 
-import com.yue.chip.common.business.definition.enums.EnumUtilDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,5 +15,5 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-public class EnumUtilVo extends EnumUtilDefinition {
+public class EnumUtilVo extends com.yue.chip.core.common.enums.EnumUtilDefinition {
 }

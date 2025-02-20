@@ -2,11 +2,12 @@ package com.yue.chip.upms.domain.aggregates;
 
 import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.common.business.expose.file.FileExposeService;
+import com.yue.chip.core.tenant.TenantExposeService;
+import com.yue.chip.core.tenant.common.TenantDefinition;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
-import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
@@ -44,8 +45,8 @@ public class User extends UserDefinition {
     @Resource
     private static OrganizationalRepository organizationalRepository;
 
-    @Resource
-    private static TenantRepository tenantRepository;
+    @DubboReference
+    private static TenantExposeService tenantExposeService;
 
     @Builder.Default
     private RoleMapper roleMapper = RoleMapper.INSTANCE;
@@ -66,7 +67,7 @@ public class User extends UserDefinition {
     /**
      * 租户
      */
-    private Tenant tenant;
+    private TenantDefinition tenantDefinition;
 
 
     public Boolean checkUsernameIsExist() {
@@ -144,14 +145,14 @@ public class User extends UserDefinition {
         return Organizational.builder().build();
     }
 
-    public Tenant getTenant() {
-        if (Objects.nonNull(tenant)) {
-            return this.tenant;
+    public TenantDefinition getTenant() {
+        if (Objects.nonNull(tenantDefinition)) {
+            return this.tenantDefinition;
         }
-        Optional<Tenant> optional = tenantRepository.findTenantByTenantNumber(getTenantNumber());
+        com.yue.chip.core.Optional<TenantDefinition> optional = tenantExposeService.findTenantByTenantNumber(getTenantNumber());
         if (optional.isPresent()){
             return optional.get();
         }
-        return Tenant.builder().build();
+        return null;
     }
 }

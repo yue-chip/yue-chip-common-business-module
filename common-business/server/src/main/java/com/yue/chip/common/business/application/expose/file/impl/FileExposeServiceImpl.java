@@ -5,6 +5,7 @@ import com.yue.chip.common.business.definition.file.FileDefinition;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.expose.file.FileExposeService;
+import com.yue.chip.core.Optional;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.StringUtils;
@@ -26,9 +27,9 @@ public class FileExposeServiceImpl implements FileExposeService {
 
     @Override
     public Optional<FileDefinition> find(Long fileId) {
-        Optional<File> optional = fileRepository.find(fileId);
+        java.util.Optional<File> optional = fileRepository.find(fileId);
         if (optional.isPresent()) {
-            Optional.ofNullable(fileMapper.toFileDefinition(optional.get()));
+            Optional.builder().build().ofNullable(fileMapper.toFileDefinition(optional.get()));
         }
         return Optional.empty();
     }
