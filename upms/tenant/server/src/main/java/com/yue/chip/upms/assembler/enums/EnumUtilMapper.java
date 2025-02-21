@@ -19,6 +19,8 @@ public interface EnumUtilMapper {
 
     public EnumUtilDefinition toEnumUtilDefinition(EnumUtilPo enumUtilPo);
 
+    public EnumUtilDefinition toEnumUtilDefinition(EnumUtil enumUtil);
+
     public EnumUtilVo toEnumUtilVo(EnumUtil enumUtil);
 
     public EnumUtilPo toEnumUtilPo(EnumUtil enumUtil);
