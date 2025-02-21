@@ -5,9 +5,9 @@ spring:
     allow-bean-definition-overriding: true
     allow-circular-references: true
   nacos:
-    group: IOT-GROUP
+    group: IOT-BUSINESS-GROUP
     host: 192.168.11.184:8848
-    namespace: 55eedd8b-01f7-4747-af49-9ff1a4a015dd
+    namespace: 82dcfa05-7323-49d1-8e91-fd7df653da87
     #    group: YUE-CHIP-GROUP
 #    host: 192.168.177.129:8848
 #    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
@@ -34,3 +34,8 @@ spring:
       - nacos:dubbo.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:seata.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:redis.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    use-code-as-default-message: true
