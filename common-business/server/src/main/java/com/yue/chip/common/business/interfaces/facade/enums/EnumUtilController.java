@@ -7,8 +7,6 @@ import com.yue.chip.core.Optional;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.common.EnumPersistenceExposeService;
 import com.yue.chip.core.common.enums.EnumUtilDefinition;
-import com.yue.chip.core.tenant.TenantExposeService;
-import com.yue.chip.core.tenant.common.TenantDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,9 +33,6 @@ public class EnumUtilController   {
     @DubboReference
     private EnumPersistenceExposeService enumPersistenceExposeService;
 
-    @DubboReference
-    private TenantExposeService tenantExposeService;
-
     @Resource
     private EnumUtilMapper enumUtilMapper;
 
@@ -45,7 +40,6 @@ public class EnumUtilController   {
     @Operation(description = "获取枚举",summary = "获取枚举")
     public IResultData<EnumUtilVo> get(@NotBlank(message = "枚举编码不能为空") @Parameter(description = "枚举编码",name = "code",required = true)String code,
                                        @NotBlank(message = "枚举版本号不能为空") @Parameter(description = "枚举版本号",name = "version",required = true) String version) {
-        Optional<TenantDefinition> tenantDefinitionOptional = tenantExposeService.getTenantDefinition("192.168.11.165");
         Optional<EnumUtilDefinition> enumUtilDefinitionOptional = enumPersistenceExposeService.get(code,version);
         if (enumUtilDefinitionOptional.isPresent()) {
             return ResultData.builder().data(enumUtilMapper.toEnumUtilVo(enumUtilDefinitionOptional.get())).build();
