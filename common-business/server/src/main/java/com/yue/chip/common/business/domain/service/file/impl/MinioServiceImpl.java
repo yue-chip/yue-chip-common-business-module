@@ -2,7 +2,7 @@ package com.yue.chip.common.business.domain.service.file.impl;
 
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.service.file.FileService;
-import com.yue.chip.config.properties.MinioProperties;
+import com.yue.chip.configuration.properties.MinioProperties;
 import io.minio.MinioClient;
 import io.minio.ObjectWriteResponse;
 import io.minio.PutObjectArgs;

@@ -1,15 +1,10 @@
 package com.yue.chip.common.business.assembler.enums;
 
-import com.yue.chip.common.business.domain.aggregates.enums.EnumUtil;
-import com.yue.chip.common.business.infrastructure.po.enmus.EnumUtilPo;
-import com.yue.chip.common.business.interfaces.dto.enuns.EnumUtilDto;
 import com.yue.chip.common.business.interfaces.vo.enums.EnumUtilVo;
-import org.hibernate.classic.Lifecycle;
+import com.yue.chip.core.common.enums.EnumUtilDefinition;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-
-import java.util.List;
 
 /**
  * @author Mr.Liu
@@ -19,13 +14,5 @@ import java.util.List;
 public interface EnumUtilMapper {
     EnumUtilMapper INSTANCE = Mappers.getMapper(EnumUtilMapper.class);
 
-    public EnumUtil toEnumUtil(EnumUtilPo enumUtilPo);
-
-    public EnumUtilVo toEnumUtilVo(EnumUtil enumUtil);
-
-    public EnumUtilPo toEnumUtilPo(EnumUtil enumUtil);
-
-    public EnumUtilPo toEnumUtilPo(EnumUtilDto enumUtilDto);
-
-    public List<EnumUtilPo> toEnumUtilPo(List<EnumUtilDto> enumUtilDtos);
+    public EnumUtilVo toEnumUtilVo(EnumUtilDefinition enumUtil);
 }

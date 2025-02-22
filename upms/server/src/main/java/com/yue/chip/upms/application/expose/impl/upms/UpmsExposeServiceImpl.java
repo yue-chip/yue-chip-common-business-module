@@ -27,14 +27,14 @@ import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import com.yue.chip.upms.vo.OrganizationalUserExposeVo;
 import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
+import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotBlank;
 import org.apache.dubbo.config.annotation.DubboService;
 import com.yue.chip.upms.infrastructure.po.organizational.GridUserPo;
 import com.yue.chip.upms.vo.*;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
-import javax.validation.constraints.NotBlank;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -78,7 +78,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public com.yue.chip.core.Optional<UserExposeVo> findUserById(Long userId) {
         Optional<User> optional = upmsRepository.findUserById(userId);
         if (optional.isPresent()) {
-            return com.yue.chip.core.Optional.ofNullable(userMapper.toUserExposeVo(optional.get()));
+            return com.yue.chip.core.Optional.builder().build().ofNullable(userMapper.toUserExposeVo(optional.get()));
         }
         return com.yue.chip.core.Optional.empty();
     }
@@ -98,7 +98,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public com.yue.chip.core.Optional<UserExposeVo> findByIdAndTenantNumber(Long id, Long tenantNumber) {
         Optional<User> optional = upmsRepository.findByIdAndTenantNumber(id,tenantNumber);
         if (optional.isPresent()) {
-            return com.yue.chip.core.Optional.ofNullable(userMapper.toUserExposeVo(optional.get()));
+            return com.yue.chip.core.Optional.builder().build().ofNullable(userMapper.toUserExposeVo(optional.get()));
         }
         return com.yue.chip.core.Optional.empty();
     }
@@ -107,7 +107,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public com.yue.chip.core.Optional<UserExposeVo> findByGridIdAndTenantNumber(Long id, Long tenantNumber) {
         Optional<User> optional = upmsRepository.findByGridIdAndTenantNumber(id,tenantNumber);
         if (optional.isPresent()) {
-            return com.yue.chip.core.Optional.ofNullable(userMapper.toUserExposeVo(optional.get()));
+            return com.yue.chip.core.Optional.builder().build().ofNullable(userMapper.toUserExposeVo(optional.get()));
         }
         return com.yue.chip.core.Optional.empty();
     }
@@ -122,7 +122,7 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     public com.yue.chip.core.Optional<OrganizationalExposeVo> findOrganizationalById(Long id) {
         java.util.Optional<Organizational> optional = organizationalRepository.findById(id);
         if (optional.isPresent()) {
-            return com.yue.chip.core.Optional.ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
+            return com.yue.chip.core.Optional.builder().build().ofNullable(organizationalMapper.toOrganizationalExposVo(optional.get()));
         }
         return com.yue.chip.core.Optional.empty();
     }

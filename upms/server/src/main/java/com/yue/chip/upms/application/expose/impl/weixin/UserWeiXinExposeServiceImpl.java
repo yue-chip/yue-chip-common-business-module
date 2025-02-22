@@ -7,7 +7,6 @@ import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.weixin.UserWeiXinExposeService;
 import com.yue.chip.weixin.vo.UserWeiXinExposeVo;
 import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import java.util.Objects;
@@ -28,7 +27,7 @@ public class UserWeiXinExposeServiceImpl implements UserWeiXinExposeService {
         }
         java.util.Optional<UserWeixin> optional = userWeiXinRepository.findById(id,tenantNumber);
         if (optional.isPresent()) {
-           return Optional.ofNullable(userWeiXinMapper.toUserWeiXinExposeVo(optional.get()));
+           return Optional.builder().build().ofNullable(userWeiXinMapper.toUserWeiXinExposeVo(optional.get()));
         }
         return Optional.empty();
     }

@@ -29,7 +29,6 @@ import com.yue.chip.upms.interfaces.dto.user.UserUpdateStateDto;
 import com.yue.chip.upms.interfaces.vo.user.UserAddFailVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
-import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -320,7 +319,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Override
     @Trace
     @Tags({@Tag(key = "name",value = "arg[0]"),@Tag(key = "UserDefinition",value = "returnedObj")})
-    @GlobalTransactional
+//    @GlobalTransactional
     public UserVo test(String name) {
 //        RoleAddDto roleAddDto = RoleAddDto.builder()
 //                .name(UUID.randomUUID().toString())

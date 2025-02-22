@@ -21,13 +21,16 @@ bootJar {
 dependencies {
     api project(':interface-expose')
     api platform("yue.chip:starter:${yueChipPlatformVersion}")
-    api 'yue.chip:yue-chip-serve-starter'
+    api 'yue.chip:yue-chip-server-starter'
     api 'yue.chip:yue-chip-business-starter'
     api 'yue.chip:yue-chip-security'
     api 'io.minio:minio'
 //    api 'com.aliyun:dysmsapi20170525'
-    api ('com.aliyun:dyvmsapi20170525') {
-        exclude group: "com.sun.xml.bind"
+    api ('com.aliyun:alibabacloud-dysmsapi20170525') {
+        exclude group: "org.dom4j", module: "dom4j"
+    }
+    api ("com.aliyun:alibabacloud-dyvmsapi20170525"){
+        exclude group: "org.dom4j", module: "dom4j"
     }
     api 'com.tencentcloudapi:tencentcloud-sdk-java-sms'
 //    api "yue.chip:yue-chip-oauth2-resource-server"
