@@ -530,7 +530,7 @@ public class UpmsConsoleController {
 
     @GetMapping("/safety/detail")
     @Operation(description = "获取安全设置",summary = "获取安全设置")
-    @SystemLog(value = "获取安全设置")
+//    @SystemLog(value = "获取安全设置")
     @AuthorizationIgnore
     public IResultData<SafetyVo> safetyDetail() {
         SafetyVo vo = upmsRepository.safetyDetail();
