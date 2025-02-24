@@ -40,8 +40,8 @@ public class TenantApplicationImpl implements TenantApplication {
         ids.forEach(id->{
             //删除租户
             tenantRepository.deleteTenant(id);
-            //更新其它租户数据中的租户状态
-            tenantRepository.updateOtherDataBase(State.DISABLE,id);
+//            //更新其它租户数据中的租户状态
+//            tenantRepository.updateOtherDataBase(State.DISABLE,id);
         });
     }
 
@@ -58,10 +58,10 @@ public class TenantApplicationImpl implements TenantApplication {
         tenantPo.setIsDefault(false);
         TenantPo entity = tenantRepository.saveTenant(tenantPo);
         tenantRepository.updateTenantNumber(entity.getId(),entity.getId());
-        //创建租户数据库
-        tenantService.createTenantDatabase(entity.getId());
-        //租户信息保存到redis
-        tenantService.saveToRedis(tenantMapper.toTenant(entity));
+//        //创建租户数据库
+//        tenantService.createTenantDatabase(entity.getId());
+//        //租户信息保存到redis
+//        tenantService.saveToRedis(tenantMapper.toTenant(entity));
         return entity;
     }
 
