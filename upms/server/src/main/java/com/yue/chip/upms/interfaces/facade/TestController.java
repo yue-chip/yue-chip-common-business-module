@@ -56,8 +56,14 @@ public class TestController  {
     @AuthorizationIgnore
     @Operation(summary = "测试-sms", description = "测试-sms")
     public IResultData sms(){
-        smsExposeService.sendSms("1400813276", "小未科技", "1795028", "test^test^test", "+8618928025540");
-        return ResultData.builder().build();
+        try {
+            CurrentUserUtil.setCurrentTenantNumber(null);
+            smsExposeService.sendSms("1400813276", "小未科技", "1795028", "test^test^test", "+8618928025540");
+            return ResultData.builder().build();
+        }finally {
+            CurrentUserUtil.cleanCurrentTenantNumber();
+        }
+
     }
 
     @GetMapping("/test")
