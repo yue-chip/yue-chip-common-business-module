@@ -1,9 +1,6 @@
 package com.yue.chip.upms.application.expose.impl.upms;
 
-import com.yue.chip.core.IPageResultData;
-import com.yue.chip.core.PageSerializable;
-import com.yue.chip.core.YueChipPage;
-import com.yue.chip.core.YueChipPageSerializable;
+import com.yue.chip.core.*;
 import com.yue.chip.grid.vo.GridExposeVo;
 import com.yue.chip.grid.vo.GridTreeVo;
 import com.yue.chip.upms.UpmsExposeService;
@@ -36,6 +33,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -96,11 +94,16 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
 
     @Override
     public com.yue.chip.core.Optional<UserExposeVo> findByIdAndTenantNumber(Long id, Long tenantNumber) {
-        Optional<User> optional = upmsRepository.findByIdAndTenantNumber(id,tenantNumber);
-        if (optional.isPresent()) {
-            return com.yue.chip.core.Optional.builder().build().ofNullable(userMapper.toUserExposeVo(optional.get()));
+        try {
+            CurrentUserUtil.setCurrentTenantNumber(TenantNumber.builder().tenantNumber(tenantNumber).build());
+            Optional<User> optional = upmsRepository.findById(id);
+            if (optional.isPresent()) {
+                return com.yue.chip.core.Optional.builder().build().ofNullable(userMapper.toUserExposeVo(optional.get()));
+            }
+            return com.yue.chip.core.Optional.empty();
+        } finally {
+            CurrentUserUtil.cleanCurrentTenantNumber();
         }
-        return com.yue.chip.core.Optional.empty();
     }
 
     @Override

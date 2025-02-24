@@ -2,12 +2,10 @@ package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
-import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author Mr.Liu
@@ -82,5 +79,13 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
     List<UserPo> findAllByNameLikeOrPhoneNumberLike(String name,String phoneNumber);
 
     List<UserPo> findAllByNameLike(String name);
+
+
+//
+    @Query("select u from UserPo u join GridPo g on u.id = g.userId where g.id = :id")
+    Optional<UserPo> findByGridId(@Param("id")Long id);
+
+    @Query("select u from UserPo u join GridUserPo g on u.id = g.userId where g.gridId = :id")
+    List<UserPo> findAllByGridId(@Param("id")Long id);
 
 }

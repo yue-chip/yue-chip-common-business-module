@@ -3,14 +3,17 @@ package com.yue.chip.upms.infrastructure.repository.upms.impl;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
+import com.yue.chip.core.TenantNumber;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
-import com.yue.chip.upms.definition.user.UserDefinition;
-import com.yue.chip.upms.domain.aggregates.*;
+import com.yue.chip.upms.domain.aggregates.Organizational;
+import com.yue.chip.upms.domain.aggregates.Resources;
+import com.yue.chip.upms.domain.aggregates.Role;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
@@ -19,14 +22,12 @@ import com.yue.chip.upms.infrastructure.dao.role.RoleResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserRoleDao;
-import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
-import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.upms.interfaces.dto.user.*;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
@@ -40,7 +41,6 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -113,7 +113,21 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public Optional<User> findByIdAndTenantNumber(Long id, Long tenantNumber) {
-        Optional<UserPo> optional = userDao.findByIdAndTenantNumber(id,tenantNumber);
+        try {
+            CurrentUserUtil.setCurrentTenantNumber(TenantNumber.builder().tenantNumber(tenantNumber).build());
+            Optional<UserPo> optional = userDao.findById(id);
+            if (optional.isPresent()) {
+                return Optional.ofNullable(userMapper.toUser(optional.get()));
+            }
+            return Optional.empty();
+        }finally {
+            CurrentUserUtil.cleanCurrentTenantNumber();
+        }
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        Optional<UserPo> optional = userDao.findById(id);
         if (optional.isPresent()) {
             return Optional.ofNullable(userMapper.toUser(optional.get()));
         }
@@ -122,17 +136,27 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public Optional<User> findByGridIdAndTenantNumber(Long id, Long tenantNumber) {
-        Optional<UserPo> optional = userDao.findByGridIdAndTenantNumber(id,tenantNumber);
-        if (optional.isPresent()) {
-            return Optional.ofNullable(userMapper.toUser(optional.get()));
+        try {
+            CurrentUserUtil.setCurrentTenantNumber(TenantNumber.builder().tenantNumber(tenantNumber).build());
+            Optional<UserPo> optional = userDao.findByGridId(id);
+            if (optional.isPresent()) {
+                return Optional.ofNullable(userMapper.toUser(optional.get()));
+            }
+            return Optional.empty();
+        }finally {
+            CurrentUserUtil.cleanCurrentTenantNumber();
         }
-        return Optional.empty();
     }
 
     @Override
     public List<User> findAllByGridIdAndTenantNumber(Long id, Long tenantNumber) {
-        List<UserPo> allByGridIdAndTenantNumber = userDao.findAllByGridIdAndTenantNumber(id, tenantNumber);
-        return userMapper.toUser(allByGridIdAndTenantNumber);
+        try {
+            CurrentUserUtil.setCurrentTenantNumber(TenantNumber.builder().tenantNumber(tenantNumber).build());
+            List<UserPo> allByGridIdAndTenantNumber = userDao.findAllByGridId(id);
+            return userMapper.toUser(allByGridIdAndTenantNumber);
+        }finally {
+            CurrentUserUtil.cleanCurrentTenantNumber();
+        }
     }
 
     @Override
