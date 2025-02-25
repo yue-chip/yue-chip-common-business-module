@@ -14,7 +14,7 @@ spring:
     password: nacos
     username: nacos
   application:
-    name: upms
+    name: upms-tenant
   config:
     import:
       - nacos:${spring.application.name}.yaml?group=${spring.nacos.group}&refreshEnabled=true
