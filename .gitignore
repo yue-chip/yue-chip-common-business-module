@@ -9,6 +9,7 @@ yarn.lock
 .env.*.local
 .gradle
 .idea
+tenant
 
 # Log files
 npm-debug.log*
