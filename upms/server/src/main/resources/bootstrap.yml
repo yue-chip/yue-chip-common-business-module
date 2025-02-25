@@ -14,7 +14,7 @@ spring:
     password: nacos
     username: nacos
   application:
-    name: upms-tenant
+    name: upms
   cloud:
     nacos:
       server-addr: ${spring.nacos.host}
