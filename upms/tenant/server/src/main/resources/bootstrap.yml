@@ -32,7 +32,6 @@ spring:
         password: ${spring.nacos.password}
         server-addr: ${spring.nacos.host}
         config:
-          file-extension: yaml
           namespace: ${spring.nacos.namespace}
           group: ${spring.nacos.group}
     messages:
