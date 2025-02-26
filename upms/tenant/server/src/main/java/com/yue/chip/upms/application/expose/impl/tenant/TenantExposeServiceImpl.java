@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.apache.dubbo.config.annotation.DubboService;
 
+import java.util.List;
 import java.util.Optional;
 
 @DubboService(interfaceClass = TenantExposeService.class)
@@ -38,6 +39,12 @@ public class TenantExposeServiceImpl implements TenantExposeService {
             return com.yue.chip.core.Optional.builder().build().ofNullable(tenantMapper.toTenantDefinition(optional.get()));
         }
         return com.yue.chip.core.Optional.empty();
+    }
+
+    @Override
+    public List<TenantDefinition> findAll() {
+        List<Tenant> tenants = tenantRepository.findAll();
+        return tenantMapper.toTenantDefinition(tenants);
     }
 }
 

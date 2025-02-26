@@ -24,6 +24,8 @@ public interface TenantMapper {
 
     public TenantDefinition toTenantDefinition(Tenant tenant);
 
+    public List<TenantDefinition> toTenantDefinition(List<Tenant> tenants);
+
     public TenantVo toTenantVo(TenantPo tenantPo);
 
     public TenantVo toTenantVo(Tenant tenant);
