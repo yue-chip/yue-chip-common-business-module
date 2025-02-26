@@ -26,16 +26,16 @@ spring:
       - nacos:dubbo.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:seata.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:redis.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    cloud:
-      nacos:
-        username: ${spring.nacos.username}
-        password: ${spring.nacos.password}
-        server-addr: ${spring.nacos.host}
-        config:
-          namespace: ${spring.nacos.namespace}
-          group: ${spring.nacos.group}
-    messages:
-      basename: i18n/messages
-      fallback-to-system-locale: true
-      encoding: UTF-8
-      use-code-as-default-message: true
+  cloud:
+    nacos:
+      username: ${spring.nacos.username}
+      password: ${spring.nacos.password}
+      server-addr: ${spring.nacos.host}
+      config:
+        namespace: ${spring.nacos.namespace}
+        group: ${spring.nacos.group}
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    use-code-as-default-message: true
