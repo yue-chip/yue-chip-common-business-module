@@ -8,7 +8,6 @@ import com.yue.chip.core.TenantNumber;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
-import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.utils.CurrentUserUtil;
 import com.yue.chip.utils.TenantNumberUtil;
@@ -61,16 +60,16 @@ public class LoginController {
             String token = loginService.login(username, password);
             Map<String, String> map = new HashMap<>();
             map.put("token", token);
-            Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
-            try {
-                if (firstByUsername.isPresent()) {
-                    systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
-                }
-            } catch (Exception e) {
-                System.out.println("---------------");
-                System.out.println(e.getMessage());
-                System.out.println("---------------");
-            }
+//            Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
+//            try {
+//                if (firstByUsername.isPresent()) {
+//                    systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
+//                }
+//            } catch (Exception e) {
+//                System.out.println("---------------");
+//                System.out.println(e.getMessage());
+//                System.out.println("---------------");
+//            }
             return ResultData.builder().data(map).build();
         }finally {
             CurrentUserUtil.cleanCurrentTenantNumber();

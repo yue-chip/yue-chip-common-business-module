@@ -62,16 +62,16 @@ public class LoginController{
             String token = loginService.login(username, password);
             Map<String, String> map = new HashMap<>();
             map.put("token", token);
-            Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
-            try {
-                if (firstByUsername.isPresent()) {
-                    systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
-                }
-            } catch (Exception e) {
-                System.out.println("---------------");
-                System.out.println(e.getMessage());
-                System.out.println("---------------");
-            }
+//            Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
+//            try {
+//                if (firstByUsername.isPresent()) {
+//                    systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
+//                }
+//            } catch (Exception e) {
+//                System.out.println("---------------");
+//                System.out.println(e.getMessage());
+//                System.out.println("---------------");
+//            }
             return ResultData.builder().data(map).build();
         }finally {
             CurrentUserUtil.cleanCurrentTenantNumber();

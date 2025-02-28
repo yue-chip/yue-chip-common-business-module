@@ -1,7 +1,6 @@
 package com.yue.chip.upms.domain.service.login.impl;
 
 import com.yue.chip.authentication.YueChipAuthenticationToken;
-import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.tenant.TenantExposeService;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
@@ -13,7 +12,6 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
-import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
@@ -31,7 +29,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -73,20 +70,20 @@ public class LoginServiceImpl implements LoginService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new AuthenticationServiceException("密码错误");
         }
-        if (Objects.nonNull(user.getLastPasswordTime())) {
-            Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
-            if (optionalSafetyPo.isPresent()) {
-                if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
-                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
-                    throw new AuthenticationServiceException("密码超过"+optionalSafetyPo.get().getPasswordTime()+"天未修改！该账号已被禁用！请联系管理员！");
-                }
-            }
-        }
-        if (Objects.nonNull(user.getState())) {
-            if (user.getState() == State.DISABLE) {
-                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
-            }
-        }
+//        if (Objects.nonNull(user.getLastPasswordTime())) {
+//            Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
+//            if (optionalSafetyPo.isPresent()) {
+//                if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
+//                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
+//                    throw new AuthenticationServiceException("密码超过"+optionalSafetyPo.get().getPasswordTime()+"天未修改！该账号已被禁用！请联系管理员！");
+//                }
+//            }
+//        }
+//        if (Objects.nonNull(user.getState())) {
+//            if (user.getState() == State.DISABLE) {
+//                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
+//            }
+//        }
         return authority(user.getResources(), user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber());
     }
 
