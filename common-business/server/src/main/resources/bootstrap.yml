@@ -15,20 +15,20 @@ spring:
     password: nacos
   application:
     name: common
-config:
-  import:
-    - nacos:${spring.application.name}.yaml?group=${spring.nacos.group}&refreshEnabled=true
-    - nacos:common.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    - nacos:datasource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    - nacos:jpa.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    - nacos:oauth2-resource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    - nacos:sentinel.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    - nacos:dubbo.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    - nacos:seata.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    - nacos:redis.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    - nacos:file.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    - nacos:sms.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-    - nacos:call.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+  config:
+    import:
+      - nacos:${spring.application.name}.yaml?group=${spring.nacos.group}&refreshEnabled=true
+      - nacos:common.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:datasource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:jpa.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:oauth2-resource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:sentinel.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:dubbo.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:seata.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:redis.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:file.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:sms.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:call.yaml?group=GLOBAL_GROUP&refreshEnabled=true
   cloud:
     nacos:
       username: ${spring.nacos.username}
