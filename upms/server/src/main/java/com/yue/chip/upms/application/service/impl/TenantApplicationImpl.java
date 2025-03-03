@@ -42,48 +42,48 @@
 //            tenantRepository.deleteTenant(id);
 //            //更新其它租户数据中的租户状态
 //            tenantRepository.updateOtherDataBase(State.DISABLE,id);
-//        });
-//    }
-//
-//    @Override
-//    @Transactional(rollbackFor = {Exception.class})
-//    public TenantPo save(TenantAddDTO tenantAddDTO) {
-//        //判断租户名称时候存在
-//        AssertUtil.isFalse(Tenant.builder().name(tenantAddDTO.getName()).build().checkNameIsExist(),"该租户名称已存在");
-//        //判断租户登录域存不存在
-//        AssertUtil.isFalse(tenantService.checkDomainIsExist(null, tenantAddDTO.getRequestDomain()),"该登录域已存在");
-//        //保存租户
-//        TenantPo tenantPo = tenantMapper.toTenantPo(tenantAddDTO);
-//        tenantPo.setState(State.NORMAL);
-//        tenantPo.setIsDefault(false);
-//        TenantPo entity = tenantRepository.saveTenant(tenantPo);
-//        tenantRepository.updateTenantNumber(entity.getId(),entity.getId());
+        });
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public TenantPo save(TenantAddDTO tenantAddDTO) {
+        //判断租户名称时候存在
+        AssertUtil.isFalse(Tenant.builder().name(tenantAddDTO.getName()).build().checkNameIsExist(),"该租户名称已存在");
+        //判断租户登录域存不存在
+        AssertUtil.isFalse(tenantService.checkDomainIsExist(null, tenantAddDTO.getRequestDomain()),"该登录域已存在");
+        //保存租户
+        TenantPo tenantPo = tenantMapper.toTenantPo(tenantAddDTO);
+        tenantPo.setState(State.NORMAL);
+        tenantPo.setIsDefault(false);
+        TenantPo entity = tenantRepository.saveTenant(tenantPo);
+        tenantRepository.updateTenantNumber(entity.getId(),entity.getId());
 //        //创建租户数据库
 //        tenantService.createTenantDatabase(entity.getId());
 //        //租户信息保存到redis
 //        tenantService.saveToRedis(tenantMapper.toTenant(entity));
-//        return entity;
-//    }
-//
-//    @Override
-//    public void update(TenantUpdateDTO tenantUpdateDTO) {
-//        //判断租户名称时候存在
-//        AssertUtil.isTrue(Tenant.builder().id(tenantUpdateDTO.getId()).name(tenantUpdateDTO.getName()).build().checkNameIsExist(),"该租户名称已存在");
-//        //判断租户登录域存不存在
-//        AssertUtil.isTrue(tenantService.checkDomainIsExist(tenantUpdateDTO.getId(), tenantUpdateDTO.getRequestDomain()),"该登录域已存在");
-//        //更新租户
-//        tenantRepository.updateTenant(tenantMapper.toTenantPo(tenantUpdateDTO));
-//    }
-//
-//    @Override
-//    @Transactional(rollbackFor = {Exception.class})
-//    public void update(@NotNull Long id, State state) {
-//        TenantPo tenantPo = TenantPo.builder()
-//                        .state(state)
-//                        .id(id)
-//                        .build();
-//        tenantRepository.updateTenant(tenantPo);
-//        //更新其它租户数据中的租户状态
-//        tenantRepository.updateOtherDataBase(state,id);
-//    }
-//}
+        return entity;
+    }
+
+    @Override
+    public void update(TenantUpdateDTO tenantUpdateDTO) {
+        //判断租户名称时候存在
+        AssertUtil.isTrue(Tenant.builder().id(tenantUpdateDTO.getId()).name(tenantUpdateDTO.getName()).build().checkNameIsExist(),"该租户名称已存在");
+        //判断租户登录域存不存在
+        AssertUtil.isTrue(tenantService.checkDomainIsExist(tenantUpdateDTO.getId(), tenantUpdateDTO.getRequestDomain()),"该登录域已存在");
+        //更新租户
+        tenantRepository.updateTenant(tenantMapper.toTenantPo(tenantUpdateDTO));
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void update(@NotNull Long id, State state) {
+        TenantPo tenantPo = TenantPo.builder()
+                        .state(state)
+                        .id(id)
+                        .build();
+        tenantRepository.updateTenant(tenantPo);
+        //更新其它租户数据中的租户状态
+        tenantRepository.updateOtherDataBase(state,id);
+    }
+}
