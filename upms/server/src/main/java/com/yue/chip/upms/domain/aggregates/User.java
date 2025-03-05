@@ -59,6 +59,8 @@ public class User extends UserDefinition {
      */
     private Organizational organizational;
 
+    private List<Organizational> organizationalList;
+
     /**
      * 角色 - 值对象(此值对象非彼值对象) 意思意思
      */
@@ -128,6 +130,15 @@ public class User extends UserDefinition {
             }
         }
         return null;
+    }
+
+    public List<Organizational> getOrganizationalList() {
+        if (Objects.nonNull(organizationalList)) {
+            return this.organizationalList;
+        }
+        Assert.notNull(getId(),"id不能为空");
+        List<Organizational> list = organizationalRepository.findAllByUserId(getId());
+        return list;
     }
 
     public Organizational getOrganizational() {

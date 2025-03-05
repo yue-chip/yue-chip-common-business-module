@@ -26,4 +26,6 @@ public interface OrganizationalDaoEx {
 
     public Page<OrganizationalPo> organizationalPoPage(List<Long> organizationalList, YueChipPage yueChipPage);
 
+    List<OrganizationalPo> findAllByUserId(@NotNull Long userId);
+
 }

@@ -28,6 +28,8 @@ public interface OrganizationalMapper {
 
     public Organizational toOrganizational(OrganizationalPo organizationalPo);
 
+    public List<Organizational> toOrganizationalList(List<OrganizationalPo> organizationalPos);
+
     public OrganizationalPo toOrganizationalPo(OrganizationalAddDto organizationalAddDto);
 
     public OrganizationalPo toOrganizationalPo(OrganizationalUpdateDto organizationalUpdateDto);

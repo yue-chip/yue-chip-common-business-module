@@ -35,6 +35,8 @@ public interface OrganizationalRepository {
      */
     public Optional<Organizational> findByUserId(@NotNull Long userId);
 
+    public List<Organizational> findAllByUserId(@NotNull Long userId);
+
     /**
      * 根据ID查询关联的组织机构
      *

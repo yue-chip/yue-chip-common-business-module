@@ -50,4 +50,17 @@ public class OrganizationalDaoImpl implements OrganizationalDaoEx {
         }
         return null;
     }
+
+    @Override
+    public List<OrganizationalPo> findAllByUserId(Long userId) {
+        if (Objects.isNull(userId)) {
+            return new ArrayList<>();
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select o from OrganizationalPo o join OrganizationalUserPo ou on o.id=ou.organizationalId  where ou.userId = :userId ");
+        Map<String,Object> para = new HashMap<>();
+        para.put("userId",userId);
+        List<OrganizationalPo> list = (List<OrganizationalPo>) baseDao.findAll(sb.toString(),para);
+        return list;
+    }
 }
