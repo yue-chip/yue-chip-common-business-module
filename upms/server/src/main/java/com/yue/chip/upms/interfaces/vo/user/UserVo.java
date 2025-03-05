@@ -2,11 +2,14 @@ package com.yue.chip.upms.interfaces.vo.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.upms.definition.user.UserDefinition;
+import com.yue.chip.upms.domain.aggregates.Organizational;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 /**
  * @author Mr.Liu
@@ -37,4 +40,6 @@ public class UserVo extends UserDefinition {
 
     @Schema(description = "数字大屏名称")
     private String bigScreenName;
+
+    private List<Organizational> organizationalList;
 }

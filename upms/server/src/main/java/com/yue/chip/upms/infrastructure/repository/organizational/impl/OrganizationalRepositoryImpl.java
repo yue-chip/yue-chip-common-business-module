@@ -31,6 +31,7 @@ import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -79,6 +80,15 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
             return Optional.ofNullable(organizationalMapper.toOrganizational(optional.get()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<Organizational> findAllByUserId(Long userId) {
+        List<OrganizationalPo> list = organizationalDao.findAllByUserId(userId);
+        if (!CollectionUtils.isEmpty(list)) {
+            return organizationalMapper.toOrganizationalList(list);
+        }
+        return new ArrayList<>();
     }
 
     @Override
@@ -153,15 +163,17 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
 
     @Override
     public List<OrganizationalTreeListVo> findTree1(State state) {
-        Optional<Organizational> optional = findByUserId(CurrentUserUtil.getCurrentUserId());
-        if (optional.isPresent()) {
-            List<OrganizationalTreeListVo> list = findTree(optional.get().getParentId(),state, null);
+        List<Organizational> organizationalList = findAllByUserId(CurrentUserUtil.getCurrentUserId());
+        if (!CollectionUtils.isEmpty(organizationalList)) {
             List<OrganizationalTreeListVo> returList = new ArrayList<>();
-            for (OrganizationalTreeListVo organizationalTreeListVo : list) {
-                if (Objects.equals(organizationalTreeListVo.getId(),optional.get().getId())) {
-                    returList.add(organizationalTreeListVo);
+            organizationalList.forEach(organizational -> {
+                List<OrganizationalTreeListVo> list = findTree(organizational.getParentId(), state, null);
+                for (OrganizationalTreeListVo organizationalTreeListVo : list) {
+                    if (Objects.equals(organizationalTreeListVo.getId(), organizational.getId())) {
+                        returList.add(organizationalTreeListVo);
+                    }
                 }
-            }
+            });
             return returList;
         }
         return Collections.EMPTY_LIST;
