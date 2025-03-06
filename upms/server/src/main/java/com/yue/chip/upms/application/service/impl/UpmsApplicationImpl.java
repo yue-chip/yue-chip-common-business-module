@@ -148,6 +148,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         User newUser = upmsRepository.saveUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系
         upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
+        upmsDomainService.userOrganizationals(newUser.getId(),userAddOrUpdateDto.getOrganizationalIds());
         //保存头像
         fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber() );
     }
@@ -184,6 +185,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系
         upmsDomainService.userOrganizational(userAddOrUpdateDto.getId(),userAddOrUpdateDto.getOrganizationalId());
+        upmsDomainService.userOrganizationals(userAddOrUpdateDto.getId(),userAddOrUpdateDto.getOrganizationalIds());
         //保存头像
 //        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber());
     }
