@@ -75,6 +75,30 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
         }
     }
 
+    @Override
+    public void userOrganizationals(Long userId, List<Long> organizationalId) {
+        List<Organizational> organizationalList = organizationalRepository.findAllByUserId(userId);
+        if (!organizationalList.isEmpty()) {
+            organizationalList.forEach(organizational -> {
+                if (!Objects.equals(organizationalId,organizational.getId()) ){
+                    //清楚机构负责人
+                    organizationalRepository.deleteLeader(userId);
+                }
+            });
+        }
+        organizationalRepository.deleteOrganizationalByUserId(userId);
+        if (Objects.nonNull(organizationalId) && !organizationalId.isEmpty()) {
+            organizationalId.forEach(id -> {
+                organizationalRepository.saveOrganizationalUser(
+                        OrganizationalUserPo.builder()
+                                .organizationalId(id)
+                                .userId(userId)
+                                .build()
+                );
+            });
+        }
+    }
+
     public void checkResourcesNameIsExist(String name, @NotNull Long parentId, Long id) {
         Resources resources = Resources.builder()
                 .name(name)
