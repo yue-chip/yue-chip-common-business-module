@@ -58,7 +58,10 @@ public class LoginController{
     public IResultData<String> login(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username,
                                      @NotBlank(message = "密码不能为空") @Parameter(description = "密码",name = "password",required = true)String password) {
         try {
-            CurrentUserUtil.setCurrentTenantNumber(TenantNumber.builder().tenantNumber(TenantNumberUtil.getTenantNumber1()).build());
+            Optional<TenantNumber> optional = TenantNumberUtil.getTenantNumberForNotLogin();
+            if (optional.isPresent()) {
+                CurrentUserUtil.setCurrentTenantNumber(optional.get());
+            }
             String token = loginService.login(username, password);
             Map<String, String> map = new HashMap<>();
             map.put("token", token);
@@ -83,7 +86,10 @@ public class LoginController{
     @Operation(summary = "登录", description = "登录")
     public IResultData<String> login2(String data) {
         try {
-            CurrentUserUtil.setCurrentTenantNumber(TenantNumber.builder().tenantNumber(TenantNumberUtil.getTenantNumber1()).build());
+            Optional<TenantNumber> optional = TenantNumberUtil.getTenantNumberForNotLogin();
+            if (optional.isPresent()) {
+                CurrentUserUtil.setCurrentTenantNumber(optional.get());
+            }
             String str = Base64.decodeStr(data);
             String username = str.split("&")[1].split("=")[1];
             String name = str.split("&")[2].split("=")[1];
