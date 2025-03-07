@@ -12,4 +12,7 @@ public interface CCSPService {
     void user();
 
     void weiXinUser();
+
+    void resources();
+
 }

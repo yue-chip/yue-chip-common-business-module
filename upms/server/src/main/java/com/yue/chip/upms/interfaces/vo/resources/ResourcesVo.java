@@ -5,6 +5,7 @@ import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
+import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -31,6 +32,18 @@ public class ResourcesVo extends ResourcesDefinition {
 
     @DubboReference
     private static FileExposeService fileExposeService;
+
+    @Override
+    public String getName() {
+        String encrypt = super.getNameEncrypt();
+        String hmac = super.getNameHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
+    }
 
     @Override
     public String getIconUrl() {

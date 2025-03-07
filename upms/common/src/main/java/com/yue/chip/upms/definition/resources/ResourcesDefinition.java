@@ -45,6 +45,10 @@ public class ResourcesDefinition extends BaseDefinition {
 
     @Schema(description = "资源名称")
     private String name;
+    @Schema(description = "姓名加密")
+    private String nameEncrypt;
+    @Schema(description = "姓名校验")
+    private String nameHmac;
 
     @Schema(description = "资源英文名称")
     private String nameEn;

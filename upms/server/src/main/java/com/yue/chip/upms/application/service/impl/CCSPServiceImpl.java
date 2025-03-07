@@ -2,10 +2,12 @@ package com.yue.chip.upms.application.service.impl;
 
 import com.yue.chip.upms.application.service.CCSPService;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalDao;
+import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
+import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
@@ -29,6 +31,8 @@ public class CCSPServiceImpl implements CCSPService {
     private UserDao userDao;
     @Resource
     private UserWeiXinDao userWeiXinDao;
+    @Resource
+    private ResourcesDao resourcesDao;
 
     @Override
     public void organizational() {
@@ -109,4 +113,19 @@ public class CCSPServiceImpl implements CCSPService {
                     po.getId());
         });
     }
+
+    @Override
+    public void resources() {
+        List<ResourcesPo> all = resourcesDao.findAll();
+        all.forEach(po -> {
+            String nameEncrypt = CCSPUtil.SM4encrypt(po.getName());
+            if (nameEncrypt.length() > 0) {
+                po.setNameEncrypt(nameEncrypt);
+                po.setNameHmac(CCSPUtil.getHMac(po.getName()));
+            }
+            resourcesDao.updateEncrypt(po.getNameEncrypt(), po.getNameHmac(),
+                    po.getId());
+        });
+    }
+
 }

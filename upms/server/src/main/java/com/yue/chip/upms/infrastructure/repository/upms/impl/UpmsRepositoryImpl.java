@@ -225,6 +225,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
                 ccspService.user();
                 ccspService.tenant();
                 ccspService.weiXinUser();
+                ccspService.resources();
             }
         }
         Page<RolePo> page = roleDao.list(name,code,state, pageable);
@@ -403,6 +404,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public Resources saveResources(@NotNull ResourcesPo resourcesPo) {
+        resourcesPo.setNameEncrypt(CCSPUtil.SM4encrypt(resourcesPo.getName()));
+        resourcesPo.setNameHmac(CCSPUtil.getHMac(resourcesPo.getName()));
         resourcesPo = resourcesDao.save(resourcesPo);
         if (Objects.nonNull(resourcesPo.getIconId())) {
             //保存头像
@@ -418,6 +421,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public void updateResources(@NotNull ResourcesPo resourcesPo) {
+        resourcesPo.setNameEncrypt(CCSPUtil.SM4encrypt(resourcesPo.getName()));
+        resourcesPo.setNameHmac(CCSPUtil.getHMac(resourcesPo.getName()));
         resourcesDao.update(resourcesPo);
         if (Objects.nonNull(resourcesPo.getIconId())) {
             //保存头像

@@ -3,6 +3,7 @@ package com.yue.chip.upms.domain.aggregates;
 import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.utils.SpringContextUtil;
 import jakarta.annotation.Resource;
 import lombok.Data;
@@ -30,6 +31,18 @@ public class Resources extends ResourcesDefinition {
 
     @Resource
     private  static UpmsRepository upmsRepository;
+
+    @Override
+    public String getName() {
+        String encrypt = super.getNameEncrypt();
+        String hmac = super.getNameHmac();
+        String decrypt = CCSPUtil.SM4decrypt(encrypt);
+        if (CCSPUtil.checkoutHMac(decrypt, hmac)) {
+            return decrypt;
+        } else {
+            return "数据被篡改";
+        }
+    }
 
     /**
      * 判断编码是否存在

@@ -52,6 +52,16 @@ public class ResourcesPo extends ResourcesDefinition {
     }
 
     @Override
+    public String getNameEncrypt() {
+        return super.getNameEncrypt();
+    }
+
+    @Override
+    public String getNameHmac() {
+        return super.getNameHmac();
+    }
+
+    @Override
     @Comment("英文名称-不能为空")
     @ColumnDefault("''")
     public String getNameEn() {
