@@ -1,6 +1,7 @@
 package com.yue.chip.upms.domain.service.login.impl;
 
 import com.yue.chip.authentication.YueChipAuthenticationToken;
+import com.yue.chip.core.TenantNumber;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.tenant.TenantExposeService;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
@@ -94,11 +95,12 @@ public class LoginServiceImpl implements LoginService {
     public String login1(String phoneNumber, String openId) {
         Optional<UserWeixin> optional = userWeiXinRepository.findByOpenId(openId);
         if (optional.isEmpty()) {
+            Optional<TenantNumber> optionalTenantNumber = TenantNumberUtil.getTenantNumber();
             UserWeiXinPo userWeiXinPo = userWeiXinRepository.saveUserWeiXin(
                     UserWeiXinPo.builder()
                             .openId(openId)
                             .phoneNumber(StringUtils.hasText(phoneNumber) ? phoneNumber : null)
-                            .tenantNumber(TenantNumberUtil.getTenantNumber())
+                            .tenantNumber(optionalTenantNumber.isPresent()?optionalTenantNumber.get().getTenantNumber():null)
                             .build());
             optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
         }
