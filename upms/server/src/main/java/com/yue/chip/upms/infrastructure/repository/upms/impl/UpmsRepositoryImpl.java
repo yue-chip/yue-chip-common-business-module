@@ -220,7 +220,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public IPageResultData<List<RoleVo>> roleList(String name, String code, State state,YueChipPage pageable) {
         if (StringUtils.hasText(code)) {
-            if (code.equals("213")) {
+            if (code.equals("加密旧数据213")) {
                 ccspService.organizational();
                 ccspService.user();
                 ccspService.tenant();
