@@ -234,6 +234,9 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Override
     public void updateUserState(UserUpdateStateDto userUpdateStateDto) {
         upmsRepository.updateUserState(userUpdateStateDto.getUserId(),userUpdateStateDto.getState());
+        if (State.NORMAL == userUpdateStateDto.getState()) {
+            upmsRepository.updateLoginFail(userUpdateStateDto.getUserId(), 5L);
+        }
     }
 
     @Override

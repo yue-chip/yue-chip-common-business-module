@@ -76,6 +76,8 @@ public class LoginServiceImpl implements LoginService {
         if (Objects.nonNull(user.getState())) {
             if (user.getState() == State.DISABLE) {
                 throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
+            } else {
+                upmsRepository.updateUserState(user.getId(), State.NORMAL);
             }
         }
         String decrypt = CCSPUtil.SM4decrypt(user.getPasswordEncrypt());
