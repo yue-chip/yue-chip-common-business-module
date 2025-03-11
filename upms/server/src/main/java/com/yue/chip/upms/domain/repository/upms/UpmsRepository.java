@@ -51,6 +51,8 @@ public interface UpmsRepository {
      */
     public void updateUserState(@NotNull Long userId, @NotNull State state);
 
+    public void updateLoginFail(@NotNull Long userId, @NotNull Long failNum);
+
     /**
      * 根据用户id查询用户
      *

@@ -195,6 +195,11 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
+    public Long getFailNum() {
+        return super.getFailNum();
+    }
+
+    @Override
     @Comment("身份证号码加密")
     public String getIdentificationNumberEncrypt() {
         return super.getIdentificationNumberEncrypt();
