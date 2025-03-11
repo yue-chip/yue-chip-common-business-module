@@ -52,6 +52,11 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
     @Transactional
     public void updateUserState(@NotNull @Param("id") Long id, @NotNull @Param("state") State state);
 
+    @Modifying
+    @Query("update UserPo set failNum = :failNum where id = :id ")
+    @Transactional
+    public void updateLoginFail(@NotNull @Param("id") Long id, @NotNull @Param("failNum") Long failNum);
+
     /**
      * 修改用户密码
      * @param id

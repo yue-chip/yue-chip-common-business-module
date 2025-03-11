@@ -157,4 +157,9 @@ public class UserPo extends UserDefinition {
     public String getIdentificationNumber() {
         return super.getIdentificationNumber();
     }
+
+    @Override
+    public Long getFailNum() {
+        return super.getFailNum();
+    }
 }

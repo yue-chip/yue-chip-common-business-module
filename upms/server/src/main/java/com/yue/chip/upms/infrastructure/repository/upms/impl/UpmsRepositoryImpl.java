@@ -103,6 +103,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public void updateLoginFail(Long userId, Long failNum) {
+        userDao.updateLoginFail(userId, failNum);
+    }
+
+    @Override
     public Optional<User> findUserById(Long id) {
         Optional<UserPo> optional = userDao.findFirstById(id);
         if (optional.isPresent()){

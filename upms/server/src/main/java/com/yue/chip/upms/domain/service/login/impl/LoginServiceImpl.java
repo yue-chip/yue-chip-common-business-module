@@ -71,8 +71,26 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("该账号不存在");
         }
         User user = optional.get();
+        if (Objects.nonNull(user.getState())) {
+            if (user.getState() == State.DISABLE) {
+                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
+            }
+        }
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new AuthenticationServiceException("密码错误");
+            Long failNum = user.getFailNum();
+            if (Objects.isNull(failNum)) {
+                failNum = 5L;
+            }
+            if (failNum > 5) {
+                failNum = 5L;
+            }
+            if (failNum - 1 > 0) {
+                upmsRepository.updateLoginFail(user.getId(), failNum - 1);
+                throw new AuthenticationServiceException("登录失败，您还剩" + (failNum - 1) + "次机会！");
+            } else {
+                upmsRepository.updateUserState(user.getId(), State.DISABLE);
+                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
+            }
         }
         if (Objects.nonNull(user.getLastPasswordTime())) {
             Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
@@ -83,11 +101,7 @@ public class LoginServiceImpl implements LoginService {
                 }
             }
         }
-        if (Objects.nonNull(user.getState())) {
-            if (user.getState() == State.DISABLE) {
-                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
-            }
-        }
+        upmsRepository.updateLoginFail(user.getId(), 5L);
         return authority(user.getResources(), user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber());
     }
 

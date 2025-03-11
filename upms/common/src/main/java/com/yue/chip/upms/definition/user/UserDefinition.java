@@ -96,6 +96,9 @@ public class UserDefinition extends BaseDefinition {
     @JsonIgnore
     private Long tenantNumber;
 
+    @Schema(description = "登录失败次数")
+    private Long failNum;
+
     private  Boolean accountNonExpired;
 
     private  Boolean accountNonLocked;
