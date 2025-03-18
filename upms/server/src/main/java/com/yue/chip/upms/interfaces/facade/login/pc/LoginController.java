@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
@@ -54,7 +56,10 @@ public class LoginController{
     @AuthorizationIgnore
     @Operation(summary = "登录", description = "登录")
     public IResultData<String> login(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username,
-                                     @NotBlank(message = "密码不能为空") @Parameter(description = "密码",name = "password",required = true)String password) {
+                                     @NotBlank(message = "密码不能为空") @Parameter(description = "密码",name = "password",required = true)String password,
+                                     HttpServletRequest req, HttpServletResponse resp) {
+        // 限制同一ip每分钟最多50次请求
+        loginService.RequestRestriction(req, resp);
         String token = loginService.login(username,password);
         Map<String,String> map = new HashMap<>();
         map.put("token",token);

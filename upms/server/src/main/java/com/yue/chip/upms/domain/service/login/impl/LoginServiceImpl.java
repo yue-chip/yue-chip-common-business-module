@@ -22,6 +22,8 @@ import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -33,6 +35,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +66,24 @@ public class LoginServiceImpl implements LoginService {
     @Resource
     private SafetyDao safetyDao;
 
+    @Resource
+    private RedisTemplate redisTemplate;
+
+
+    @Override
+    public void RequestRestriction(HttpServletRequest req, HttpServletResponse resp) {
+        String clientIp = req.getRemoteAddr();
+        if (!redisTemplate.hasKey(clientIp)) {
+            redisTemplate.opsForValue().set(clientIp, 100, Duration.ofSeconds(60));
+        }
+        else {
+            Long reqNum = redisTemplate.opsForValue().decrement(clientIp);
+            if (reqNum != null && reqNum < 0) {
+                redisTemplate.opsForValue().set(clientIp, 0, Duration.ofSeconds(60));
+                throw new AuthenticationServiceException("短时间内登录次数过多，请稍后再试");
+            }
+        }
+    }
 
     @Override
     public String login(String username, String password) {
@@ -70,7 +91,7 @@ public class LoginServiceImpl implements LoginService {
         checkTenantState();
         Optional<User> optional = upmsRepository.findUserByUsername(username);
         if (optional.isEmpty()) {
-            throw new AuthenticationServiceException("该账号不存在");
+            throw new AuthenticationServiceException("登录异常，请重新登录！");
         }
         User user = optional.get();
         if (Objects.nonNull(user.getState())) {
@@ -83,9 +104,9 @@ public class LoginServiceImpl implements LoginService {
         String decrypt = CCSPUtil.SM4decrypt(user.getPasswordEncrypt());
         String hMac = CCSPUtil.getHMac(decrypt);
         if (hMac.equals(user.getPasswordHmac())) {
-            System.out.println("密码校验成功");
+//            System.out.println("密码校验成功");
         } else {
-            throw new AuthenticationServiceException("密码数据被篡改");
+            throw new AuthenticationServiceException("密码数据被篡改！");
         }
         if (!passwordEncoder.matches(password, decrypt)) {
             Long failNum = user.getFailNum();

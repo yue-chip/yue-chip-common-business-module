@@ -1,5 +1,7 @@
 package com.yue.chip.upms.domain.service.login;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotBlank;
 
 /**
@@ -7,6 +9,8 @@ import jakarta.validation.constraints.NotBlank;
  * @date 2023/5/25 下午2:05
  */
 public interface LoginService {
+
+    void RequestRestriction(HttpServletRequest req, HttpServletResponse resp);
 
     /**
      * pc 登录
