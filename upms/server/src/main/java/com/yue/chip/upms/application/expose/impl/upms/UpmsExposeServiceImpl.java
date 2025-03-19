@@ -152,14 +152,29 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
         return organizationalMapper.toOrganizationalExposeVo(firstList);
     }
 
+    public List<OrganizationalExposeVo> findOrganizationalAllChildrenByOrganizationalIds(List<Long> organizationalIds) {
+        List<Organizational> firstList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(organizationalIds)) {
+            organizationalIds.forEach(organizationalId -> {
+                List<Organizational> list = organizationalRepository.findAllChildren(organizationalId);
+                java.util.Optional<Organizational> optional = organizationalRepository.findById(organizationalId);
+                if (optional.isPresent()) {
+                    firstList.add(optional.get());
+                }
+                firstList.addAll(list);
+            });
+        }
+        return organizationalMapper.toOrganizationalExposeVo(firstList);
+    }
+
     @Override
     public List<OrganizationalExposeVo> findOrganizationalAllChildrenByUserId(Long userId) {
         if (Objects.isNull(userId)) {
             return Collections.EMPTY_LIST;
         }
-        java.util.Optional<Organizational> optional = organizationalRepository.findByUserId(userId);
-        if (optional.isPresent()) {
-            return findOrganizationalAllChildrenByOrganizationalId(optional.get().getId());
+        List<Organizational> organizationalList = organizationalRepository.findAllByUserId(userId);
+        if (!CollectionUtils.isEmpty(organizationalList)) {
+            return findOrganizationalAllChildrenByOrganizationalIds(organizationalList.stream().map(Organizational::getId).toList());
         }
         return Collections.EMPTY_LIST;
     }
