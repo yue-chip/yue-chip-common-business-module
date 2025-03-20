@@ -19,6 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.java.Log;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,19 +63,22 @@ public class LoginController{
         // 限制同一ip每分钟最多50次请求
         loginService.RequestRestriction(req, resp);
         String token = loginService.login(username,password);
-        Map<String,String> map = new HashMap<>();
-        map.put("token",token);
-        Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
-        try {
-            if (firstByUsername.isPresent()) {
-                systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
+        if (StringUtils.hasText(token)) {
+            Map<String, String> map = new HashMap<>();
+            map.put("token", token);
+            Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
+            try {
+                if (firstByUsername.isPresent()) {
+                    systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
+                }
+            } catch (Exception e) {
+                System.out.println("---------------");
+                System.out.println(e.getMessage());
+                System.out.println("---------------");
             }
-        } catch (Exception e) {
-            System.out.println("---------------");
-            System.out.println(e.getMessage());
-            System.out.println("---------------");
+            return ResultData.builder().data(map).build();
         }
-        return ResultData.builder().data(map).build();
+        throw new AuthenticationServiceException("登录异常，请重新登录！");
     }
 
     @PostMapping("/login2")
