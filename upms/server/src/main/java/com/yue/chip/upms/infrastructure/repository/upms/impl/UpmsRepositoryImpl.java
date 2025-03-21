@@ -353,9 +353,13 @@ public class UpmsRepositoryImpl implements UpmsRepository {
             treeList = null;
         }
         list.forEach(resourcesPo -> {
-            ResourcesTreeListVo resourcesTree = resourcesMapper.toResourcesTreeListVo(resourcesPo);
-            resourcesTree.setChildren(findResourcesToTreeList(userId,resourcesPo.getId(),scope));
-            treeList.add(resourcesTree);
+            if (CCSPUtil.checkoutHMac(CCSPUtil.SM4decrypt(resourcesPo.getNameEncrypt()), resourcesPo.getNameHmac())) {
+                ResourcesTreeListVo resourcesTree = resourcesMapper.toResourcesTreeListVo(resourcesPo);
+                resourcesTree.setChildren(findResourcesToTreeList(userId,resourcesPo.getId(),scope));
+                treeList.add(resourcesTree);
+            } else {
+                throw new AuthenticationServiceException("检查权限被篡改，请联系管理员！");
+            }
         });
         return treeList;
     }

@@ -74,7 +74,7 @@ public class LoginServiceImpl implements LoginService {
     public void RequestRestriction(HttpServletRequest req, HttpServletResponse resp) {
         String clientIp = req.getRemoteAddr();
         if (!redisTemplate.hasKey(clientIp)) {
-            redisTemplate.opsForValue().set(clientIp, 100, Duration.ofSeconds(60));
+            redisTemplate.opsForValue().set(clientIp, 20, Duration.ofSeconds(60));
         }
         else {
             Long reqNum = redisTemplate.opsForValue().decrement(clientIp);
@@ -104,7 +104,6 @@ public class LoginServiceImpl implements LoginService {
         String decrypt = CCSPUtil.SM4decrypt(user.getPasswordEncrypt());
         String hMac = CCSPUtil.getHMac(decrypt);
         if (hMac.equals(user.getPasswordHmac())) {
-//            System.out.println("密码校验成功");
         } else {
             throw new AuthenticationServiceException("密码数据被篡改！");
         }
@@ -197,7 +196,10 @@ public class LoginServiceImpl implements LoginService {
         List<GrantedAuthority> authoritiesList = AuthorityUtils.createAuthorityList();
         resourcesList.forEach(resources -> {
             YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
-            grantedAuthority.setAuthority(resources.getCode());
+            String decrypt = CCSPUtil.SM4decrypt(resources.getNameEncrypt());
+            if (CCSPUtil.checkoutHMac(decrypt, resources.getNameHmac())) {
+                grantedAuthority.setAuthority(resources.getCode());
+            }
             authoritiesList.add(grantedAuthority);
         });
         YueChipAuthenticationToken token = new YueChipAuthenticationToken(username, authoritiesList);
