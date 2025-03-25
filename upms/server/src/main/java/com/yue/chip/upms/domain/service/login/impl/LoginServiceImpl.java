@@ -101,15 +101,12 @@ public class LoginServiceImpl implements LoginService {
                 upmsRepository.updateUserState(user.getId(), State.NORMAL);
             }
         }
-        String decrypt = CCSPUtil.SM4decrypt(user.getPasswordEncrypt());
-        String hMac = CCSPUtil.getHMac(decrypt);
-        if (hMac.equals(user.getPasswordHmac())) {
-        } else {
-            throw new AuthenticationServiceException("密码数据被篡改！");
+        if (!CCSPUtil.SM2decrypt(user.getPassword(), user.getPasswordSignature())) {
+            throw new AuthenticationServiceException("用户签名被篡改！请联系管理员！");
         }
         Long remainingSeconds = 600L;
         if (!redisTemplate.hasKey("username"+username)) {
-            if (!passwordEncoder.matches(password, decrypt)) {
+            if (!CCSPUtil.SM2decrypt(password, user.getPasswordSignature())) {
                 Long failNum = user.getFailNum();
                 if (Objects.isNull(failNum)) {
                     failNum = 5L;

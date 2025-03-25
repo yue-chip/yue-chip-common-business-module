@@ -228,7 +228,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
     public void updateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
 //        upmsRepository.updateUserPassword(CurrentUserUtil.getCurrentUserId(),passwordEncoder.encode(SecureUtil.md5(userUpdatePasswordDto.getPassword())));
         upmsRepository.updateUserPassword(Objects.isNull(userUpdatePasswordDto.getUserId())?CurrentUserUtil.getCurrentUserId():userUpdatePasswordDto.getUserId(),
-                passwordEncoder.encode(userUpdatePasswordDto.getPassword()));
+                userUpdatePasswordDto.getPassword());
     }
 
     @Override

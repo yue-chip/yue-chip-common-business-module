@@ -56,11 +56,8 @@ public class UserDefinition extends BaseDefinition {
     @Schema(description = "密码")
     private String password;
 
-    @Schema(description = "密码加密")
-    private String passwordEncrypt;
-
-    @Schema(description = "密码校验")
-    private String passwordHmac;
+    @Schema(description = "签名")
+    private String passwordSignature;
 
     @Schema(description = "用户登陆账号")
     private  String username;

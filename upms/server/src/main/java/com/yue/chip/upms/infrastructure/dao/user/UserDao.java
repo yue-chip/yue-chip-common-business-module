@@ -66,11 +66,11 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @param password
      */
     @Modifying
-    @Query("update UserPo set password=:password, passwordEncrypt = :passwordEncrypt, " +
-            " passwordHmac=:passwordHmac where id =:id ")
+    @Query("update UserPo set password=:password, passwordSignature = :passwordSignature " +
+            " where id =:id ")
     @Transactional
     public void updatePassword(@NotNull @Param("id") Long id, @NotBlank @Param("password") String password,
-                               @NotBlank @Param("passwordEncrypt") String passwordEncrypt, @NotBlank @Param("passwordHmac") String passwordHmac);
+                               @NotBlank @Param("passwordSignature") String passwordSignature);
 
     /**
      * 根据ids查询所有用户
@@ -92,11 +92,11 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
     @org.springframework.transaction.annotation.Transactional
     @Query("UPDATE UserPo e SET e.phoneNumberEncrypt = :phoneNumberEncrypt, e.phoneNumberHmac = :phoneNumberHmac," +
             " e.nameEncrypt = :nameEncrypt, e.nameHmac = :nameHmac, " +
-            " e.passwordEncrypt = :passwordEncrypt, e.passwordHmac = :passwordHmac, " +
+            " e.passwordSignature = :passwordSignature, " +
             " e.identificationNumberEncrypt = :identificationNumberEncrypt, e.identificationNumberHmac = :identificationNumberHmac WHERE e.id = :id")
     void updateEncrypt(@Param("phoneNumberEncrypt") String phoneNumberEncrypt, @Param("phoneNumberHmac") String phoneNumberHmac,
                        @Param("nameEncrypt") String nameEncrypt, @Param("nameHmac") String nameHmac,
-                       @Param("passwordEncrypt") String passwordEncrypt, @Param("passwordHmac") String passwordHmac,
+                       @Param("passwordSignature") String passwordSignature,
                        @Param("identificationNumberEncrypt") String identificationNumberEncrypt, @Param("identificationNumberHmac") String identificationNumberHmac,
                        @Param("id") Long id);
 

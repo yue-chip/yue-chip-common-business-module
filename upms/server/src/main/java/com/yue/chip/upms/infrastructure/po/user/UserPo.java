@@ -46,15 +46,9 @@ public class UserPo extends UserDefinition {
     }
 
     @Override
-    @Comment("密码加密")
-    public String getPasswordEncrypt() {
-        return super.getPasswordEncrypt();
-    }
-
-    @Override
-    @Comment("密码校验")
-    public String getPasswordHmac() {
-        return super.getPasswordHmac();
+    @Comment("密码签名")
+    public String getPasswordSignature() {
+        return super.getPasswordSignature();
     }
 
     @Override

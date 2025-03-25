@@ -82,10 +82,8 @@ public class CCSPServiceImpl implements CCSPService {
                 po.setNameEncrypt(nameEncrypt);
                 po.setNameHmac(CCSPUtil.getHMac(po.getName()));
             }
-            String passwordEncrypt = CCSPUtil.SM4encrypt(po.getPassword());
-            if (passwordEncrypt.length() > 0) {
-                po.setPasswordEncrypt(passwordEncrypt);
-                po.setPasswordHmac(CCSPUtil.getHMac(po.getPassword()));
+            if (po.getPassword().length() > 0) {
+                po.setPasswordSignature(CCSPUtil.SM2encrypt(po.getPassword()));
             }
             String idCardEncrypt = CCSPUtil.SM4encrypt(po.getIdentificationNumber());
             if (idCardEncrypt.length() > 0) {
@@ -94,7 +92,7 @@ public class CCSPServiceImpl implements CCSPService {
             }
             userDao.updateEncrypt(po.getPhoneNumberEncrypt(), po.getPhoneNumberHmac(),
                     po.getNameEncrypt(), po.getNameHmac(),
-                    po.getPasswordEncrypt(), po.getPasswordHmac(),
+                    po.getPasswordSignature(),
                     po.getIdentificationNumberEncrypt(), po.getIdentificationNumberHmac(),
                     po.getId());
         });

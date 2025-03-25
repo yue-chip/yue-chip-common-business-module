@@ -187,7 +187,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public void updateUserPassword(Long userId, String password) {
-        userDao.updatePassword(userId,password,CCSPUtil.SM4encrypt(password),CCSPUtil.getHMac(password));
+        userDao.updatePassword(userId,password,CCSPUtil.SM2encrypt(password));
         userDao.updateLastPasswordTime(userId, LocalDateTime.now());
     }
 
@@ -474,9 +474,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public User saveUser(UserPo userPo) {
-        userPo.setPassword(passwordEncoder.encode(userPo.getPassword()));
-        userPo.setPasswordEncrypt(CCSPUtil.SM4encrypt(userPo.getPassword()));
-        userPo.setPasswordHmac(CCSPUtil.getHMac(userPo.getPassword()));
+        userPo.setPassword(userPo.getPassword());
+        userPo.setPasswordSignature(CCSPUtil.SM2encrypt(userPo.getPassword()));
         userPo.setNameEncrypt(CCSPUtil.SM4encrypt(userPo.getName()));
         userPo.setNameHmac(CCSPUtil.getHMac(userPo.getName()));
         userPo.setIdentificationNumberEncrypt(CCSPUtil.SM4encrypt(userPo.getIdentificationNumber()));
@@ -492,8 +491,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @CacheEvict(value = User.CACHE_KEY, key = "#userPo.id")
     public void updateUser(UserPo userPo) {
         if (StringUtils.hasText(userPo.getPassword())) {
-            userPo.setPasswordEncrypt(CCSPUtil.SM4encrypt(userPo.getPassword()));
-            userPo.setPasswordHmac(CCSPUtil.getHMac(userPo.getPassword()));
+            userPo.setPasswordSignature(CCSPUtil.SM2encrypt(userPo.getPassword()));
         }
         if (StringUtils.hasText(userPo.getName())) {
             userPo.setNameEncrypt(CCSPUtil.SM4encrypt(userPo.getName()));

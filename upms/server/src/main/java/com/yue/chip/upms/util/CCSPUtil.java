@@ -90,4 +90,44 @@ public class CCSPUtil {
         }
         return result;
     }
+
+    /**
+     * SM2签名
+     * @param input
+     * @return
+     */
+    public static String SM2encrypt(String input) {
+        String encryptStr = "";
+        if (StringUtils.hasText(input)) {
+            try {
+                String encrypt = CCSPApi.SM2encrypt(input);
+                if (Objects.nonNull(encrypt)) {
+                    encryptStr = encrypt;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return encryptStr;
+    }
+
+    /**
+     * SM2验签
+     * @param input
+     * @return
+     */
+    public static Boolean SM2decrypt(String input, String signData) {
+        boolean result = false;
+        if (!StringUtils.hasText(input) && !StringUtils.hasText(signData)) {
+            return false;
+        }
+        try {
+            if (StringUtils.hasText(input) && StringUtils.hasText(signData)) {
+                result = CCSPApi.SM2decrypt(input, signData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

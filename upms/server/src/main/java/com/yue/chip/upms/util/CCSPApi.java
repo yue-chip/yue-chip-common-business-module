@@ -10,6 +10,9 @@ import com.ccsp.sdk.crypto.impl.CCSPClient;
 import com.ccsp.util.Bytes;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @author jiacheng.liao on 2025/01/06
@@ -118,12 +121,13 @@ public class CCSPApi {
     }
 
     /**
-     * 杂凑运算 签名验签
+     * SM2签名
      * @param data
      * @return
      * @throws CryptoException
+     * @throws NoSuchAlgorithmException
      */
-    public static byte[] SM2encrypt(String data) throws CryptoException {
+    public static String SM2encrypt(String data) throws CryptoException, NoSuchAlgorithmException {
         if (ccspClient == null) {
             try {
                 ccspClient = SDFFactory.getInstance(ip, 20000, 10, 30, 20);
@@ -134,43 +138,112 @@ public class CCSPApi {
         }
         byte[] inData = null;
         try {
-            inData = data.getBytes("UTF-8");
+            inData = data.getBytes(StandardCharsets.UTF_8);
         } catch (Exception e){
             e.printStackTrace();
         }
+        byte[] inputData = processInputTo32Bytes(inData);
 
-        // 杂凑运算
-        Object hashContext = crypto.CCSP_HashInit(GlobalData.SGD_SHA256, null, null);
-        System.out.println("HashInit OK");
-        crypto.CCSP_HashUpdate(hashContext, inData);
-        System.out.println("HashUpdate OK");
-        byte[] hashresult = crypto.CCSP_HashFinal(hashContext,null);
-        System.out.println("HashFinal OK");
-        if(hashresult == null) {
-            System.out.println("哈希失败!");
-        } else {
-            System.out.println("哈希成功.");
-            for(int i = 0; i<hashresult.length; i++)
-            {
-                System.out.printf("%02x", hashresult[i]);
+        SM2refSignature refSig = crypto.CCSP_InternalSign_ECC(SM2KeyId, inputData);
+
+        String RBase64 = extractValue(refSig.toString(), "R:").trim();
+        String SBase64 = extractValue(refSig.toString(), "S:").trim();
+        return RBase64 + "_RS_" + SBase64;
+    }
+
+    /**
+     * SM2验签
+     * @param data
+     * @param signData
+     * @return
+     * @throws CryptoException
+     * @throws NoSuchAlgorithmException
+     */
+    public static Boolean SM2decrypt(String data, String signData) throws CryptoException, NoSuchAlgorithmException {
+        if (ccspClient == null) {
+            try {
+                ccspClient = SDFFactory.getInstance(ip, 20000, 10, 30, 20);
+                ccspClient.CCSP_LoginbyAppNameAndPwd(appName, password);
+            } catch (CryptoException e) {
+                e.printStackTrace();
             }
         }
+        byte[] inData = null;
+        try {
+            inData = data.getBytes(StandardCharsets.UTF_8);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        byte[] inputData = processInputTo32Bytes(inData);
 
         boolean result = false;
         SM2refSignature refSig = null;
-        System.out.println("私钥签名->公钥验签");
-        System.out.println("----------------------------------");
-        System.out.println("签名数据: "+Bytes.bytes2hex(hashresult));
-        refSig = crypto.CCSP_InternalSign_ECC(SM2KeyId, hashresult);
-        System.out.println("签名结果: ");
-        System.out.println(refSig);
-        result = crypto.CCSP_InternalVerify_ECC(SM2KeyId, hashresult, refSig);
-        System.out.println("验签结果: "+result);
-        return null;
+
+        String RBase64 = signData.split("_RS_")[0];
+        String SBase64 = signData.split("_RS_")[1];
+
+//        byte[] br = processInputTo64Bytes(Bytes.hex2bytes(RBase64));
+//        byte[] bs = processInputTo64Bytes(Bytes.hex2bytes(SBase64));
+
+        refSig = new SM2refSignature(processInputTo64Bytes(Bytes.hex2bytes(RBase64)), processInputTo64Bytes(Bytes.hex2bytes(SBase64)));
+        result = crypto.CCSP_InternalVerify_ECC(SM2KeyId, inputData, refSig);
+        return result;
     }
 
-    public static byte[] SM2decrypt(byte[] inputData) throws CryptoException {
-        return null;
+    private static byte[] processInputTo32Bytes(byte[] input) {
+        byte[] processedInput = new byte[32];
+
+        // 如果输入长度大于 32 字节，截断
+        if (input.length > 32) {
+            System.arraycopy(input, 0, processedInput, 0, 32);
+        } else {
+            // 如果输入长度小于或等于 32 字节，填充
+            System.arraycopy(input, 0, processedInput, 0, input.length);
+            // 填充剩余部分为 0
+            for (int i = input.length; i < 32; i++) {
+                processedInput[i] = 0;
+            }
+        }
+
+        return processedInput;
+    }
+
+    private static byte[] processInputTo64Bytes(byte[] input) {
+        byte[] processedInput = new byte[64];
+
+        // 如果输入长度大于 64 字节，截断
+        if (input.length > 64) {
+            System.arraycopy(input, 0, processedInput, 0, 64);
+        } else {
+            // 如果输入长度小于或等于 64 字节，填充
+            // 计算需要填充的零的数量
+            int paddingLength = 64 - input.length;
+
+            // 填充前面的零
+            for (int i = 0; i < paddingLength; i++) {
+                processedInput[i] = 0;
+            }
+
+            // 将输入数据复制到 processedInput 的后面
+            System.arraycopy(input, 0, processedInput, paddingLength, input.length);
+        }
+
+        return processedInput;
+    }
+
+    private static String extractValue(String result, String key) {
+        // 查找 key 的位置
+        int startIndex = result.indexOf(key);
+        if (startIndex == -1) {
+            return null;
+        }
+
+        // 截取从 key 开始到行结束的部分
+        int endIndex = result.indexOf("\n", startIndex);
+        String valueLine = (endIndex == -1) ? result.substring(startIndex) : result.substring(startIndex, endIndex);
+
+        // 去掉 key 和前后的空格
+        return valueLine.replace(key, "").trim();
     }
 
 }
