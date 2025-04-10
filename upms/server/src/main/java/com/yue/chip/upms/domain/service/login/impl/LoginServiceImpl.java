@@ -2,8 +2,10 @@ package com.yue.chip.upms.domain.service.login.impl;
 
 import com.yue.chip.authentication.YueChipAuthenticationToken;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
 import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.util.CCSPUtil;
 import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.exception.BusinessException;
@@ -35,6 +37,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.security.MessageDigest;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -65,6 +68,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Resource
     private SafetyDao safetyDao;
+
+    @Resource
+    private UpmsApplication upmsApplication;
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -139,6 +145,63 @@ public class LoginServiceImpl implements LoginService {
             remainingSeconds = redisTemplate.getExpire("username"+username);
         }
         throw new AuthenticationServiceException("该账号已被禁用" + remainingSeconds + "秒！");
+    }
+
+    @Override
+    public String loginGrid(String username) {
+        //检查租户状态
+        checkTenantState();
+        upmsApplication.saveUser1(UserAddOrUpdateDto.builder().name(username).username(username).password(getMD5Hash(username)).passwordI(getMD5Hash(username)).build());
+        Optional<User> optional = upmsRepository.findUserByUsername(username);
+        if (optional.isEmpty()) {
+            throw new AuthenticationServiceException("登录异常，请重新登录！");
+        }
+        User user = optional.get();
+        if (Objects.nonNull(user.getState())) {
+            if (user.getState() == State.DISABLE) {
+                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
+            } else {
+                upmsRepository.updateUserState(user.getId(), State.NORMAL);
+            }
+        }
+        if (!CCSPUtil.SM2decrypt(user.getPassword(), user.getPasswordSignature())) {
+            throw new AuthenticationServiceException("用户签名被篡改！请联系管理员！");
+        }
+        if (Objects.nonNull(user.getLastPasswordTime())) {
+            Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
+            if (optionalSafetyPo.isPresent()) {
+                if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
+                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
+                    throw new AuthenticationServiceException("密码超过" + optionalSafetyPo.get().getPasswordTime() + "天未修改！该账号已被禁用！请联系管理员！");
+                }
+            }
+        }
+        // 登录成功恢复5次登录错误次数
+        upmsRepository.updateLoginFail(user.getId(), 5L);
+        return authority(user.getResources(), user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber());
+    }
+
+    public static String getMD5Hash(String input) {
+        try {
+            // 创建MessageDigest实例，并指定使用MD5算法
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // 使用指定的字节更新摘要
+            md.update(input.getBytes());
+
+            // 完成哈希计算并返回结果
+            byte[] digest = md.digest();
+
+            // 将字节转换为十六进制字符串
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            // 当JVM不支持MD5算法时，会抛出此异常
+            throw new RuntimeException("MD5 algorithm not available!", e);
+        }
     }
 
     @Override

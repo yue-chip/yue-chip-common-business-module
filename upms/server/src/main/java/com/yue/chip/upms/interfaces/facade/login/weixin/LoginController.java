@@ -73,6 +73,27 @@ public class LoginController {
         return ResultData.builder().data(map).build();
     }
 
+
+    @PostMapping("/login/grid")
+    @AuthorizationIgnore
+    @Operation(summary = "登录", description = "登录")
+    public IResultData<String> loginGrid(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username) {
+        String token = loginService.loginGrid(username);
+        Map<String,String> map = new HashMap<>();
+        map.put("token",token);
+        Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
+        try {
+            if (firstByUsername.isPresent()) {
+                systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
+            }
+        } catch (Exception e) {
+            System.out.println("---------------");
+            System.out.println(e.getMessage());
+            System.out.println("---------------");
+        }
+        return ResultData.builder().data(map).build();
+    }
+
     @PostMapping("/login1")
     @AuthorizationIgnore
     @Operation(summary = "登录1", description = "登录1")
