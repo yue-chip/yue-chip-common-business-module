@@ -118,12 +118,30 @@ public class LoginServiceImpl implements LoginService {
         //检查租户状态
 //        checkTenantState();
         upmsApplication.saveUser1( UserAddOrUpdateDto.builder().name(username).username(username).password(getMD5Hash(username)).passwordI(getMD5Hash(username)).build());
+        checkTenantState();
+        upmsApplication.saveUser1(UserAddOrUpdateDto.builder().name(username).username(username).password(getMD5Hash(username)).passwordI(getMD5Hash(username)).build());
         Optional<User> optional = upmsRepository.findUserByUsername(username);
-        User user = new User();
-        if (!optional.isPresent()) {
+        if (optional.isEmpty()) {
             throw new AuthenticationServiceException("该账号不存在");
         }
-        user = optional.get();
+        User user = optional.get();
+        if (Objects.nonNull(user.getState())) {
+            if (user.getState() == State.DISABLE) {
+                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
+            } else {
+                upmsRepository.updateUserState(user.getId(), State.NORMAL);
+            }
+        }
+        if (Objects.nonNull(user.getLastPasswordTime())) {
+            Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
+            if (optionalSafetyPo.isPresent()) {
+                if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
+                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
+                    throw new AuthenticationServiceException("密码超过"+optionalSafetyPo.get().getPasswordTime()+"天未修改！该账号已被禁用！请联系管理员！");
+                }
+            }
+        }
+        upmsRepository.updateLoginFail(user.getId(), 5L);
         return authority(user.getResources(), user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber());
     }
 
