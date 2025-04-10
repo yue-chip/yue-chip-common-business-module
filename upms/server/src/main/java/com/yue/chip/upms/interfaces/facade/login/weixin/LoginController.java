@@ -1,10 +1,12 @@
 package com.yue.chip.upms.interfaces.facade.login.weixin;
 
 import com.yue.chip.annotation.AuthorizationIgnore;
+import com.yue.chip.annotation.SystemLog;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.SystemLogService;
 import com.yue.chip.core.TenantNumber;
+import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.weixin.UserWeiXinDao;
@@ -12,6 +14,7 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
 import com.yue.chip.utils.CurrentUserUtil;
 import com.yue.chip.utils.TenantNumberUtil;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -78,6 +81,26 @@ public class LoginController {
         }finally {
             CurrentUserUtil.cleanCurrentTenantNumber();
         }
+    }
+
+    @PostMapping("/login/grid")
+    @AuthorizationIgnore
+    @Operation(summary = "登录", description = "登录")
+    public IResultData<String> loginGrid(@NotBlank(message = "登录账号不能为空") @Parameter(description = "登录账号",name = "username",required = true)String username) {
+        String token = loginService.loginGrid(username);
+        Map<String,String> map = new HashMap<>();
+        map.put("token",token);
+        Optional<UserPo> firstByUsername = userDao.findFirstByUsername(username);
+        try {
+            if (firstByUsername.isPresent()) {
+                systemLogService.saveLog("登录账号", firstByUsername.get().getId(), "pc");
+            }
+        } catch (Exception e) {
+            System.out.println("---------------");
+            System.out.println(e.getMessage());
+            System.out.println("---------------");
+        }
+        return ResultData.builder().data(map).build();
     }
 
     @PostMapping("/login1")

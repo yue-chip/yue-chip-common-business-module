@@ -6,6 +6,7 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.tenant.TenantExposeService;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
+import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -16,6 +17,7 @@ import com.yue.chip.upms.domain.service.login.LoginService;
 import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
 import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
 import jakarta.annotation.Resource;
@@ -32,6 +34,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +61,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Resource
     private UserWeiXinMapper userWeiXinMapper;
+
+    @Resource
+    private UpmsApplication upmsApplication;
 
     @Resource
     private SafetyDao safetyDao;
@@ -105,6 +111,43 @@ public class LoginServiceImpl implements LoginService {
         }
         upmsRepository.updateLoginFail(user.getId(), 5L);
         return authority(user.getResources(), user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber());
+    }
+
+    @Override
+    public String loginGrid(String username) {
+        //检查租户状态
+//        checkTenantState();
+        upmsApplication.saveUser1( UserAddOrUpdateDto.builder().name(username).username(username).password(getMD5Hash(username)).passwordI(getMD5Hash(username)).build());
+        Optional<User> optional = upmsRepository.findUserByUsername(username);
+        User user = new User();
+        if (!optional.isPresent()) {
+            throw new AuthenticationServiceException("该账号不存在");
+        }
+        user = optional.get();
+        return authority(user.getResources(), user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber());
+    }
+
+    public static String getMD5Hash(String input) {
+        try {
+            // 创建MessageDigest实例，并指定使用MD5算法
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // 使用指定的字节更新摘要
+            md.update(input.getBytes());
+
+            // 完成哈希计算并返回结果
+            byte[] digest = md.digest();
+
+            // 将字节转换为十六进制字符串
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            // 当JVM不支持MD5算法时，会抛出此异常
+            throw new RuntimeException("MD5 algorithm not available!", e);
+        }
     }
 
     @Override

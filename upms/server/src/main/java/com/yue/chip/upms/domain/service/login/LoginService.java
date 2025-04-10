@@ -17,6 +17,13 @@ public interface LoginService {
     public String login(@NotBlank String username, @NotBlank String password);
 
     /**
+     * 粤政易登录
+     * @param username
+     * @return
+     */
+    public String loginGrid(@NotBlank String username);
+
+    /**
      *
      * @param phoneNumber
      * @param openId
