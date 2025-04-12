@@ -95,7 +95,7 @@ public class LoginServiceImpl implements LoginService {
                     UserWeiXinPo.builder()
                             .openId(openId)
                             .phoneNumber(StringUtils.hasText(phoneNumber) ? phoneNumber : null)
-                            .tenantNumber(TenantNumberUtil.getTenantNumber())
+                            .tenantNumber(TenantNumberUtil.getTenantNumber().get().getTenantNumber())
                             .build());
             optional = Optional.ofNullable(userWeiXinMapper.toUserWeiXin(userWeiXinPo));
         }
