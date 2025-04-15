@@ -5,9 +5,9 @@ spring:
     allow-bean-definition-overriding: true
     allow-circular-references: true
   nacos:
-    group: XIAO-WEI-GROUP
+    group: DORMITORY-MANAGEMENT-GROUP
     host: 192.168.11.184:8848
-    namespace: 87b9a0db-d7ee-4c43-b707-18b7c53843fd
+    namespace: 8adc07a3-fea8-4029-9544-7ff17131d3ec
 #    group: YUE-CHIP-GROUP
 #    host: 192.168.177.129:8848
 #    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
