@@ -45,7 +45,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -92,10 +91,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         return Optional.empty();
     }
 
-    @Override
-    public void updateLastLoginTime(String username) {
-        userDao.updateLastLoginTime(username, LocalDateTime.now());
-    }
 
     @Override
     public void updateUserState(Long userId, State state) {
@@ -202,7 +197,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public void updateUserPassword(Long userId, String password) {
         userDao.updatePassword(userId,password);
-        userDao.updateLastPasswordTime(userId, LocalDateTime.now());
     }
 
     @Override

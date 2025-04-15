@@ -24,7 +24,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true,value = {"updateDateTime","password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId","lastLoginTime","lastPasswordTime"})
+@JsonIgnoreProperties(ignoreUnknown = true,value = {"updateDateTime","password","accountNonExpired","accountNonLocked","credentialsNonExpired","enabled","createUserId","updateUserId"})
 public class UserVo extends UserDefinition {
 
     private String organizationalName;

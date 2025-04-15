@@ -135,7 +135,6 @@ public class LoginServiceImpl implements LoginService {
     }
 
     private String authority(List<Resources> resourcesList, Long id, String username, String password, Long tenantNumber) {
-        upmsRepository.updateLastLoginTime(username);
         List<GrantedAuthority> authoritiesList = AuthorityUtils.createAuthorityList();
         resourcesList.forEach(resources -> {
             YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
