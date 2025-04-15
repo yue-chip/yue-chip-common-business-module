@@ -12,8 +12,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-
 /**
  * user 字段的定义 避免在聚合实体entity，dto，vo，po……等bean 进行重复定义
  */
@@ -85,12 +83,6 @@ public class UserDefinition extends BaseDefinition {
 
     @Schema(description = "是否接收紧急呼叫")
     private Boolean isCall;
-
-    @Schema(description = "最后登录时间")
-    private LocalDateTime lastLoginTime;
-
-    @Schema(description = "最后密码修改时间")
-    private LocalDateTime lastPasswordTime;
 
     @Schema(description = "租户id")
     @JsonIgnore

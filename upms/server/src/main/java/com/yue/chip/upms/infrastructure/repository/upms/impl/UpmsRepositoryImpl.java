@@ -473,7 +473,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public User saveUser(UserPo userPo) {
         userPo.setPassword(passwordEncoder.encode(userPo.getPassword()));
         userPo.setTenantNumber(CurrentUserUtil.getCurrentUserTenantNumber(true));
-        userPo.setLastPasswordTime(LocalDateTime.now());
         userPo = userDao.save(userPo);
         return userMapper.toUser(userPo);
     }

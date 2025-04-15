@@ -69,19 +69,4 @@ public class UserAddOrUpdateDto extends UserDefinition {
         return super.getCreateDateTime();
     }
 
-    @Override
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public LocalDateTime getLastLoginTime() {
-        return super.getLastLoginTime();
-    }
-
-    @Override
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public LocalDateTime getLastPasswordTime() {
-        return super.getLastPasswordTime();
-    }
 }
