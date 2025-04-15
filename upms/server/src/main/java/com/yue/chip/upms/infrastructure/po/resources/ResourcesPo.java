@@ -51,12 +51,6 @@ public class ResourcesPo extends ResourcesDefinition {
         return super.getName();
     }
 
-    @Override
-    @Comment("英文名称-不能为空")
-    @ColumnDefault("''")
-    public String getNameEn() {
-        return super.getNameEn();
-    }
 
     @Override
     @Convert(converter = Scope.ScopeConverter.class)
