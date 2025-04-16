@@ -118,8 +118,6 @@ public class LoginServiceImpl implements LoginService {
         //检查租户状态
 //        checkTenantState();
         upmsApplication.saveUser1( UserAddOrUpdateDto.builder().name(username).username(username).password(getMD5Hash(username)).passwordI(getMD5Hash(username)).build());
-        checkTenantState();
-        upmsApplication.saveUser1(UserAddOrUpdateDto.builder().name(username).username(username).password(getMD5Hash(username)).passwordI(getMD5Hash(username)).build());
         Optional<User> optional = upmsRepository.findUserByUsername(username);
         if (optional.isEmpty()) {
             throw new AuthenticationServiceException("该账号不存在");
@@ -231,3 +229,5 @@ public class LoginServiceImpl implements LoginService {
         return token.getToken();
     }
 }
+
+
