@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -129,6 +130,16 @@ public interface FileExposeService {
      * @param tenantNumber
      * @return
      */
-    public Map<String, String> getUrls(@NotNull List<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName,Long tenantNumber);
+    public Map<String, String> getUrls(@NotNull ArrayList<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName);
+
+    /**
+     * 查找多个url路径
+     * @param tableIds
+     * @param fileFieldName
+     * @param tableName
+     * @param tenantNumber
+     * @return
+     */
+    public Map<String, String> getUrls(@NotNull ArrayList<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName,Long tenantNumber);
 
 }
