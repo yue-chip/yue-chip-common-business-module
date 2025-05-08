@@ -37,6 +37,14 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      */
     public Optional<UserPo> findFirstByUsername(@NotBlank String username);
 
+    /**
+     * 根据手机号查询用户
+     *
+     * @param phoneNumber 手机号
+     * @return User 用户
+     */
+    Optional<UserPo> findFirstByPhoneNumber(@NotBlank String phoneNumber);
+
     @Modifying
     @Query("update UserPo set lastLoginTime = :lastLoginTime where username = :username ")
     @Transactional

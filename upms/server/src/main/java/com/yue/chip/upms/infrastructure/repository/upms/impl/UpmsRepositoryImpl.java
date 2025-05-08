@@ -93,6 +93,16 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public Optional<User> findUserByPhoneNumber(String phoneNumber) {
+        Optional<UserPo> optional = userDao.findFirstByPhoneNumber(phoneNumber);
+        if (optional.isPresent()) {
+            User user = userMapper.toUser(optional.get());
+            return Optional.ofNullable(user);
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public void updateLastLoginTime(String username) {
         userDao.updateLastLoginTime(username, LocalDateTime.now());
     }

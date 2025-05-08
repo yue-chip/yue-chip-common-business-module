@@ -39,6 +39,14 @@ public interface UpmsRepository {
     public Optional<User> findUserByUsername(@NotBlank String username);
 
     /**
+     * 根据手机号获取用户
+     *
+     * @param phoneNumber 手机号
+     * @return 用户对象
+     */
+    Optional<User> findUserByPhoneNumber(@NotBlank String phoneNumber);
+
+    /**
      * 更新最后登录时间
      * @param username
      */

@@ -24,6 +24,14 @@ public interface LoginService {
     public String loginGrid(@NotBlank String username);
 
     /**
+     * 粤商通登录
+     *
+     * @param phoneNumber 手机号
+     * @return token
+     */
+    String loginYst(@NotBlank String phoneNumber);
+
+    /**
      *
      * @param phoneNumber
      * @param openId

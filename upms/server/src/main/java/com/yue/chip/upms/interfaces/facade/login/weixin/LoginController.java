@@ -105,6 +105,30 @@ public class LoginController {
         }
     }
 
+    @PostMapping("/login/yst")
+    @AuthorizationIgnore
+    @Operation(summary = "粤商通登录", description = "粤商通登录")
+    public IResultData<?> loginYst(@NotBlank(message = "手机号不能为空") @Parameter(description = "手机号",name = "phoneNumber",required = true) String phoneNumber) {
+       try {
+        String token = loginService.loginYst(phoneNumber);
+        Map<String,String> map = new HashMap<>();
+        map.put("token",token);
+        Optional<UserPo> firstByPhoneNumber = userDao.findFirstByPhoneNumber(phoneNumber);
+        try {
+            if (firstByPhoneNumber.isPresent()) {
+                systemLogService.saveLog("登录账号", firstByPhoneNumber.get().getId(), "pc");
+            }
+        } catch (Exception e) {
+            System.out.println("---------------");
+            System.out.println(e.getMessage());
+            System.out.println("---------------");
+        }
+        return ResultData.builder().data(map).build();
+    }finally {
+        CurrentUserUtil.cleanCurrentTenantNumber();
+    }
+    }
+
     @PostMapping("/login1")
     @AuthorizationIgnore
     @Operation(summary = "登录1", description = "登录1")
