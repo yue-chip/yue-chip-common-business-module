@@ -84,32 +84,32 @@ public class LoginServiceImpl implements LoginService {
                 upmsRepository.updateUserState(user.getId(), State.NORMAL);
             }
         }
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            Long failNum = user.getFailNum();
-            if (Objects.isNull(failNum)) {
-                failNum = 5L;
-            }
-            if (failNum > 5) {
-                failNum = 5L;
-            }
-            if (failNum - 1 > 0) {
-                upmsRepository.updateLoginFail(user.getId(), failNum - 1);
-                throw new AuthenticationServiceException("登录失败，您还剩" + (failNum - 1) + "次机会！");
-            } else {
-                upmsRepository.updateUserState(user.getId(), State.DISABLE);
-                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
-            }
-        }
-        if (Objects.nonNull(user.getLastPasswordTime())) {
-            Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
-            if (optionalSafetyPo.isPresent()) {
-                if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
-                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
-                    throw new AuthenticationServiceException("密码超过"+optionalSafetyPo.get().getPasswordTime()+"天未修改！该账号已被禁用！请联系管理员！");
-                }
-            }
-        }
-        upmsRepository.updateLoginFail(user.getId(), 5L);
+//        if (!passwordEncoder.matches(password, user.getPassword())) {
+//            Long failNum = user.getFailNum();
+//            if (Objects.isNull(failNum)) {
+//                failNum = 5L;
+//            }
+//            if (failNum > 5) {
+//                failNum = 5L;
+//            }
+//            if (failNum - 1 > 0) {
+//                upmsRepository.updateLoginFail(user.getId(), failNum - 1);
+//                throw new AuthenticationServiceException("登录失败，您还剩" + (failNum - 1) + "次机会！");
+//            } else {
+//                upmsRepository.updateUserState(user.getId(), State.DISABLE);
+//                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
+//            }
+//        }
+//        if (Objects.nonNull(user.getLastPasswordTime())) {
+//            Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
+//            if (optionalSafetyPo.isPresent()) {
+//                if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
+//                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
+//                    throw new AuthenticationServiceException("密码超过"+optionalSafetyPo.get().getPasswordTime()+"天未修改！该账号已被禁用！请联系管理员！");
+//                }
+//            }
+//        }
+//        upmsRepository.updateLoginFail(user.getId(), 5L);
         return authority(user.getResources(), user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber());
     }
 
