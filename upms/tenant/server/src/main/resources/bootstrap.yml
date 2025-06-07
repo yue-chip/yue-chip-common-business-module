@@ -1,3 +1,41 @@
+server:
+  port: 0
 spring:
-  profiles:
-    active: dev
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  nacos:
+    group: XIAO-WEI-GROUP
+    host: 192.168.11.184:8848
+    namespace: 87b9a0db-d7ee-4c43-b707-18b7c53843fd
+#    group: YUE-CHIP-GROUP
+#    host: 192.168.177.129:8848
+#    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
+    password: nacos
+    username: nacos
+  application:
+    name: upms-tenant
+  config:
+    import:
+      - nacos:${spring.application.name}.yaml?group=${spring.nacos.group}&refreshEnabled=true
+      - nacos:common.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:datasource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:jpa.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:oauth2-resource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:sentinel.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:dubbo.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:seata.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:redis.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+  cloud:
+    nacos:
+      username: ${spring.nacos.username}
+      password: ${spring.nacos.password}
+      server-addr: ${spring.nacos.host}
+      config:
+        namespace: ${spring.nacos.namespace}
+        group: ${spring.nacos.group}
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    use-code-as-default-message: true

@@ -1,11 +1,13 @@
 apply from: this.rootProject.file('javaLibrary.gradle')
-archivesBaseName = 'yue-chip-upms-tenant-interface-expose'
+archivesBaseName = 'yue-chip-upms-common'
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
 dependencies {
     api platform("yue.chip:starter:${yueChipPlatformVersion}")
-    api project(':tenant:common')
-    api 'yue.chip:yue-chip-interface-expose-starter'
+    implementation 'yue.chip:yue-chip-core'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'jakarta.platform:jakarta.jakartaee-api'
+    implementation 'org.reflections:reflections:'
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"

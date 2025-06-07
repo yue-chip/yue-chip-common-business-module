@@ -3,7 +3,7 @@ plugins {
     id 'application'
 //    id 'org.graalvm.buildtools.native' version "${nativeVersion}"
 }
-archivesBaseName = 'xiao-wei-security-tenant-server'
+archivesBaseName = 'yue-chip-upms-tenant-server'
 apply plugin: 'org.springframework.boot'
 apply from: this.rootProject.file('javaLibrary.gradle')
 apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
@@ -15,20 +15,38 @@ configurations {
         extendsFrom testAnnotationProcessor
     }
 }
-mainClassName = 'com.xiao.wei.security.ApplicationTenantServer'
+mainClassName = 'com.yue.chip.upms.ApplicationUpmsTenantServer'
+//graalvmNative {
+//    binaries {
+//        main {
+//            verbose = true
+//            fallback = true
+//            buildArgs.add('-H:+ReportExceptionStackTraces')
+//            buildArgs.add('--no-fallback')
+//            buildArgs.add('--report-unsupported-elements-at-runtime')
+//            buildArgs.add('--allow-incomplete-classpath')
+//            buildArgs.add('--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback.classic.Logger,java.net.Inet4Address')
+//            buildArgs.add('--trace-class-initialization=org.slf4j.LoggerFactory,ch.qos.logback.classic.Logger,java.net.Inet4Address')
+//            buildArgs.add('--trace-object-instantiation=java.net.Inet4Address')
+//        }
+//    }
+//}
 bootJar {
     enabled true
 }
 dependencies {
-    api project(':interface-expose')
+    api project(':tenant:interface-expose')
+//    api project(':authentication')
     api platform("yue.chip:starter:${yueChipPlatformVersion}")
     api 'yue.chip:yue-chip-server-starter'
     api 'yue.chip:yue-chip-business-starter'
-    api 'yue.chip:yue-chip-security'
-    api 'org.springframework.boot:spring-boot-starter-data-redis'
-    api "yue.chip:yue-chip-core-redis:${yueChipPlatformVersion}"
-//    implementation 'org.springframework.boot:spring-boot-devtools' //
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    api "yue.chip:yue-chip-common-business-interface-expose:${commonBusinessVersion}"
+//    api 'yue.chip:yue-chip-security'
+    api "yue.chip:yue-chip-oauth2-resource-server"
+//    implementation 'org.springframework.boot:spring-boot-devtools'
+//    api "org.springframework.statemachine:spring-statemachine-starter"
+//    api "org.springframework.statemachine:spring-statemachine-data-redis"
+//    api "org.springframework.statemachine:spring-statemachine-data-jpa"
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"
@@ -41,3 +59,4 @@ dependencies {
     testCompileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     testAnnotationProcessor"org.mapstruct:mapstruct-processor:${mapstructVersion}"
 }
+
