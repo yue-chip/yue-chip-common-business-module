@@ -1,0 +1,43 @@
+server:
+  port: 0
+spring:
+
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  nacos:
+    group: IOT-GROUP
+    host: 192.168.11.201:8848
+    namespace: a7f0f6a1-d994-4cdf-b550-550b6b06711e
+    #    group: YUE-CHIP-GROUP
+    #    host: 192.168.177.129:8848
+    #    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
+    password: nacos
+    username: nacos
+  config:
+    import:
+      - nacos:${spring.application.name}.yaml?group=${spring.nacos.group}&refreshEnabled=true
+      - nacos:common.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:datasource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:jpa.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:oauth2-resource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:sentinel.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:dubbo.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:seata.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:redis.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+  application:
+    name: security-tenant
+  cloud:
+    nacos:
+      server-addr: ${spring.nacos.host}
+      username: ${spring.nacos.username}
+      password: ${spring.nacos.password}
+      config:
+        file-extension: yaml
+        group: ${spring.nacos.group}
+        namespace: ${spring.nacos.namespace}
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    use-code-as-default-message: true

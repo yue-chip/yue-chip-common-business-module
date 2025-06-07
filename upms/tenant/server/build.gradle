@@ -1,0 +1,43 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'application'
+//    id 'org.graalvm.buildtools.native' version "${nativeVersion}"
+}
+archivesBaseName = 'xiao-wei-security-tenant-server'
+apply plugin: 'org.springframework.boot'
+apply from: this.rootProject.file('javaLibrary.gradle')
+apply from: this.rootProject.file('javaLibraryMvnPublish.gradle')
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    testCompileOnly {
+        extendsFrom testAnnotationProcessor
+    }
+}
+mainClassName = 'com.xiao.wei.security.ApplicationTenantServer'
+bootJar {
+    enabled true
+}
+dependencies {
+    api project(':interface-expose')
+    api platform("yue.chip:starter:${yueChipPlatformVersion}")
+    api 'yue.chip:yue-chip-server-starter'
+    api 'yue.chip:yue-chip-business-starter'
+    api 'yue.chip:yue-chip-security'
+    api 'org.springframework.boot:spring-boot-starter-data-redis'
+    api "yue.chip:yue-chip-core-redis:${yueChipPlatformVersion}"
+//    implementation 'org.springframework.boot:spring-boot-devtools' //
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly "org.mapstruct:mapstruct"
+    compileOnly "org.mapstruct:mapstruct-processor"
+    compileOnly "org.mapstruct:mapstruct-jdk8"
+    compileOnly "org.projectlombok:lombok"
+    compileOnly "org.projectlombok:lombok-mapstruct-binding"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    testCompileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    testAnnotationProcessor"org.mapstruct:mapstruct-processor:${mapstructVersion}"
+}
