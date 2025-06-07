@@ -1,7 +1,7 @@
 package com.yue.chip.common.business.domain.aggregates.enums;
 
 import com.yue.chip.annotation.YueChipDDDEntity;
-import com.yue.chip.common.business.definition.enums.EnumUtilDefinition;
+import com.yue.chip.core.common.enums.EnumUtilDefinition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

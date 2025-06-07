@@ -1,6 +1,6 @@
 package com.yue.chip.common.business.interfaces.dto.enuns;
 
-import com.yue.chip.common.business.definition.enums.EnumUtilDefinition;
+import com.yue.chip.core.common.enums.EnumUtilDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
