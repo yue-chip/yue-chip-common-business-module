@@ -3,13 +3,12 @@ package com.yue.chip.upms.domain.service.tenant.impl;
 import cn.hutool.crypto.SecureUtil;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.tenant.jpa.TenantConstant;
-import com.yue.chip.utils.HibernateSessionJdbcUtil;
-import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.upms.domain.aggregates.Tenant;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.upms.domain.service.tenant.CreateSql;
 import com.yue.chip.upms.domain.service.tenant.TenantService;
 import com.yue.chip.upms.infrastructure.dao.tenant.TenantDao;
+import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -29,7 +27,6 @@ import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Mr.Liu
@@ -141,14 +138,14 @@ public class TenantServiceImpl implements TenantService {
         if (StringUtils.hasText(domain)) {
            String[] domains = domain.split(",");
            for (String str : domains) {
-               redisTemplate.opsForValue().set(TenantNumberUtil.TENANT_REMOTE_HOST.concat(str),tenant.getTenantNumber());
-               redisTemplate.expire(TenantNumberUtil.TENANT_REMOTE_HOST.concat(str),62, TimeUnit.SECONDS);
+//               redisTemplate.opsForValue().set(TenantNumberUtil.TENANT_REMOTE_HOST.concat(str),tenant.getTenantNumber());
+//               redisTemplate.expire(TenantNumberUtil.TENANT_REMOTE_HOST.concat(str),62, TimeUnit.SECONDS);
            }
         }
     }
 
     @Override
-    @Scheduled(cron = "0 0/1 * * * ?")
+//    @Scheduled(cron = "0 0/1 * * * ?")
     public void saveAllToRedis() {
         if (!Objects.equals(multiTenantEnabled,"enabled")) {
             return;
