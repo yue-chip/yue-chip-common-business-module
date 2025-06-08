@@ -78,11 +78,15 @@ public class LoginServiceImpl implements LoginService {
         }
         User user = optional.get();
         if (Objects.nonNull(user.getState())) {
-            if (user.getState() == State.DISABLE) {
+            if (Objects.equals(user.getState(),State.DISABLE)) {
                 throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
-            } else {
-                upmsRepository.updateUserState(user.getId(), State.NORMAL);
             }
+//            else {
+//                upmsRepository.updateUserState(user.getId(), State.NORMAL);
+//            }
+        }
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new AuthenticationServiceException("密码错误！");
         }
 //        if (!passwordEncoder.matches(password, user.getPassword())) {
 //            Long failNum = user.getFailNum();
