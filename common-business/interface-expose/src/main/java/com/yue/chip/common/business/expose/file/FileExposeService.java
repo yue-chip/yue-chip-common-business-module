@@ -127,7 +127,6 @@ public interface FileExposeService {
      * @param tableIds
      * @param fileFieldName
      * @param tableName
-     * @param tenantNumber
      * @return
      */
     public Map<String, String> getUrls(@NotNull ArrayList<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName);
