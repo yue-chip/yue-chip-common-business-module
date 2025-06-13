@@ -34,6 +34,7 @@ public interface ResourcesMapper {
     })
     public ResourcesTreeVo toResourcesTreeVo(ResourcesTreeListVo resourcesTreeListVo);
 
+
     public Resources toResources(ResourcesPo resourcesPo);
 
     public List<Resources> toResourcesList(List<ResourcesPo> list);

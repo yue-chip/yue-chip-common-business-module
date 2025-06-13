@@ -5,7 +5,6 @@ import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Type;
-import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import jakarta.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +13,10 @@ import lombok.experimental.SuperBuilder;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Mr.Liu
@@ -94,23 +96,24 @@ public class Resources extends ResourcesDefinition {
 
     @Override
     public Long getIconId() {
-        Assert.notNull(getId(),"id不能为空");
-        Map<String,String> fileMap = fileExposeService.getUrl(getId(),ResourcesPo.TABLE_NAME, ResourcesPo.ICON_FIELD_NAME);
-        if (Objects.nonNull(fileMap) && fileMap.size()>0) {
-            Object obj = fileMap.keySet().toArray()[0];
-            if (obj instanceof Long) {
-                return (Long) obj;
-            }else {
-                return Long.valueOf(String.valueOf(obj));
-            }
-        }
+//        Assert.notNull(getId(),"id不能为空");
+//        Map<String,String> fileMap = fileExposeService.getUrl(getId(),ResourcesPo.TABLE_NAME, ResourcesPo.ICON_FIELD_NAME);
+//        if (Objects.nonNull(fileMap) && fileMap.size()>0) {
+//            Object obj = fileMap.keySet().toArray()[0];
+//            if (obj instanceof Long) {
+//                return (Long) obj;
+//            }else {
+//                return Long.valueOf(String.valueOf(obj));
+//            }
+//        }
         return null;
     }
 
     @Override
     public String getIconUrl() {
-        Assert.notNull(getId(),"id不能为空");
-        return fileExposeService.getUrlSingle(getId(), ResourcesPo.ICON_FIELD_NAME, ResourcesPo.TABLE_NAME);
+//        Assert.notNull(getId(),"id不能为空");
+//        return fileExposeService.getUrlSingle(getId(), ResourcesPo.ICON_FIELD_NAME, ResourcesPo.TABLE_NAME);
+        return "";
     }
 
     private void getAllChildren(List<Resources> list) {
