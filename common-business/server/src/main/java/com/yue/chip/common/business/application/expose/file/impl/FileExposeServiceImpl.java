@@ -5,7 +5,6 @@ import com.yue.chip.common.business.definition.file.FileDefinition;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.expose.file.FileExposeService;
-import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.CollectionUtils;
@@ -83,7 +82,15 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
-    public Map<String, String> getUrls(List<Long> tableIds, String fileFieldName, String tableName, Long tenantNumber) {
+    public Map<String, String> getUrls(ArrayList<Long> tableIds, String fileFieldName, String tableName) {
+        if (CollectionUtils.isEmpty(tableIds) || !StringUtils.hasText(tableName)) {
+            return Collections.EMPTY_MAP;
+        }
+        return fileRepository.find(tableIds, fileFieldName, tableName);
+    }
+
+    @Override
+    public Map<String, String> getUrls(ArrayList<Long> tableIds, String fileFieldName, String tableName, Long tenantNumber) {
         if (CollectionUtils.isEmpty(tableIds) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {
             return Collections.EMPTY_MAP;
         }
