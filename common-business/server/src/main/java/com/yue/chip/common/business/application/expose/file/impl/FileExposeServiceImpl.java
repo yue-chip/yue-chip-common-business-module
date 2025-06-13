@@ -82,6 +82,14 @@ public class FileExposeServiceImpl implements FileExposeService {
     }
 
     @Override
+    public Map<String, String> getUrls(List<Long> tableIds, String fileFieldName, String tableName, Long tenantNumber) {
+        if (CollectionUtils.isEmpty(tableIds) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {
+            return Collections.EMPTY_MAP;
+        }
+        return fileRepository.find(tableIds, fileFieldName, tableName);
+    }
+
+    @Override
     public Map<String, String> getUrls(ArrayList<Long> tableIds, String fileFieldName, String tableName) {
         if (CollectionUtils.isEmpty(tableIds) || !StringUtils.hasText(tableName)) {
             return Collections.EMPTY_MAP;

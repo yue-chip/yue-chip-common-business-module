@@ -98,6 +98,16 @@ public interface FileExposeService {
      * @param tableIds
      * @param fileFieldName
      * @param tableName
+     * @param tenantNumber
+     * @return
+     */
+    public Map<String, String> getUrls(@NotNull List<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName,Long tenantNumber);
+
+    /**
+     * 查找多个url路径
+     * @param tableIds
+     * @param fileFieldName
+     * @param tableName
      * @return
      */
     public Map<String, String> getUrls(@NotNull ArrayList<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName);
