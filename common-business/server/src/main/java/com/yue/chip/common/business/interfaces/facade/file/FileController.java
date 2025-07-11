@@ -7,8 +7,6 @@ import com.yue.chip.common.business.domain.service.file.FileService;
 import com.yue.chip.common.business.interfaces.vo.file.FileVo;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
-import com.yue.chip.core.controller.BaseController;
-import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -70,7 +68,8 @@ public class FileController  {
                 }
             }
         }
-        return ResultData.builder().data(fileList).build();
+        ResultData.ResultDataBuilder<List<FileVo>> builder = ResultData.builder();
+        return builder.data(fileList).build();
     }
 
 }

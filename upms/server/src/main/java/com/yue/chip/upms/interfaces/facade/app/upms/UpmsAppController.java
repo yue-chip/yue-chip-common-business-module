@@ -55,14 +55,16 @@ public class UpmsAppController {
     @Operation(description = "组织机构-树形结构下拉框选择",summary = "组织机构-树形结构下拉框选择")
     public IResultData<List<OrganizationalTreeSelectVo>> organizationalTreeSelect(){
         List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree(0L, State.NORMAL,null );
-        return ResultData.builder().data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
+        ResultData.ResultDataBuilder<List<OrganizationalTreeSelectVo>> builder = ResultData.builder();
+        return builder.data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
     }
 
     @GetMapping("/current/user/details")
     @Operation(summary = "用户-当前登录用户详情", description = "用户-当前登录用户详情")
     public IResultData<UserVo> userPermissions(){
         Optional<User> optional = upmsRepository.findUserById(CurrentUserUtil.getCurrentUserId());
-        return ResultData.builder().data(optional.isPresent()?userMapper.toUserVo(optional.get()):null).build();
+        ResultData.ResultDataBuilder<UserVo> builder = ResultData.builder();
+        return builder.data(optional.isPresent()?userMapper.toUserVo(optional.get()):null).build();
     }
 
     @PutMapping("/user/update")

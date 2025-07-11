@@ -1,5 +1,9 @@
+buildscript {
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
 plugins {
-    id 'org.springframework.boot' version "${springBootVersion}"
     id 'application'
 }
 archivesBaseName = 'yue-chip-common-business-server'

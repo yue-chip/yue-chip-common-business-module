@@ -92,7 +92,8 @@ public class TestController  {
     public IResultData<String> test1(String username,String password) {
 
         Map<String,String> map = new HashMap<>();
-        return ResultData.builder().data(map).build();
+        ResultData.ResultDataBuilder<String> builder = ResultData.builder();
+        return builder.build();
     }
 
     @GetMapping("/mock")
@@ -100,7 +101,8 @@ public class TestController  {
     @AuthorizationIgnore
     @Operation(summary = "测试-接口mock测试", description = "测试-接口mock测试")
     public IResultData<List<UserVo>> testMock(String name){
-        return ResultData.builder().data(new PodamFactoryImpl().manufacturePojo(List.class,UserVo.class)).build();
+        ResultData.ResultDataBuilder<List<UserVo>> builder = ResultData.builder();
+        return builder.data(new PodamFactoryImpl().manufacturePojo(List.class,UserVo.class)).build();
     }
 
     @GetMapping("/mock1")

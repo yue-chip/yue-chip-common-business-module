@@ -7,7 +7,7 @@ spring:
   nacos:
     group: IOT-GROUP
     host: 192.168.11.184:8848
-    namespace: 55eedd8b-01f7-4747-af49-9ff1a4a015dd
+    namespace: a7f0f6a1-d994-4cdf-b550-550b6b06711e
     #    group: YUE-CHIP-GROUP
 #    host: 192.168.177.129:8848
 #    namespace: cbce5ffe-31d2-4826-99ab-384241f16917

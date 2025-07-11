@@ -46,7 +46,8 @@ public class EnumUtilController implements RemoteEnumPersistenceHttp {
 //        if (optional.isPresent()){
 //            return ResultData.builder().data(enumUtilMapper.toEnumUtilVo(optional.get())).build();
 //        }
-        return ResultData.builder().build();
+        ResultData.ResultDataBuilder<EnumUtilVo> builder = ResultData.builder();
+        return builder.build();
     }
 
     @Override

@@ -41,9 +41,10 @@ public class EnumUtilController   {
     public IResultData<EnumUtilVo> get(@NotBlank(message = "枚举编码不能为空") @Parameter(description = "枚举编码",name = "code",required = true)String code,
                                        @NotBlank(message = "枚举版本号不能为空") @Parameter(description = "枚举版本号",name = "version",required = true) String version) {
         Optional<EnumUtilDefinition> enumUtilDefinitionOptional = enumPersistenceExposeService.get(code,version);
+        ResultData.ResultDataBuilder<EnumUtilVo> builder = ResultData.builder();
         if (enumUtilDefinitionOptional.isPresent()) {
-            return ResultData.builder().data(enumUtilMapper.toEnumUtilVo(enumUtilDefinitionOptional.get())).build();
+            return builder.data(enumUtilMapper.toEnumUtilVo(enumUtilDefinitionOptional.get())).build();
         }
-        return ResultData.builder().build();
+        return builder.build();
     }
 }
