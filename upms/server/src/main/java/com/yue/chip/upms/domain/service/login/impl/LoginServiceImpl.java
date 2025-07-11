@@ -2,15 +2,10 @@ package com.yue.chip.upms.domain.service.login.impl;
 
 import com.yue.chip.authentication.YueChipAuthenticationToken;
 import com.yue.chip.core.common.enums.State;
-import com.yue.chip.upms.application.service.UpmsApplication;
-import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
-import com.yue.chip.upms.infrastructure.po.user.SafetyPo;
-import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
-import com.yue.chip.upms.util.CCSPUtil;
-import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
+import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -19,8 +14,12 @@ import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.repository.weixin.UserWeiXinRepository;
 import com.yue.chip.upms.domain.service.login.LoginService;
+import com.yue.chip.upms.infrastructure.dao.user.SafetyDao;
 import com.yue.chip.upms.infrastructure.po.tenant.TenantStatePo;
 import com.yue.chip.upms.infrastructure.po.user.UserWeiXinPo;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
+import com.yue.chip.upms.util.CCSPUtil;
+import com.yue.chip.utils.TenantNumberUtil;
 import com.yue.chip.utils.YueChipRedisTokenStoreUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +38,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.security.MessageDigest;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -100,51 +98,51 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("登录异常，请重新登录！");
         }
         User user = optional.get();
-        if (Objects.nonNull(user.getState())) {
-            if (user.getState() == State.DISABLE) {
-                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
-            } else {
-                upmsRepository.updateUserState(user.getId(), State.NORMAL);
-            }
-        }
-        if (!CCSPUtil.SM2decrypt(user.getPassword(), user.getPasswordSignature())) {
-            throw new AuthenticationServiceException("用户签名被篡改！请联系管理员！");
-        }
+//        if (Objects.nonNull(user.getState())) {
+//            if (user.getState() == State.DISABLE) {
+//                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
+//            } else {
+//                upmsRepository.updateUserState(user.getId(), State.NORMAL);
+//            }
+//        }
+//        if (!CCSPUtil.SM2decrypt(user.getPassword(), user.getPasswordSignature())) {
+//            throw new AuthenticationServiceException("用户签名被篡改！请联系管理员！");
+//        }
         Long remainingSeconds = 600L;
-        if (!redisTemplate.hasKey("username"+username)) {
-            if (!CCSPUtil.SM2decrypt(password, user.getPasswordSignature())) {
-                Long failNum = user.getFailNum();
-                if (Objects.isNull(failNum)) {
-                    failNum = 5L;
-                }
-                if (failNum > 5) {
-                    failNum = 5L;
-                }
-                if (failNum - 1 > 0) {
-                    upmsRepository.updateLoginFail(user.getId(), failNum - 1);
-                    throw new AuthenticationServiceException("登录失败，您还剩" + (failNum - 1) + "次机会！");
-                } else {
-//                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
-                    redisTemplate.opsForValue().set("username"+username, username, Duration.ofSeconds(600));
-                    throw new AuthenticationServiceException("该账号已被禁用600秒！");
-                }
-            }
-            if (Objects.nonNull(user.getLastPasswordTime())) {
-                Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
-                if (optionalSafetyPo.isPresent()) {
-                    if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
-                        upmsRepository.updateUserState(user.getId(), State.DISABLE);
-                        throw new AuthenticationServiceException("密码超过" + optionalSafetyPo.get().getPasswordTime() + "天未修改！该账号已被禁用！请联系管理员！");
-                    }
-                }
-            }
+//        if (!redisTemplate.hasKey("username"+username)) {
+//            if (!CCSPUtil.SM2decrypt(password, user.getPasswordSignature())) {
+//                Long failNum = user.getFailNum();
+//                if (Objects.isNull(failNum)) {
+//                    failNum = 5L;
+//                }
+//                if (failNum > 5) {
+//                    failNum = 5L;
+//                }
+//                if (failNum - 1 > 0) {
+//                    upmsRepository.updateLoginFail(user.getId(), failNum - 1);
+//                    throw new AuthenticationServiceException("登录失败，您还剩" + (failNum - 1) + "次机会！");
+//                } else {
+////                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
+//                    redisTemplate.opsForValue().set("username"+username, username, Duration.ofSeconds(600));
+//                    throw new AuthenticationServiceException("该账号已被禁用600秒！");
+//                }
+//            }
+//            if (Objects.nonNull(user.getLastPasswordTime())) {
+//                Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
+//                if (optionalSafetyPo.isPresent()) {
+//                    if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
+//                        upmsRepository.updateUserState(user.getId(), State.DISABLE);
+//                        throw new AuthenticationServiceException("密码超过" + optionalSafetyPo.get().getPasswordTime() + "天未修改！该账号已被禁用！请联系管理员！");
+//                    }
+//                }
+//            }
             // 登录成功恢复5次登录错误次数
-            upmsRepository.updateLoginFail(user.getId(), 5L);
+//            upmsRepository.updateLoginFail(user.getId(), 5L);
             return authority(user.getResources(), user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber());
-        } else {
-            remainingSeconds = redisTemplate.getExpire("username"+username);
-        }
-        throw new AuthenticationServiceException("该账号已被禁用" + remainingSeconds + "秒！");
+//        } else {
+//            remainingSeconds = redisTemplate.getExpire("username"+username);
+//        }
+//        throw new AuthenticationServiceException("该账号已被禁用" + remainingSeconds + "秒！");
     }
 
     @Override
@@ -157,27 +155,27 @@ public class LoginServiceImpl implements LoginService {
             throw new AuthenticationServiceException("登录异常，请重新登录！");
         }
         User user = optional.get();
-        if (Objects.nonNull(user.getState())) {
-            if (user.getState() == State.DISABLE) {
-                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
-            } else {
-                upmsRepository.updateUserState(user.getId(), State.NORMAL);
-            }
-        }
-        if (!CCSPUtil.SM2decrypt(user.getPassword(), user.getPasswordSignature())) {
-            throw new AuthenticationServiceException("用户签名被篡改！请联系管理员！");
-        }
-        if (Objects.nonNull(user.getLastPasswordTime())) {
-            Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
-            if (optionalSafetyPo.isPresent()) {
-                if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
-                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
-                    throw new AuthenticationServiceException("密码超过" + optionalSafetyPo.get().getPasswordTime() + "天未修改！该账号已被禁用！请联系管理员！");
-                }
-            }
-        }
-        // 登录成功恢复5次登录错误次数
-        upmsRepository.updateLoginFail(user.getId(), 5L);
+//        if (Objects.nonNull(user.getState())) {
+//            if (user.getState() == State.DISABLE) {
+//                throw new AuthenticationServiceException("该账号已被禁用！请联系管理员！");
+//            } else {
+//                upmsRepository.updateUserState(user.getId(), State.NORMAL);
+//            }
+//        }
+//        if (!CCSPUtil.SM2decrypt(user.getPassword(), user.getPasswordSignature())) {
+//            throw new AuthenticationServiceException("用户签名被篡改！请联系管理员！");
+//        }
+//        if (Objects.nonNull(user.getLastPasswordTime())) {
+//            Optional<SafetyPo> optionalSafetyPo = safetyDao.findById(1L);
+//            if (optionalSafetyPo.isPresent()) {
+//                if (LocalDateTime.now().minusDays(optionalSafetyPo.get().getPasswordTime()).isAfter(user.getLastPasswordTime())) {
+//                    upmsRepository.updateUserState(user.getId(), State.DISABLE);
+//                    throw new AuthenticationServiceException("密码超过" + optionalSafetyPo.get().getPasswordTime() + "天未修改！该账号已被禁用！请联系管理员！");
+//                }
+//            }
+//        }
+//        // 登录成功恢复5次登录错误次数
+//        upmsRepository.updateLoginFail(user.getId(), 5L);
         return authority(user.getResources(), user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber());
     }
 
