@@ -69,10 +69,10 @@ public interface TenantRepository {
 
     /**
      * 根据租户编码获取租户
-     * @param url
+     * @param requestDomain
      * @return
      */
-    public Optional<Tenant> findTenantByUrl(@NotBlank String url);
+    public Optional<Tenant> findTenantByRequestDomain(@NotBlank String requestDomain);
 
     /**
      * 查寻所有租户(特殊场景使用 jdbc查寻 禁止其它功能调用)
