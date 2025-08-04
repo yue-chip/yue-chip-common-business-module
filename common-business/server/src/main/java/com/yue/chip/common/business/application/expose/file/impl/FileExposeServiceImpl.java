@@ -4,12 +4,14 @@ import com.yue.chip.common.business.assembler.file.FileMapper;
 import com.yue.chip.common.business.definition.file.FileDefinition;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
+import com.yue.chip.common.business.domain.service.file.FileService;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -22,6 +24,9 @@ public class FileExposeServiceImpl implements FileExposeService {
 
     @Resource
     private FileRepository fileRepository;
+
+    @Resource
+    private FileService fileService;
 
     @Resource
     private FileMapper fileMapper;
@@ -88,6 +93,36 @@ public class FileExposeServiceImpl implements FileExposeService {
             return Collections.EMPTY_MAP;
         }
         return fileRepository.find(tableIds, fileFieldName, tableName);
+    }
+
+    @Override
+    public List<Map<Long, Object>> upload(Map<String, MultipartFile> fileMap) throws Exception {
+        List<Map<Long, Object>> fileList = new ArrayList<>();
+        for(String originalFileName : fileMap.keySet()) {
+            MultipartFile file = fileMap.get(originalFileName);
+            if (file.getSize() <= 0) {
+                continue;
+            }
+            Optional<File> optional = fileService.upload(file);
+            if (optional.isPresent()) {
+                File fileAggregateRoot = optional.get();
+                fileAggregateRoot = fileRepository.add(fileMapper.toFilePo(fileAggregateRoot));
+                if (Objects.nonNull(fileAggregateRoot.getId())) {
+                    String url = fileAggregateRoot.getUrl();
+                    if (!Objects.equals(url.substring(0, 1), "/")) {
+                        url = "/" + url;
+                    }
+                    if (!url.contains("/file")) {
+                        url = FileService.URL_PREFIX + url;
+                    }
+                    fileAggregateRoot.setUrl(url);
+                    Map<Long, Object> fileObjMap = new HashMap<>();
+                    fileObjMap.put(fileAggregateRoot.getId(), fileMapper.toFileVo(fileAggregateRoot));
+                    fileList.add(fileObjMap);
+                }
+            }
+        }
+        return fileList;
     }
 //
 //    @Override

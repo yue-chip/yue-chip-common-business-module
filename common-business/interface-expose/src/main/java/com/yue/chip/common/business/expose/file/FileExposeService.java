@@ -4,6 +4,7 @@ import com.yue.chip.common.business.definition.file.FileDefinition;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -102,4 +103,11 @@ public interface FileExposeService {
      */
     public Map<String, String> getUrls(@NotNull List<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName,Long tenantNumber);
 
+    /**
+     * 上传文件
+     *
+     * @param fileMap 文件Map，key为文件字段名，value为文件
+     * @return 文件列表，key:文件id，value:文件对象
+     */
+    List<Map<Long, Object>> upload(@NotNull Map<String, MultipartFile> fileMap) throws Exception;
 }
