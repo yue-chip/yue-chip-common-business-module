@@ -5,10 +5,12 @@ import com.yue.chip.common.business.definition.file.FileDefinition;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.domain.service.file.FileService;
+import com.yue.chip.common.business.expose.dto.FileAddDTO;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,9 +97,11 @@ public class FileExposeServiceImpl implements FileExposeService {
         return fileRepository.find(tableIds, fileFieldName, tableName);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public List<Map<Long, Object>> upload(Map<String, MultipartFile> fileMap) throws Exception {
-        List<Map<Long, Object>> fileList = new ArrayList<>();
+    public void upload(FileAddDTO dto) throws Exception {
+        List<Long> fileIds = new ArrayList<>();
+        Map<String, MultipartFile> fileMap = dto.getFileMap();
         for(String originalFileName : fileMap.keySet()) {
             MultipartFile file = fileMap.get(originalFileName);
             if (file.getSize() <= 0) {
@@ -116,13 +120,12 @@ public class FileExposeServiceImpl implements FileExposeService {
                         url = FileService.URL_PREFIX + url;
                     }
                     fileAggregateRoot.setUrl(url);
-                    Map<Long, Object> fileObjMap = new HashMap<>();
-                    fileObjMap.put(fileAggregateRoot.getId(), fileMapper.toFileVo(fileAggregateRoot));
-                    fileList.add(fileObjMap);
+                    fileIds.add(fileAggregateRoot.getId());
                 }
             }
         }
-        return fileList;
+        // 批量保存文件
+        save(dto.getTableId(), dto.getTableName(), dto.getFileFieldName(), fileIds, dto.getTenantNumber());
     }
 //
 //    @Override

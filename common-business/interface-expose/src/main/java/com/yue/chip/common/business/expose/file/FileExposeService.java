@@ -1,6 +1,7 @@
 package com.yue.chip.common.business.expose.file;
 
 import com.yue.chip.common.business.definition.file.FileDefinition;
+import com.yue.chip.common.business.expose.dto.FileAddDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -106,8 +107,7 @@ public interface FileExposeService {
     /**
      * 上传文件
      *
-     * @param fileMap 文件Map，key为文件字段名，value为文件
-     * @return 文件列表，key:文件id，value:文件对象
+     * @param dto 文件对象
      */
-    List<Map<Long, Object>> upload(@NotNull Map<String, MultipartFile> fileMap) throws Exception;
+    void upload(@NotNull(message = "文件不能为空") FileAddDTO dto) throws Exception;
 }
