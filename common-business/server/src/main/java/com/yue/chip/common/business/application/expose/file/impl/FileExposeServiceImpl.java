@@ -6,10 +6,12 @@ import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.domain.service.file.FileService;
 import com.yue.chip.common.business.expose.dto.FileAddDTO;
+import com.yue.chip.common.business.expose.dto.FileDTO;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -100,10 +102,11 @@ public class FileExposeServiceImpl implements FileExposeService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void upload(FileAddDTO dto) throws Exception {
+        List<FileDTO> fileList = dto.getFileList();
         List<Long> fileIds = new ArrayList<>();
-        Map<String, MultipartFile> fileMap = dto.getFileMap();
-        for(String originalFileName : fileMap.keySet()) {
-            MultipartFile file = fileMap.get(originalFileName);
+        for (FileDTO fileDTO : fileList) {
+            MockMultipartFile file = new MockMultipartFile("file", fileDTO.getFileName(),
+                    "application/octet-stream", fileDTO.getByteArray());
             if (file.getSize() <= 0) {
                 continue;
             }
