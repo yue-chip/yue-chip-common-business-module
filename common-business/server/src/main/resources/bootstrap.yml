@@ -7,7 +7,7 @@ spring:
   nacos:
     group: XIAO-WEI-GROUP
     host: 192.168.11.184:8848
-    namespace: 1706918c-e809-426a-b633-e351101ed09d
+    namespace: 214f1cf2-fb7d-490f-b2d9-71ec0f9d410e
 #    group: YUE-CHIP-GROUP
 #    host: 192.168.177.129:8848
 #    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
