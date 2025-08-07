@@ -36,7 +36,7 @@ public class EnumUtilPo extends EnumUtilDefinition {
     }
 
     @Override
-    @Column(name = "value",columnDefinition = "varchar(1000) NULL DEFAULT '' COMMENT '枚举值'")
+    @Column(name = "value",columnDefinition = "varchar(5000) NULL DEFAULT '' COMMENT '枚举值'")
     public String getValue() {
         return super.getValue();
     }
