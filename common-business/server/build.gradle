@@ -25,6 +25,7 @@ dependencies {
     api 'yue.chip:yue-chip-oauth2-resource-server'
     api 'yue.chip:yue-chip-business-starter'
     api 'yue.chip:yue-chip-security'
+    api 'org.springframework:spring-mock:2.0.8'
     api 'io.minio:minio'
 //    api 'com.aliyun:dysmsapi20170525'
     api ('com.aliyun:alibabacloud-dysmsapi20170525') {
