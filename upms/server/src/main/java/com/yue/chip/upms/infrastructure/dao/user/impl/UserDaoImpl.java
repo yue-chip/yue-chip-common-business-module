@@ -1,9 +1,16 @@
 package com.yue.chip.upms.infrastructure.dao.user.impl;
 
+import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.core.persistence.curd.BaseDao;
+import com.yue.chip.core.persistence.curd.MoreEntity;
+import com.yue.chip.upms.domain.repository.social.UserSocialRepository;
+import com.yue.chip.upms.infrastructure.dao.social.UserSocialDao;
+import com.yue.chip.upms.infrastructure.dao.social.impl.UserSocialDaoImpl;
 import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.infrastructure.po.user.UserSocialPo;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
@@ -30,6 +37,8 @@ public class UserDaoImpl implements UserDaoEx {
 
     @Autowired
     public BaseDao<UserPo> baseDao;
+    @Autowired
+    public UserSocialDao userSocialDao;
 
 //    @Override
 //    public Optional<UserPo> find(String username) {
@@ -75,6 +84,7 @@ public class UserDaoImpl implements UserDaoEx {
             para.put("name","%"+username+"%");
         }
         sb.append(" and u.username <> 'superadmin' ");
+        sb.append(" ORDER BY u.createDateTime ASC ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
     }
 
@@ -93,6 +103,48 @@ public class UserDaoImpl implements UserDaoEx {
         }
         sb.append(" and u.username <> 'superadmin' ");
         return (Page<UserPo>) baseDao.findNavigator(pageable,sb.toString(),para);
+    }
+
+    @Override
+    public Page<UserPo> find(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, UserType userType, YueChipPage yueChipPage) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u where 1=1 ");
+        Map<String,Object> para = new HashMap<>();
+        if (Objects.nonNull(state)) {
+            sb.append(" and u.state = :state ");
+            para.put("state", state);
+        }
+        if (Objects.nonNull(userType)) {
+            sb.append(" and u.userType = :userType ");
+            para.put("userType", userType);
+        }
+        if (StringUtils.hasText(name)) {
+            sb.append(" and u.name like :name ");
+            para.put("name","%"+name+"%");
+        }
+        if (StringUtils.hasText(nickname)) {
+            sb.append(" and u.nickname like :nickname ");
+            para.put("nickname","%"+nickname+"%");
+        }
+        if (StringUtils.hasText(username)) {
+            sb.append(" and u.username like :username ");
+            para.put("username","%"+username+"%");
+        }
+        if (StringUtils.hasText(phoneNumber)) {
+            sb.append(" and u.phoneNumber like :phoneNumber ");
+            para.put("phoneNumber","%"+phoneNumber+"%");
+        }
+        if (StringUtils.hasText(email)) {
+            sb.append(" and u.email like :email ");
+            para.put("email","%"+email+"%");
+        }
+        if (StringUtils.hasText(nameLike)) {
+            String keyword = "%" + nameLike + "%";
+            sb.append(" and (u.name like :keyword or u.nickname like :keyword or u.username like :keyword or u.email like :keyword or u.phoneNumber like :keyword)");
+            para.put("keyword", keyword);
+        }
+        sb.append(" and u.username <> 'superadmin' ");
+        return (Page<UserPo>) baseDao.findNavigator(yueChipPage,sb.toString(),para);
     }
 
     @Override
@@ -219,6 +271,50 @@ public class UserDaoImpl implements UserDaoEx {
                 }
             });
         return result;
+    }
+
+    @Override
+    public Optional<UserPo> findUserBySocialTypeAndSocialUid(String socialType, String socialUid) {
+        AssertUtil.nonNull(socialType,"第三方用户类型不能为空");
+        AssertUtil.nonNull(socialUid,"第三方用户UID不能为空");
+
+        // 先查询第三方绑定用户
+        Optional<UserSocialPo> userSocialPoOptional = userSocialDao.findFirstByTypeAndUid(socialType, socialUid);
+        if (userSocialPoOptional.isEmpty()) {
+            return Optional.empty();
+        }
+        UserSocialPo userSocialPo = userSocialPoOptional.get();
+        if (userSocialPo.getUserId() == null) {
+            return Optional.empty();
+        }
+
+        // 查询用户信息
+        return this.baseDao.findById(userSocialPo.getUserId());
+    }
+
+    @Override
+    public List<UserPo> findByUserName(String username) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(" select u from UserPo u where ");
+        Map<String,Object> para = new HashMap<>();
+        sb.append(" u.username like :username ");
+        para.put("username","%"+username+"%");
+        sb.append(" and u.username <> 'superadmin' ");
+        return (List<UserPo>) baseDao.findAll(sb.toString(),para);
+    }
+
+    @Override
+    public Page<UserPo> findByUsernameOrPhoneNumberOrEmailAndUserType(String name, UserType userType, YueChipPage yueChipPage) {
+        StringBuffer sb = new StringBuffer();
+        Map<String,Object> para = new HashMap<>();
+        sb.append(" select u from UserPo u where u.username like :name ");
+        para.put("name", "%" + name + "%");
+        if (Objects.nonNull(userType)) {
+            sb.append(" and u.userType = :userType ");
+            para.put("userType", userType);
+        }
+        sb.append(" and u.username <> 'superadmin' ");
+        return (Page<UserPo>) baseDao.findNavigator(yueChipPage,sb.toString(),para);
     }
 
 }

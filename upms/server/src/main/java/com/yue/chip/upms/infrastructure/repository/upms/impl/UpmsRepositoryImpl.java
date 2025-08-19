@@ -149,6 +149,16 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public Optional<User> findUserBySocialTypeAndSocialUid(String socialType, String socialUid) {
+        Optional<UserPo> optional = userDao.findUserBySocialTypeAndSocialUid(socialType, socialUid);
+        if (optional.isPresent()) {
+            User user = userMapper.toUser(optional.get());
+            return Optional.ofNullable(user);
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public void updateUserPassword(Long userId, String password) {
         userDao.updatePassword(userId,password);
     }

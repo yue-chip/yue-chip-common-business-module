@@ -1,0 +1,39 @@
+server:
+  port: 0
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  nacos:
+    group: IOT-BUSINESS-GROUP
+    host: 192.168.11.184:8848
+    namespace: 050c0cfa-0e3d-409e-8bc6-d0c425ce4c94
+    password: nacos
+    username: nacos
+  application:
+    name: upms
+  config:
+    import:
+      - nacos:${spring.application.name}.yaml?group=${spring.nacos.group}&refreshEnabled=true
+      - nacos:common.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:datasource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:jpa.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:oauth2-resource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:sentinel.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:dubbo.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:seata.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:redis.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+  cloud:
+    nacos:
+      username: ${spring.nacos.username}
+      password: ${spring.nacos.password}
+      server-addr: ${spring.nacos.host}
+      config:
+        file-extension: yaml
+        namespace: ${spring.nacos.namespace}
+        group: ${spring.nacos.group}
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    use-code-as-default-message: true
