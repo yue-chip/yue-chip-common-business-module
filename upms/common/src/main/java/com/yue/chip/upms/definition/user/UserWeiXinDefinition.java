@@ -21,7 +21,7 @@ import java.time.LocalDate;
  * user 字段的定义 避免在聚合实体entity，dto，vo，po……等bean 进行重复定义
  */
 @Data
-@Schema(description = "用户小程序")
+@Schema(description = "用户绑定")
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor

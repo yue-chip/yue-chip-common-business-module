@@ -91,6 +91,14 @@ public interface UserDaoEx {
     Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber);
 
     /**
+     * 根据 第三方用户类型 和 第三方用户UID 获取用户信息
+     * @param socialType    第三方用户类型
+     * @param socialUid     第三方用户UID
+     * @return 结果
+     */
+    Optional<UserPo> findUserBySocialTypeAndSocialUid(String socialType, String socialUid);
+
+    /**
      * 根据手机号精准查询UserName
      * @param userName
      * @return

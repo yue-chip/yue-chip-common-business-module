@@ -103,6 +103,14 @@ public interface UpmsRepository {
     public List<User> findUserByRoleId(@NotNull Long roleId);
 
     /**
+     * 根据 第三方用户类型 和 第三方用户UID 获取用户信息
+     * @param socialType    第三方用户类型
+     * @param socialUid     第三方用户UID
+     * @return 结果
+     */
+    Optional<User> findUserBySocialTypeAndSocialUid(String socialType, String socialUid);
+
+    /**
      * 修改用户密码
      * @param userId
      * @param password

@@ -4,8 +4,13 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.core.persistence.curd.BaseDao;
+import com.yue.chip.core.persistence.curd.MoreEntity;
+import com.yue.chip.upms.domain.repository.social.UserSocialRepository;
+import com.yue.chip.upms.infrastructure.dao.social.UserSocialDao;
+import com.yue.chip.upms.infrastructure.dao.social.impl.UserSocialDaoImpl;
 import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.infrastructure.po.user.UserSocialPo;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
@@ -32,6 +37,8 @@ public class UserDaoImpl implements UserDaoEx {
 
     @Autowired
     public BaseDao<UserPo> baseDao;
+    @Autowired
+    public UserSocialDao userSocialDao;
 
 //    @Override
 //    public Optional<UserPo> find(String username) {
@@ -264,6 +271,25 @@ public class UserDaoImpl implements UserDaoEx {
                 }
             });
         return result;
+    }
+
+    @Override
+    public Optional<UserPo> findUserBySocialTypeAndSocialUid(String socialType, String socialUid) {
+        AssertUtil.nonNull(socialType,"第三方用户类型不能为空");
+        AssertUtil.nonNull(socialUid,"第三方用户UID不能为空");
+
+        // 先查询第三方绑定用户
+        Optional<UserSocialPo> userSocialPoOptional = userSocialDao.findFirstByTypeAndUid(socialType, socialUid);
+        if (userSocialPoOptional.isEmpty()) {
+            return Optional.empty();
+        }
+        UserSocialPo userSocialPo = userSocialPoOptional.get();
+        if (userSocialPo.getUserId() == null) {
+            return Optional.empty();
+        }
+
+        // 查询用户信息
+        return this.baseDao.findById(userSocialPo.getUserId());
     }
 
     @Override
