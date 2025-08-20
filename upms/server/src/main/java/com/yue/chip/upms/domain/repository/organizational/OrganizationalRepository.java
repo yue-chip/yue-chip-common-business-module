@@ -1,5 +1,6 @@
 package com.yue.chip.upms.domain.repository.organizational;
 
+import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.domain.aggregates.Grid;
@@ -9,6 +10,7 @@ import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,6 +34,8 @@ public interface OrganizationalRepository {
      * @return
      */
     public Optional<Organizational> findByUserId(@NotNull Long userId);
+
+    public List<Organizational> findAllByUserId(@NotNull Long userId);
 
     /**
      * 根据ID查询关联的组织机构
@@ -129,6 +133,10 @@ public interface OrganizationalRepository {
 
     public Page<OrganizationalPo> organizationalPoPage(@NotNull @Size(min = 0) List<Long> organizationalList, @NotNull YueChipPage yueChipPage);
 
+    IPageResultData<List<UserExposeVo>> organizationalPoList(List<Long> organizationalIds, String name, YueChipPage yueChipPage);
+
+    public IPageResultData<List<UserExposeVo>> findByUserIdIn(Set<Long> userIds, String name, YueChipPage yueChipPage);
+
     /**
      * 新增网格
      * @param gridPo
@@ -222,4 +230,21 @@ public interface OrganizationalRepository {
      * @return
      */
     List<Grid> findGridByName(String name);
+
+
+    /**
+     * 注册或修改密码
+     * @param phoneNumber
+     * @param password
+     * @param id
+     */
+    void register(@NotNull String phoneNumber, @NotNull String password, String name, Long id);
+
+    /**
+     * 注册或修改密码(根据Email)
+     * @param email         Email
+     * @param password      密码
+     * @param id            用户ID
+     */
+    void registerByEmail(String email, String password, String name, Long id);
 }

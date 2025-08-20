@@ -1,7 +1,11 @@
 package com.yue.chip.upms.infrastructure.repository.organizational.impl;
 
+import com.yue.chip.core.IPageResultData;
+import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
+import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
@@ -13,18 +17,25 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.infrastructure.dao.organizational.GridDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalDao;
 import com.yue.chip.upms.infrastructure.dao.organizational.OrganizationalUserDao;
+import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Mr.Liu
@@ -55,6 +66,12 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     @Resource
     private GridDao gridDao;
 
+    @Resource
+    private UserDao userDao;
+
+    @Resource
+    private UpmsApplication upmsApplication;
+
 
     @Override
     public Optional<Organizational> findByUserId(Long userId) {
@@ -63,6 +80,15 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
             return Optional.ofNullable(organizationalMapper.toOrganizational(optional.get()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<Organizational> findAllByUserId(Long userId) {
+        List<OrganizationalPo> list = organizationalDao.findAllByUserId(userId);
+        if (!CollectionUtils.isEmpty(list)) {
+            return organizationalMapper.toOrganizationalList(list);
+        }
+        return new ArrayList<>();
     }
 
     @Override
@@ -299,6 +325,52 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     public List<Grid> findGridByName(String name) {
         List<GridPo> list = gridDao.findAllByNameLike(name);
         return gridMapper.toGrid(list);
+    }
+
+    @Override
+    public void register(String phoneNumber, String password, String name, Long id) {
+        //保存app用户
+        UserAddOrUpdateDto userAddOrUpdateDto = new UserAddOrUpdateDto();
+        userAddOrUpdateDto.setPhoneNumber(phoneNumber);
+        userAddOrUpdateDto.setUsername(phoneNumber);
+        userAddOrUpdateDto.setPasswordI(password);
+        userAddOrUpdateDto.setState(State.NORMAL);
+        userAddOrUpdateDto.setUserType(UserType.ORDINARY);
+        if (StringUtils.hasText(name)) {
+            userAddOrUpdateDto.setName(name);
+            userAddOrUpdateDto.setNickname(name);
+        }
+        if (Objects.nonNull(id)) {
+            Optional<UserPo> firstById = userDao.findFirstById(id);
+            if (firstById.isPresent()) {
+                userAddOrUpdateDto = userMapper.toUserAddOrUpdateDto(firstById.get());
+                userAddOrUpdateDto.setPasswordI(password);
+            }
+        }
+        upmsApplication.saveAppUser(userAddOrUpdateDto);
+    }
+
+    @Override
+    public void registerByEmail(String email, String password, String name, Long id) {
+        //保存app用户
+        UserAddOrUpdateDto userAddOrUpdateDto = new UserAddOrUpdateDto();
+        userAddOrUpdateDto.setEmail(email);
+        userAddOrUpdateDto.setUsername(email);
+        userAddOrUpdateDto.setPasswordI(password);
+        userAddOrUpdateDto.setState(State.NORMAL);
+        userAddOrUpdateDto.setUserType(UserType.ORDINARY);
+        if (StringUtils.hasText(name)) {
+            userAddOrUpdateDto.setName(name);
+            userAddOrUpdateDto.setNickname(name);
+        }
+        if (Objects.nonNull(id)) {
+            Optional<UserPo> firstById = userDao.findFirstById(id);
+            if (firstById.isPresent()) {
+                userAddOrUpdateDto = userMapper.toUserAddOrUpdateDto(firstById.get());
+                userAddOrUpdateDto.setPasswordI(password);
+            }
+        }
+        upmsApplication.saveAppUser(userAddOrUpdateDto);
     }
 
     private void findAllChildren(Long parentId,List<Organizational> organizationals) {
