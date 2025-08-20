@@ -239,4 +239,12 @@ public interface OrganizationalRepository {
      * @param id
      */
     void register(@NotNull String phoneNumber, @NotNull String password, String name, Long id);
+
+    /**
+     * 注册或修改密码(根据Email)
+     * @param email         Email
+     * @param password      密码
+     * @param id            用户ID
+     */
+    void registerByEmail(String email, String password, String name, Long id);
 }

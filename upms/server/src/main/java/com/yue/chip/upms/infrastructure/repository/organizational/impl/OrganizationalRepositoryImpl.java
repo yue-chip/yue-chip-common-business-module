@@ -352,6 +352,29 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         upmsApplication.saveAppUser(userAddOrUpdateDto);
     }
 
+    @Override
+    public void registerByEmail(String email, String password, String name, Long id) {
+        //保存app用户
+        UserAddOrUpdateDto userAddOrUpdateDto = new UserAddOrUpdateDto();
+        userAddOrUpdateDto.setEmail(email);
+        userAddOrUpdateDto.setUsername(email);
+        userAddOrUpdateDto.setPasswordI(password);
+        userAddOrUpdateDto.setState(State.NORMAL);
+        userAddOrUpdateDto.setUserType(UserType.ORDINARY);
+        if (StringUtils.hasText(name)) {
+            userAddOrUpdateDto.setName(name);
+            userAddOrUpdateDto.setNickname(name);
+        }
+        if (Objects.nonNull(id)) {
+            Optional<UserPo> firstById = userDao.findFirstById(id);
+            if (firstById.isPresent()) {
+                userAddOrUpdateDto = userMapper.toUserAddOrUpdateDto(firstById.get());
+                userAddOrUpdateDto.setPasswordI(password);
+            }
+        }
+        upmsApplication.saveAppUser(userAddOrUpdateDto);
+    }
+
     private void findAllChildren(Long parentId,List<Organizational> organizationals) {
         List<OrganizationalPo> list = organizationalDao.findAllByParentId(parentId);
         list.forEach(organizationalPo -> {

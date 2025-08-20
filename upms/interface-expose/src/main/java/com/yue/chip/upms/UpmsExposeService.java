@@ -168,6 +168,14 @@ public interface UpmsExposeService {
     void register(@NotBlank String phoneNumber, @NotBlank String password, String name, Long id);
 
     /**
+     * APP用户注册或修改密码(根据Email)
+     * @param email         email
+     * @param password      密码
+     * @param id            用户ID
+     */
+    void registerByEmail(@NotBlank String email, @NotBlank String password, String name, Long id);
+
+    /**
      * 注销账号
      */
     void logoutUser(@NotNull Long userId);

@@ -275,6 +275,11 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
+    public void registerByEmail(String email, String password, String name, Long id) {
+        organizationalRepository.registerByEmail(email, password, name, id);
+    }
+
+    @Override
     public void logoutUser(Long userId) {
         upmsRepository.logoutUser(userId);
     }
