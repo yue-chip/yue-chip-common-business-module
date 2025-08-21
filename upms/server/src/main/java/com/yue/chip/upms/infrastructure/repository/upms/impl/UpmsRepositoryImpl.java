@@ -78,8 +78,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Optional<User> findByAccount(String account) {
-        Optional<UserPo> optional = userDao.findFirstByUsernameOrPhoneNumberOrEmail(account);
+    public Optional<User> findUserByAccount(String account) {
+        Optional<UserPo> optional = userDao.findFirstByUsernameOrPhoneNumberOrEmail(account, account, account);
         if (optional.isPresent()) {
             User user = userMapper.toUser(optional.get());
             return Optional.ofNullable(user);
@@ -98,6 +98,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
+    public Optional<User> findUserByPhoneNumber(String phoneNumber) {
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<User> findUserByEmail(String email) {
         Optional<UserPo> optional = userDao.findFirstByEmail(email);
         if (optional.isPresent()) {
@@ -109,12 +114,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public Optional<User> findUserById(Long id) {
-
         Optional<UserPo> optional = userDao.findFirstById(id);
-        if (optional.isPresent()){
-            return Optional.ofNullable(userMapper.toUser(optional.get()));
-        }
-        return Optional.empty();
+        return optional.map(userPo -> userMapper.toUser(userPo));
     }
 
     @Override
@@ -144,7 +145,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public Optional<User> findUserByGridId(Long gridId) {
         List<UserPo> list = userDao.findUserByGridId(gridId);
-        if (list.size()>0) {
+        if (!list.isEmpty()) {
             return Optional.ofNullable(userMapper.toUser(list.get(0)));
         }
         return Optional.empty();
@@ -234,7 +235,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public List<Role> findRoleByUserId(Long userId) {
         List<RolePo> list = roleDao.list(userId);
-        if (list.size()>0){
+        if (!list.isEmpty()){
             return roleMapper.toRoleList(list);
         }
         return Collections.EMPTY_LIST;
@@ -243,10 +244,7 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @Override
     public Optional<Role> findRoleById(Long id) {
         Optional<RolePo> optional = roleDao.findById(id);
-        if (optional.isPresent()) {
-            return Optional.ofNullable(roleMapper.toRole(optional.get()));
-        }
-        return Optional.empty();
+        return optional.map(rolePo -> roleMapper.toRole(rolePo));
     }
 
     @Override
@@ -410,31 +408,6 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         Page<UserPo> page = userDao.findByUsernameOrPhoneNumberOrEmailAndUserType(nameLike, userType, yueChipPage);
         List<User> listUser = userMapper.toUser(page.getContent());
         return (IPageResultData<List<User>>) PageResultData.convert(page, listUser);
-    }
-
-    @Override
-    public User findByPhoneNumber(String phoneNumber) {
-        UserPo byPhoneNumber = userDao.findByPhoneNumber(phoneNumber);
-        User user = userMapper.toUser(byPhoneNumber);
-        return user;
-    }
-
-    @Override
-    public User findByUsername(String phoneNumber) {
-        UserPo byUserName = userDao.findByUsername(phoneNumber);
-        if (Objects.nonNull(byUserName)) {
-            return userMapper.toUser(byUserName);
-        }
-        return null;
-    }
-
-    @Override
-    public User findByUserName(String userName) {
-        UserPo byUserName = userDao.findByUsername(userName);
-        if (Objects.nonNull(byUserName)) {
-            return userMapper.toUser(byUserName);
-        }
-        return null;
     }
 
     @Override

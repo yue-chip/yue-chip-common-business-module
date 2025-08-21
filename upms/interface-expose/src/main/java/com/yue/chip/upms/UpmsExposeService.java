@@ -33,7 +33,15 @@ public interface UpmsExposeService {
      */
     List<UserExposeVo> findUserAllByIdIn(@Size(min = 1) List<Long> userIds);
 
-    Optional<UserExposeVo> findUserById(@NotNull Long userId);
+    UserExposeVo findUserById(@NotNull Long userId);
+
+    UserExposeVo findUserByAccount(@NotBlank String account);
+
+    UserExposeVo findUserByUsername(@NotBlank String username);
+
+    UserExposeVo findUserByPhoneNumber(@NotBlank String phoneNumber);
+
+    UserExposeVo findUserByEmail(@NotBlank String phoneEmail);
 
     /**
      * 根据机构id查询用户
@@ -109,8 +117,6 @@ public interface UpmsExposeService {
 
     List<UserExposeVo> findUserAllByNameOrPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber);
     PageSerializable<UserExposeVo> findByUsernameOrPhoneNumberOrEmailAndUserType(@NotBlank String nameLike, UserType userType, @NotNull YueChipPage yueChipPage);
-    UserExposeVo findByPhoneNumber(@NotBlank String phoneNumber);
-    UserExposeVo findByUserName(@NotBlank String phoneNumber);
 
     public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(@NotNull Long parentId);
 
@@ -179,8 +185,6 @@ public interface UpmsExposeService {
      * 注销账号
      */
     void logoutUser(@NotNull Long userId);
-
-    UserExposeVo findUserByUsername(@NotBlank String username);
 
     void updateUserPassword(@NotNull Long userId, @NotNull String password);
 

@@ -45,10 +45,12 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
 
     /**
      * 根据 账号(用户名/手机号/email) 查询用户
-     * @param account   账号(用户名/手机号/email)
+     * @param username      用户名
+     * @param phoneNumber   手机号
+     * @param email         email
      * @return
      */
-    Optional<UserPo> findFirstByUsernameOrPhoneNumberOrEmail(String account);
+    Optional<UserPo> findFirstByUsernameOrPhoneNumberOrEmail(String username, String phoneNumber, String email);
 
     /**
      * 修改用户密码
