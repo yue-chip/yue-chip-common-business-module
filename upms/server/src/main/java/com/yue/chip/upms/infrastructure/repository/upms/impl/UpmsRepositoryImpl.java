@@ -6,6 +6,7 @@ import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.TenantNumber;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
@@ -329,11 +330,17 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Override
     public void saveRole(@NotNull RolePo role) {
+        if (findRoleByCode(role.getCode()).isPresent()){
+            throw new BusinessException("角色编码已存在,添加失败！");
+        }
         roleDao.save(role);
     }
 
     @Override
     public void updateRole(@NotNull RolePo role) {
+        if (findRoleByCode(role.getCode()).isPresent()){
+            throw new BusinessException("角色编码已存在,添加失败！");
+        }
         roleDao.update(role);
     }
 
@@ -505,6 +512,12 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         SafetyPo safetyPo = userMapper.toSafetyPo(safetyUpdateDto);
         safetyPo.setId(1L);
         safetyDao.save(safetyPo);
+    }
+
+    @Override
+    public Optional<Role> findRoleByCode(String code) {
+        Optional<RolePo> optional = roleDao.findFirstByCode(code);
+        return optional.map(rolePo -> roleMapper.toRole(rolePo));
     }
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {

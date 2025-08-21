@@ -19,4 +19,11 @@ public interface RoleDao extends BaseDao<RolePo>, RoleDaoEx {
      * @return
      */
     Optional<RolePo> findFirstByName(@NotBlank String name);
+
+    /**
+     * 根据编码查询角色
+     * @param code 编码
+     * @return 角色信息
+     */
+    Optional<RolePo> findFirstByCode(@NotBlank String code);
 }

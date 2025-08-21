@@ -329,7 +329,7 @@ public interface UpmsRepository {
     /**
      * 用户列表
      *
-     * @param name
+     * @param pageable
      * @return
      */
     public IPageResultData<List<UserVo>> userList(UserListDto userListDto, @NotNull Pageable pageable);
@@ -362,4 +362,11 @@ public interface UpmsRepository {
     SafetyVo safetyDetail();
 
     void safetyUpdate(SafetyUpdateDto safetyUpdateDto);
+
+    /**
+     * 根据编码查询角色
+     * @param code 编码
+     * @return 角色信息
+     */
+    public Optional<Role> findRoleByCode(@NotBlank String code);
 }
