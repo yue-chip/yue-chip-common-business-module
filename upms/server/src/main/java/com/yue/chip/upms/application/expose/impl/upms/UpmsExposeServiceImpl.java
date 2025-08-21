@@ -68,12 +68,33 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public com.yue.chip.core.Optional<UserExposeVo> findUserById(Long userId) {
+    public UserExposeVo findUserById(Long userId) {
         Optional<User> optional = upmsRepository.findUserById(userId);
-        if (optional.isPresent()) {
-            return com.yue.chip.core.Optional.builder().build().ofNullable(userMapper.toUserExposeVo(optional.get()));
-        }
-        return com.yue.chip.core.Optional.empty();
+        return optional.map(user -> userMapper.toUserExposeVo(user)).orElse(null);
+    }
+
+    @Override
+    public UserExposeVo findUserByAccount(String account) {
+        Optional<User> userOptional = upmsRepository.findUserByAccount(account);
+        return userOptional.map(user -> userMapper.toUserExposeVo(user)).orElse(null);
+    }
+
+    @Override
+    public UserExposeVo findUserByUsername(String username) {
+        Optional<User> userOptional = upmsRepository.findUserByUsername(username);
+        return userOptional.map(user -> userMapper.toUserExposeVo(user)).orElse(null);
+    }
+
+    @Override
+    public UserExposeVo findUserByPhoneNumber(String phoneNumber) {
+        Optional<User> userOptional = upmsRepository.findUserByPhoneNumber(phoneNumber);
+        return userOptional.map(user -> userMapper.toUserExposeVo(user)).orElse(null);
+    }
+
+    @Override
+    public UserExposeVo findUserByEmail(String email) {
+        Optional<User> userOptional = upmsRepository.findUserByEmail(email);
+        return userOptional.map(user -> userMapper.toUserExposeVo(user)).orElse(null);
     }
 
     @Override
@@ -208,18 +229,6 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     }
 
     @Override
-    public UserExposeVo findByPhoneNumber(String phoneNumber) {
-        User byPhoneNumber = upmsRepository.findByPhoneNumber(phoneNumber);
-        return userMapper.toUserExposeVo(byPhoneNumber);
-    }
-
-    @Override
-    public UserExposeVo findByUserName(String phoneNumber) {
-        User user = upmsRepository.findByUsername(phoneNumber);
-        return userMapper.toUserExposeVo(user);
-    }
-
-    @Override
     public List<OrganizationalExposeVo> findOrganizationalChildrenOrganizationalIds(Long parentId) {
         List<OrganizationalExposeVo> list = new ArrayList<>();
         List<OrganizationalPo> children = organizationalRepository.findChildren(parentId);
@@ -282,11 +291,6 @@ public class UpmsExposeServiceImpl implements UpmsExposeService {
     @Override
     public void logoutUser(Long userId) {
         upmsRepository.logoutUser(userId);
-    }
-
-    @Override
-    public UserExposeVo findUserByUsername(String username) {
-        return userMapper.toUserExposeVo(upmsRepository.findByUserName(username));
     }
 
     @Override

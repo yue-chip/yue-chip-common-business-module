@@ -78,8 +78,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Optional<User> findByAccount(String account) {
-        Optional<UserPo> optional = userDao.findFirstByUsernameOrPhoneNumberOrEmail(account);
+    public Optional<User> findUserByAccount(String account) {
+        Optional<UserPo> optional = userDao.findFirstByUsernameOrPhoneNumberOrEmail(account, account, account);
         if (optional.isPresent()) {
             User user = userMapper.toUser(optional.get());
             return Optional.ofNullable(user);
@@ -108,17 +108,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public Optional<User> findUserByPhoneNumber(String phoneNumber) {
-        Optional<UserPo> optional = userDao.findFirstByPhoneNumber(phoneNumber);
-        if (optional.isPresent()) {
-            User user = userMapper.toUser(optional.get());
-            return Optional.ofNullable(user);
-        }
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<User> findUserById(Long id) {
+
         Optional<UserPo> optional = userDao.findFirstById(id);
         if (optional.isPresent()){
             return Optional.ofNullable(userMapper.toUser(optional.get()));

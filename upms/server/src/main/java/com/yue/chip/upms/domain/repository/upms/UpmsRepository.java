@@ -7,7 +7,6 @@ import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
-import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
@@ -38,7 +37,7 @@ public interface UpmsRepository {
      * @param account  账号(用户名/手机号/email)
      * @return Optional<User>
      */
-    Optional<User> findByAccount(String account);
+    Optional<User> findUserByAccount(String account);
 
     /**
      * 根据 用户名 查询用户
@@ -46,6 +45,13 @@ public interface UpmsRepository {
      * @return Optional<User>
      */
     Optional<User> findUserByUsername(@NotBlank String username);
+
+    /**
+     * 根据 手机号 查询用户
+     * @param phoneNumber   手机号
+     * @return Optional<User>
+     */
+    Optional<User> findUserByPhoneNumber(@NotBlank String phoneNumber);
 
     /**
      * 根据 Email 查询用户
@@ -356,16 +362,11 @@ public interface UpmsRepository {
      * @param id
      */
     public void deleteUser(@NotNull Long id);
-
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
     Page<User> findByUsernameOrPhoneNumberOrEmailAndUserType(@NotBlank String nameLike, UserType userType, YueChipPage yueChipPage);
-    User findByPhoneNumber(@NotBlank String phoneNumber);
-
-    User findByUsername(@NotBlank String phoneNumber);
-
-    User findByUserName(String userName);
 
     IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, @NotNull YueChipPage yueChipPage);
 
     void logoutUser(Long userId);
+
 }

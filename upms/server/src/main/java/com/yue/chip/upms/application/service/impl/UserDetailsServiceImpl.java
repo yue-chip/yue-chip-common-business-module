@@ -38,18 +38,15 @@ public class UserDetailsServiceImpl implements YueChipUserDetailsService {
     private UpmsRepository upmsRepository;
     @Resource
     private UserSocialRepository userSocialRepository;
-    @Resource
-    private RedisTemplate redisTemplate;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optional = upmsRepository.findUserByUsername(username);
-        if (!optional.isPresent()){
+        if (optional.isEmpty()){
             return null;
         }
         User user = optional.get();
-        YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
-        return userDetails;
+        return new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
     }
     /**
      * 设置用户权限
@@ -72,7 +69,7 @@ public class UserDetailsServiceImpl implements YueChipUserDetailsService {
 
     @Override
     public UserDetails loadUserByAccount(String account) {
-        Optional<User> userOptional = upmsRepository.findByAccount(account);
+        Optional<User> userOptional = upmsRepository.findUserByAccount(account);
         if (userOptional.isEmpty()) {
             return null;
         }
@@ -82,10 +79,11 @@ public class UserDetailsServiceImpl implements YueChipUserDetailsService {
 
     @Override
     public UserDetails loadUserByPhoneNumber(String phoneNumber) {
-        User user = upmsRepository.findByPhoneNumber(phoneNumber);
-        if (Objects.isNull(user)) {
+        Optional<User> userOptional = upmsRepository.findUserByPhoneNumber(phoneNumber);
+        if (userOptional.isEmpty()) {
             return null;
         }
+        User user = userOptional.get();
         return new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
     }
 
@@ -102,12 +100,11 @@ public class UserDetailsServiceImpl implements YueChipUserDetailsService {
     @Override
     public UserDetails loadUserBySocialTypeAndSocialUid(String socialType, String socialUid) {
         Optional<User> optional = upmsRepository.findUserBySocialTypeAndSocialUid(socialType, socialUid);
-        if (!optional.isPresent()){
+        if (optional.isEmpty()){
             return null;
         }
         User user = optional.get();
-        YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber(), getUserGrantedAuthority(user.getRoles()));
-        return userDetails;
+        return new YueChipUserDetails(user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber(), getUserGrantedAuthority(user.getRoles()));
     }
 
     @Override
