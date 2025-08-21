@@ -1,13 +1,18 @@
 package com.yue.chip.upms.infrastructure.repository.upms.impl;
 
+import cn.hutool.core.lang.Assert;
+import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
+import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
+import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -23,19 +28,24 @@ import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
+import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
+import javax.sql.DataSource;
 import java.util.*;
 
 /**
@@ -68,8 +78,28 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     private PasswordEncoder passwordEncoder;
 
     @Override
+    public Optional<User> findByAccount(String account) {
+        Optional<UserPo> optional = userDao.findFirstByUsernameOrPhoneNumberOrEmail(account);
+        if (optional.isPresent()) {
+            User user = userMapper.toUser(optional.get());
+            return Optional.ofNullable(user);
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<User> findUserByUsername(String username) {
         Optional<UserPo> optional = userDao.findFirstByUsername(username);
+        if (optional.isPresent()) {
+            User user = userMapper.toUser(optional.get());
+            return Optional.ofNullable(user);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+        Optional<UserPo> optional = userDao.findFirstByEmail(email);
         if (optional.isPresent()) {
             User user = userMapper.toUser(optional.get());
             return Optional.ofNullable(user);
@@ -383,6 +413,53 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         List<User> userList = userMapper.toUserList(allByNameOrPhoneNumber);
         return userList;
     }
+
+    @Override
+    public Page<User> findByUsernameOrPhoneNumberOrEmailAndUserType(String nameLike, UserType userType, YueChipPage yueChipPage) {
+        Page<UserPo> page = userDao.findByUsernameOrPhoneNumberOrEmailAndUserType(nameLike, userType, yueChipPage);
+        List<User> listUser = userMapper.toUser(page.getContent());
+        return (IPageResultData<List<User>>) PageResultData.convert(page, listUser);
+    }
+
+    @Override
+    public User findByPhoneNumber(String phoneNumber) {
+        UserPo byPhoneNumber = userDao.findByPhoneNumber(phoneNumber);
+        User user = userMapper.toUser(byPhoneNumber);
+        return user;
+    }
+
+    @Override
+    public User findByUsername(String phoneNumber) {
+        UserPo byUserName = userDao.findByUsername(phoneNumber);
+        if (Objects.nonNull(byUserName)) {
+            return userMapper.toUser(byUserName);
+        }
+        return null;
+    }
+
+    @Override
+    public User findByUserName(String userName) {
+        UserPo byUserName = userDao.findByUsername(userName);
+        if (Objects.nonNull(byUserName)) {
+            return userMapper.toUser(byUserName);
+        }
+        return null;
+    }
+
+    @Override
+    public IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage) {
+        Page<UserPo> page = userDao.find(name, nickname, username, phoneNumber, email, state, nameLike, UserType.ORDINARY, yueChipPage);
+        List<User> listUser = userMapper.toUserList(page.getContent());
+        List<UserExposeVo> userExposeVo = userMapper.toUserExposeVo(listUser);
+        return (IPageResultData<List<UserExposeVo>>) PageResultData.convert(page,userExposeVo);
+    }
+
+    @Override
+    public void logoutUser(Long userId) {
+        userDao.deleteById(userId);
+        userRoleDao.deleteByUserId(userId);
+    }
+
 
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {
         if (optional.isPresent()) {

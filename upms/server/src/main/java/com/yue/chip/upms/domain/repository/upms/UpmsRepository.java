@@ -2,21 +2,26 @@ package com.yue.chip.upms.domain.repository.upms;
 
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
+import com.yue.chip.upms.domain.aggregates.UserWeixin;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
-import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
+import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.vo.UserExposeVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -29,11 +34,25 @@ import java.util.Optional;
 public interface UpmsRepository {
 
     /**
-     * 根据登录账号获取用户
-     * @param username
-     * @return
+     * 根据 账号(用户名/手机号/email) 查询用户
+     * @param account  账号(用户名/手机号/email)
+     * @return Optional<User>
      */
-    public Optional<User> findUserByUsername(@NotBlank String username);
+    Optional<User> findByAccount(String account);
+
+    /**
+     * 根据 用户名 查询用户
+     * @param username  用户名
+     * @return Optional<User>
+     */
+    Optional<User> findUserByUsername(@NotBlank String username);
+
+    /**
+     * 根据 Email 查询用户
+     * @param email     Email
+     * @return Optional<User>
+     */
+    Optional<User> findUserByEmail(String email);
 
     /**
      * 根据手机号码查询用户
@@ -338,6 +357,15 @@ public interface UpmsRepository {
      */
     public void deleteUser(@NotNull Long id);
 
-
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
+    Page<User> findByUsernameOrPhoneNumberOrEmailAndUserType(@NotBlank String nameLike, UserType userType, YueChipPage yueChipPage);
+    User findByPhoneNumber(@NotBlank String phoneNumber);
+
+    User findByUsername(@NotBlank String phoneNumber);
+
+    User findByUserName(String userName);
+
+    IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, @NotNull YueChipPage yueChipPage);
+
+    void logoutUser(Long userId);
 }

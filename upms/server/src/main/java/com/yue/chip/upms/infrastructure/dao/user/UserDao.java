@@ -1,5 +1,6 @@
 package com.yue.chip.upms.infrastructure.dao.user;
 
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import jakarta.validation.constraints.NotBlank;
@@ -26,14 +27,28 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @return
      */
 //    @Cacheable(value = User.CACHE_KEY,key = "#id")
-    public Optional<UserPo> findFirstById(@NotNull Long id);
+    Optional<UserPo> findFirstById(@NotNull Long id);
 
     /**
-     * 根据登录帐号查询用户
-     * @param username
+     * 根据 用户名 查询用户
+     * @param username  用户名
      * @return
      */
-    public Optional<UserPo> findFirstByUsername(@NotBlank String username);
+    Optional<UserPo> findFirstByUsername(@NotBlank String username);
+
+    /**
+     * 根据 email 查询用户
+     * @param email
+     * @return
+     */
+    Optional<UserPo> findFirstByEmail(String email);
+
+    /**
+     * 根据 账号(用户名/手机号/email) 查询用户
+     * @param account   账号(用户名/手机号/email)
+     * @return
+     */
+    Optional<UserPo> findFirstByUsernameOrPhoneNumberOrEmail(String account);
 
     /**
      * 根据手机号码查询用户
@@ -67,4 +82,25 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      */
     List<UserPo> findAllByNameLikeOrPhoneNumberLike(String name,String phoneNumber);
 
+    /**
+     * 根据username或手机号或邮箱查询
+     * @param username
+     * @param phoneNumber
+     * @param email
+     * @return
+     */
+    List<UserPo> findAllByUsernameLikeOrPhoneNumberLikeOrEmailLike(String username,String phoneNumber,String email);
+
+    /**
+     * 根据手机号精准查询
+     * @param phoneNumber
+     * @return
+     */
+    UserPo findByPhoneNumber(String phoneNumber);
+
+    /**
+     * 根据账号精准查询
+     * @return
+     */
+    UserPo findByUsername(String username);
 }
