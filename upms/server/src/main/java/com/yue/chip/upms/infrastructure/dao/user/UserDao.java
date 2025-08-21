@@ -27,14 +27,28 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @return
      */
 //    @Cacheable(value = User.CACHE_KEY,key = "#id")
-    public Optional<UserPo> findFirstById(@NotNull Long id);
+    Optional<UserPo> findFirstById(@NotNull Long id);
 
     /**
-     * 根据登录帐号查询用户
-     * @param username
+     * 根据 用户名 查询用户
+     * @param username  用户名
      * @return
      */
-    public Optional<UserPo> findFirstByUsername(@NotBlank String username);
+    Optional<UserPo> findFirstByUsername(@NotBlank String username);
+
+    /**
+     * 根据 email 查询用户
+     * @param email
+     * @return
+     */
+    Optional<UserPo> findFirstByEmail(String email);
+
+    /**
+     * 根据 账号(用户名/手机号/email) 查询用户
+     * @param account   账号(用户名/手机号/email)
+     * @return
+     */
+    Optional<UserPo> findFirstByUsernameOrPhoneNumberOrEmail(String account);
 
     /**
      * 修改用户密码
@@ -82,5 +96,4 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
      * @return
      */
     UserPo findByUsername(String username);
-
 }

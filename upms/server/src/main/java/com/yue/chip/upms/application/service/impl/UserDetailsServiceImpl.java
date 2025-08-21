@@ -71,13 +71,32 @@ public class UserDetailsServiceImpl implements YueChipUserDetailsService {
     }
 
     @Override
+    public UserDetails loadUserByAccount(String account) {
+        Optional<User> userOptional = upmsRepository.findByAccount(account);
+        if (userOptional.isEmpty()) {
+            return null;
+        }
+        User user = userOptional.get();
+        return new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
+    }
+
+    @Override
     public UserDetails loadUserByPhoneNumber(String phoneNumber) {
         User user = upmsRepository.findByPhoneNumber(phoneNumber);
         if (Objects.isNull(user)) {
             return null;
         }
-        YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
-        return userDetails;
+        return new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
+    }
+
+    @Override
+    public UserDetails loadUserByEmail(String email) {
+        Optional<User> userOptional = upmsRepository.findUserByEmail(email);
+        if (userOptional.isEmpty()) {
+            return null;
+        }
+        User user = userOptional.get();
+        return new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
     }
 
     @Override
