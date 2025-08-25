@@ -12,9 +12,14 @@ public interface UserSocialDao extends BaseDao<UserSocialPo>, UserSocialDaoEx {
      * 根据第三方用户类型和用户ID查询用户
      * @param type  第三方用户类型
      * @param uid   第三方用户ID
-     * @return
      */
     Optional<UserSocialPo> findFirstByTypeAndUid(@NotBlank String type, @NotBlank String uid);
 
     Optional<UserSocialPo> findFirstByUserIdAndTenantNumberAndType(Long userId, Long tenantNumber, String type);
+
+    /**
+     * 根据 用户ID 删除第三方绑定信息
+     * @param userId    用户ID
+     */
+    void deleteByUserId(Long userId);
 }

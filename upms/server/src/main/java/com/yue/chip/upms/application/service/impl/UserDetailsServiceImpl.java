@@ -110,7 +110,7 @@ public class UserDetailsServiceImpl implements YueChipUserDetailsService {
     @Override
     public UserDetails saveUserSocial(String socialType, String socialUid, String socialAcc, String socialNickname) {
         // 生成一个新的用户
-        String name = StrUtil.format("{}_{}", socialType, RandomUtil.randomStringUpper(6));
+        String name = StrUtil.format("{}_{}", socialType.toUpperCase(), RandomUtil.randomStringUpper(6));
         UserPo userPo = new UserPo();
         userPo.setTenantNumber(null);
         userPo.setName(name);
@@ -132,7 +132,6 @@ public class UserDetailsServiceImpl implements YueChipUserDetailsService {
         // 重新获取用户信息
         Optional<User> currUserOptional = upmsRepository.findUserBySocialTypeAndSocialUid(socialType, socialUid);
         User currUser = currUserOptional.get();
-        YueChipUserDetails userDetails = new YueChipUserDetails(currUser.getId(), currUser.getUsername(), currUser.getPassword(), currUser.getTenantNumber(), getUserGrantedAuthority(currUser.getRoles()));
-        return userDetails;
+        return new YueChipUserDetails(currUser.getId(), currUser.getUsername(), currUser.getPassword(), currUser.getTenantNumber(), getUserGrantedAuthority(currUser.getRoles()));
     }
 }

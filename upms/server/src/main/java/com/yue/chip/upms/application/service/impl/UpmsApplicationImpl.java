@@ -176,6 +176,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
                 upmsRepository.deleteUserRoleByUserId(id);
                 //删除用户
                 upmsRepository.deleteUser(id);
+                //删除用户第三方绑定信息
+                upmsRepository.deleteUserSocial(id);
                 //删除用户与组织机构的关联关系
                 upmsDomainService.userOrganizational(id,null);
                 //删除机构负责人
