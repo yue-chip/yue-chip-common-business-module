@@ -21,6 +21,7 @@ import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.dao.resources.ResourcesDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleDao;
 import com.yue.chip.upms.infrastructure.dao.role.RoleResourcesDao;
+import com.yue.chip.upms.infrastructure.dao.social.UserSocialDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserRoleDao;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
@@ -57,7 +58,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
 
     @Resource
     private UserDao userDao;
-
+    @Resource
+    private UserSocialDao userSocialDao;
     @Resource
     private UserRoleDao userRoleDao;
     @Resource
@@ -394,6 +396,11 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     @CacheEvict(value = User.CACHE_KEY, key = "#id")
     public void deleteUser(Long id) {
         userDao.deleteById(id);
+    }
+
+    @Override
+    public void deleteUserSocial(Long id) {
+        userSocialDao.deleteByUserId(id);
     }
 
     @Override

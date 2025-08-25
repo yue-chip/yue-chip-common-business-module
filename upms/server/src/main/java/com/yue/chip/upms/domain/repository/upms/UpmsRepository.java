@@ -351,15 +351,21 @@ public interface UpmsRepository {
 
     /**
      * 根据id删除用户
-     *
-     * @param id
+     * @param id    用户ID
      */
-    public void deleteUser(@NotNull Long id);
+    void deleteUser(@NotNull Long id);
+
+    /**
+     * 根据id删除用户第三方绑定信息
+     * @param id    用户ID
+     */
+    void deleteUserSocial(Long id);
+
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
+
     Page<User> findByUsernameOrPhoneNumberOrEmailAndUserType(@NotBlank String nameLike, UserType userType, YueChipPage yueChipPage);
 
     IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, @NotNull YueChipPage yueChipPage);
 
     void logoutUser(Long userId);
-
 }
