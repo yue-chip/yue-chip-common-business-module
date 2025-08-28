@@ -9,9 +9,6 @@ import com.yue.chip.upms.domain.aggregates.enums.EnumUtil;
 import com.yue.chip.upms.domain.repository.enums.EnumUtilRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +32,7 @@ public class RemoteEnumController implements RemoteEnum {
     private EnumUtilMapper enumUtilMapper;
 
     @Override
-    public void save(@NotNull(message = "数据不能未空") @Size(min = 1, message = "不能传入空数据") List<EnumPersistenceBean> list) {
+    public void save(List<EnumPersistenceBean> list) {
         if (Objects.nonNull(list) && !list.isEmpty()) {
             list.forEach(bean -> {
                 enumUtilRepository.save(enumUtilMapper.toEnumUtilPo(bean));
@@ -44,7 +41,7 @@ public class RemoteEnumController implements RemoteEnum {
     }
 
     @Override
-    public ResultData<EnumUtilDefinition> get(@NotBlank String code, @NotBlank String version) {
+    public ResultData<EnumUtilDefinition> get( String code,  String version) {
         Optional<EnumUtil> optional = enumUtilRepository.find(code,version);
         ResultData.ResultDataBuilder<EnumUtilDefinition> resultData = ResultData.builder();
         if (optional.isPresent()){

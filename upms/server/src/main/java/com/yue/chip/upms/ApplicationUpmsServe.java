@@ -2,7 +2,6 @@ package com.yue.chip.upms;
 
 import com.yue.chip.core.persistence.BaseDaoFactoryBean;
 import com.yue.chip.security.SecurityConfig;
-import org.apache.dubbo.config.spring.context.annotation.DubboComponentScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -18,7 +17,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan(basePackages = "com.yue.chip.**")
 @EnableDiscoveryClient
 @EnableCaching()
-@DubboComponentScan(basePackages = {"com.yue.chip.**"})
 @EnableJpaRepositories(basePackages = {"com.yue.chip.upms.infrastructure.dao.**"}, repositoryFactoryBeanClass = BaseDaoFactoryBean.class)
 @EntityScan({"com.yue.chip.upms.infrastructure.po.**"})
 @EnableJpaAuditing

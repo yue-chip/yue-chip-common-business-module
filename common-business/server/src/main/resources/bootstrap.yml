@@ -33,7 +33,7 @@ spring:
       - nacos:sentinel.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:dubbo.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:seata.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-      - nacos:redis.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:valkey.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:file.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:sms.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:call.yaml?group=GLOBAL_GROUP&refreshEnabled=true

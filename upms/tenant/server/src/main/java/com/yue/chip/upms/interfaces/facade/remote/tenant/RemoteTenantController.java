@@ -8,8 +8,6 @@ import com.yue.chip.upms.domain.aggregates.tenant.Tenant;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +30,7 @@ public class RemoteTenantController implements RemoteTenant {
     private TenantMapper tenantMapper;
 
     @Override
-    public ResultData<TenantDefinition> get(@NotBlank String requestDomain) {
+    public ResultData<TenantDefinition> get( String requestDomain) {
         ResultData.ResultDataBuilder<TenantDefinition> builder = ResultData.builder();
         Optional<Tenant> optional = tenantRepository.findTenantByRequestDomain(requestDomain);
         if(optional.isPresent()){
@@ -42,7 +40,7 @@ public class RemoteTenantController implements RemoteTenant {
     }
 
     @Override
-    public ResultData<TenantDefinition> get(@NotNull Long tenantNumber) {
+    public ResultData<TenantDefinition> get( Long tenantNumber) {
         ResultData.ResultDataBuilder<TenantDefinition> builder = ResultData.builder();
         Optional<Tenant> optional = tenantRepository.findTenantByTenantNumber(tenantNumber);
         if(optional.isPresent()){
@@ -52,7 +50,7 @@ public class RemoteTenantController implements RemoteTenant {
     }
 
     @Override
-    public ResultData<List<TenantDefinition>> findAll() {
+    public ResultData<List<TenantDefinition>> getAll() {
         ResultData.ResultDataBuilder<List<TenantDefinition>> builder = ResultData.builder();
         List<Tenant> tenants = tenantRepository.findAll();
         return builder.data(tenantMapper.toTenantDefinition(tenants)).build();
