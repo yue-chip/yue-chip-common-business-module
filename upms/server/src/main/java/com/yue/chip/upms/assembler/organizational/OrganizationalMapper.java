@@ -7,7 +7,6 @@ import com.yue.chip.upms.interfaces.dto.organizational.OrganizationalUpdateDto;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeSelectVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalVo;
-import com.yue.chip.upms.vo.OrganizationalExposeVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -49,12 +48,4 @@ public interface OrganizationalMapper {
     public OrganizationalTreeListVo toOrganizationalTreeListVo(OrganizationalPo organizationalPo);
 
     public OrganizationalVo toOrganizationalVo(Organizational organizational);
-
-    public OrganizationalExposeVo toOrganizationalExposVo(Organizational organizational);
-
-    public OrganizationalExposeVo toOrganizationalExposeVo(OrganizationalPo organizationalPo);
-
-    public List<OrganizationalExposeVo> toOrganizationalExposeVo(List<Organizational> organizationalList);
-
-    public List<OrganizationalExposeVo> toOrganizationalExposeVoList(List<OrganizationalPo> organizationalPoList);
 }

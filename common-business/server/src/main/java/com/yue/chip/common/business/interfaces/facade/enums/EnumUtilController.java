@@ -5,7 +5,7 @@ import com.yue.chip.common.business.interfaces.vo.enums.EnumUtilVo;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.common.enums.EnumUtilDefinition;
-import com.yue.chip.core.common.remote.RemoteEnum;
+import com.yue.chip.core.common.remote.http.RemoteEnum;
 import com.yue.chip.utils.CheckRemoteHttpResultDataUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -1,7 +1,7 @@
 package com.yue.chip.upms.interfaces.facade.remote.http;
 
 import com.yue.chip.core.ResultData;
-import com.yue.chip.core.YueChipUserDetailsClient;
+import com.yue.chip.core.remote.http.YueChipUserDetailsClientDefinition;
 import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,24 +15,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
-@RequestMapping("/remote")
+@RequestMapping("")
 @Validated
 @Tag(name = "远程用户登陆")
 @Log
-public class YueChipUserDetailsClientController implements YueChipUserDetailsClient {
+public class YueChipUserDetailsClientController implements YueChipUserDetailsClientDefinition {
 
     @Resource
     private UpmsDomainService upmsDomainService;
 
     @Override
-    @GetMapping("/user/login/username")
+    @GetMapping(LOGIN_BY_USERNAME)
     public ResultData<YueChipUserDetails> loadUserByUsernameEx(String username) throws UsernameNotFoundException {
         ResultData.ResultDataBuilder<YueChipUserDetails> builder = ResultData.builder();
         return builder.data(upmsDomainService.loadUserByUsername(username)).build();
     }
 
     @Override
-    @GetMapping("/user/login/phone")
+    @GetMapping(LOGIN_BY_PHONE_NUMBER)
     public ResultData<YueChipUserDetails> loadUserByPhoneNumber(String phoneNumber) {
         ResultData.ResultDataBuilder<YueChipUserDetails> builder = ResultData.builder();
         return builder.data(upmsDomainService.loadUserByPhoneNumber(phoneNumber)).build();

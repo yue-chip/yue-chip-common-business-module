@@ -1,5 +1,7 @@
 package com.yue.chip.upms;
 
+import com.yue.chip.annotation.HttpExchangeScan;
+import com.yue.chip.annotation.HttpExchangeScans;
 import com.yue.chip.core.persistence.BaseDaoFactoryBean;
 import com.yue.chip.security.SecurityConfig;
 import org.springframework.boot.SpringApplication;
@@ -22,6 +24,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJpaAuditing
 @EnableAsync
 @EnableScheduling
+@HttpExchangeScans({@HttpExchangeScan("com.yue.chip.**")})
 public class ApplicationUpmsTenantServer {
 
     public static void main ( String args[] ) throws Exception {

@@ -1,10 +1,5 @@
 package com.yue.chip.common.business.expose.sms;
 
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
@@ -16,34 +11,13 @@ import java.util.List;
  * @date 2023/11/1 下午2:33
  */
 @HttpExchange("${http.exchange.host}")
-public interface RemoteSms {
+public interface RemoteSms extends RemoteSmsDefinition {
 
-    /**
-     * 发送短信
-     *
-     * @param appId        腾讯云appId  啊里云短信无需填写
-     * @param signName     签名
-     * @param templateCode 短信模板编码
-     * @param message      短信内容 啊里云短信：{"code":"123456"},腾讯短信-用^隔开：刘方^123456
-     * @param phoneNumber  手机号码 腾讯短信：示例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号
+    @Override
+    @GetExchange(PREFIX+SEND_SINGLE)
+    void sendSms(String appId, String signName, String templateCode, Object message, String phoneNumber);
 
-     */
-    @GetExchange("/api/common/sms/remote/send/single")
-    @GetMapping("/remote/send/single")
-    @Operation(description = "发送短信",summary = "发送短信")
-    public void sendSms(@NotBlank String appId, @NotBlank String signName, @NotBlank String templateCode, @NotBlank Object message, @NotBlank String phoneNumber);
-
-    /**
-     * 发送短信
-     *
-     * @param appId        腾讯云appId  啊里云短信无需填写
-     * @param signName     签名
-     * @param templateCode 短信模板编码
-     * @param message      短信内容 啊里云短信：{"code":"123456"},腾讯短信-用^隔开：刘方^123456
-     * @param phoneNumbers 手机号码 示例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号
-     */
-    @GetExchange("/api/common/sms/remote/send")
-    @GetMapping("/remote/send")
-    @Operation(description = "发送短信",summary = "发送短信")
-    public void sendSms(@NotBlank String appId, @NotBlank String signName,@NotBlank String templateCode, @NotBlank Object message,@NotNull @Size(min = 1) List<String> phoneNumbers);
+    @Override
+    @GetExchange(PREFIX+SEND)
+    void sendSms(String appId, String signName, String templateCode, Object message, List<String> phoneNumbers);
 }

@@ -5,7 +5,6 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.vo.user.UserSelectVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
-import com.yue.chip.upms.vo.UserExposeVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -26,8 +25,6 @@ public interface UserMapper {
     public User toUser(UserPo userPo);
 
     public List<User> toUser(List<UserPo> userPos);
-
-//    public List<UserVo> toUserListVo(List<UserPo> listGrid);
 
     @Mappings({@Mapping(target = "organizationalName",source = "organizational.name"),
             @Mapping(target = "organizationalId",source = "organizational.id")})
@@ -59,8 +56,4 @@ public interface UserMapper {
             @Mapping(target = "tenantNumber",source = "tenant.tenantNumber"),
             @Mapping(target = "bigScreenName",source = "tenant.bigScreenName")})
     public UserVo toUserVo(User user);
-
-    UserExposeVo toUserExposeVo(User userPo);
-
-    List<UserExposeVo> toUserExposeVo(List<User> userList);
 }

@@ -4,7 +4,6 @@ import cn.hutool.core.lang.Assert;
 import com.yue.chip.common.business.expose.file.FileExposeService;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.exception.BusinessException;
-import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
@@ -31,7 +30,6 @@ import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.skywalking.apm.toolkit.trace.Tag;
 import org.apache.skywalking.apm.toolkit.trace.Tags;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
@@ -59,9 +57,6 @@ public class UpmsApplicationImpl implements UpmsApplication {
 
     @Resource
     private OrganizationalRepository organizationalRepository;
-
-    @DubboReference()
-    private TestExpose testExpose;
 
     @Resource
     private UserMapper userMapper;

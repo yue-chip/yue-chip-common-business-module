@@ -1,27 +1,28 @@
-package com.yue.chip.common.business.interfaces.facade.remote.file;
+package com.yue.chip.common.business.interfaces.facade.remote.http.file;
 
 import com.yue.chip.common.business.assembler.file.FileMapper;
 import com.yue.chip.common.business.definition.file.FileDefinition;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
-import com.yue.chip.common.business.expose.file.RemoteFile;
+import com.yue.chip.common.business.expose.file.RemoteFileDefinition;
 import com.yue.chip.core.ResultData;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
 @RestController()
-@RequestMapping("/file")
+@RequestMapping("")
 @Validated
 @Tag(name = "远程文件")
 @Log
-public class RemoteFileController implements RemoteFile {
+public class RemoteFileController implements RemoteFileDefinition {
     @Resource
     private FileRepository fileRepository;
 
@@ -29,6 +30,7 @@ public class RemoteFileController implements RemoteFile {
     private FileMapper fileMapper;
 
     @Override
+    @GetMapping(FIND)
     public ResultData<FileDefinition> find(Long fileId) {
         Optional<File> optional = fileRepository.find(fileId);
         ResultData.ResultDataBuilder<FileDefinition>  builder = ResultData.builder();
@@ -39,6 +41,7 @@ public class RemoteFileController implements RemoteFile {
     }
 
     @Override
+    @GetMapping(URL)
     public ResultData<Map<String, String>> url(Long tableId, String fileFieldName, String tableName) {
         ResultData.ResultDataBuilder<Map<String, String>> builder = ResultData.builder();
         if (Objects.isNull(tableId) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {

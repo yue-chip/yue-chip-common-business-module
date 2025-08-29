@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;

@@ -1,10 +1,10 @@
-package com.yue.chip.common.business.interfaces.facade.remote.call;
+package com.yue.chip.common.business.interfaces.facade.remote.http.call;
 
 import com.aliyun.sdk.service.dyvmsapi20170525.AsyncClient;
 import com.aliyun.sdk.service.dyvmsapi20170525.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yue.chip.common.business.expose.call.RemoteCall;
+import com.yue.chip.common.business.expose.call.RemoteCallDefinition;
 import com.yue.chip.common.business.expose.call.vo.QueryCallDetailByCallIdResponseBodyExposeVo;
 import com.yue.chip.common.business.expose.call.vo.SingleCallByTtsResponseBodyExposeVo;
 import com.yue.chip.core.ResultData;
@@ -15,6 +15,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,17 +23,18 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @RestController()
-@RequestMapping("/call")
+@RequestMapping("")
 @Validated
 @Tag(name = "远程拨打电话")
 @Log
-public class RemoteCallController implements RemoteCall {
+public class RemoteCallController implements RemoteCallDefinition {
 
     @Resource
     @Lazy
     private AsyncClient client;
 
     @Override
+    @GetMapping(CALL)
     public ResultData<SingleCallByTtsResponseBodyExposeVo> call(String calledNumber, Object ttsParam, String ttsCode, Integer playTimes, Integer volume, String outId) {
         SingleCallByTtsRequest request = SingleCallByTtsRequest.builder()
                 .calledNumber(calledNumber)
@@ -59,6 +61,7 @@ public class RemoteCallController implements RemoteCall {
     }
 
     @Override
+    @GetMapping(CALL_RESULT)
     public ResultData<QueryCallDetailByCallIdResponseBodyExposeVo> callResult(String callId, Long prodId, Long queryDate) {
         QueryCallDetailByCallIdRequest queryCallDetailByCallIdRequest = QueryCallDetailByCallIdRequest.builder()
                 .callId(callId)

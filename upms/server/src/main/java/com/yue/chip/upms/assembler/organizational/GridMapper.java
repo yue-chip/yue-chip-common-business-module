@@ -5,7 +5,6 @@ import com.yue.chip.upms.infrastructure.po.organizational.GridPo;
 import com.yue.chip.upms.interfaces.dto.organizational.GridAddDto;
 import com.yue.chip.upms.interfaces.dto.organizational.GridUpdateDto;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
-import com.yue.chip.grid.vo.GridExposeVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -34,7 +33,4 @@ public interface GridMapper {
 
     public List<GridVo> toGridVo(List<Grid> gridList);
 
-    public GridExposeVo toGridExposeVo(Grid grid);
-    
-    public List<GridExposeVo> toGridExposeVo(List<Grid> gridList);
 }
