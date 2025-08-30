@@ -1,8 +1,6 @@
 package com.yue.chip.upms.interfaces.facade;
 
 import com.yue.chip.annotation.AuthorizationIgnore;
-import com.yue.chip.common.business.expose.file.FileExposeService;
-import com.yue.chip.common.business.expose.sms.SmsExposeService;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
@@ -15,7 +13,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,12 +41,6 @@ public class TestController  {
 
     @Resource
     private TestApplicationService testApplicationService;
-
-    @DubboReference
-    private SmsExposeService smsExposeService;
-
-    @DubboReference
-    private FileExposeService fileExposeService;
 
 
     @GetMapping("/sms")
@@ -80,8 +71,8 @@ public class TestController  {
     @AuthorizationIgnore
     @Operation(summary = "测试文件", description = "测试文件")
     public IResultData testFile(String name){
-        Map map = fileExposeService.getUrl(14L,"storePhoto","store",null);
-        log.info(map.toString());
+//        Map map = fileExposeService.getUrl(14L,"storePhoto","store",null);
+//        log.info(map.toString());
         return ResultData.builder().build();
     }
 

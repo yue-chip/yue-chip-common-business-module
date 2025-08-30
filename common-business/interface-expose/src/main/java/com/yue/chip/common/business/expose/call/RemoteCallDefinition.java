@@ -16,7 +16,7 @@ public interface RemoteCallDefinition {
     static final String PREFIX = "/common";
 
     static final String CALL = "/call/remote";
-    static final String CALL_RESULT = "/call/remote";
+    static final String CALL_RESULT = "/call/remote/result";
 
     /**
      * @param calledNumber 被呼叫号码

@@ -1,5 +1,7 @@
 package com.yue.chip.common.business;
 
+import com.yue.chip.annotation.HttpExchangeScan;
+import com.yue.chip.annotation.HttpExchangeScans;
 import com.yue.chip.core.persistence.BaseDaoFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,6 +23,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableJpaAuditing
 @EnableCaching
 @EnableAsync
+@HttpExchangeScans({@HttpExchangeScan("com.yue.chip.**")})
 public class ApplicationCommonBusinessServe {
 
     public static void main ( String args[] ) throws Exception {

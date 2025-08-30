@@ -1,7 +1,7 @@
 package com.yue.chip.upms.domain.aggregates;
 
 import com.yue.chip.annotation.YueChipDDDEntity;
-import com.yue.chip.common.business.expose.file.FileExposeService;
+import com.yue.chip.common.business.expose.file.RemoteFile;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Type;
@@ -32,8 +32,8 @@ public class Resources extends ResourcesDefinition {
     @Resource
     private  static UpmsRepository upmsRepository;
 
-    @DubboReference
-    private static FileExposeService fileExposeService;
+    @Resource
+    private static RemoteFile  remoteFile;
 
     /**
      * 判断编码是否存在

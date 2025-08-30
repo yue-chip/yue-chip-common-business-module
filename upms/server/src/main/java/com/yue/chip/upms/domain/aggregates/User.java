@@ -1,7 +1,7 @@
 package com.yue.chip.upms.domain.aggregates;
 
 import com.yue.chip.annotation.YueChipDDDEntity;
-import com.yue.chip.common.business.expose.file.FileExposeService;
+import com.yue.chip.common.business.expose.file.RemoteFile;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.tenant.common.TenantDefinition;
 import com.yue.chip.core.tenant.remote.http.RemoteTenant;
@@ -40,8 +40,8 @@ public class User extends UserDefinition {
     @Resource
     private static UpmsRepository upmsRepository;
 
-    @DubboReference
-    private static FileExposeService fileExposeService;
+    @Resource
+    private static RemoteFile remoteFile;
 
     @Resource
     private static OrganizationalRepository organizationalRepository;
@@ -108,13 +108,17 @@ public class User extends UserDefinition {
     @Override
     public String getProfilePhotoUrl() {
         Assert.notNull(getId(),"id不能为空");
-        return fileExposeService.getUrlSingle(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME, CurrentUserUtil.getCurrentUserTenantNumber());
+        ResultData<String> resultData = remoteFile.urlSingle(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
+        CheckRemoteHttpResultDataUtil.check(resultData);
+        return resultData.getData();
     }
 
     @Override
     public Long getProfilePhotoId() {
         Assert.notNull(getId(),"id不能为空");
-        Map<String,String> fileMap = fileExposeService.getUrl(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME, CurrentUserUtil.getCurrentUserTenantNumber());
+        ResultData<Map<String, String>> resultData = remoteFile.url(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
+        CheckRemoteHttpResultDataUtil.check(resultData);
+        Map<String,String> fileMap = resultData.getData();
         if (Objects.nonNull(fileMap) && fileMap.size()>0) {
             Object obj = fileMap.keySet().toArray()[0];
             if (obj instanceof Long) {

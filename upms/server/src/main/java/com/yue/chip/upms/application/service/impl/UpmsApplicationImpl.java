@@ -1,7 +1,8 @@
 package com.yue.chip.upms.application.service.impl;
 
 import cn.hutool.core.lang.Assert;
-import com.yue.chip.common.business.expose.file.FileExposeService;
+import com.yue.chip.common.business.expose.file.RemoteFile;
+import com.yue.chip.core.ResultData;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.upms.application.service.UpmsApplication;
@@ -27,6 +28,7 @@ import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.utils.CheckRemoteHttpResultDataUtil;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -67,8 +69,8 @@ public class UpmsApplicationImpl implements UpmsApplication {
     @Resource
     private ResourcesMapper resourcesMapper;
 
-    @DubboReference
-    private FileExposeService fileExposeService;
+    @Resource
+    private RemoteFile remoteFile;
 
     @Resource
     private PasswordEncoder passwordEncoder;
@@ -139,7 +141,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         //保存用户与组织架构的关联关系
         upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
         //保存头像
-        fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber() );
+        remoteFile.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()));
     }
 
     @Override
@@ -148,14 +150,14 @@ public class UpmsApplicationImpl implements UpmsApplication {
     public void updateUser(UserAddOrUpdateDto userAddOrUpdateDto) {
         //更新头像
         if (Objects.nonNull(userAddOrUpdateDto.getProfilePhotoId())) {
-            fileExposeService.save(userAddOrUpdateDto.getId(),UserPo.TABLE_NAME,UserPo.PROFILE_PHOTO_FIELD_NAME,userAddOrUpdateDto.getProfilePhotoId(),CurrentUserUtil.getCurrentUserTenantNumber());
+            remoteFile.save(userAddOrUpdateDto.getId(),UserPo.TABLE_NAME,UserPo.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()));
         }
         //修改用户
         upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系
         upmsDomainService.userOrganizational(userAddOrUpdateDto.getId(),userAddOrUpdateDto.getOrganizationalId());
         //保存头像
-        fileExposeService.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber());
+        remoteFile.save(userAddOrUpdateDto.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME,Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()));
     }
 
     @Override
@@ -241,7 +243,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         resourcesAddDto.setCode(resourcesAddDto.getCode().trim().toUpperCase());
         Resources resources = upmsRepository.saveResources(resourcesMapper.toResourcesPo(resourcesAddDto));
         //保存icon
-        fileExposeService.save(resources.getId(), ResourcesPo.TABLE_NAME,ResourcesPo.ICON_FIELD_NAME,resourcesAddDto.getIconId());
+        remoteFile.save(resources.getId(), ResourcesPo.TABLE_NAME,ResourcesPo.ICON_FIELD_NAME,Arrays.asList(resourcesAddDto.getIconId()));
         return resources;
     }
 
@@ -257,7 +259,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         resourcesUpdateDto.setCode(resourcesUpdateDto.getCode().trim().toUpperCase());
         upmsRepository.updateResources(resourcesMapper.toResourcesPo(resourcesUpdateDto));
         //保存icon
-        fileExposeService.save(resourcesUpdateDto.getId(), ResourcesPo.TABLE_NAME,ResourcesPo.ICON_FIELD_NAME,resourcesUpdateDto.getIconId());
+        remoteFile.save(resourcesUpdateDto.getId(), ResourcesPo.TABLE_NAME,ResourcesPo.ICON_FIELD_NAME,Arrays.asList(resourcesUpdateDto.getIconId()));
     }
 
     private void deleteOrganizational(Long id) {
@@ -290,7 +292,9 @@ public class UpmsApplicationImpl implements UpmsApplication {
 
     @Override
     public String getUrlSingle(Long tableId, String fileFieldName, String tableName, Long tenantNumber) {
-        return fileExposeService.getUrlSingle(tableId, fileFieldName, tableName,tenantNumber);
+        ResultData<String> resultData = remoteFile.urlSingle(tableId, fileFieldName, tableName);
+        CheckRemoteHttpResultDataUtil.check(resultData);
+        return resultData.getData();
     }
 
 
