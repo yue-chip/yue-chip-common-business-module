@@ -14,7 +14,6 @@ import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.utils.AssertUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -159,8 +158,8 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
      * @param roles
      * @return
      */
-    private List<GrantedAuthority> getUserGrantedAuthority(List<Role> roles){
-        List<GrantedAuthority> listGrantedAuthority = new ArrayList<GrantedAuthority>();
+    private List<YueChipSimpleGrantedAuthority> getUserGrantedAuthority(List<Role> roles){
+        List<YueChipSimpleGrantedAuthority> listGrantedAuthority = new ArrayList<YueChipSimpleGrantedAuthority>();
         if (Objects.nonNull(roles)) {
             roles.forEach(role -> {
                 role.getResources().forEach(resourcesVODefinition -> {

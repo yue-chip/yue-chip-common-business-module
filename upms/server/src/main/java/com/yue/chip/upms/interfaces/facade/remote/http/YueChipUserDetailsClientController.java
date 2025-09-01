@@ -1,11 +1,13 @@
 package com.yue.chip.upms.interfaces.facade.remote.http;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.remote.http.YueChipUserDetailsClientDefinition;
 import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,17 +26,26 @@ public class YueChipUserDetailsClientController implements YueChipUserDetailsCli
     @Resource
     private UpmsDomainService upmsDomainService;
 
+    @Resource
+    private ObjectMapper objectMapper;
+
+    @SneakyThrows
     @Override
     @GetMapping(LOGIN_BY_USERNAME)
-    public ResultData<YueChipUserDetails> loadUserByUsernameEx(String username) throws UsernameNotFoundException {
+    public ResultData<YueChipUserDetails> loadUserByUsernameEx(String username) {
         ResultData.ResultDataBuilder<YueChipUserDetails> builder = ResultData.builder();
+//        YueChipUserDetails userDetails = upmsDomainService.loadUserByUsername(username);
+//        return objectMapper.writeValueAsString(userDetails);
         return builder.data(upmsDomainService.loadUserByUsername(username)).build();
     }
 
+    @SneakyThrows
     @Override
     @GetMapping(LOGIN_BY_PHONE_NUMBER)
     public ResultData<YueChipUserDetails> loadUserByPhoneNumber(String phoneNumber) {
         ResultData.ResultDataBuilder<YueChipUserDetails> builder = ResultData.builder();
+//        YueChipUserDetails userDetails = upmsDomainService.loadUserByPhoneNumber(phoneNumber);
+//        return objectMapper.writeValueAsString(userDetails);
         return builder.data(upmsDomainService.loadUserByPhoneNumber(phoneNumber)).build();
     }
 
