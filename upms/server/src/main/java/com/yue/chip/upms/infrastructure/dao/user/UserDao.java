@@ -37,6 +37,13 @@ public interface UserDao extends BaseDao<UserPo>, UserDaoEx {
     Optional<UserPo> findFirstByUsername(@NotBlank String username);
 
     /**
+     * 根据 手机号 查询用户
+     * @param phoneNumber   手机号
+     * @return
+     */
+    Optional<UserPo> findFirstByPhoneNumber(@NotBlank String phoneNumber);
+
+    /**
      * 根据 email 查询用户
      * @param email
      * @return
