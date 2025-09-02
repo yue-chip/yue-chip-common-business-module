@@ -34,7 +34,7 @@ import java.util.*;
 @EqualsAndHashCode(callSuper=false)
 @SuperBuilder
 @NoArgsConstructor
-//@YueChipDDDEntity
+
 @Component
 public class User extends UserDefinition {
 

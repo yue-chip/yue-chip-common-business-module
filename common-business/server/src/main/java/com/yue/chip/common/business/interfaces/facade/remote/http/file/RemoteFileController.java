@@ -59,6 +59,7 @@ public class RemoteFileController implements RemoteFileDefinition {
     }
 
     @Override
+    @GetMapping(URL_SINGLE)
     public ResultData<String> urlSingle(Long tableId, String fileFieldName, String tableName) {
         ResultData.ResultDataBuilder<String> builder = ResultData.builder();
         ResultData<Map<String, String>> resultData = url(tableId, fileFieldName, tableName);
@@ -73,6 +74,7 @@ public class RemoteFileController implements RemoteFileDefinition {
     }
 
     @Override
+    @GetMapping(SAVE)
     public ResultData<List<Long>> save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
         fileRepository.save(tableId, tableName, fileFieldName, fileIds);
         ResultData.ResultDataBuilder<List<Long>> builder = ResultData.builder();

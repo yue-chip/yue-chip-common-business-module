@@ -1,4 +1,4 @@
-package com.yue.chip.upms.interfaces.facade.remote.enums;
+package com.yue.chip.upms.interfaces.facade.remote.http.enums;
 
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.common.enums.EnumPersistenceBean;
@@ -11,10 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -35,12 +32,13 @@ public class RemoteEnumController implements RemoteEnumDefinition {
 
     @Override
     @PostMapping(SAVE)
-    public void save(List<EnumPersistenceBean> list) {
+    public ResultData save(List<EnumPersistenceBean> list) {
         if (Objects.nonNull(list) && !list.isEmpty()) {
             list.forEach(bean -> {
                 enumUtilRepository.save(enumUtilMapper.toEnumUtilPo(bean));
             });
         }
+        return ResultData.builder().build();
     }
 
     @Override
