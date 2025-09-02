@@ -1,6 +1,5 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.common.business.expose.file.RemoteFile;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
@@ -10,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -24,15 +24,14 @@ import java.util.Optional;
  */
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
-@YueChipDDDEntity
+//@YueChipDDDEntity
+@Component
 public class Resources extends ResourcesDefinition {
 
-    @Resource
     private  static UpmsRepository upmsRepository;
 
-    @Resource
     private static RemoteFile  remoteFile;
 
     /**
@@ -133,4 +132,13 @@ public class Resources extends ResourcesDefinition {
         return true;
     }
 
+    @Resource
+    public void setUpmsRepository(UpmsRepository upmsRepository) {
+        Resources.upmsRepository = upmsRepository;
+    }
+
+    @Resource
+    public void setRemoteFile(RemoteFile remoteFile) {
+        Resources.remoteFile = remoteFile;
+    }
 }

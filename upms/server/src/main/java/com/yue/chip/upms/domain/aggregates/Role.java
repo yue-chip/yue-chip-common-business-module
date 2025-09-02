@@ -1,15 +1,12 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.role.RoleDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
-import com.yue.chip.utils.SpringContextUtil;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Resource;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -25,12 +22,12 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper=true)
+//@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
-@YueChipDDDEntity
+//@YueChipDDDEntity
+@Component
 public class Role extends RoleDefinition {
 
-    @Resource
     private  static UpmsRepository upmsRepository;
 
     /**
@@ -117,5 +114,15 @@ public class Role extends RoleDefinition {
             return true;
         }
         return false;
+    }
+
+    @Resource
+    public void setUpmsRepository(UpmsRepository upmsRepository) {
+        Role.upmsRepository = upmsRepository;
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }

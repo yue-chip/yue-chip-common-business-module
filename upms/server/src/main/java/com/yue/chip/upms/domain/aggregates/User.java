@@ -1,6 +1,5 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.common.business.expose.file.RemoteFile;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.tenant.common.TenantDefinition;
@@ -21,6 +20,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.*;
@@ -31,21 +31,17 @@ import java.util.*;
  * @description 用户聚合根 此聚合根非彼聚合根 意思意思
  */
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper=false)
 @SuperBuilder
 @NoArgsConstructor
-@YueChipDDDEntity
+//@YueChipDDDEntity
+@Component
 public class User extends UserDefinition {
 
-    @Resource
     private static UpmsRepository upmsRepository;
 
-    @Resource
     private static RemoteFile remoteFile;
-
-    @Resource
     private static OrganizationalRepository organizationalRepository;
-
     private static RemoteTenant remoteTenant;
 
     @Builder.Default
@@ -155,5 +151,25 @@ public class User extends UserDefinition {
             return resultData.getData();
         }
         return null;
+    }
+
+    @Resource
+    public void setUpmsRepository(UpmsRepository upmsRepository) {
+        User.upmsRepository = upmsRepository;
+    }
+
+    @Resource
+    public void setRemoteFile(RemoteFile remoteFile) {
+        User.remoteFile = remoteFile;
+    }
+
+    @Resource
+    public void setOrganizationalRepository(OrganizationalRepository organizationalRepository) {
+        User.organizationalRepository = organizationalRepository;
+    }
+
+    @Resource
+    public void setRemoteTenant(RemoteTenant remoteTenant) {
+        User.remoteTenant = remoteTenant;
     }
 }
