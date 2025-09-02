@@ -24,7 +24,7 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
 @Component
-//@YueChipDDDEntity
+
 public class Grid extends GridDefinition {
 
     private static OrganizationalRepository organizationalRepository;

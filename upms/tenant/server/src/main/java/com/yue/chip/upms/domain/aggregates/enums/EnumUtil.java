@@ -1,6 +1,6 @@
 package com.yue.chip.upms.domain.aggregates.enums;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
+
 import com.yue.chip.core.common.enums.EnumUtilDefinition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +15,6 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-@YueChipDDDEntity
+
 public class EnumUtil extends EnumUtilDefinition {
 }

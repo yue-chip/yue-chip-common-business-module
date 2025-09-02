@@ -1,6 +1,6 @@
 package com.yue.chip.upms.domain.aggregates.tenant;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
+
 import com.yue.chip.core.tenant.common.TenantDefinition;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import jakarta.annotation.Resource;
@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
-@YueChipDDDEntity
+
 public class Tenant extends TenantDefinition {
 
     @Resource
@@ -50,4 +50,10 @@ public class Tenant extends TenantDefinition {
 //        }
 //        return false;
 //    }
+
+
+    @Resource
+    public void setTenantRepository(TenantRepository tenantRepository) {
+        Tenant.tenantRepository = tenantRepository;
+    }
 }

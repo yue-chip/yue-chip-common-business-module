@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @EqualsAndHashCode(callSuper=false)
 @SuperBuilder
 @NoArgsConstructor
-//@YueChipDDDEntity
+
 @Component
 public class UserWeixin extends UserWeiXinDefinition {
 

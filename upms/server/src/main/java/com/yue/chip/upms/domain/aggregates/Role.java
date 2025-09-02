@@ -4,6 +4,7 @@ import com.yue.chip.upms.definition.role.RoleDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import jakarta.annotation.Resource;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.stereotype.Component;
@@ -22,9 +23,9 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Data
 @SuperBuilder
-//@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
-//@YueChipDDDEntity
+
 @Component
 public class Role extends RoleDefinition {
 
@@ -119,10 +120,5 @@ public class Role extends RoleDefinition {
     @Resource
     public void setUpmsRepository(UpmsRepository upmsRepository) {
         Role.upmsRepository = upmsRepository;
-    }
-
-    @Override
-    public String toString() {
-        return "";
     }
 }

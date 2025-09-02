@@ -1,4 +1,4 @@
-package com.yue.chip.upms.interfaces.facade.remote.tenant;
+package com.yue.chip.upms.interfaces.facade.remote.http.tenant;
 
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.tenant.common.TenantDefinition;
@@ -31,7 +31,7 @@ public class RemoteTenantController implements RemoteTenantDefinition {
     private TenantMapper tenantMapper;
 
     @Override
-    @GetMapping(GET_BY_REQUEST_DOMAIN)
+    @GetMapping(PREFIX+GET_BY_REQUEST_DOMAIN)
     public ResultData<TenantDefinition> get( String requestDomain) {
         ResultData.ResultDataBuilder<TenantDefinition> builder = ResultData.builder();
         Optional<Tenant> optional = tenantRepository.findTenantByRequestDomain(requestDomain);
@@ -42,7 +42,7 @@ public class RemoteTenantController implements RemoteTenantDefinition {
     }
 
     @Override
-    @GetMapping(GET_BY_TENANT_NUMBER)
+    @GetMapping(PREFIX+GET_BY_TENANT_NUMBER)
     public ResultData<TenantDefinition> get( Long tenantNumber) {
         ResultData.ResultDataBuilder<TenantDefinition> builder = ResultData.builder();
         Optional<Tenant> optional = tenantRepository.findTenantByTenantNumber(tenantNumber);

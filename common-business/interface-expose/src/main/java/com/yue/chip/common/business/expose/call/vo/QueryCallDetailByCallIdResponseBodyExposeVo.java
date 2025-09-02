@@ -1,8 +1,10 @@
 package com.yue.chip.common.business.expose.call.vo;
 
 import com.aliyun.core.annotation.NameInMap;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -13,6 +15,8 @@ import java.io.Serializable;
  */
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class QueryCallDetailByCallIdResponseBodyExposeVo implements Serializable {
     @NameInMap("Code")
     private String code;

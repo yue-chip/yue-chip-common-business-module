@@ -1,6 +1,6 @@
 //package com.yue.chip.upms.domain.aggregates;
 //
-//import com.yue.chip.annotation.YueChipDDDEntity;
+
 //import com.yue.chip.upms.definition.tenant.TenantDefinition;
 //import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 //import com.yue.chip.utils.AssertUtil;
@@ -25,7 +25,7 @@
 //@SuperBuilder
 //@EqualsAndHashCode(callSuper=true)
 //@NoArgsConstructor
-//@YueChipDDDEntity
+
 //public class Tenant extends TenantDefinition {
 //
 //    @Resource

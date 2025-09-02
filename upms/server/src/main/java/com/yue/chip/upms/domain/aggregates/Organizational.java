@@ -23,7 +23,7 @@ import java.util.Optional;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
-//@YueChipDDDEntity
+
 @Component
 public class Organizational extends OrganizationalDefinition {
 
