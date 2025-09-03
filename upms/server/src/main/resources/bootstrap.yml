@@ -31,6 +31,5 @@ spring:
       - nacos:jpa.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:oauth2-resource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:sentinel.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-      - nacos:dubbo.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:seata.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:valkey.yaml?group=GLOBAL_GROUP&refreshEnabled=true
