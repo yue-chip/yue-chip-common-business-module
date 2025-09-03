@@ -8,11 +8,15 @@ import com.yue.chip.common.business.expose.file.RemoteFileDefinition;
 import com.yue.chip.core.ResultData;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.extern.java.Log;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
@@ -31,7 +35,7 @@ public class RemoteFileController implements RemoteFileDefinition {
 
     @Override
     @GetMapping(FIND)
-    public ResultData<FileDefinition> find(Long fileId) {
+    public ResultData<FileDefinition> find(@NotNull(message = "文件id不能为空") @RequestParam(value = "fileId") Long fileId) {
         Optional<File> optional = fileRepository.find(fileId);
         ResultData.ResultDataBuilder<FileDefinition>  builder = ResultData.builder();
         if (optional.isPresent()) {
@@ -42,7 +46,9 @@ public class RemoteFileController implements RemoteFileDefinition {
 
     @Override
     @GetMapping(URL)
-    public ResultData<Map<String, String>> url(Long tableId, String fileFieldName, String tableName) {
+    public ResultData<Map<String, String>> url(@NotNull(message = "表id不能为空") @RequestParam(value = "tableId") Long tableId,
+                                               @NotBlank(message = "表字段名不能为空") @RequestParam(value = "fileFieldName") String fileFieldName,
+                                               @NotBlank(message = "表明") @RequestParam(value = "tableName") String tableName) {
         ResultData.ResultDataBuilder<Map<String, String>> builder = ResultData.builder();
         if (Objects.isNull(tableId) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {
             return builder.build();
@@ -60,7 +66,9 @@ public class RemoteFileController implements RemoteFileDefinition {
 
     @Override
     @GetMapping(URL_SINGLE)
-    public ResultData<String> urlSingle(Long tableId, String fileFieldName, String tableName) {
+    public ResultData<String> urlSingle(@NotNull(message = "表id不能为空") @RequestParam(value = "tableId") Long tableId,
+                                        @NotBlank(message = "表字段名不能为空") @RequestParam(value = "fileFieldName") String fileFieldName,
+                                        @NotBlank(message = "tableName") @RequestParam(value = "tableName") String tableName) {
         ResultData.ResultDataBuilder<String> builder = ResultData.builder();
         ResultData<Map<String, String>> resultData = url(tableId, fileFieldName, tableName);
         if (Objects.nonNull(resultData.getData())) {
@@ -75,7 +83,10 @@ public class RemoteFileController implements RemoteFileDefinition {
 
     @Override
     @GetMapping(SAVE)
-    public ResultData<List<Long>> save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
+    public ResultData<List<Long>> save(@NotNull(message = "表id不能为空") @RequestParam(value = "tableId")Long tableId,
+                                       @NotBlank(message = "表名不能为空") @RequestParam(value = "tableName")String tableName,
+                                       @NotBlank(message = "表字段名不能为空") @RequestParam(value = "fileFieldName")String fileFieldName,
+                                       @NotNull(message = "文件id不能为空") @Size(min = 1,message = "文件id不能为空") @RequestParam(value = "fileIds")List<Long> fileIds) {
         fileRepository.save(tableId, tableName, fileFieldName, fileIds);
         ResultData.ResultDataBuilder<List<Long>> builder = ResultData.builder();
         return builder.data(fileIds).build();

@@ -23,9 +23,8 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
-
 @Component
 public class Role extends RoleDefinition {
 
@@ -121,4 +120,10 @@ public class Role extends RoleDefinition {
     public void setUpmsRepository(UpmsRepository upmsRepository) {
         Role.upmsRepository = upmsRepository;
     }
+
+    public int hashCode() {
+        return 1;
+    }
+
+
 }

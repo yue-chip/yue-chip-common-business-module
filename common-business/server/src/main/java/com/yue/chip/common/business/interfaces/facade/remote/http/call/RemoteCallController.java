@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -35,7 +36,12 @@ public class RemoteCallController implements RemoteCallDefinition {
 
     @Override
     @GetMapping(CALL)
-    public ResultData<SingleCallByTtsResponseBodyExposeVo> call(String calledNumber, Object ttsParam, String ttsCode, Integer playTimes, Integer volume, String outId) {
+    public ResultData<SingleCallByTtsResponseBodyExposeVo> call(@RequestParam(value = "calledNumber",required = false) String calledNumber,
+                                                                @RequestParam(value = "ttsParam",required = false) Object ttsParam,
+                                                                @RequestParam(value = "ttsCode",required = false) String ttsCode,
+                                                                @RequestParam(value = "playTimes",required = false) Integer playTimes,
+                                                                @RequestParam(value = "volume",required = false) Integer volume,
+                                                                @RequestParam(value = "outId",required = false) String outId) {
         SingleCallByTtsRequest request = SingleCallByTtsRequest.builder()
                 .calledNumber(calledNumber)
                 .ttsCode(ttsCode)
@@ -62,7 +68,9 @@ public class RemoteCallController implements RemoteCallDefinition {
 
     @Override
     @GetMapping(CALL_RESULT)
-    public ResultData<QueryCallDetailByCallIdResponseBodyExposeVo> callResult(String callId, Long prodId, Long queryDate) {
+    public ResultData<QueryCallDetailByCallIdResponseBodyExposeVo> callResult(@RequestParam(value = "callId",required = false) String callId,
+                                                                              @RequestParam(value = "prodId",required = false)  Long prodId,
+                                                                              @RequestParam(value = "queryDate",required = false) Long queryDate) {
         QueryCallDetailByCallIdRequest queryCallDetailByCallIdRequest = QueryCallDetailByCallIdRequest.builder()
                 .callId(callId)
                 .prodId(prodId)

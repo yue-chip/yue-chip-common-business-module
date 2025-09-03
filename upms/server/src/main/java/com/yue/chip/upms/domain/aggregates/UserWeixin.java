@@ -13,11 +13,14 @@ import org.springframework.stereotype.Component;
  * @date 2023/10/7 下午6:25
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-
 @Component
 public class UserWeixin extends UserWeiXinDefinition {
 
+
+    public int hashCode() {
+        return 1;
+    }
 }

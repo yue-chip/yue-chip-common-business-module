@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
 @Component
 
@@ -62,5 +62,9 @@ public class Grid extends GridDefinition {
     @Resource
     public  void setUserMapper(UserMapper userMapper) {
         Grid.userMapper = userMapper;
+    }
+
+    public int hashCode() {
+        return 1;
     }
 }

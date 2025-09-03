@@ -5,9 +5,9 @@ spring:
     allow-bean-definition-overriding: true
     allow-circular-references: true
   nacos:
-    group: IOT-GROUP
+    group: RECYCLING-MACHINE
     host: 192.168.11.171:8848
-    namespace: ed8ca3b7-24be-4caa-b4aa-5549d68ae896
+    namespace: 3b759ee5-b170-4c41-b967-31d18099077c
 #    group: YUE-CHIP-GROUP
 #    host: 192.168.177.129:8848
 #    namespace: cbce5ffe-31d2-4826-99ab-384241f16917
