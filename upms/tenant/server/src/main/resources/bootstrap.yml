@@ -1,3 +1,17 @@
+management:
+  endpoint:
+    restart:
+      enabled: true
+    health:
+      access: read_only
+#  endpoints:
+#    web:
+#      exposure:
+#        include: ['restart']
+#        exclude: "*"
+#    jmx:
+#      exposure:
+#        exclude: "*"
 server:
   port: 0
 spring:
