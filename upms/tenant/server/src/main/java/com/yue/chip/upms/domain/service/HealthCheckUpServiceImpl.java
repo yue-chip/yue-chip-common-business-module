@@ -63,7 +63,8 @@ public class HealthCheckUpServiceImpl implements HealthCheckUpService {
                 return jdbcIsHealth;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return false;
         }
         return true;
     }
