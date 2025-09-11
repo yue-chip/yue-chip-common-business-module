@@ -9,6 +9,7 @@ import com.yue.chip.core.ResultData;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,6 +56,17 @@ public class RemoteFileController implements RemoteFileDefinition {
             });
         }
         return  builder.data(urls).build();
+
+    }
+
+    @Override
+    @GetMapping(URLS)
+    public ResultData<Map<String, String>> urls(ArrayList<Long> tableIds, String fileFieldName, String tableName) {
+        ResultData.ResultDataBuilder<Map<String, String>> builder = ResultData.builder();
+        if (CollectionUtils.isEmpty(tableIds) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {
+            return builder.build();
+        }
+        return builder.data(fileRepository.find(tableIds, fileFieldName, tableName)).build();
 
     }
 
