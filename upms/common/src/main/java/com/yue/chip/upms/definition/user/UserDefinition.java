@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yue.chip.core.BaseDefinition;
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.enums.IdCardType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Transient;
@@ -89,9 +90,14 @@ public class UserDefinition extends BaseDefinition {
     @Schema(description = "最后登录时间")
     private LocalDateTime lastLoginTime;
 
+    @Schema(description = "用户类型")
+    private UserType userType;
+
     @Schema(description = "租户id")
     @JsonIgnore
     private Long tenantNumber;
+
+    private String nickname;
 
     private  Boolean accountNonExpired;
 

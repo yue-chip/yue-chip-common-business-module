@@ -1,6 +1,7 @@
 package com.yue.chip.upms.infrastructure.po.user;
 
 import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.core.persistence.JpaInterceptor;
 import com.yue.chip.upms.definition.user.UserDefinition;
 import com.yue.chip.upms.enums.IdCardType;
@@ -145,5 +146,16 @@ public class UserPo extends UserDefinition {
     @ColumnDefault("''")
     public String getIdentificationNumber() {
         return super.getIdentificationNumber();
+    }
+
+    @Override
+    @Convert(converter = UserType.UserTypeConverter.class)
+    public UserType getUserType() {
+        return super.getUserType();
+    }
+
+    @Override
+    public String getNickname() {
+        return super.getNickname();
     }
 }

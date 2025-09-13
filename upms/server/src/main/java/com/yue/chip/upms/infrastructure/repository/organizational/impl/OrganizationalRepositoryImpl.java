@@ -1,7 +1,5 @@
 package com.yue.chip.upms.infrastructure.repository.organizational.impl;
 
-import com.yue.chip.core.IPageResultData;
-import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
@@ -25,17 +23,14 @@ import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
 import com.yue.chip.upms.interfaces.vo.organizational.OrganizationalTreeListVo;
-import com.yue.chip.upms.vo.UserExposeVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Mr.Liu
@@ -82,14 +77,6 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
         return Optional.empty();
     }
 
-    @Override
-    public List<Organizational> findAllByUserId(Long userId) {
-        List<OrganizationalPo> list = organizationalDao.findAllByUserId(userId);
-        if (!CollectionUtils.isEmpty(list)) {
-            return organizationalMapper.toOrganizationalList(list);
-        }
-        return new ArrayList<>();
-    }
 
     @Override
     public Optional<Organizational> findById(Long id) {

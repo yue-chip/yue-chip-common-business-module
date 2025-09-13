@@ -1,7 +1,6 @@
-package com.yue.chip.social.vo;
+package com.yue.chip.remote.http.social.vo;
 
 import com.yue.chip.upms.definition.user.UserSocialDefinition;
-import com.yue.chip.upms.definition.user.UserWeiXinDefinition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

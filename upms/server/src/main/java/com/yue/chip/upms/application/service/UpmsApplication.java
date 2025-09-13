@@ -106,6 +106,14 @@ public interface UpmsApplication {
 
     public UserVo test(String name);
 
+    /**
+     * 保存app用户
+     * @param userAddOrUpdateDto
+     */
+    public void saveAppUser(@NotNull UserAddOrUpdateDto userAddOrUpdateDto);
+
+
+
     @Cacheable(
             value = {"test"},
             key = "#id + '-' +#name"

@@ -1,6 +1,6 @@
 package com.yue.chip.upms.assembler.social;
 
-import com.yue.chip.social.vo.UserSocialExposeVo;
+import com.yue.chip.remote.http.social.vo.UserSocialExposeVo;
 import com.yue.chip.upms.domain.aggregates.UserSocial;
 import com.yue.chip.upms.infrastructure.po.user.UserSocialPo;
 import org.mapstruct.Mapper;

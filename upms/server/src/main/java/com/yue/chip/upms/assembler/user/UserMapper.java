@@ -1,5 +1,6 @@
 package com.yue.chip.upms.assembler.user;
 
+import com.yue.chip.remote.http.upms.vo.UserExposeVo;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
@@ -56,4 +57,10 @@ public interface UserMapper {
             @Mapping(target = "tenantNumber",source = "tenant.tenantNumber"),
             @Mapping(target = "bigScreenName",source = "tenant.bigScreenName")})
     public UserVo toUserVo(User user);
+
+    UserExposeVo toUserExposeVo(User  user);
+
+    List<UserExposeVo> toUserExposeVo(List<User>  user);
+
+    UserAddOrUpdateDto toUserAddOrUpdateDto(UserPo userPo);
 }
