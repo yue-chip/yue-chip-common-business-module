@@ -76,4 +76,8 @@ public class Organizational extends OrganizationalDefinition {
     public void setOrganizationalRepository(OrganizationalRepository organizationalRepository) {
         Organizational.organizationalRepository = organizationalRepository;
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }

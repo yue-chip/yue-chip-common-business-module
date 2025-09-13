@@ -141,4 +141,8 @@ public class Resources extends ResourcesDefinition {
     public void setRemoteFile(RemoteFile remoteFile) {
         Resources.remoteFile = remoteFile;
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }

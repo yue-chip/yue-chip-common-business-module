@@ -63,4 +63,8 @@ public class Grid extends GridDefinition {
     public  void setUserMapper(UserMapper userMapper) {
         Grid.userMapper = userMapper;
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }

@@ -20,4 +20,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserWeixin extends UserWeiXinDefinition {
 
+    public int hashCode() {
+        return 1;
+    }
+
 }

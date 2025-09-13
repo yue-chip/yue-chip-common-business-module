@@ -121,4 +121,8 @@ public class Role extends RoleDefinition {
     public void setUpmsRepository(UpmsRepository upmsRepository) {
         Role.upmsRepository = upmsRepository;
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }

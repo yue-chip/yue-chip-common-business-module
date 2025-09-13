@@ -7,6 +7,7 @@ import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotBlank;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,6 +48,21 @@ public class YueChipUserDetailsClientController implements YueChipUserDetailsCli
 //        YueChipUserDetails userDetails = upmsDomainService.loadUserByPhoneNumber(phoneNumber);
 //        return objectMapper.writeValueAsString(userDetails);
         return builder.data(upmsDomainService.loadUserByPhoneNumber(phoneNumber)).build();
+    }
+
+    @Override
+    public ResultData<YueChipUserDetails> loadUserByEmail(@NotBlank(message = "邮箱不能为空") String s) {
+        return null;
+    }
+
+    @Override
+    public ResultData<YueChipUserDetails> loadUserBySocialTypeAndSocialUid(@NotBlank(message = "socialType不能为空") String s, @NotBlank(message = "socialUid不能为空") String s1) {
+        return null;
+    }
+
+    @Override
+    public ResultData<YueChipUserDetails> saveUserSocial(@NotBlank(message = "socialType不能为空") String s, @NotBlank(message = "socialUid不能为空") String s1, @NotBlank(message = "socialAcc不能为空") String s2, @NotBlank(message = "socialNickname不能为空") String s3) {
+        return null;
     }
 
     @Override

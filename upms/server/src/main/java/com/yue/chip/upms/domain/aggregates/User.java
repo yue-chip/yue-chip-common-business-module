@@ -172,4 +172,8 @@ public class User extends UserDefinition {
     public void setRemoteTenant(RemoteTenant remoteTenant) {
         User.remoteTenant = remoteTenant;
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }
