@@ -31,7 +31,7 @@ public class RemoteTenantController implements RemoteTenantDefinition {
     private TenantMapper tenantMapper;
 
     @Override
-    @GetMapping(PREFIX+GET_BY_REQUEST_DOMAIN)
+    @GetMapping(GET_BY_REQUEST_DOMAIN)
     public ResultData<TenantDefinition> get( String requestDomain) {
         ResultData.ResultDataBuilder<TenantDefinition> builder = ResultData.builder();
         Optional<Tenant> optional = tenantRepository.findTenantByRequestDomain(requestDomain);
@@ -42,7 +42,7 @@ public class RemoteTenantController implements RemoteTenantDefinition {
     }
 
     @Override
-    @GetMapping(PREFIX+GET_BY_TENANT_NUMBER)
+    @GetMapping(GET_BY_TENANT_NUMBER)
     public ResultData<TenantDefinition> get( Long tenantNumber) {
         ResultData.ResultDataBuilder<TenantDefinition> builder = ResultData.builder();
         Optional<Tenant> optional = tenantRepository.findTenantByTenantNumber(tenantNumber);

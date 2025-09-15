@@ -7,7 +7,6 @@ import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotBlank;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,8 +34,6 @@ public class YueChipUserDetailsClientController implements YueChipUserDetailsCli
     @GetMapping(LOGIN_BY_USERNAME)
     public ResultData<YueChipUserDetails> loadUserByUsernameEx(String username) {
         ResultData.ResultDataBuilder<YueChipUserDetails> builder = ResultData.builder();
-//        YueChipUserDetails userDetails = upmsDomainService.loadUserByUsername(username);
-//        return objectMapper.writeValueAsString(userDetails);
         return builder.data(upmsDomainService.loadUserByUsername(username)).build();
     }
 
@@ -45,23 +42,24 @@ public class YueChipUserDetailsClientController implements YueChipUserDetailsCli
     @GetMapping(LOGIN_BY_PHONE_NUMBER)
     public ResultData<YueChipUserDetails> loadUserByPhoneNumber(String phoneNumber) {
         ResultData.ResultDataBuilder<YueChipUserDetails> builder = ResultData.builder();
-//        YueChipUserDetails userDetails = upmsDomainService.loadUserByPhoneNumber(phoneNumber);
-//        return objectMapper.writeValueAsString(userDetails);
         return builder.data(upmsDomainService.loadUserByPhoneNumber(phoneNumber)).build();
     }
 
     @Override
-    public ResultData<YueChipUserDetails> loadUserByEmail(@NotBlank(message = "邮箱不能为空") String s) {
+    @GetMapping(LOGIN_BY_EMAIL)
+    public ResultData<YueChipUserDetails> loadUserByEmail(String email) {
         return null;
     }
 
     @Override
-    public ResultData<YueChipUserDetails> loadUserBySocialTypeAndSocialUid(@NotBlank(message = "socialType不能为空") String s, @NotBlank(message = "socialUid不能为空") String s1) {
+    @GetMapping(LOGIN_BY_SOCIAL)
+    public ResultData<YueChipUserDetails> loadUserBySocialTypeAndSocialUid(String socialType,String socialUid) {
         return null;
     }
 
     @Override
-    public ResultData<YueChipUserDetails> saveUserSocial(@NotBlank(message = "socialType不能为空") String s, @NotBlank(message = "socialUid不能为空") String s1, @NotBlank(message = "socialAcc不能为空") String s2, @NotBlank(message = "socialNickname不能为空") String s3) {
+    @GetMapping(SAVE_SOCIAL)
+    public ResultData<YueChipUserDetails> saveUserSocial(String socialType,String socialUid,String socialAcc,String socialNickname) {
         return null;
     }
 

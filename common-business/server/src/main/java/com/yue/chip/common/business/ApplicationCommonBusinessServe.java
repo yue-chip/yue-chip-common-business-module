@@ -11,6 +11,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author Mr.Liu
@@ -23,6 +24,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableJpaAuditing
 @EnableCaching
 @EnableAsync
+@EnableScheduling
 @HttpExchangeScans({@HttpExchangeScan("com.yue.chip.**")})
 public class ApplicationCommonBusinessServe {
 
