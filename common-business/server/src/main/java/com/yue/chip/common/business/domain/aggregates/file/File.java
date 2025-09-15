@@ -1,12 +1,11 @@
 package com.yue.chip.common.business.domain.aggregates.file;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.common.business.definition.file.FileDefinition;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Mr.Liu
@@ -16,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-@YueChipDDDEntity
+@Component
 public class File extends FileDefinition {
 
 }
