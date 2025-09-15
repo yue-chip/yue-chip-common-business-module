@@ -21,4 +21,6 @@ public interface FileDaoEx {
      * @return
      */
     public List<FilePo> find(@NotNull Long tableId,@NotBlank String fileFieldName, @NotBlank String tableName);
+
+    public List<FilePo> find(@NotNull List<Long> tableIds,@NotBlank String fileFieldName, @NotBlank String tableName);
 }

@@ -7,8 +7,6 @@ import com.yue.chip.common.business.domain.service.file.FileService;
 import com.yue.chip.common.business.interfaces.vo.file.FileVo;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
-import com.yue.chip.core.controller.BaseController;
-import com.yue.chip.core.controller.impl.BaseControllerImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -44,6 +42,7 @@ public class FileController  {
     @PostMapping("/upload")
     @Operation(description = "上传文件(支持多文件)",summary = "上传文件(支持多文件)")
     public IResultData<List<FileVo>> upload(StandardMultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
+        ResultData.ResultDataBuilder<List<FileVo>> builder = ResultData.builder();
         Map<String, MultipartFile> files = multipartHttpServletRequest.getFileMap();
         List<FileVo> fileList = new ArrayList<FileVo>();
         for(String originalFileName : files.keySet()) {
@@ -70,7 +69,7 @@ public class FileController  {
                 }
             }
         }
-        return ResultData.builder().data(fileList).build();
+        return builder.data(fileList).build();
     }
 
 }

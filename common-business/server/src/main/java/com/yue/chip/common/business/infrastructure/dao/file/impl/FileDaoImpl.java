@@ -4,7 +4,6 @@ import com.yue.chip.common.business.infrastructure.dao.file.FileDaoEx;
 import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotBlank;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +24,17 @@ public class FileDaoImpl implements FileDaoEx {
         Map<String, Object> para = new HashMap<>();
         sb.append("select f from FilePo f join FileRelationalPo fr on f.id = fr.fileId where fr.tableId=:tableId and fr.fileFieldName=:fileFieldName and fr.tableName=: tableName");
         para.put("tableId",tableId);
+        para.put("fileFieldName",fileFieldName);
+        para.put("tableName",tableName);
+        return (List<FilePo>) filePoBaseDao.findAll(sb.toString(),para);
+    }
+
+    @Override
+    public List<FilePo> find(List<Long> tableIds, String fileFieldName, String tableName) {
+        StringBuffer sb = new StringBuffer();
+        Map<String, Object> para = new HashMap<>();
+        sb.append("select f from FilePo f join FileRelationalPo fr on f.id = fr.fileId where fr.tableId in(:tableId) and fr.fileFieldName=:fileFieldName and fr.tableName=: tableName");
+        para.put("tableId",tableIds);
         para.put("fileFieldName",fileFieldName);
         para.put("tableName",tableName);
         return (List<FilePo>) filePoBaseDao.findAll(sb.toString(),para);

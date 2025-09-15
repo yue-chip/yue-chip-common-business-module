@@ -39,6 +39,8 @@ public interface FileRepository {
      */
     public List<File> find(@NotNull Long tableId,@NotBlank String fileFieldName,@NotBlank String tableName);
 
+    public List<File> find(@NotNull List<Long>  tableId,@NotBlank String fileFieldName,@NotBlank String tableName);
+
     /**
      * 保存表与文件的关联关系
      *

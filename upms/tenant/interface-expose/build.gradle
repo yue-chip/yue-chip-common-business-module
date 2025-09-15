@@ -6,6 +6,7 @@ dependencies {
     api project(':tenant:common')
     api 'yue.chip:yue-chip-interface-expose-starter'
     implementation 'jakarta.platform:jakarta.jakartaee-api'
+    compileOnly 'org.springdoc:springdoc-openapi-starter-webmvc-api'
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
     compileOnly "org.mapstruct:mapstruct-jdk8"
