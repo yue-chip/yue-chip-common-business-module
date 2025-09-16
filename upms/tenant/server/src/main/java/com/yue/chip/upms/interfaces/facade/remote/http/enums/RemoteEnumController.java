@@ -32,7 +32,7 @@ public class RemoteEnumController implements RemoteEnumDefinition {
 
     @Override
     @PostMapping(SAVE)
-    public ResultData save(List<EnumPersistenceBean> list) {
+    public ResultData save(@RequestBody List<EnumPersistenceBean> list) {
         if (Objects.nonNull(list) && !list.isEmpty()) {
             list.forEach(bean -> {
                 enumUtilRepository.save(enumUtilMapper.toEnumUtilPo(bean));

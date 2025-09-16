@@ -1,8 +1,8 @@
-package com.yue.chip.common.business.domain.service;
+package com.yue.chip.upms.domain.service;
 
-import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import com.yue.chip.core.health.HealthCheckUpService;
 import com.yue.chip.core.persistence.curd.BaseDao;
+import com.yue.chip.upms.infrastructure.po.tenant.TenantPo;
 import jakarta.annotation.Resource;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class HealthCheckUpServiceImpl implements HealthCheckUpService {
 
     @Resource
-    private BaseDao<FilePo> baseDao;
+    private BaseDao<TenantPo> baseDao;
 
     @Resource
     private RedisTemplate redisTemplate;
