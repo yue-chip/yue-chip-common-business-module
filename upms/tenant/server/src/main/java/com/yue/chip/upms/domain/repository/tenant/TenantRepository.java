@@ -118,4 +118,8 @@ public interface TenantRepository {
      * @return
      */
     public List<Tenant> findAll();
+
+    public Optional<Tenant> findTenantByRequestDomain(String requestDomain);
+
+
 }

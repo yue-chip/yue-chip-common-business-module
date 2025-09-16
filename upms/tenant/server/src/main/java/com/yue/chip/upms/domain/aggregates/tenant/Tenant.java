@@ -1,6 +1,5 @@
 package com.yue.chip.upms.domain.aggregates.tenant;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.core.tenant.common.TenantDefinition;
 import com.yue.chip.upms.domain.repository.tenant.TenantRepository;
 import jakarta.annotation.Resource;
@@ -8,17 +7,25 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.stereotype.Component;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
-@YueChipDDDEntity
+@Component
 public class Tenant extends TenantDefinition {
 
-    @Resource
     private static TenantRepository tenantRepository;
 
+    @Resource
+    public void setTenantRepository(TenantRepository tenantRepository) {
+        Tenant.tenantRepository = tenantRepository;
+    }
+
+    public int hashCode() {
+        return 1;
+    }
 
 //    public Boolean checkNameIsExist() {
 //        Assert.hasText(getName(),"名称不能为空");

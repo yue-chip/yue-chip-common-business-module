@@ -1,19 +1,15 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.definition.organizational.GridDefinition;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
-import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import jakarta.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -24,18 +20,14 @@ import java.util.Optional;
  */
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
-@YueChipDDDEntity
 public class Grid extends GridDefinition {
 
-    @Resource
     private static OrganizationalRepository organizationalRepository;
 
-    @Resource
     private static UpmsRepository upmsRepository;
 
-    @Resource
     private static UserMapper userMapper;
 
     /**
@@ -52,5 +44,24 @@ public class Grid extends GridDefinition {
         }
         Optional<User> optional = upmsRepository.findUserByGridId(getId());
         return optional.isPresent()?optional.get():User.builder().build();
+    }
+
+    @Resource
+    public void setOrganizationalRepository(OrganizationalRepository organizationalRepository) {
+        Grid.organizationalRepository = organizationalRepository;
+    }
+
+    @Resource
+    public void setUpmsRepository(UpmsRepository upmsRepository) {
+        Grid.upmsRepository = upmsRepository;
+    }
+
+    @Resource
+    public void setUserMapper(UserMapper userMapper) {
+        Grid.userMapper = userMapper;
+    }
+
+    public int hashCode() {
+        return 1;
     }
 }

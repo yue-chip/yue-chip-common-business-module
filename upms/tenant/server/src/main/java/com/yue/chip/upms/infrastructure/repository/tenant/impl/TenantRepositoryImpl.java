@@ -136,4 +136,13 @@ public class TenantRepositoryImpl implements TenantRepository {
         List<TenantPo> list  = tenantDao.findAll();
         return tenantMapper.toTenant(list);
     }
+
+    @Override
+    public Optional<Tenant> findTenantByRequestDomain(String requestDomain) {
+        Optional<TenantPo> optional = tenantDao.findTenantByUrl(requestDomain);
+        if (optional.isPresent()) {
+            return Optional.ofNullable(tenantMapper.toTenant(optional.get()));
+        }
+        return Optional.empty();
+    }
 }

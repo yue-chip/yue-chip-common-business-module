@@ -6,8 +6,8 @@ spring:
     allow-circular-references: true
   nacos:
     group: IOT-BUSINESS-GROUP
-    host: 192.168.11.184:8848
-    namespace: 82dcfa05-7323-49d1-8e91-fd7df653da87
+    host: 192.168.11.171:8848
+    namespace: 6f82e104-c7dc-4be7-8bb3-89da6c79e9ae
     username: nacos
     password: nacos
   application:
@@ -20,9 +20,8 @@ spring:
       - nacos:jpa.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:oauth2-resource.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:sentinel.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-      - nacos:dubbo.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:seata.yaml?group=GLOBAL_GROUP&refreshEnabled=true
-      - nacos:redis.yaml?group=GLOBAL_GROUP&refreshEnabled=true
+      - nacos:valkey.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:file.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:sms.yaml?group=GLOBAL_GROUP&refreshEnabled=true
       - nacos:call.yaml?group=GLOBAL_GROUP&refreshEnabled=true

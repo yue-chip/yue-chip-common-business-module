@@ -1,9 +1,9 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
-import com.yue.chip.common.business.expose.file.FileExposeService;
-import com.yue.chip.core.tenant.TenantExposeService;
+import com.yue.chip.common.business.expose.file.RemoteFile;
+import com.yue.chip.core.ResultData;
 import com.yue.chip.core.tenant.common.TenantDefinition;
+import com.yue.chip.core.tenant.remote.http.RemoteTenant;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
 import com.yue.chip.upms.assembler.role.RoleMapper;
 import com.yue.chip.upms.definition.user.UserDefinition;
@@ -12,14 +12,14 @@ import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Scope;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
-import com.yue.chip.utils.CurrentUserUtil;
+import com.yue.chip.utils.CheckRemoteHttpResultDataUtil;
 import jakarta.annotation.Resource;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.*;
@@ -30,23 +30,16 @@ import java.util.*;
  * @description 用户聚合根 此聚合根非彼聚合根 意思意思
  */
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper=false)
 @SuperBuilder
 @NoArgsConstructor
-@YueChipDDDEntity
+@Component
 public class User extends UserDefinition {
 
-    @Resource
     private static UpmsRepository upmsRepository;
-
-    @DubboReference
-    private static FileExposeService fileExposeService;
-
-    @Resource
+    private static RemoteFile remoteFile;
     private static OrganizationalRepository organizationalRepository;
-
-    @DubboReference
-    private static TenantExposeService tenantExposeService;
+    private static RemoteTenant remoteTenant;
 
     @Builder.Default
     private RoleMapper roleMapper = RoleMapper.INSTANCE;
@@ -114,13 +107,17 @@ public class User extends UserDefinition {
     @Override
     public String getProfilePhotoUrl() {
         Assert.notNull(getId(),"id不能为空");
-        return fileExposeService.getUrlSingle(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME, CurrentUserUtil.getCurrentUserTenantNumber());
+        ResultData<String> resultData = remoteFile.urlSingle(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
+        CheckRemoteHttpResultDataUtil.check(resultData);
+        return resultData.getData();
     }
 
     @Override
     public Long getProfilePhotoId() {
         Assert.notNull(getId(),"id不能为空");
-        Map<String,String> fileMap = fileExposeService.getUrl(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME, CurrentUserUtil.getCurrentUserTenantNumber());
+        ResultData<Map<String, String>>  resultData = remoteFile.url(getId(),UserPo.PROFILE_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
+        CheckRemoteHttpResultDataUtil.check(resultData);
+        Map<String,String> fileMap = resultData.getData();
         if (Objects.nonNull(fileMap) && fileMap.size()>0) {
             Object obj = fileMap.keySet().toArray()[0];
             if (obj instanceof Long) {
@@ -160,10 +157,33 @@ public class User extends UserDefinition {
         if (Objects.nonNull(tenantDefinition)) {
             return this.tenantDefinition;
         }
-        com.yue.chip.core.Optional<TenantDefinition> optional = tenantExposeService.findTenantByTenantNumber(getTenantNumber());
-        if (optional.isPresent()){
-            return optional.get();
-        }
-        return null;
+        ResultData<TenantDefinition> resultData = remoteTenant.get(getTenantNumber());
+        CheckRemoteHttpResultDataUtil.check(resultData);
+        TenantDefinition  tenantDefinition = resultData.getData();
+        return tenantDefinition;
+    }
+
+    @Resource
+    public void setUpmsRepository(UpmsRepository upmsRepository) {
+        User.upmsRepository = upmsRepository;
+    }
+
+    @Resource
+    public void setRemoteFile(RemoteFile remoteFile) {
+        User.remoteFile = remoteFile;
+    }
+
+    @Resource
+    public void setOrganizationalRepository(OrganizationalRepository organizationalRepository) {
+        User.organizationalRepository = organizationalRepository;
+    }
+
+    @Resource
+    public void setRemoteTenant(RemoteTenant remoteTenant) {
+        User.remoteTenant = remoteTenant;
+    }
+
+    public int hashCode() {
+        return 1;
     }
 }

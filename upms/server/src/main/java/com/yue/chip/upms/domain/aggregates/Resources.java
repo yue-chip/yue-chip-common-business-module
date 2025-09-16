@@ -1,17 +1,18 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
-import com.yue.chip.common.business.expose.file.FileExposeService;
+import com.yue.chip.common.business.expose.file.RemoteFile;
+import com.yue.chip.core.ResultData;
 import com.yue.chip.upms.definition.resources.ResourcesDefinition;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.enums.Type;
 import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
+import com.yue.chip.utils.CheckRemoteHttpResultDataUtil;
 import jakarta.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.*;
@@ -23,16 +24,14 @@ import java.util.*;
  */
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
-@YueChipDDDEntity
+@Component
 public class Resources extends ResourcesDefinition {
 
-    @Resource
-    private  static UpmsRepository upmsRepository;
+    private static UpmsRepository upmsRepository;
 
-    @DubboReference
-    private static FileExposeService fileExposeService;
+    private static  RemoteFile remoteFile;
 
     /**
      * 判断编码是否存在
@@ -95,7 +94,9 @@ public class Resources extends ResourcesDefinition {
     @Override
     public Long getIconId() {
         Assert.notNull(getId(),"id不能为空");
-        Map<String,String> fileMap = fileExposeService.getUrl(getId(),ResourcesPo.TABLE_NAME, ResourcesPo.ICON_FIELD_NAME);
+        ResultData<Map<String, String>> resultData = remoteFile.url(getId(),ResourcesPo.TABLE_NAME, ResourcesPo.ICON_FIELD_NAME);
+        CheckRemoteHttpResultDataUtil.check(resultData);
+        Map<String,String> fileMap = resultData.getData();
         if (Objects.nonNull(fileMap) && fileMap.size()>0) {
             Object obj = fileMap.keySet().toArray()[0];
             if (obj instanceof Long) {
@@ -110,7 +111,9 @@ public class Resources extends ResourcesDefinition {
     @Override
     public String getIconUrl() {
         Assert.notNull(getId(),"id不能为空");
-        return fileExposeService.getUrlSingle(getId(), ResourcesPo.ICON_FIELD_NAME, ResourcesPo.TABLE_NAME);
+        ResultData<String> resultData = remoteFile.urlSingle(getId(), ResourcesPo.ICON_FIELD_NAME, ResourcesPo.TABLE_NAME);
+        CheckRemoteHttpResultDataUtil.check(resultData);
+        return resultData.getData();
     }
 
     private void getAllChildren(List<Resources> list) {
@@ -129,6 +132,20 @@ public class Resources extends ResourcesDefinition {
             return false;
         }
         return true;
+    }
+
+    @Resource
+    public  void setUpmsRepository(UpmsRepository upmsRepository) {
+        Resources.upmsRepository = upmsRepository;
+    }
+
+    @Resource
+    public void setRemoteFile(RemoteFile remoteFile) {
+        this.remoteFile = remoteFile;
+    }
+
+    public int hashCode() {
+        return 1;
     }
 
 }

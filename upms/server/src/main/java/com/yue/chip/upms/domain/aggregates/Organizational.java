@@ -1,15 +1,13 @@
 package com.yue.chip.upms.domain.aggregates;
 
-import com.yue.chip.annotation.YueChipDDDEntity;
 import com.yue.chip.upms.definition.organizational.OrganizationalDefinition;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
-import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalPo;
 import jakarta.annotation.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.glassfish.jaxb.core.v2.TODO;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -23,9 +21,9 @@ import java.util.Optional;
  */
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
-@YueChipDDDEntity
+@Component
 public class Organizational extends OrganizationalDefinition {
 
     @Resource
@@ -72,5 +70,14 @@ public class Organizational extends OrganizationalDefinition {
     public User getLeader() {
         // TODO
         return leader;
+    }
+
+    @Resource
+    public void setOrganizationalRepository(OrganizationalRepository organizationalRepository) {
+        Organizational.organizationalRepository = organizationalRepository;
+    }
+
+    public int hashCode() {
+        return 1;
     }
 }

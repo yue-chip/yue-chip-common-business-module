@@ -13,4 +13,5 @@ public interface TenantDaoEx {
      * @return
      */
     public Optional<TenantPo> findTenantByUrl(@NotBlank String requestDomain);
+
 }

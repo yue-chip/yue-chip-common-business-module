@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface TenantDao extends BaseDao<TenantPo> ,TenantDaoEx{
 
     public Optional<TenantPo> findFirstByTenantNumber(Long tenantNumber);
+
+
 }
