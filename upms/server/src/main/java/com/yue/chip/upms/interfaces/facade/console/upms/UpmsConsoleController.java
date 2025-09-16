@@ -33,6 +33,7 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
+import com.yue.chip.upms.interfaces.vo.user.UserSelectVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,8 +96,9 @@ public class UpmsConsoleController {
     @GetMapping("/current/user/details")
     @Operation(summary = "用户-获取当前登录用户信息", description = "用户-获取当前登录用户信息")
     public IResultData<UserVo> userDetails(){
+        ResultData.ResultDataBuilder<UserVo>  builder = ResultData.builder();
         Optional<User> optional = upmsRepository.findUserById(CurrentUserUtil.getCurrentUserId(true));
-        return ResultData.builder().data(optional.isPresent()?userMapper.toUserVo(optional.get()):null).build();
+        return builder.data(optional.isPresent()?userMapper.toUserVo(optional.get()):null).build();
     }
 
     @GetMapping("/role/list")
@@ -127,8 +129,9 @@ public class UpmsConsoleController {
     @Operation(description = "角色-角色详情",summary = "角色-角色详情")
     @GetMapping("/role/details")
     public IResultData<RoleVo> roleDetails(@NotNull(message = "角色id不能为空")@Parameter(description = "角色id",name = "id",required = true)Long id){
+        ResultData.ResultDataBuilder<RoleVo>  builder = ResultData.builder();
         Optional<Role> optional = upmsRepository.findRoleById(id);
-        return ResultData.builder().data(optional.isPresent()?roleMapper.toRoleVo(optional.get()):null).build();
+        return builder.data(optional.isPresent()?roleMapper.toRoleVo(optional.get()):null).build();
     }
 
     @Operation(description = "角色-修改角色",summary = "角色-修改角色")
@@ -250,8 +253,9 @@ public class UpmsConsoleController {
     @Operation(description = "菜单资源-资源详情",summary = "菜单资源-资源详情")
     @GetMapping("/resources/details")
     public IResultData<ResourcesVo> resourcesDetails(@NotNull(message = "资源id不能为空")@Parameter(description = "url",name="url",required = true)Long id ){
+        ResultData.ResultDataBuilder<ResourcesVo>  builder = ResultData.builder();
         Optional<Resources> optional = upmsRepository.findResourcesById(id);
-        return ResultData.builder().data(optional.isPresent()?resourcesMapper.toResourcesVo(optional.get()):null).build();
+        return builder.data(optional.isPresent()?resourcesMapper.toResourcesVo(optional.get()):null).build();
     }
 
     @Operation(description = "菜单资源-删除资源",summary = "菜单资源-删除资源")
@@ -279,8 +283,9 @@ public class UpmsConsoleController {
     @GetMapping("/user/details")
     @Operation(description = "用户-用户详情",summary = "用户-用户详情")
     public IResultData<UserVo> userDetails(@NotNull(message = "用户id不能为空") @Parameter(description = "用户id",name="id",required = true)Long id) {
+        ResultData.ResultDataBuilder<UserVo>  builder = ResultData.builder();
         Optional<User> optional = upmsRepository.findUserById(id);
-        return ResultData.builder().data(optional.isPresent()?userMapper.toUserVo(optional.get()):null).build();
+        return builder.data(optional.isPresent()?userMapper.toUserVo(optional.get()):null).build();
     }
 
     @PutMapping("/user/update")
@@ -307,7 +312,8 @@ public class UpmsConsoleController {
     @GetMapping("/user/is/exist")
     @Operation(description = "用户-判断账号是否存在",summary = "用户-判断账号是否存在")
     public IResultData<Boolean> userIsExist(@NotNull(message = "账号不能为空")@Parameter(description = "账号",name="username",required = true)String username) {
-        return ResultData.builder().data(User.builder().username(username).build().checkUsernameIsExist()).build();
+        ResultData.ResultDataBuilder<Boolean>  builder = ResultData.builder();
+        return builder.data(User.builder().username(username).build().checkUsernameIsExist()).build();
     }
 
     @PostMapping("/organizational/add")
@@ -334,34 +340,39 @@ public class UpmsConsoleController {
     @GetMapping("/organizational/tree/list")
     @Operation(description = "组织机构-树形结构列表",summary = "组织机构-树形结构列表")
     public IResultData<List<OrganizationalTreeListVo>> organizationalTreeList(@Parameter(description = "组织机构名称",name="name")String name){
-        return ResultData.builder().data(organizationalRepository.findTree(0L, null,name )).build();
+        ResultData.ResultDataBuilder<List<OrganizationalTreeListVo>>  builder = ResultData.builder();
+        return builder.data(organizationalRepository.findTree(0L, null,name )).build();
     }
 
     @GetMapping("/organizational/tree/select")
     @Operation(description = "组织机构-树形结构下拉框选择",summary = "组织机构-树形结构下拉框选择")
     public IResultData<List<OrganizationalTreeSelectVo>> organizationalTreeSelect(@Parameter(description = "组织机构名称",name="name")String name){
+        ResultData.ResultDataBuilder<List<OrganizationalTreeSelectVo>>  builder = ResultData.builder();
         List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree(0L,State.NORMAL, name);
-        return ResultData.builder().data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
+        return builder.data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
     }
 
     @GetMapping("/organizational/tree/select1")
     @Operation(description = "组织机构-树形结构下拉框选择(当前登录用户所属的机构)",summary = "组织机构-树形结构下拉框选择(当前登录用户所属的机构)")
     public IResultData<List<OrganizationalTreeSelectVo>> organizationalTreeSelect1(){
+        ResultData.ResultDataBuilder<List<OrganizationalTreeSelectVo>>  builder = ResultData.builder();
         List<OrganizationalTreeListVo> treeListVos = organizationalRepository.findTree1(State.NORMAL);
-        return ResultData.builder().data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
+        return builder.data(organizationalMapper.toOrganizationalTreeSelectVo(treeListVos)).build();
     }
 
     @GetMapping("/organizational/user/select/list")
     @Operation(description = "组织机构-获取机构下的用户",summary = "组织机构-获取机构下的用户")
-    public IResultData<List<UserVo>> organizationalUserList(@NotNull(message = "机构id不能为空") @Parameter(description = "组织机构id",name="organizationalId",required = true)Long organizationalId){
-        return ResultData.builder().data(userMapper.toUserSelectVo(upmsRepository.findUserByOrganizationalId(organizationalId))).build();
+    public IResultData<List<UserSelectVo>> organizationalUserList(@NotNull(message = "机构id不能为空") @Parameter(description = "组织机构id",name="organizationalId",required = true)Long organizationalId){
+        ResultData.ResultDataBuilder<List<UserSelectVo>>  builder = ResultData.builder();
+        return builder.data(userMapper.toUserSelectVo(upmsRepository.findUserByOrganizationalId(organizationalId))).build();
     }
 
     @GetMapping("/organizational/details")
     @Operation(description = "组织机构-组织机构详情",summary = "组织机构-组织机构详情")
     public IResultData<OrganizationalVo> organizationalDetails(@NotNull(message = "组织机构id不能为空") @Parameter(description = "组织机构id",name="id",required = true)Long id) {
+        ResultData.ResultDataBuilder<OrganizationalVo>  builder = ResultData.builder();
         Optional<Organizational> optional = organizationalRepository.findById(id);
-        return ResultData.builder().data(optional.isPresent()?organizationalMapper.toOrganizationalVo(optional.get()):null).build();
+        return builder.data(optional.isPresent()?organizationalMapper.toOrganizationalVo(optional.get()):null).build();
     }
 
     @PostMapping("/grid/add")
@@ -394,7 +405,8 @@ public class UpmsConsoleController {
     @GetMapping("/grid/details")
     @Operation(description = "网格-网格详情",summary = "网格-网格详情")
     public IResultData<GridVo> GridDetails(@NotNull(message = "网格id不能为空") @Parameter(description = "网格id",name="id",required = true)Long id) {
+        ResultData.ResultDataBuilder<GridVo>  builder = ResultData.builder();
         Optional<Grid> optional = organizationalRepository.gridDetails(id);
-        return ResultData.builder().data(optional.isPresent()?gridMapper.toGridVo(optional.get()):null).build();
+        return builder.data(optional.isPresent()?gridMapper.toGridVo(optional.get()):null).build();
     }
 }

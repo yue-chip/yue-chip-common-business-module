@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import java.util.Optional;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
+@Component
 public class Grid extends GridDefinition {
 
     private static OrganizationalRepository organizationalRepository;
@@ -43,7 +45,7 @@ public class Grid extends GridDefinition {
             return null;
         }
         Optional<User> optional = upmsRepository.findUserByGridId(getId());
-        return optional.isPresent()?optional.get():User.builder().build();
+        return optional.isPresent()?optional.get():null;
     }
 
     @Resource

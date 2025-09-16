@@ -3,6 +3,7 @@ package com.yue.chip.upms.infrastructure.dao.social;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.po.user.UserSocialPo;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Optional;
 
@@ -16,6 +17,8 @@ public interface UserSocialDao extends BaseDao<UserSocialPo>, UserSocialDaoEx {
     Optional<UserSocialPo> findFirstByTypeAndUid(@NotBlank String type, @NotBlank String uid);
 
     Optional<UserSocialPo> findFirstByUserIdAndTenantNumberAndType(Long userId, Long tenantNumber, String type);
+
+    Optional<UserSocialPo> findFirstByUserIdAndType(@NotNull Long userId, @NotBlank String type);
 
     /**
      * 根据 用户ID 删除第三方绑定信息

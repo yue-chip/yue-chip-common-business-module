@@ -15,7 +15,7 @@ public interface UserSocialRepository {
      * @param type          第三方用户类型
      * @return
      */
-    Optional<UserSocial> findByUserIdAndTenantNumberAndType(Long userId, Long tenantNumber, @NotBlank String type);
+    Optional<UserSocial> findByUserIdAndTenantNumberAndType(Long userId,  @NotBlank String type);
 
     /**
      * @param type  第三方用户类型

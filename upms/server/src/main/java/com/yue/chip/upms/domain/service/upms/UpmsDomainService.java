@@ -1,5 +1,6 @@
 package com.yue.chip.upms.domain.service.upms;
 
+import com.yue.chip.security.YueChipUserDetails;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -49,4 +50,19 @@ public interface UpmsDomainService {
      * @param id
      */
     public void checkResourcesUrlIsExist(@NotBlank String url,Long id);
+
+
+    /**
+     * 根据登陆用户名查寻用户信息
+     * @param username
+     * @return
+     */
+    YueChipUserDetails loadUserByUsername(String username);
+
+    /**
+     * 根据手机号码查寻用户信息
+     * @param phoneNumber
+     * @return
+     */
+    YueChipUserDetails loadUserByPhoneNumber(String phoneNumber);
 }

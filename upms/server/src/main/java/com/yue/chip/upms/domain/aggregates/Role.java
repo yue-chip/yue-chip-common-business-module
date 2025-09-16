@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @SuperBuilder
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
+@Component
 public class Role extends RoleDefinition {
 
     private  static UpmsRepository upmsRepository;

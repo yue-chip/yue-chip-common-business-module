@@ -6,7 +6,6 @@ import com.yue.chip.core.ResultData;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.exception.BusinessException;
-import com.yue.chip.test.TestExpose;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.OrganizationalMapper;
 import com.yue.chip.upms.assembler.resources.ResourcesMapper;
@@ -148,7 +147,7 @@ public class UpmsApplicationImpl implements UpmsApplication {
         upmsDomainService.userOrganizational(newUser.getId(),userAddOrUpdateDto.getOrganizationalId());
         upmsDomainService.userOrganizationals(newUser.getId(),userAddOrUpdateDto.getOrganizationalIds());
         //保存头像
-        fileExposeService.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()),CurrentUserUtil.getCurrentUserTenantNumber() );
+        remoteFile.save(newUser.getId(), UserPo.TABLE_NAME,UserDefinition.PROFILE_PHOTO_FIELD_NAME, Arrays.asList(userAddOrUpdateDto.getProfilePhotoId()));
     }
 
     @Override

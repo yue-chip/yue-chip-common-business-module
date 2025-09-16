@@ -26,7 +26,6 @@ import java.util.Optional;
 @Component
 public class Organizational extends OrganizationalDefinition {
 
-    @Resource
     private static OrganizationalRepository organizationalRepository;
 
     /**

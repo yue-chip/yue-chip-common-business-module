@@ -21,8 +21,8 @@ public class UserSocialRepositoryImpl implements UserSocialRepository {
     private UserSocialMapper userWeiXinMapper;
 
     @Override
-    public Optional<UserSocial> findByUserIdAndTenantNumberAndType(Long userId, Long tenantNumber, String type) {
-        Optional<UserSocialPo> optional = userSocialDao.findFirstByUserIdAndTenantNumberAndType(userId, tenantNumber, type);
+    public Optional<UserSocial> findByUserIdAndTenantNumberAndType(Long userId, String type) {
+        Optional<UserSocialPo> optional = userSocialDao.findFirstByUserIdAndType(userId, type);
         return optional.map(userSocialPo -> userWeiXinMapper.toUserSocial(userSocialPo));
     }
 

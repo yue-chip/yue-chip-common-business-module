@@ -150,7 +150,7 @@ public class User extends UserDefinition {
         if (optional.isPresent()) {
             return optional.get();
         }
-        return Organizational.builder().build();
+        return null;
     }
 
     public TenantDefinition getTenant() {

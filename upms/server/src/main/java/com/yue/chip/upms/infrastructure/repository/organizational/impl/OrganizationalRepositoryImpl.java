@@ -48,7 +48,7 @@ public class OrganizationalRepositoryImpl implements OrganizationalRepository {
     @Resource
     private OrganizationalDao organizationalDao;
 
-    @javax.annotation.Resource
+    @Resource
     private UserMapper userMapper;
 
     @Resource

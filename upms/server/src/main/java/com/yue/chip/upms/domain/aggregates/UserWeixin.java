@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Mr.Liu
@@ -15,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper=false)
 @SuperBuilder
 @NoArgsConstructor
+@Component
 public class UserWeixin extends UserWeiXinDefinition {
 
     public int hashCode() {

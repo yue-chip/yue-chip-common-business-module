@@ -1,7 +1,11 @@
 package com.yue.chip.upms.domain.service.upms.impl;
 
+import com.yue.chip.security.YueChipSimpleGrantedAuthority;
+import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.domain.aggregates.Organizational;
 import com.yue.chip.upms.domain.aggregates.Resources;
+import com.yue.chip.upms.domain.aggregates.Role;
+import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
@@ -129,6 +133,29 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
         AssertUtil.isFalse(isExist,"该url已经存");
     }
 
+    @Override
+    public YueChipUserDetails loadUserByUsername(String username) {
+        Optional<User> optional = upmsRepository.findUserByUsername(username);
+        if (!optional.isPresent()){
+            return null;
+        }
+        User user = optional.get();
+        YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
+        return userDetails;
+    }
+
+
+    @Override
+    public YueChipUserDetails loadUserByPhoneNumber(String phoneNumber) {
+        Optional<User> optional = upmsRepository.findUserByPhoneNumber(phoneNumber);
+        if (!optional.isPresent()){
+            return null;
+        }
+        User user = optional.get();
+        YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
+        return userDetails;
+    }
+
     private List<Long> getAllParentId(Long resourcesId) {
         List<Resources> list = new ArrayList<>();
         getParent(resourcesId,list);
@@ -149,4 +176,25 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
             }
         }
     }
+
+    /**
+     * 设置用户权限
+     * @param roles
+     * @return
+     */
+    private List<YueChipSimpleGrantedAuthority> getUserGrantedAuthority(List<Role> roles){
+        List<YueChipSimpleGrantedAuthority> listGrantedAuthority = new ArrayList<YueChipSimpleGrantedAuthority>();
+        if (Objects.nonNull(roles)) {
+            roles.forEach(role -> {
+                role.getResources().forEach(resourcesVODefinition -> {
+                    YueChipSimpleGrantedAuthority grantedAuthority = new YueChipSimpleGrantedAuthority();
+                    grantedAuthority.setAuthority(resourcesVODefinition.getCode());
+                    listGrantedAuthority.add(grantedAuthority);
+                });
+            });
+        }
+        return listGrantedAuthority;
+    }
+
+
 }
