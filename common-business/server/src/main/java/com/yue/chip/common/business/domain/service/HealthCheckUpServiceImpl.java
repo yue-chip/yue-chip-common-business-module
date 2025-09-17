@@ -4,7 +4,9 @@ import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import com.yue.chip.core.health.HealthCheckUpService;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.jdbc.ReturningWork;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,8 @@ import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@Primary
+@Slf4j
 public class HealthCheckUpServiceImpl implements HealthCheckUpService {
 
     @Resource
@@ -25,10 +29,12 @@ public class HealthCheckUpServiceImpl implements HealthCheckUpService {
     public Boolean checkHealth() {
         Boolean jdbcIsHealth = checkJdbcHealth();
         if (!jdbcIsHealth) {
+            log.error("服务重启:jdbc检查失败");
             return false;
         }
         Boolean redisIsHealth = checkRedisHealth();
         if (!redisIsHealth) {
+            log.error("服务重启:redis检查失败");
             return false;
         }
         return true;
