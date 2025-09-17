@@ -1,6 +1,9 @@
 package com.yue.chip.upms.interfaces.facade.remote.http;
 
+import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;
+import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.RemoteUpmsDefinition;
 import com.yue.chip.upms.application.service.UpmsApplication;
 import com.yue.chip.upms.assembler.organizational.GridMapper;
@@ -14,6 +17,7 @@ import com.yue.chip.upms.vo.UserExposeVo;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -78,6 +82,13 @@ public class RemoteUpmsController implements RemoteUpmsDefinition {
             return builder.data(userMapper.toUserExposeVo(optional.get())).build();
         }
         return builder.build();
+    }
+
+    @Override
+    @GetExchange(FIND_4)
+    public PageResultData<List<UserExposeVo>> find(String nameLike, UserType userType, YueChipPage yueChipPage) {
+        Page<User> page = upmsRepository.findByUsernameOrPhoneNumberOrEmailAndUserType(nameLike, userType, yueChipPage);
+        return (PageResultData<List<UserExposeVo>>) PageResultData.convert(page,userMapper.toUserExposeVo(page.getContent()));
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.yue.chip.upms;
 
+import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;
+import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.vo.UserExposeVo;
 
 import java.util.List;
@@ -14,6 +17,7 @@ public interface RemoteUpmsDefinition {
     static final String FIND_1 = "/remote/user/find1";
     static final String FIND_2 = "/remote/user/find2";
     static final String FIND_3 = "/remote/user/find3";
+    static final String FIND_4 = "/remote/user/find4";
     static final String FIND_PHONE = "/remote/user/find/phone";
     static final String FIND_EMAIL = "/remote/user/find/email";
     static final String REGISTER = "/remote/user/find/register";
@@ -31,6 +35,8 @@ public interface RemoteUpmsDefinition {
     ResultData<UserExposeVo> find( Long userId);
 
     ResultData<UserExposeVo> find( String username);
+
+    PageResultData<List<UserExposeVo>> find(String nameLike, UserType userType, YueChipPage yueChipPage);
     /**
      * 根据用户id和租户编码查寻用户
      * @param id
