@@ -1,9 +1,9 @@
 package com.yue.chip.upms.domain.service.login.impl;
 
-import com.yue.chip.authentication.YueChipAuthenticationToken;
 import com.yue.chip.core.tenant.TenantExposeService;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
+import com.yue.chip.security.YueChipUsernamePasswordAuthenticationToken;
 import com.yue.chip.upms.assembler.weixin.UserWeiXinMapper;
 import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.User;
@@ -141,7 +141,7 @@ public class LoginServiceImpl implements LoginService {
             grantedAuthority.setAuthority(resources.getCode());
             authoritiesList.add(grantedAuthority);
         });
-        YueChipAuthenticationToken token = new YueChipAuthenticationToken(username, authoritiesList);
+        YueChipUsernamePasswordAuthenticationToken token = new YueChipUsernamePasswordAuthenticationToken(username,"", authoritiesList);
         SecurityContextHolder.getContext().setAuthentication(token);
         YueChipUserDetails userDetails = new YueChipUserDetails(id, username, password, tenantNumber, authoritiesList);
         YueChipRedisTokenStoreUtil.store(userDetails, token.getToken());
