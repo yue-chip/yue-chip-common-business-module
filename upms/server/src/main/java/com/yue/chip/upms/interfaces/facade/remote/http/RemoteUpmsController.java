@@ -1,8 +1,10 @@
 package com.yue.chip.upms.interfaces.facade.remote.http;
 
+import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.RemoteUpmsDefinition;
 import com.yue.chip.upms.application.service.UpmsApplication;
@@ -100,6 +102,18 @@ public class RemoteUpmsController implements RemoteUpmsDefinition {
             return builder.data(userMapper.toUserExposeVo(optional.get())).build();
         }
         return builder.build();
+    }
+
+    @Override
+    public PageResultData<List<UserExposeVo>> find(YueChipPage yueChipPage) {
+        IPageResultData<List<UserExposeVo>> userList = upmsRepository.findUserAllByUserType(null, null, null, null, null, null, null, yueChipPage);
+        return (PageResultData<List<UserExposeVo>>) userList;
+    }
+
+    @Override
+    public PageResultData<List<UserExposeVo>> find(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage) {
+        IPageResultData<List<UserExposeVo>> userList = upmsRepository.findUserAllByUserType(name, nickname, username, phoneNumber, email, state, nameLike, yueChipPage);
+        return (PageResultData<List<UserExposeVo>>) userList;
     }
 
     @Override

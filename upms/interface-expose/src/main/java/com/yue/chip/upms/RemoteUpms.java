@@ -3,6 +3,7 @@ package com.yue.chip.upms;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.vo.UserExposeVo;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +37,21 @@ public interface RemoteUpms extends RemoteUpmsDefinition{
     @GetExchange(PREFIX+FIND_4)
     PageResultData<List<UserExposeVo>> find(@RequestParam(value = "nameLike")String nameLike,
                                             @RequestParam(value = "userType") UserType userType,
+                                            YueChipPage yueChipPage);
+
+    @Override
+    @GetExchange(PREFIX+FIND_5)
+    PageResultData<List<UserExposeVo>> find(YueChipPage yueChipPage);
+
+    @Override
+    @GetExchange(PREFIX+FIND_6)
+    PageResultData<List<UserExposeVo>> find(@RequestParam(value = "name")String name,
+                                            @RequestParam(value = "nickname")String nickname,
+                                            @RequestParam(value = "username")String username,
+                                            @RequestParam(value = "phoneNumber") String phoneNumber,
+                                            @RequestParam(value = "email")String email,
+                                            @RequestParam(value = "state")State state,
+                                            @RequestParam(value = "nameLike")String nameLike,
                                             YueChipPage yueChipPage);
 
     @Override

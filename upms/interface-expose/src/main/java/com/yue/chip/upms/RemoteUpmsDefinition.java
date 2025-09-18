@@ -3,6 +3,7 @@ package com.yue.chip.upms;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.YueChipPage;
+import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.vo.UserExposeVo;
 
@@ -18,6 +19,8 @@ public interface RemoteUpmsDefinition {
     static final String FIND_2 = "/remote/user/find2";
     static final String FIND_3 = "/remote/user/find3";
     static final String FIND_4 = "/remote/user/find4";
+    static final String FIND_5 = "/remote/user/find5";
+    static final String FIND_6 = "/remote/user/find6";
     static final String FIND_PHONE = "/remote/user/find/phone";
     static final String FIND_EMAIL = "/remote/user/find/email";
     static final String REGISTER = "/remote/user/find/register";
@@ -44,6 +47,10 @@ public interface RemoteUpmsDefinition {
      * @return
      */
     ResultData<UserExposeVo> find( Long id, Long tenantNumber);
+
+    PageResultData<List<UserExposeVo>> find(YueChipPage yueChipPage);
+
+    PageResultData<List<UserExposeVo>> find(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage);
 
     ResultData<UserExposeVo> findPhoneNumber( String phoneNumber);
 
