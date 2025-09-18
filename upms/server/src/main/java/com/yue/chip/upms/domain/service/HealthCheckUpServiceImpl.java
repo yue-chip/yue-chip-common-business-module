@@ -7,6 +7,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +43,9 @@ public class HealthCheckUpServiceImpl implements HealthCheckUpService {
 
     private Boolean checkRedisHealth() {
         try {
+            RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
+            connection.ping();
+//            connection.close();
             redisTemplate.opsForValue().set("1", "1", 1, TimeUnit.SECONDS);
         } catch (Exception e){
             e.printStackTrace();
@@ -54,7 +58,7 @@ public class HealthCheckUpServiceImpl implements HealthCheckUpService {
         try {
             Boolean isExecute = baseDao.getSession().doReturningWork(new ReturningWork<Boolean>() {
                 public Boolean execute(Connection connection) throws SQLException {
-                    return connection.createStatement().execute("SELECT 1");
+                    return connection.createStatement().execute("SELECT 1 FROM DUAL");
                 }
             });
             return isExecute;

@@ -54,7 +54,8 @@ public class HealthCheckUpServiceImpl implements HealthCheckUpService {
         try {
             Boolean isExecute = baseDao.getSession().doReturningWork(new ReturningWork<Boolean>() {
                 public Boolean execute(Connection connection) throws SQLException {
-                    return connection.createStatement().execute("SELECT 1");
+                    Boolean b = connection.createStatement().execute("SELECT 1 FROM DUAL");
+                    return b;
                 }
             });
             return isExecute;

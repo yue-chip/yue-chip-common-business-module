@@ -39,3 +39,8 @@ spring:
     fallback-to-system-locale: true
     encoding: UTF-8
     use-code-as-default-message: true
+#logging:
+#  level:
+#    com:
+#      zaxxer:
+#        hikari: debug
