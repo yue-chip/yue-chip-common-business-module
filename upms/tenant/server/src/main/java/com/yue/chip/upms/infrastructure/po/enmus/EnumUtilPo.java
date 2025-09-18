@@ -24,19 +24,19 @@ public class EnumUtilPo extends EnumUtilDefinition {
 
     @Override
 
-    @Column( name = "code",columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '编码'")
+    @Column()
     public String getCode() {
         return super.getCode();
     }
 
     @Override
-    @Column(name = "version",columnDefinition = "varchar(255) NULL DEFAULT '' COMMENT '版本号'")
+    @Column()
     public String getVersion() {
         return super.getVersion();
     }
 
     @Override
-    @Column(name = "value",columnDefinition = "varchar(1000) NULL DEFAULT '' COMMENT '枚举值'")
+    @Column(length = 1000)
     public String getValue() {
         return super.getValue();
     }
