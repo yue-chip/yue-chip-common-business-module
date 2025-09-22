@@ -1,6 +1,15 @@
 server:
   port: 0
 spring:
+  data:
+    redis:
+      lettuce:
+        pool:
+          max-active: 8
+          min-idle: 4
+          max-idle: 8
+          max-wait: 1s
+          time-between-eviction-runs: 1s
   main:
     allow-bean-definition-overriding: true
     allow-circular-references: true
@@ -39,8 +48,3 @@ spring:
     fallback-to-system-locale: true
     encoding: UTF-8
     use-code-as-default-message: true
-#logging:
-#  level:
-#    com:
-#      zaxxer:
-#        hikari: debug

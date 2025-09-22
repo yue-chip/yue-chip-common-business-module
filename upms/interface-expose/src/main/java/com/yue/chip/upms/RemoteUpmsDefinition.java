@@ -8,6 +8,7 @@ import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.vo.UserExposeVo;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface RemoteUpmsDefinition {
@@ -39,7 +40,7 @@ public interface RemoteUpmsDefinition {
 
     ResultData<UserExposeVo> find( String username);
 
-    PageResultData<List<UserExposeVo>> find(String nameLike, UserType userType, YueChipPage yueChipPage);
+    PageResultData<List<UserExposeVo>> find(String nameLike, UserType userType, YueChipPage yueChipPage, Map<String,Object> map);
     /**
      * 根据用户id和租户编码查寻用户
      * @param id
@@ -48,9 +49,9 @@ public interface RemoteUpmsDefinition {
      */
     ResultData<UserExposeVo> find( Long id, Long tenantNumber);
 
-    PageResultData<List<UserExposeVo>> find(YueChipPage yueChipPage);
+    PageResultData<List<UserExposeVo>> find(YueChipPage yueChipPage, Map<String,Object> map);
 
-    PageResultData<List<UserExposeVo>> find(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage);
+    PageResultData<List<UserExposeVo>> find(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage, Map<String,Object> map);
 
     ResultData<UserExposeVo> findPhoneNumber( String phoneNumber);
 

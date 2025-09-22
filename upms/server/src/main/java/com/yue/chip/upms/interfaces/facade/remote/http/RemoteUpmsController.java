@@ -28,6 +28,7 @@ import org.springframework.web.service.annotation.PostExchange;
 import org.springframework.web.service.annotation.PutExchange;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController()
@@ -88,7 +89,7 @@ public class RemoteUpmsController implements RemoteUpmsDefinition {
 
     @Override
     @GetExchange(FIND_4)
-    public PageResultData<List<UserExposeVo>> find(String nameLike, UserType userType, YueChipPage yueChipPage) {
+    public PageResultData<List<UserExposeVo>> find(String nameLike, UserType userType, YueChipPage yueChipPage, Map<String,Object> map) {
         Page<User> page = upmsRepository.findByUsernameOrPhoneNumberOrEmailAndUserType(nameLike, userType, yueChipPage);
         return (PageResultData<List<UserExposeVo>>) PageResultData.convert(page,userMapper.toUserExposeVo(page.getContent()));
     }
@@ -105,13 +106,15 @@ public class RemoteUpmsController implements RemoteUpmsDefinition {
     }
 
     @Override
-    public PageResultData<List<UserExposeVo>> find(YueChipPage yueChipPage) {
+    @GetExchange(FIND_5)
+    public PageResultData<List<UserExposeVo>> find(YueChipPage yueChipPage,Map<String,Object> map) {
         IPageResultData<List<UserExposeVo>> userList = upmsRepository.findUserAllByUserType(null, null, null, null, null, null, null, yueChipPage);
         return (PageResultData<List<UserExposeVo>>) userList;
     }
 
     @Override
-    public PageResultData<List<UserExposeVo>> find(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage) {
+    @GetExchange(FIND_6)
+    public PageResultData<List<UserExposeVo>> find(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage,Map<String,Object> map) {
         IPageResultData<List<UserExposeVo>> userList = upmsRepository.findUserAllByUserType(name, nickname, username, phoneNumber, email, state, nameLike, yueChipPage);
         return (PageResultData<List<UserExposeVo>>) userList;
     }
