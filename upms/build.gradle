@@ -13,9 +13,13 @@ allprojects {
 }
 subprojects {
     configurations.all() {
+        // 配置 Java 编译任务
+        tasks.withType(JavaCompile).configureEach {
+            // 启用参数名称保留
+            options.compilerArgs += '-parameters'
+            // 或者使用以下方式（效果相同）：
+            // options.compilerArgs << '-parameters'
+        }
         resolutionStrategy.cacheChangingModulesFor 10, 'seconds'
-        resolutionStrategy.force "org.antlr:antlr4-runtime:4.13.0"
-        resolutionStrategy.force "org.antlr:antlr4-tool:4.13.0"
-        resolutionStrategy.force "org.reflections:reflections:0.9.12"
     }
 }
