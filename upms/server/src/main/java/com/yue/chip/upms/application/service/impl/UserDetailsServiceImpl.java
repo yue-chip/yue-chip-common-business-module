@@ -62,6 +62,11 @@ public class UserDetailsServiceImpl implements YueChipUserDetailsService {
     }
 
     @Override
+    public UserDetails loadUserByAccount(String s) {
+        return null;
+    }
+
+    @Override
     public UserDetails loadUserByPhoneNumber(String phoneNumber) {
         User user = upmsRepository.findByPhoneNumber(phoneNumber);
         if (Objects.isNull(user)) {
@@ -69,5 +74,20 @@ public class UserDetailsServiceImpl implements YueChipUserDetailsService {
         }
         YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
         return userDetails;
+    }
+
+    @Override
+    public UserDetails loadUserByEmail(String s) {
+        return null;
+    }
+
+    @Override
+    public UserDetails loadUserBySocialTypeAndSocialUid(String s, String s1) {
+        return null;
+    }
+
+    @Override
+    public UserDetails saveUserSocial(String s, String s1, String s2, String s3) {
+        return null;
     }
 }
