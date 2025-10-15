@@ -1,6 +1,5 @@
 package com.yue.chip.common.business.interfaces.facade.file;
 
-import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.common.business.assembler.file.FileMapper;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
@@ -42,7 +41,7 @@ public class FileController  {
 
     @PostMapping("/upload")
     @Operation(description = "上传文件(支持多文件)",summary = "上传文件(支持多文件)")
-    @AuthorizationIgnore
+//    @AuthorizationIgnore
     public IResultData<List<FileVo>> upload(StandardMultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
         Map<String, MultipartFile> files = multipartHttpServletRequest.getFileMap();
         List<FileVo> fileList = new ArrayList<FileVo>();
