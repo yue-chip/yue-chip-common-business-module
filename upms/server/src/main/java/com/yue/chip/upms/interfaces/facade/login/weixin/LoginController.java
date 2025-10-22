@@ -1,5 +1,7 @@
 package com.yue.chip.upms.interfaces.facade.login.weixin;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +53,9 @@ public class LoginController {
 
     @Resource
     private UserWeiXinDao userWeiXinDao;
+
+    @Resource
+    private RestTemplate restTemplate;
 
     @PostMapping("/login")
     @AuthorizationIgnore
@@ -158,6 +164,17 @@ public class LoginController {
         }
     }
 
+    @GetMapping("/openid")
+    @AuthorizationIgnore
+    @Operation(summary = "获取openid", description = "获取openid")
+    public IResultData<String> openId(String code){
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wx9d61f9a8ccffbe2e&secret=b8d172fabbf7e0e92ba5931fbe5233f6&js_code=" + code + "&grant_type=authorization_code";
+        String response = restTemplate.getForObject(url, String.class);
+        JSONObject jsonObject = JSON.parseObject(response);
+        return ResultData.builder().data(jsonObject.getString("openid")).build();
+    }
+
+
     @GetMapping("/login/out")
     @AuthorizationIgnore
     @Operation(summary = "退出登录", description = "退出登录")
@@ -167,3 +184,12 @@ public class LoginController {
     }
 
 }
+
+
+//iptables -t nat -D PREROUTING --dst 172.16.0.16 -p tcp --dport 8910 -j DNAT --to-destination 202.105.182.199:8910
+//iptables -t nat -D POSTROUTING --dst 202.105.182.199 -p tcp --dport 8910 -j SNAT --to-source 172.16.0.16
+
+
+
+//iptables -t nat -A PREROUTING --dst 172.16.0.16 -p tcp --dport 8910 -j DNAT --to-destination 120.238.165.61:5478
+//iptables -t nat -A POSTROUTING --dst 120.238.165.61 -p tcp --dport 5478 -j SNAT --to-source 172.16.0.16
