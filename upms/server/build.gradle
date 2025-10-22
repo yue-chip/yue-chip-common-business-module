@@ -50,7 +50,6 @@ dependencies {
     api "org.springframework.statemachine:spring-statemachine-starter"
     api "org.springframework.statemachine:spring-statemachine-data-redis"
     api "org.springframework.statemachine:spring-statemachine-data-jpa"
-    api("com.github.wxpay:WXPay-SDK-Java:0.0.5")
 //    api "xiao.wei:xiao-wei-security-interface-expose:1.0.0-SNAPSHOT"
     compileOnly "org.mapstruct:mapstruct"
     compileOnly "org.mapstruct:mapstruct-processor"
