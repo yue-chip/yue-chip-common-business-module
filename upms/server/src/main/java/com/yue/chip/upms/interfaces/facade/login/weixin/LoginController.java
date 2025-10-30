@@ -184,12 +184,3 @@ public class LoginController {
     }
 
 }
-
-
-//iptables -t nat -D PREROUTING --dst 172.16.0.16 -p tcp --dport 8910 -j DNAT --to-destination 202.105.182.199:8910
-//iptables -t nat -D POSTROUTING --dst 202.105.182.199 -p tcp --dport 8910 -j SNAT --to-source 172.16.0.16
-
-
-
-//iptables -t nat -A PREROUTING --dst 172.16.0.16 -p tcp --dport 8910 -j DNAT --to-destination 120.238.165.61:5478
-//iptables -t nat -A POSTROUTING --dst 120.238.165.61 -p tcp --dport 5478 -j SNAT --to-source 172.16.0.16
