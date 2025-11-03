@@ -1,5 +1,6 @@
 package com.yue.chip.common.business.expose.file;
 
+import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.common.business.definition.file.FileDefinition;
 import com.yue.chip.core.ResultData;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +29,7 @@ public interface RemoteFileDefinition {
      * @return
      */
     @Operation(description = "根据文件id查找",summary = "根据文件id查找")
+    @AuthorizationIgnore
     public ResultData<FileDefinition> find( Long fileId);
 
     /**
@@ -39,11 +41,13 @@ public interface RemoteFileDefinition {
      * @return fileId 和 url 的映射关系
      */
     @Operation(description = "查找文件",summary = "查找文件")
+    @AuthorizationIgnore
     public ResultData<Map<String,String>> url(@NotNull(message = "表id不能为空") @RequestParam(value = "tableId") Long tableId,
                                               @NotBlank(message = "表字段名不能为空") @RequestParam(value = "fileFieldName") String fileFieldName,
                                               @NotBlank(message = "表明") @RequestParam(value = "tableName") String tableName);
 
     @Operation(description = "查找文件",summary = "查找文件")
+    @AuthorizationIgnore
     public ResultData<Map<String, String>> urls(@NotNull ArrayList<Long> tableIds, @NotBlank String fileFieldName, @NotBlank String tableName);
 
     /**
@@ -55,6 +59,7 @@ public interface RemoteFileDefinition {
      * @return fileId 和 url 的映射关系
      */
     @Operation(description = "查找文件",summary = "查找文件")
+    @AuthorizationIgnore
     public ResultData<String> urlSingle(@NotNull(message = "表id不能为空") @RequestParam(value = "tableId") Long tableId,
                                         @NotBlank(message = "表字段名不能为空") @RequestParam(value = "fileFieldName") String fileFieldName,
                                         @NotBlank(message = "tableName") @RequestParam(value = "tableName") String tableName);
@@ -68,6 +73,7 @@ public interface RemoteFileDefinition {
      * @return
      */
     @Operation(description = "保存文件",summary = "保存文件")
+    @AuthorizationIgnore
     public ResultData<List<Long>> save(@NotNull(message = "表id不能为空") @RequestParam(value = "tableId")Long tableId,
                                        @NotBlank(message = "表名不能为空") @RequestParam(value = "tableName")String tableName,
                                        @NotBlank(message = "表字段名不能为空") @RequestParam(value = "fileFieldName")String fileFieldName,

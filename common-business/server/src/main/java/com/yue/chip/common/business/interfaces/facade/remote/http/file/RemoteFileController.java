@@ -1,5 +1,6 @@
 package com.yue.chip.common.business.interfaces.facade.remote.http.file;
 
+import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.common.business.assembler.file.FileMapper;
 import com.yue.chip.common.business.definition.file.FileDefinition;
 import com.yue.chip.common.business.domain.aggregates.file.File;
@@ -32,6 +33,7 @@ public class RemoteFileController implements RemoteFileDefinition {
 
     @Override
     @GetMapping(FIND)
+    @AuthorizationIgnore
     public ResultData<FileDefinition> find(Long fileId) {
         Optional<File> optional = fileRepository.find(fileId);
         ResultData.ResultDataBuilder<FileDefinition>  builder = ResultData.builder();
@@ -43,6 +45,7 @@ public class RemoteFileController implements RemoteFileDefinition {
 
     @Override
     @GetMapping(URL)
+    @AuthorizationIgnore
     public ResultData<Map<String, String>> url(Long tableId, String fileFieldName, String tableName) {
         ResultData.ResultDataBuilder<Map<String, String>> builder = ResultData.builder();
         if (Objects.isNull(tableId) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {
@@ -61,6 +64,7 @@ public class RemoteFileController implements RemoteFileDefinition {
 
     @Override
     @GetMapping(URLS)
+    @AuthorizationIgnore
     public ResultData<Map<String, String>> urls(ArrayList<Long> tableIds, String fileFieldName, String tableName) {
         ResultData.ResultDataBuilder<Map<String, String>> builder = ResultData.builder();
         if (CollectionUtils.isEmpty(tableIds) || !StringUtils.hasText(tableName)|| !StringUtils.hasText(fileFieldName)) {
@@ -78,6 +82,7 @@ public class RemoteFileController implements RemoteFileDefinition {
 
     @Override
     @GetMapping(URL_SINGLE)
+    @AuthorizationIgnore
     public ResultData<String> urlSingle(Long tableId, String fileFieldName, String tableName) {
         ResultData.ResultDataBuilder<String> builder = ResultData.builder();
         ResultData<Map<String, String>> resultData = url(tableId, fileFieldName, tableName);
@@ -93,6 +98,7 @@ public class RemoteFileController implements RemoteFileDefinition {
 
     @Override
     @GetMapping(SAVE)
+    @AuthorizationIgnore
     public ResultData<List<Long>> save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
         fileRepository.save(tableId, tableName, fileFieldName, fileIds);
         ResultData.ResultDataBuilder<List<Long>> builder = ResultData.builder();
