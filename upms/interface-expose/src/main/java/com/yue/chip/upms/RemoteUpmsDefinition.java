@@ -1,5 +1,6 @@
 package com.yue.chip.upms;
 
+import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;
 import com.yue.chip.core.YueChipPage;
@@ -34,12 +35,16 @@ public interface RemoteUpmsDefinition {
      * @param userIds
      * @return
      */
+    @AuthorizationIgnore
     ResultData<List<UserExposeVo>> find( List<Long> userIds);
 
+    @AuthorizationIgnore
     ResultData<UserExposeVo> find( Long userId);
 
+    @AuthorizationIgnore
     ResultData<UserExposeVo> find( String username);
 
+    @AuthorizationIgnore
     PageResultData<List<UserExposeVo>> find(String nameLike, UserType userType, YueChipPage yueChipPage, Map<String,Object> map);
     /**
      * 根据用户id和租户编码查寻用户
@@ -47,14 +52,19 @@ public interface RemoteUpmsDefinition {
      * @param tenantNumber
      * @return
      */
+    @AuthorizationIgnore
     ResultData<UserExposeVo> find( Long id, Long tenantNumber);
 
+    @AuthorizationIgnore
     PageResultData<List<UserExposeVo>> find(YueChipPage yueChipPage, Map<String,Object> map);
 
+    @AuthorizationIgnore
     PageResultData<List<UserExposeVo>> find(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, YueChipPage yueChipPage, Map<String,Object> map);
 
+    @AuthorizationIgnore
     ResultData<UserExposeVo> findPhoneNumber( String phoneNumber);
 
+    @AuthorizationIgnore
     ResultData<UserExposeVo> findEmail( String email);
 
     /**
@@ -63,6 +73,7 @@ public interface RemoteUpmsDefinition {
      * @param password
      * @param id
      */
+    @AuthorizationIgnore
     ResultData register( String phoneNumber,  String password, String name, Long id);
 
     /**
@@ -71,12 +82,15 @@ public interface RemoteUpmsDefinition {
      * @param password      密码
      * @param id            用户ID
      */
+    @AuthorizationIgnore
     ResultData registerByEmail( String email,  String password, String name, Long id);
 
     /**
      * 注销账号
      */
+    @AuthorizationIgnore
     ResultData logoutUser( Long userId);
 
+    @AuthorizationIgnore
     ResultData updateUserPassword( Long userId,  String password);
 }
