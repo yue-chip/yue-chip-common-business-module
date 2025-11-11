@@ -1,5 +1,6 @@
 package com.yue.chip.common.business.interfaces.facade.enums;
 
+import com.yue.chip.annotation.AuthorizationIgnore;
 import com.yue.chip.common.business.assembler.enums.EnumUtilMapper;
 import com.yue.chip.common.business.interfaces.vo.enums.EnumUtilVo;
 import com.yue.chip.core.IResultData;
@@ -38,6 +39,7 @@ public class EnumUtilController   {
 
     @GetMapping("")
     @Operation(description = "获取枚举",summary = "获取枚举")
+    @AuthorizationIgnore
     public IResultData<EnumUtilVo> get(@NotBlank(message = "枚举编码不能为空") @Parameter(description = "枚举编码",name = "code",required = true)String code,
                                        @NotBlank(message = "枚举版本号不能为空") @Parameter(description = "枚举版本号",name = "version",required = true) String version) {
         Optional<EnumUtilDefinition> enumUtilDefinitionOptional = enumPersistenceExposeService.get(code,version);
