@@ -15,6 +15,7 @@ import com.yue.chip.upms.assembler.user.UserMapper;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
+import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.vo.UserExposeVo;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -183,7 +184,8 @@ public class RemoteUpmsController implements RemoteUpmsDefinition {
     @PutExchange(UPDATE_PASSWORD)
     public ResultData updateUserPassword(@RequestParam("userId") Long userId,
                                          @RequestParam("password") String password) {
-        upmsRepository.updateUserPassword(userId,password);
+
+        upmsApplication.updateUserPassword(new UserUpdatePasswordDto(userId, password));
         return ResultData.builder().build();
     }
 }
