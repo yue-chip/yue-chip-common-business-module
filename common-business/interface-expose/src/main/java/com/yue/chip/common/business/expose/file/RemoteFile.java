@@ -45,6 +45,6 @@ public interface RemoteFile extends RemoteFileDefinition {
     public ResultData<List<Long>> save( @RequestParam(value = "tableId") Long tableId,
                                         @RequestParam(value = "tableName") String tableName,
                                         @RequestParam(value = "fileFieldName") String fileFieldName,
-                                        @RequestParam(value = "fileIds") List<Long> fileIds);
+                                        @RequestParam(value = "fileIds", required = false) List<Long> fileIds);
 
 }
