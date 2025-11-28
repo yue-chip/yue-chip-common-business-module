@@ -24,13 +24,13 @@ public interface RemoteFile extends RemoteFileDefinition {
 
     @Override
     @GetExchange(PREFIX+URL)
-    public ResultData<Map<String,String>> url(  @RequestParam(value = "tableId")Long tableId,
+    public ResultData<Map<String,String>> url(  @RequestParam(value = "tableId", required = false)Long tableId,
                                                 @RequestParam(value = "fileFieldName")  String fileFieldName,
                                                 @RequestParam(value = "tableName") String tableName);
 
     @Override
     @GetExchange(PREFIX+URLS)
-    ResultData<Map<String, String>> urls(@RequestParam(value = "tableIds") ArrayList<Long> tableIds,
+    ResultData<Map<String, String>> urls(@RequestParam(value = "tableIds", required = false) ArrayList<Long> tableIds,
                                 @RequestParam(value = "fileFieldName") String fileFieldName,
                                 @RequestParam(value = "tableName")String tableName);
 
@@ -45,6 +45,6 @@ public interface RemoteFile extends RemoteFileDefinition {
     public ResultData<List<Long>> save( @RequestParam(value = "tableId") Long tableId,
                                         @RequestParam(value = "tableName") String tableName,
                                         @RequestParam(value = "fileFieldName") String fileFieldName,
-                                        @RequestParam(value = "fileIds") List<Long> fileIds);
+                                        @RequestParam(value = "fileIds", required = false) List<Long> fileIds);
 
 }
