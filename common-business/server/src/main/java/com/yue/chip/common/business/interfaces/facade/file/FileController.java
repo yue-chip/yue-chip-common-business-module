@@ -1,5 +1,6 @@
 package com.yue.chip.common.business.interfaces.facade.file;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.yue.chip.common.business.assembler.file.FileMapper;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
@@ -82,8 +83,9 @@ public class FileController {
                                                        @NotBlank(message = "文件名称不能为空") String fileName,
                                                        @Parameter(description = "文件大小", required = true) @RequestParam("fileSize")
                                                        @NotNull(message = "文件大小不能为空") Long fileSize) {
+        ResultData.ResultDataBuilder<Map<String, Object>> builder = ResultData.builder();
         Map<String, Object> stateMap = largeFileService.initUpload(fileName, fileSize);
-        return ResultData.builder().data(stateMap).build();
+        return builder.data(stateMap).build();
     }
 
     @PostMapping("/upload/chunk")
@@ -101,16 +103,18 @@ public class FileController {
     @Operation(description = "合并文件", summary = "合并文件")
     public IResultData<FileVo> mergeFile(@Parameter(description = "上传ID", required = true) @RequestParam("uploadId")
                                          @NotBlank(message = "上传ID不能为空") String uploadId) {
+        ResultData.ResultDataBuilder<FileVo> builder = ResultData.builder();
         File file = largeFileService.mergeFile(uploadId);
-        return ResultData.builder().data(file).build();
+        return builder.data(BeanUtil.copyProperties(file, FileVo.class)).build();
     }
 
     @GetMapping("/upload/status")
     @Operation(description = "查询上传状态", summary = "查询上传状态")
     public IResultData<Map<String, Object>> getUploadStatus(@Parameter(description = "上传ID", required = true) @RequestParam("uploadId")
                                                             @NotBlank(message = "上传ID不能为空") String uploadId) {
+        ResultData.ResultDataBuilder<Map<String, Object>> builder = ResultData.builder();
         Map<String, Object> uploadStatus = largeFileService.getUploadStatus(uploadId);
-        return ResultData.builder().data(uploadStatus).build();
+        return builder.data(uploadStatus).build();
     }
 
 }
