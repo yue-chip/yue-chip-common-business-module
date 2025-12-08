@@ -65,4 +65,37 @@ public interface UpmsDomainService {
      * @return
      */
     YueChipUserDetails loadUserByPhoneNumber(String phoneNumber);
+
+    /**
+     * 根据手机号码查寻用户信息
+     * @param email Email
+     * @return
+     */
+    YueChipUserDetails loadUserByEmail(String email);
+
+    /**
+     * 根据手机号码查寻用户信息
+     * @param account   账号(用户名/手机号/email)
+     * @return
+     */
+    YueChipUserDetails loadUserByAccount(String account);
+
+    /**
+     * 根据手机号码查寻用户信息
+     * @param socialType   第三方类型
+     * @param socialUid    第三方uid
+     * @return
+     */
+    YueChipUserDetails loadUserBySocialTypeAndSocialUid(String socialType, String socialUid);
+
+    /**
+     * 根据手机号码查寻用户信息
+     * @param socialType        第三方类型
+     * @param socialUid         第三方uid
+     * @param socialAcc         第三方账号
+     * @param socialNickname    第三方昵称
+     * @return
+     */
+    YueChipUserDetails saveUserSocial(String socialType, String socialUid, String socialAcc, String socialNickname);
+
 }

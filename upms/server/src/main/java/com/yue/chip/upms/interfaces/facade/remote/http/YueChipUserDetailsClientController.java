@@ -48,19 +48,22 @@ public class YueChipUserDetailsClientController implements YueChipUserDetailsCli
     @Override
     @GetMapping(LOGIN_BY_EMAIL)
     public ResultData<YueChipUserDetails> loadUserByEmail(String email) {
-        return null;
+        ResultData.ResultDataBuilder<YueChipUserDetails> builder = ResultData.builder();
+        return builder.data(upmsDomainService.loadUserByEmail(email)).build();
     }
 
     @Override
     @GetMapping(LOGIN_BY_SOCIAL)
     public ResultData<YueChipUserDetails> loadUserBySocialTypeAndSocialUid(String socialType,String socialUid) {
-        return null;
+        ResultData.ResultDataBuilder<YueChipUserDetails> builder = ResultData.builder();
+        return builder.data(upmsDomainService.loadUserBySocialTypeAndSocialUid(socialType, socialUid)).build();
     }
 
     @Override
     @GetMapping(SAVE_SOCIAL)
-    public ResultData<YueChipUserDetails> saveUserSocial(String socialType,String socialUid,String socialAcc,String socialNickname) {
-        return null;
+    public ResultData<YueChipUserDetails> saveUserSocial(String socialType, String socialUid, String socialAcc, String socialNickname) {
+        ResultData.ResultDataBuilder<YueChipUserDetails> builder = ResultData.builder();
+        return builder.data(upmsDomainService.saveUserSocial(socialType, socialUid, socialAcc, socialNickname)).build();
     }
 
     @Override

@@ -1,5 +1,9 @@
 package com.yue.chip.upms.domain.service.upms.impl;
 
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
+import com.yue.chip.core.common.enums.State;
+import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.security.YueChipSimpleGrantedAuthority;
 import com.yue.chip.security.YueChipUserDetails;
 import com.yue.chip.upms.domain.aggregates.Organizational;
@@ -7,10 +11,13 @@ import com.yue.chip.upms.domain.aggregates.Resources;
 import com.yue.chip.upms.domain.aggregates.Role;
 import com.yue.chip.upms.domain.aggregates.User;
 import com.yue.chip.upms.domain.repository.organizational.OrganizationalRepository;
+import com.yue.chip.upms.domain.repository.social.UserSocialRepository;
 import com.yue.chip.upms.domain.repository.upms.UpmsRepository;
 import com.yue.chip.upms.domain.service.upms.UpmsDomainService;
 import com.yue.chip.upms.infrastructure.po.organizational.OrganizationalUserPo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
+import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.infrastructure.po.user.UserSocialPo;
 import com.yue.chip.utils.AssertUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +34,8 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
 
     @Resource
     private UpmsRepository upmsRepository;
+    @Resource
+    private UserSocialRepository userSocialRepository;
 
     @Resource
     private OrganizationalRepository organizationalRepository;
@@ -144,7 +153,6 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
         return userDetails;
     }
 
-
     @Override
     public YueChipUserDetails loadUserByPhoneNumber(String phoneNumber) {
         Optional<User> optional = upmsRepository.findUserByPhoneNumber(phoneNumber);
@@ -154,6 +162,64 @@ public class UpmsDomainServiceImpl implements UpmsDomainService {
         User user = optional.get();
         YueChipUserDetails userDetails = new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
         return userDetails;
+    }
+
+    @Override
+    public YueChipUserDetails loadUserByEmail(String email) {
+        Optional<User> userOptional = upmsRepository.findUserByEmail(email);
+        if (userOptional.isEmpty()) {
+            return null;
+        }
+        User user = userOptional.get();
+        return new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
+    }
+
+    @Override
+    public YueChipUserDetails loadUserByAccount(String account) {
+        Optional<User> userOptional = upmsRepository.findUserByAccount(account);
+        if (userOptional.isEmpty()) {
+            return null;
+        }
+        User user = userOptional.get();
+        return new YueChipUserDetails(user.getId(),user.getUsername(),user.getPassword(),user.getTenantNumber(),getUserGrantedAuthority(user.getRoles()));
+    }
+
+    @Override
+    public YueChipUserDetails loadUserBySocialTypeAndSocialUid(String socialType, String socialUid) {
+        Optional<User> optional = upmsRepository.findUserBySocialTypeAndSocialUid(socialType, socialUid);
+        if (optional.isEmpty()){
+            return null;
+        }
+        User user = optional.get();
+        return new YueChipUserDetails(user.getId(), user.getUsername(), user.getPassword(), user.getTenantNumber(), getUserGrantedAuthority(user.getRoles()));
+    }
+
+    @Override
+    public YueChipUserDetails saveUserSocial(String socialType, String socialUid, String socialAcc, String socialNickname) {
+        // 生成一个新的用户
+        String name = StrUtil.format("{}_{}", socialType.toUpperCase(), RandomUtil.randomStringUpper(6));
+        UserPo userPo = new UserPo();
+        userPo.setTenantNumber(null);
+        userPo.setName(name);
+        userPo.setUsername(name);
+        userPo.setNickname(socialNickname);
+        userPo.setState(State.NORMAL);
+        userPo.setUserType(UserType.ORDINARY);
+        userPo.setPassword("123456"); // 默认密码
+        User user = upmsRepository.saveUser(userPo);
+        // 绑定第三方用户信息
+        UserSocialPo userSocialPo = new UserSocialPo();
+        userSocialPo.setUserId(user.getId());
+        userSocialPo.setTenantNumber(null);
+        userSocialPo.setType(socialType);
+        userSocialPo.setUid(socialUid);
+        userSocialPo.setAcc(socialAcc);
+        userSocialPo = userSocialRepository.saveUserSocial(userSocialPo);
+
+        // 重新获取用户信息
+        Optional<User> currUserOptional = upmsRepository.findUserBySocialTypeAndSocialUid(socialType, socialUid);
+        User currUser = currUserOptional.get();
+        return new YueChipUserDetails(currUser.getId(), currUser.getUsername(), currUser.getPassword(), currUser.getTenantNumber(), getUserGrantedAuthority(currUser.getRoles()));
     }
 
     private List<Long> getAllParentId(Long resourcesId) {
