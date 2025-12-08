@@ -1,20 +1,23 @@
 package com.yue.chip.common.business.interfaces.facade.file;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.yue.chip.common.business.assembler.file.FileMapper;
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.repository.file.FileRepository;
 import com.yue.chip.common.business.domain.service.file.FileService;
+import com.yue.chip.common.business.domain.service.file.LargeFileService;
 import com.yue.chip.common.business.interfaces.vo.file.FileVo;
 import com.yue.chip.core.IResultData;
 import com.yue.chip.core.ResultData;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
@@ -29,10 +32,12 @@ import java.util.*;
 @Validated
 @Tag(name = "文件")
 @Log
-public class FileController  {
+public class FileController {
 
     @Resource
     private FileService fileService;
+    @Resource
+    private LargeFileService largeFileService;
     @Resource
     private FileRepository fileRepository;
 
@@ -40,12 +45,12 @@ public class FileController  {
     private FileMapper fileMapper;
 
     @PostMapping("/upload")
-    @Operation(description = "上传文件(支持多文件)",summary = "上传文件(支持多文件)")
+    @Operation(description = "上传文件(支持多文件)", summary = "上传文件(支持多文件)")
     public IResultData<List<FileVo>> upload(StandardMultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
         ResultData.ResultDataBuilder<List<FileVo>> builder = ResultData.builder();
         Map<String, MultipartFile> files = multipartHttpServletRequest.getFileMap();
         List<FileVo> fileList = new ArrayList<FileVo>();
-        for(String originalFileName : files.keySet()) {
+        for (String originalFileName : files.keySet()) {
             MultipartFile file = files.get(originalFileName);
             if (file.getSize() <= 0) {
                 continue;
@@ -70,6 +75,46 @@ public class FileController  {
             }
         }
         return builder.data(fileList).build();
+    }
+
+    @PostMapping("/init/upload")
+    @Operation(description = "初始化分片上传", summary = "初始化分片上传")
+    public IResultData<Map<String, Object>> initUpload(@Parameter(description = "文件名称", required = true) @RequestParam("fileName")
+                                                       @NotBlank(message = "文件名称不能为空") String fileName,
+                                                       @Parameter(description = "文件大小", required = true) @RequestParam("fileSize")
+                                                       @NotNull(message = "文件大小不能为空") Long fileSize) {
+        ResultData.ResultDataBuilder<Map<String, Object>> builder = ResultData.builder();
+        Map<String, Object> stateMap = largeFileService.initUpload(fileName, fileSize);
+        return builder.data(stateMap).build();
+    }
+
+    @PostMapping("/upload/chunk")
+    @Operation(description = "上传分片", summary = "上传分片")
+    public IResultData<?> uploadChunk(@Parameter(description = "上传ID", required = true) @RequestParam("uploadId")
+                                      @NotBlank(message = "上传ID不能为空") String uploadId,
+                                      @Parameter(description = "分片编号", required = true) @RequestParam("chunkNumber")
+                                      @NotNull(message = "分片编号不能为空") Integer chunkNumber,
+                                      MultipartFile chunk) {
+        largeFileService.uploadChunk(uploadId, chunkNumber, chunk);
+        return ResultData.builder().build();
+    }
+
+    @PostMapping("/merge/file")
+    @Operation(description = "合并文件", summary = "合并文件")
+    public IResultData<FileVo> mergeFile(@Parameter(description = "上传ID", required = true) @RequestParam("uploadId")
+                                         @NotBlank(message = "上传ID不能为空") String uploadId) {
+        ResultData.ResultDataBuilder<FileVo> builder = ResultData.builder();
+        File file = largeFileService.mergeFile(uploadId);
+        return builder.data(BeanUtil.copyProperties(file, FileVo.class)).build();
+    }
+
+    @GetMapping("/upload/status")
+    @Operation(description = "查询上传状态", summary = "查询上传状态")
+    public IResultData<Map<String, Object>> getUploadStatus(@Parameter(description = "上传ID", required = true) @RequestParam("uploadId")
+                                                            @NotBlank(message = "上传ID不能为空") String uploadId) {
+        ResultData.ResultDataBuilder<Map<String, Object>> builder = ResultData.builder();
+        Map<String, Object> uploadStatus = largeFileService.getUploadStatus(uploadId);
+        return builder.data(uploadStatus).build();
     }
 
 }

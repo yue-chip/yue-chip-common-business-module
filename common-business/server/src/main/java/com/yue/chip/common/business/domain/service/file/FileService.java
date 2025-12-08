@@ -6,17 +6,19 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Optional;
 
 /**
+ * 文件上传服务
+ *
  * @author Mr.Liu
  * @date 2023/6/13 下午4:51
  */
 public interface FileService {
 
-    public static final String URL_PREFIX = "/file";
+    String URL_PREFIX = "/file";
 
     /**
-     * @param file
-     * @return
-     * @throws Exception
+     * @param file 文件上传
+     * @return 文件信息
+     * @throws Exception 抛出异常
      */
-    public Optional<File> upload(MultipartFile file) throws Exception;
+    Optional<File> upload(MultipartFile file) throws Exception;
 }
