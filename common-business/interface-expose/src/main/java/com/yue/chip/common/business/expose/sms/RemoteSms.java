@@ -1,5 +1,6 @@
 package com.yue.chip.common.business.expose.sms;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
@@ -15,9 +16,17 @@ public interface RemoteSms extends RemoteSmsDefinition {
 
     @Override
     @GetExchange(PREFIX+SEND_SINGLE)
-    void sendSms(String appId, String signName, String templateCode, Object message, String phoneNumber);
+    void sendSms(@RequestParam(value = "appId") String appId,
+                 @RequestParam(value = "signName") String signName,
+                 @RequestParam(value = "templateCode") String templateCode,
+                 @RequestParam(value = "message") Object message,
+                 @RequestParam(value = "phoneNumber") String phoneNumber);
 
     @Override
     @GetExchange(PREFIX+SEND)
-    void sendSms(String appId, String signName, String templateCode, Object message, List<String> phoneNumbers);
+    void sendSms(@RequestParam(value = "appId") String appId,
+                 @RequestParam(value = "signName") String signName,
+                 @RequestParam(value = "templateCode") String templateCode,
+                 @RequestParam(value = "message") Object message,
+                 @RequestParam(value = "phoneNumber") List<String> phoneNumbers);
 }

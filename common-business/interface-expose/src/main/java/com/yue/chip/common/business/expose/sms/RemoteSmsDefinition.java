@@ -33,7 +33,7 @@ public interface RemoteSmsDefinition {
     public void sendSms(@NotBlank(message = "appId不能为空") @RequestParam("appId") String appId,
                         @NotBlank(message = "signName不能为空") @RequestParam("signName") String signName,
                         @NotBlank(message = "模板编码不能为空") @RequestParam("templateCode") String templateCode,
-                        @NotBlank(message = "短信内容不能为空") @RequestParam("message") Object message,
+                        @RequestParam("message") Object message,
                         @NotBlank(message = "电话号码不能为空") @RequestParam("phoneNumber") String phoneNumber);
 
     /**
@@ -49,6 +49,6 @@ public interface RemoteSmsDefinition {
     public void sendSms(@NotBlank(message = "appId不能为空") @RequestParam("appId")String appId,
                         @NotBlank(message = "signName不能为空") @RequestParam("signName")String signName,
                         @NotBlank(message = "模板编码不能为空") @RequestParam("templateCode")String templateCode,
-                        @NotBlank(message = "短信内容不能为空") @RequestParam("message")Object message,
+                        @RequestParam("message")Object message,
                         @NotNull(message = "电话号码不能为空") @Size(min = 1,message = "电话号码不能为空") @RequestParam("phoneNumbers")List<String> phoneNumbers);
 }
