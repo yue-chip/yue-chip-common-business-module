@@ -41,7 +41,7 @@ public interface RemoteFile extends RemoteFileDefinition {
                                          @RequestParam(value = "tableName")String tableName);
 
     @Override
-    @PostExchange(PREFIX+SAVE)
+    @GetExchange(PREFIX+SAVE)
     public ResultData<List<Long>> save( @RequestParam(value = "tableId") Long tableId,
                                         @RequestParam(value = "tableName") String tableName,
                                         @RequestParam(value = "fileFieldName") String fileFieldName,
