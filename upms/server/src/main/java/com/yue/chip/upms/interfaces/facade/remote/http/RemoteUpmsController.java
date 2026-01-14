@@ -120,13 +120,13 @@ public class RemoteUpmsController implements RemoteUpmsDefinition {
 
     @Override
     @GetExchange(FIND_6)
-    public PageResultData<List<UserExposeVo>> find(@RequestParam("id") String name,
-                                                   @RequestParam("nickname") String nickname,
-                                                   @RequestParam("username") String username,
-                                                   @RequestParam("phoneNumber") String phoneNumber,
-                                                   @RequestParam("email") String email,
-                                                   @RequestParam("state") State state,
-                                                   @RequestParam("nameLike") String nameLike, YueChipPage yueChipPage,Map<String,Object> map) {
+    public PageResultData<List<UserExposeVo>> find(@RequestParam(name = "name",required = false) String name,
+                                                   @RequestParam(name = "nickname",required = false) String nickname,
+                                                   @RequestParam(name = "username",required = false) String username,
+                                                   @RequestParam(name = "phoneNumber",required = false) String phoneNumber,
+                                                   @RequestParam(name = "email",required = false) String email,
+                                                   @RequestParam(name = "state",required = false) State state,
+                                                   @RequestParam(name = "nameLike",required = false) String nameLike, YueChipPage yueChipPage,Map<String,Object> map) {
         IPageResultData<List<UserExposeVo>> userList = upmsRepository.findUserAllByUserType(name, nickname, username, phoneNumber, email, state, nameLike, yueChipPage);
         return (PageResultData<List<UserExposeVo>>) userList;
     }
