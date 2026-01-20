@@ -2,9 +2,13 @@ package com.yue.chip.upms.enums;
 
 import cn.hutool.core.util.NumberUtil;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.yue.chip.core.IEnum;
 import com.yue.chip.core.common.enums.EnumConverter;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -86,5 +90,16 @@ public enum IdCardType implements IEnum {
     }
 
     public static class IdCardTypeConverter extends EnumConverter<IdCardType,Integer> {
+    }
+
+    public static class IdCardTypeSerializer extends JsonSerializer<IdCardType> {
+        @Override
+        public void serialize(IdCardType value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            if (value == null) {
+                gen.writeNull();
+            } else {
+                gen.writeString(value.getName()); // 自定义的序列化逻辑
+            }
+        }
     }
 }

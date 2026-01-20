@@ -1,5 +1,6 @@
 package com.yue.chip.upms.interfaces.facade.remote.http;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;

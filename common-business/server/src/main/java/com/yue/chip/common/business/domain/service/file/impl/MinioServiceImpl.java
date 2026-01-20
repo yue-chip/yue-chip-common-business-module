@@ -144,7 +144,7 @@ public class MinioServiceImpl implements FileService, LargeFileService {
             List<ComposeSource> sources = IntStream.range(0, totalChunks)
                     .mapToObj(i -> ComposeSource.builder()
                             .bucket(MinioProperties.PUBLIC_BUCKET)
-                            .object(chunkObjectName(uploadId, i)) // 指向每个分块
+                            .object(chunkObjectName(uploadId, (i + 1))) // 指向每个分块
                             .build())
                     .collect(Collectors.toList());
 
@@ -163,7 +163,7 @@ public class MinioServiceImpl implements FileService, LargeFileService {
                 minioClient.removeObject(
                         RemoveObjectArgs.builder()
                                 .bucket(MinioProperties.PUBLIC_BUCKET)
-                                .object(chunkObjectName(uploadId, i))
+                                .object(chunkObjectName(uploadId, (i + 1)))
                                 .build()
                 );
             }
@@ -173,7 +173,7 @@ public class MinioServiceImpl implements FileService, LargeFileService {
             }
 
         } catch (Exception e) {
-            log.error("文件合并失败：{}", e.getMessage());
+            log.error("文件合并失败：", e);
             throw new BusinessException("文件合并失败");
         } finally {
             // 5. 清理Redis状态
