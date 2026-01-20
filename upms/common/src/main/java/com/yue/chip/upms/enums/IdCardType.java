@@ -2,6 +2,7 @@ package com.yue.chip.upms.enums;
 
 import cn.hutool.core.util.NumberUtil;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -98,7 +99,7 @@ public enum IdCardType implements IEnum {
             if (value == null) {
                 gen.writeNull();
             } else {
-                gen.writeObject(value.jsonValue()); // 自定义的序列化逻辑
+                gen.writeString(value.getName()); // 自定义的序列化逻辑
             }
         }
     }
