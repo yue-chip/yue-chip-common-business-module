@@ -178,6 +178,10 @@ public class UpmsApplicationImpl implements UpmsApplication {
         if (Objects.nonNull(userAddOrUpdateDto.getProfilePhotoId())) {
             remoteFile.save(userAddOrUpdateDto.getId(),UserPo.TABLE_NAME,UserPo.PROFILE_PHOTO_FIELD_NAME,List.of(userAddOrUpdateDto.getProfilePhotoId()));
         }
+        //更新其他头像
+        if (Objects.nonNull(userAddOrUpdateDto.getOtherPhotoId())) {
+            remoteFile.save(userAddOrUpdateDto.getId(),UserPo.TABLE_NAME,UserPo.OTHER_PHOTO_FIELD_NAME,List.of(userAddOrUpdateDto.getOtherPhotoId()));
+        }
         //修改用户
         upmsRepository.updateUser(userMapper.toUserPo(userAddOrUpdateDto));
         //保存用户与组织架构的关联关系
