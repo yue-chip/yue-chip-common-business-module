@@ -98,7 +98,7 @@ public enum IdCardType implements IEnum {
             if (value == null) {
                 gen.writeNull();
             } else {
-                gen.writeString(value.getName()); // 自定义的序列化逻辑
+                gen.writeObject(value.jsonValue()); // 自定义的序列化逻辑
             }
         }
     }
