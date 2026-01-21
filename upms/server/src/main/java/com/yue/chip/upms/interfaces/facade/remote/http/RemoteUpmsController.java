@@ -1,6 +1,5 @@
 package com.yue.chip.upms.interfaces.facade.remote.http;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.yue.chip.core.IPageResultData;
 import com.yue.chip.core.PageResultData;
 import com.yue.chip.core.ResultData;
@@ -33,6 +32,7 @@ import org.springframework.web.service.annotation.PutExchange;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("")
@@ -188,5 +188,13 @@ public class RemoteUpmsController implements RemoteUpmsDefinition {
 
         upmsApplication.updateUserPassword(new UserUpdatePasswordDto(userId, password));
         return ResultData.builder().build();
+    }
+
+    @Override
+    @GetExchange(VERIFY_USERIDS)
+    public ResultData<List<Long>> verifyUserIds(@RequestParam("userIds") List<Long> userIds) {
+        ResultData.ResultDataBuilder<List<Long>> builder = ResultData.builder();
+        List<Long> userIdList = upmsRepository.findUserByIds(userIds).stream().map(User::getId).collect(Collectors.toList());
+        return builder.data(userIdList).build();
     }
 }
