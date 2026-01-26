@@ -29,6 +29,7 @@ public interface RemoteUpmsDefinition {
     static final String REGISTER_EMAIL = "/remote/user/find/register/email";
     static final String LOGOUT_USER = "/remote/user/logout/user";
     static final String UPDATE_PASSWORD = "/remote/user/update/password";
+    static final String VERIFY_USERIDS = "/remote/user/verify/userIds";
 
     /**
      * 根据ids查询所有用户
@@ -93,4 +94,12 @@ public interface RemoteUpmsDefinition {
 
     @AuthorizationIgnore
     ResultData updateUserPassword( Long userId,  String password);
+
+    /**
+     * 校验用户ID是否存在
+     * @param userIds
+     * @return
+     */
+    @AuthorizationIgnore
+    ResultData<List<Long>> verifyUserIds(List<Long> userIds);
 }

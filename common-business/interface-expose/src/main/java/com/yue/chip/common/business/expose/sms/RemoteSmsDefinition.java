@@ -1,5 +1,8 @@
 package com.yue.chip.common.business.expose.sms;
 
+import com.yue.chip.annotation.AuthorizationIgnore;
+import com.yue.chip.core.IResultData;
+import com.yue.chip.core.ResultData;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,11 +33,12 @@ public interface RemoteSmsDefinition {
 
      */
     @Operation(description = "发送短信",summary = "发送短信")
-    public void sendSms(@NotBlank(message = "appId不能为空") @RequestParam("appId") String appId,
-                        @NotBlank(message = "signName不能为空") @RequestParam("signName") String signName,
-                        @NotBlank(message = "模板编码不能为空") @RequestParam("templateCode") String templateCode,
-                        @RequestParam("message") Object message,
-                        @NotBlank(message = "电话号码不能为空") @RequestParam("phoneNumber") String phoneNumber);
+    @AuthorizationIgnore
+    public ResultData sendSms(@NotBlank(message = "appId不能为空") @RequestParam("appId") String appId,
+                              @NotBlank(message = "signName不能为空") @RequestParam("signName") String signName,
+                              @NotBlank(message = "模板编码不能为空") @RequestParam("templateCode") String templateCode,
+                              @RequestParam("message") Object message,
+                              @NotBlank(message = "电话号码不能为空") @RequestParam("phoneNumber") String phoneNumber);
 
     /**
      * 发送短信
@@ -46,7 +50,8 @@ public interface RemoteSmsDefinition {
      * @param phoneNumbers 手机号码 示例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号
      */
     @Operation(description = "发送短信",summary = "发送短信")
-    public void sendSms(@NotBlank(message = "appId不能为空") @RequestParam("appId")String appId,
+    @AuthorizationIgnore
+    public ResultData sendSms(@NotBlank(message = "appId不能为空") @RequestParam("appId")String appId,
                         @NotBlank(message = "signName不能为空") @RequestParam("signName")String signName,
                         @NotBlank(message = "模板编码不能为空") @RequestParam("templateCode")String templateCode,
                         @RequestParam("message")Object message,

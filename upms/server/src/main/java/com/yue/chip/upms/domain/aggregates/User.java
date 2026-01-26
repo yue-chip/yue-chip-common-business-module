@@ -129,6 +129,31 @@ public class User extends UserDefinition {
         return null;
     }
 
+    @Override
+    public String getOtherPhotoUrl() {
+        Assert.notNull(getId(),"id不能为空");
+        ResultData<String> resultData = remoteFile.urlSingle(getId(),UserPo.OTHER_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
+        CheckRemoteHttpResultDataUtil.check(resultData);
+        return resultData.getData();
+    }
+
+    @Override
+    public Long getOtherPhotoId() {
+        Assert.notNull(getId(),"id不能为空");
+        ResultData<Map<String, String>>  resultData = remoteFile.url(getId(),UserPo.OTHER_PHOTO_FIELD_NAME, UserPo.TABLE_NAME);
+        CheckRemoteHttpResultDataUtil.check(resultData);
+        Map<String,String> fileMap = resultData.getData();
+        if (Objects.nonNull(fileMap) && !fileMap.isEmpty()) {
+            Object obj = fileMap.keySet().toArray()[0];
+            if (obj instanceof Long) {
+                return (Long) obj;
+            }else {
+                return Long.valueOf(String.valueOf(obj));
+            }
+        }
+        return null;
+    }
+
     public List<Organizational> getOrganizationalList() {
         if (Objects.nonNull(organizationalList)) {
             return this.organizationalList;
