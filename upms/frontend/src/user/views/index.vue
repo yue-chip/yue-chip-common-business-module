@@ -5,7 +5,7 @@
         <a-row :gutter="[12,12]">
           <a-col :span="6">
             <a-form-item label="姓名/账号" name="name" ref="name" >
-              <a-input placeholder="请输入姓名/账号" v-model:value="searchModel.nameOrUsemame" />
+              <a-input placeholder="请输入姓名/账号" v-model:value="searchModel.nameOrUsername" />
             </a-form-item>
           </a-col>
           <a-col :span="6">
