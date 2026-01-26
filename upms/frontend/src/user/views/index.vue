@@ -2,13 +2,17 @@
   <div>
     <a-card >
       <a-form ref="from" :model="searchModel" :label-col="{span: 4,offset:0}" >
-        <a-row >
+        <a-row :gutter="[12,12]">
           <a-col :span="6">
             <a-form-item label="姓名" name="name" ref="name" >
               <a-input placeholder="请输入姓名" v-model:value="searchModel.name" />
             </a-form-item>
           </a-col>
           <a-col :span="6">
+            <a-form-item label="手机号" name="phoneNumber" ref="phoneNumber" >
+              <a-input placeholder="请输入手机号" v-model:value="searchModel.phoneNumber" />
+            </a-form-item>
+            
           </a-col>
           <a-col :span="6">
           </a-col>
