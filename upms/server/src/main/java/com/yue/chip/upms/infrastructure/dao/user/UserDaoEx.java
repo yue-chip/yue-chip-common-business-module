@@ -4,6 +4,7 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.UserPageDto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,15 @@ public interface UserDaoEx {
 
     public Page<UserPo> find(List<Long> ids, String name,@NotNull Pageable pageable);
     Page<UserPo> find(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike,UserType userType, @NotNull YueChipPage yueChipPage);
+
+    /**
+     * 分页查询用户列表
+     *
+     * @param dto      分页条件DTO
+     * @param pageable 分页参数
+     * @return 用户列表
+     */
+    Page<UserPo> find(UserPageDto dto, Pageable pageable);
 
     /**
      * 根据角色查询关联的用户

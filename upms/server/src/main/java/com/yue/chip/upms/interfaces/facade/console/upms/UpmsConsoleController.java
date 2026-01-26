@@ -23,6 +23,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
+import com.yue.chip.upms.interfaces.dto.user.UserPageDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
@@ -267,8 +268,8 @@ public class UpmsConsoleController {
 
     @GetMapping("/user/list")
     @Operation(description = "用户-用户列表",summary = "用户-用户列表")
-    public IPageResultData<List<UserVo>> userList(@Parameter(description = "姓名",name="name")String name, YueChipPage page) {
-        IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(name,page);
+    public IPageResultData<List<UserVo>> userList(UserPageDto dto, YueChipPage page) {
+        IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(dto,page);
         return pageResultData;
     }
 
