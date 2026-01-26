@@ -4,8 +4,8 @@
       <a-form ref="from" :model="searchModel" :label-col="{span: 4,offset:0}" >
         <a-row :gutter="[12,12]">
           <a-col :span="6">
-            <a-form-item label="姓名" name="name" ref="name" >
-              <a-input placeholder="请输入姓名" v-model:value="searchModel.name" />
+            <a-form-item label="姓名/账号" name="name" ref="name" >
+              <a-input placeholder="请输入姓名/账号" v-model:value="searchModel.nameOrUsemame" />
             </a-form-item>
           </a-col>
           <a-col :span="6">
