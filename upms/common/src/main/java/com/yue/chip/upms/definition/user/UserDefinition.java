@@ -70,7 +70,7 @@ public class UserDefinition extends BaseDefinition {
     private String name;
 
     @Schema(description = "性别")
-    @JsonSerialize(using = Gender.GenderSerializer.class)
+    //@JsonSerialize(using = Gender.GenderSerializer.class)
     private Gender gender;
 
     @Schema(description = "昵称")
@@ -83,7 +83,7 @@ public class UserDefinition extends BaseDefinition {
     private String email;
 
     @Schema(description = "证件类型")
-    @JsonSerialize(using = IdCardType.IdCardTypeSerializer.class)
+    //@JsonSerialize(using = IdCardType.IdCardTypeSerializer.class)
     private IdCardType idCardType;
 
     @Schema(description = "证书编号")
