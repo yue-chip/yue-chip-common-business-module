@@ -2,12 +2,14 @@ package com.yue.chip.common.business.domain.service.file.impl;
 
 import com.yue.chip.common.business.domain.aggregates.file.File;
 import com.yue.chip.common.business.domain.service.file.FileService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,14 +30,18 @@ public class LocalFileUploadServiceImpl implements FileService {
     public Optional<File> upload(MultipartFile file) throws Exception {
         String fileName = UUID.randomUUID().toString()+file.getOriginalFilename();
         String filePath = storage_path +(Objects.equals(storage_path.substring(storage_path.length()-1),"/")?"":"/")+fileName;
-        FileUtils.copyInputStreamToFile(file.getInputStream(), new java.io.File(filePath));
-        return Optional.ofNullable(
-                File.builder()
-                        .fileName(fileName)
-                        .size(file.getSize())
-                        .originalFileName(file.getOriginalFilename())
-                        .url("/"+ fileName)
-                        .build()
-        );
+        try (InputStream inputStream = file.getInputStream()) {
+            String md5 = DigestUtils.md5Hex(inputStream);
+            FileUtils.copyInputStreamToFile(file.getInputStream(), new java.io.File(filePath));
+            return Optional.ofNullable(
+                    File.builder()
+                            .fileName(fileName)
+                            .size(file.getSize())
+                            .originalFileName(file.getOriginalFilename())
+                            .url("/"+ fileName)
+                            .md5(md5)
+                            .build()
+            );
+        }
     }
 }
