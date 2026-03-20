@@ -369,4 +369,19 @@ public interface UpmsRepository {
     IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, @NotNull YueChipPage yueChipPage);
 
     void logoutUser(Long userId);
+
+    /**
+     * 统计年度用户增长数量
+     * @param year 年份
+     * @return 用户数量
+     */
+    Long countUserByYear(Integer year);
+
+    /**
+     * 统计月度用户增长数量
+     * @param year 年份
+     * @param month 月份
+     * @return 用户数量
+     */
+    Long countUserByYearAndMonth(Integer year, Integer month);
 }

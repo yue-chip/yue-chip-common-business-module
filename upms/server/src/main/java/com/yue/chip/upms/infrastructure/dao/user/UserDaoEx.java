@@ -117,4 +117,19 @@ public interface UserDaoEx {
 
     Page<UserPo> findByUsernameOrPhoneNumberOrEmailAndUserType(String name, UserType userType, YueChipPage yueChipPage);
 
+    /**
+     * 统计指定年份的用户增长数量
+     * @param year 年份
+     * @return 用户数量
+     */
+    Long countByYear(Integer year);
+
+    /**
+     * 统计指定年份和月份的用户增长数量
+     * @param year 年份
+     * @param month 月份
+     * @return 用户数量
+     */
+    Long countByYearAndMonth(Integer year, Integer month);
+
 }
