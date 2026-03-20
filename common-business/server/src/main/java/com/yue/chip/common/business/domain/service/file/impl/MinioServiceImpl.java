@@ -7,6 +7,7 @@ import com.yue.chip.configuration.properties.MinioProperties;
 import com.yue.chip.exception.BusinessException;
 import com.yue.chip.utils.RedisUtils;
 import io.minio.*;
+import org.apache.commons.codec.digest.DigestUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,7 @@ public class MinioServiceImpl implements FileService, LargeFileService {
     @Override
     public Optional<File> upload(MultipartFile file) throws Exception {
         String fileStoreName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        String md5 = DigestUtils.md5Hex(file.getInputStream());
         InputStream inputStream = file.getInputStream();
 
         PutObjectArgs putObjectArgs = PutObjectArgs.builder()
@@ -65,7 +67,7 @@ public class MinioServiceImpl implements FileService, LargeFileService {
 
         ObjectWriteResponse response = minioClient.putObject(putObjectArgs);
         if (Objects.nonNull(response) && StringUtils.hasText(response.etag())) {
-            return Optional.of(buildFileInfo(file.getSize(), file.getOriginalFilename(), fileStoreName));
+            return Optional.of(buildFileInfo(file.getSize(), file.getOriginalFilename(), fileStoreName, md5));
         }
         return Optional.empty();
     }
@@ -73,12 +75,13 @@ public class MinioServiceImpl implements FileService, LargeFileService {
     /**
      * 构建文件信息
      */
-    private File buildFileInfo(long fileSize, String originalFilename, String fileStoreName) {
+    private File buildFileInfo(long fileSize, String originalFilename, String fileStoreName, String md5) {
         return File.builder()
                 .fileName(fileStoreName)
                 .size(fileSize)
                 .originalFileName(originalFilename)
                 .url("/" + MinioProperties.PUBLIC_BUCKET + "/" + minioProperties.getPath() + "/" + fileStoreName)
+                .md5(md5)
                 .build();
     }
 
@@ -169,7 +172,7 @@ public class MinioServiceImpl implements FileService, LargeFileService {
             }
 
             if (Objects.nonNull(response) && StringUtils.hasText(response.etag())) {
-                return buildFileInfo(fileSize, originalFilename, finalObjectName);
+                return buildFileInfo(fileSize, originalFilename, finalObjectName, response.etag());
             }
 
         } catch (Exception e) {
