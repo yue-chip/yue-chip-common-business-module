@@ -380,4 +380,14 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         }
         return Optional.empty();
     }
+
+    @Override
+    public Long countUserByYear(Integer year) {
+        return userDao.countByYear(year);
+    }
+
+    @Override
+    public Long countUserByYearAndMonth(Integer year, Integer month) {
+        return userDao.countByYearAndMonth(year, month);
+    }
 }

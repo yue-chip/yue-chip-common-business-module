@@ -332,4 +332,19 @@ public interface UpmsRepository {
 
 
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
+
+    /**
+     * 统计年度用户增长数量
+     * @param year 年份
+     * @return 用户数量
+     */
+    Long countUserByYear(Integer year);
+
+    /**
+     * 统计月度用户增长数量
+     * @param year 年份
+     * @param month 月份
+     * @return 用户数量
+     */
+    Long countUserByYearAndMonth(Integer year, Integer month);
 }

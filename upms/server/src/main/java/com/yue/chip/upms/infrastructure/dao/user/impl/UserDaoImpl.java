@@ -19,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -219,6 +220,42 @@ public class UserDaoImpl implements UserDaoEx {
                 }
             });
         return result;
+    }
+
+    @Override
+    public Long countByYear(Integer year) {
+        if (Objects.isNull(year)) {
+            return 0L;
+        }
+        LocalDateTime startDate = LocalDateTime.of(year, 1, 1, 0, 0, 0);
+        LocalDateTime endDate = LocalDateTime.of(year, 12, 31, 23, 59, 59);
+        StringBuffer sb = new StringBuffer();
+        sb.append("select count(u) from UserPo u where 1=1");
+        sb.append(" and u.createDateTime >= :startDate and u.createDateTime <= :endDate");
+        sb.append(" and u.username <> 'superadmin'");
+        Map<String, Object> para = new HashMap<>();
+        para.put("startDate", startDate);
+        para.put("endDate", endDate);
+        List<?> result = baseDao.findAll(sb.toString(), para);
+        return (Long) result.get(0);
+    }
+
+    @Override
+    public Long countByYearAndMonth(Integer year, Integer month) {
+        if (Objects.isNull(year) || Objects.isNull(month)) {
+            return 0L;
+        }
+        LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
+        LocalDateTime endDate = LocalDateTime.of(year, month, 1, 23, 59, 59).plusMonths(1).minusDays(1);
+        StringBuffer sb = new StringBuffer();
+        sb.append("select count(u) from UserPo u where 1=1");
+        sb.append(" and u.createDateTime >= :startDate and u.createDateTime <= :endDate");
+        sb.append(" and u.username <> 'superadmin'");
+        Map<String, Object> para = new HashMap<>();
+        para.put("startDate", startDate);
+        para.put("endDate", endDate);
+        List<?> result = baseDao.findAll(sb.toString(), para);
+        return (Long) result.get(0);
     }
 
 }
