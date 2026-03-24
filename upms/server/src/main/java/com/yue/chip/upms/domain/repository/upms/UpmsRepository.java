@@ -14,6 +14,8 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.interfaces.vo.user.UserGrowthVo;
+import com.yue.chip.upms.interfaces.vo.user.UserGrowthByYearVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -334,17 +336,15 @@ public interface UpmsRepository {
     List<User> findAllByNameOrPhoneNumber(@NotBlank String name,@NotBlank String phoneNumber);
 
     /**
-     * 统计年度用户增长数量
-     * @param year 年份
-     * @return 用户数量
+     * 统计用户年度增长
      */
-    Long countUserByYear(Integer year);
+    List<UserGrowthVo> countUserGrowth();
 
     /**
-     * 统计月度用户增长数量
+     * 统计用户年度增长(指定年份)
      * @param year 年份
-     * @param month 月份
-     * @return 用户数量
+     * @return 年度增长统计（包含总数量和每月数量）
      */
-    Long countUserByYearAndMonth(Integer year, Integer month);
+    UserGrowthByYearVo countUserGrowthByYear(Integer year);
+
 }

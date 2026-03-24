@@ -4,6 +4,7 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.vo.user.UserGrowthVo;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
@@ -223,39 +224,40 @@ public class UserDaoImpl implements UserDaoEx {
     }
 
     @Override
-    public Long countByYear(Integer year) {
-        if (Objects.isNull(year)) {
-            return 0L;
-        }
-        LocalDateTime startDate = LocalDateTime.of(year, 1, 1, 0, 0, 0);
-        LocalDateTime endDate = LocalDateTime.of(year, 12, 31, 23, 59, 59);
-        StringBuffer sb = new StringBuffer();
-        sb.append("select count(u) from UserPo u where 1=1");
-        sb.append(" and u.createDateTime >= :startDate and u.createDateTime <= :endDate");
-        sb.append(" and u.username <> 'superadmin'");
-        Map<String, Object> para = new HashMap<>();
-        para.put("startDate", startDate);
-        para.put("endDate", endDate);
-        List<?> result = baseDao.findAll(sb.toString(), para);
-        return (Long) result.get(0);
+    public List<UserGrowthVo> countByYear() {
+        String hql = "SELECT FUNCTION('DATE_FORMAT', u.createDateTime, '%Y'), COUNT(u) " +
+                      "FROM UserPo u " +
+                      "GROUP BY FUNCTION('DATE_FORMAT', u.createDateTime, '%Y') " +
+                      "ORDER BY FUNCTION('DATE_FORMAT', u.createDateTime, '%Y')";
+        List<Object[]> resultList = (List<Object[]>) baseDao.findAll(hql);
+        return convertToGrowthList(resultList);
     }
 
     @Override
-    public Long countByYearAndMonth(Integer year, Integer month) {
-        if (Objects.isNull(year) || Objects.isNull(month)) {
-            return 0L;
+    public List<UserGrowthVo> countByYearMonth(LocalDateTime yearStart, LocalDateTime yearEnd) {
+        String hql = "SELECT FUNCTION('DATE_FORMAT', u.createDateTime, '%Y-%m'), COUNT(u) " +
+                      "FROM UserPo u " +
+                      "WHERE u.createDateTime >= :yearStart AND u.createDateTime < :yearEnd " +
+                      "GROUP BY FUNCTION('DATE_FORMAT', u.createDateTime, '%Y-%m') " +
+                      "ORDER BY FUNCTION('DATE_FORMAT', u.createDateTime, '%Y-%m')";
+        Map<String, Object> params = new HashMap<>();
+        params.put("yearStart", yearStart);
+        params.put("yearEnd", yearEnd);
+        List<Object[]> resultList = (List<Object[]>) baseDao.findAll(hql, params);
+        return convertToGrowthList(resultList);
+    }
+
+    private List<UserGrowthVo> convertToGrowthList(List<Object[]> resultList) {
+        List<UserGrowthVo> list = new ArrayList<>();
+        for (Object[] row : resultList) {
+            String timeLabel = row[0] != null ? row[0].toString() : "";
+            Long count = row[1] != null ? ((Number) row[1]).longValue() : 0L;
+            list.add(UserGrowthVo.builder()
+                    .timeLabel(timeLabel)
+                    .count(count)
+                    .build());
         }
-        LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
-        LocalDateTime endDate = LocalDateTime.of(year, month, 1, 23, 59, 59).plusMonths(1).minusDays(1);
-        StringBuffer sb = new StringBuffer();
-        sb.append("select count(u) from UserPo u where 1=1");
-        sb.append(" and u.createDateTime >= :startDate and u.createDateTime <= :endDate");
-        sb.append(" and u.username <> 'superadmin'");
-        Map<String, Object> para = new HashMap<>();
-        para.put("startDate", startDate);
-        para.put("endDate", endDate);
-        List<?> result = baseDao.findAll(sb.toString(), para);
-        return (Long) result.get(0);
+        return list;
     }
 
 }

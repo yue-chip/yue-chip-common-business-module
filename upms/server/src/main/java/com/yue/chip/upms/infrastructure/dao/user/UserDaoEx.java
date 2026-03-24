@@ -2,11 +2,13 @@ package com.yue.chip.upms.infrastructure.dao.user;
 
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.vo.user.UserGrowthVo;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,18 +90,17 @@ public interface UserDaoEx {
     Optional<UserPo> findByGridIdAndTenantNumber(Long id, Long tenantNumber);
 
     /**
-     * 统计指定年份的用户增长数量
-     * @param year 年份
-     * @return 用户数量
+     * 按年度统计用户增长数量
+     * @return 统计结果列表
      */
-    Long countByYear(Integer year);
+    List<UserGrowthVo> countByYear();
 
     /**
-     * 统计指定年份和月份的用户增长数量
-     * @param year 年份
-     * @param month 月份
-     * @return 用户数量
+     * 按指定年份月度统计用户增长数量
+     * @param yearStart 年开始日期
+     * @param yearEnd 年结束日期
+     * @return 统计结果列表
      */
-    Long countByYearAndMonth(Integer year, Integer month);
+    List<UserGrowthVo> countByYearMonth(LocalDateTime yearStart, LocalDateTime yearEnd);
 
 }
