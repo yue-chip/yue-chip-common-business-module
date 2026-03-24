@@ -24,7 +24,7 @@ import java.util.Optional;
  */
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=false, doNotUseGetters = true)
 @NoArgsConstructor
 
 @Component
@@ -140,9 +140,5 @@ public class Resources extends ResourcesDefinition {
     @Resource
     public void setRemoteFile(RemoteFile remoteFile) {
         Resources.remoteFile = remoteFile;
-    }
-
-    public int hashCode() {
-        return 1;
     }
 }
