@@ -172,7 +172,7 @@ public class MinioServiceImpl implements FileService, LargeFileService {
             }
 
             if (Objects.nonNull(response) && StringUtils.hasText(response.etag())) {
-                return buildFileInfo(fileSize, originalFilename, finalObjectName, response.etag());
+                return buildFileInfo(fileSize, originalFilename, originalFilename, response.etag());
             }
 
         } catch (Exception e) {
