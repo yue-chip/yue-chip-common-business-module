@@ -35,9 +35,12 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserSelectVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.interfaces.vo.user.UserGrowthVo;
+import com.yue.chip.upms.interfaces.vo.user.UserGrowthByYearVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
@@ -314,6 +317,22 @@ public class UpmsConsoleController {
     public IResultData<Boolean> userIsExist(@NotNull(message = "账号不能为空")@Parameter(description = "账号",name="username",required = true)String username) {
         ResultData.ResultDataBuilder<Boolean> builder = ResultData.builder();
         return builder.data(User.builder().username(username).build().checkUsernameIsExist()).build();
+    }
+
+    @GetMapping("/user/growth")
+    @Operation(summary = "用户-增长统计")
+    public ResultData<List<UserGrowthVo>> userGrowth() {
+        return ResultData.succeed(upmsRepository.countUserGrowth());
+    }
+
+    @GetMapping("/user/growth/year")
+    @Operation(summary = "用户-增长统计(指定年份)")
+    @Parameters({
+            @Parameter(description = "年份", name = "year")
+    })
+    public ResultData<UserGrowthByYearVo> userGrowthYear(@RequestParam(value = "year") Integer year) {
+        UserGrowthByYearVo result = upmsRepository.countUserGrowthByYear(year);
+        return ResultData.succeed(result);
     }
 
     @PostMapping("/organizational/add")

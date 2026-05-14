@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=false, doNotUseGetters = true)
 @NoArgsConstructor
 
 @Component
@@ -77,7 +77,4 @@ public class Organizational extends OrganizationalDefinition {
         Organizational.organizationalRepository = organizationalRepository;
     }
 
-    public int hashCode() {
-        return 1;
-    }
 }

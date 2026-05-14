@@ -27,6 +27,8 @@ import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
+import com.yue.chip.upms.interfaces.vo.user.UserGrowthVo;
+import com.yue.chip.upms.interfaces.vo.user.UserGrowthByYearVo;
 import com.yue.chip.utils.CurrentUserUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
@@ -36,6 +38,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -374,10 +377,50 @@ public class UpmsRepositoryImpl implements UpmsRepository {
         return userList;
     }
 
+    @Override
+    public List<UserGrowthVo> countUserGrowth() {
+        return userDao.countByYear();
+    }
+
+    @Override
+    public UserGrowthByYearVo countUserGrowthByYear(Integer year) {
+        LocalDateTime yearStart = LocalDateTime.of(year, 1, 1, 0, 0, 0);
+        LocalDateTime yearEnd = LocalDateTime.of(year + 1, 1, 1, 0, 0, 0);
+
+        List<UserGrowthVo> monthlyList = userDao.countByYearMonth(yearStart, yearEnd);
+
+        // 补齐缺失的月份
+        Map<String, Long> countMap = new HashMap<>();
+        for (UserGrowthVo vo : monthlyList) {
+            countMap.put(vo.getTimeLabel(), vo.getCount());
+        }
+        for (int month = 1; month <= 12; month++) {
+            String monthLabel = String.format("%d-%02d", year, month);
+            if (!countMap.containsKey(monthLabel)) {
+                monthlyList.add(UserGrowthVo.builder()
+                        .timeLabel(monthLabel)
+                        .count(0L)
+                        .build());
+            }
+        }
+        // 按月份排序
+        monthlyList.sort(Comparator.comparing(UserGrowthVo::getTimeLabel));
+
+        long totalCount = monthlyList.stream()
+                .mapToLong(v -> v.getCount() != null ? v.getCount() : 0L)
+                .sum();
+
+        return UserGrowthByYearVo.builder()
+                .totalCount(totalCount)
+                .monthlyList(monthlyList)
+                .build();
+    }
+
     private Optional<Resources> convertResources(Optional<ResourcesPo> optional) {
         if (optional.isPresent()) {
             return Optional.ofNullable(resourcesMapper.toResources(optional.get()));
         }
         return Optional.empty();
     }
+
 }

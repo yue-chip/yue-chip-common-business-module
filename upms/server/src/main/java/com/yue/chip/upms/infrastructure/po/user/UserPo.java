@@ -22,7 +22,16 @@ import java.time.LocalDateTime;
  */
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Table(name = UserPo.TABLE_NAME,indexes = {@Index(columnList = "name"),@Index(columnList = "create_date_time"), @Index(columnList = "update_date_time")})
+@Table(
+    name = UserPo.TABLE_NAME,
+    indexes = {
+        @Index(columnList = "name"),
+        @Index(columnList = "username"),
+        @Index(columnList = "phone_number"),
+        @Index(columnList = "create_date_time"),
+        @Index(columnList = "update_date_time")
+    }
+)
 @SuperBuilder
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class, JpaInterceptor.class})

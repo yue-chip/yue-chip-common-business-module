@@ -8,6 +8,7 @@ import com.yue.chip.common.business.infrastructure.dao.file.FileRelationalDao;
 import com.yue.chip.common.business.infrastructure.po.file.FilePo;
 import com.yue.chip.common.business.infrastructure.po.file.FileRelationalPo;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -16,6 +17,7 @@ import java.util.*;
  * @author Mr.Liu
  * @date 2023/6/13 下午4:33
  */
+@Slf4j
 @Repository
 public class FileRepositoryImpl implements FileRepository {
 
@@ -60,6 +62,7 @@ public class FileRepositoryImpl implements FileRepository {
 
     @Override
     public void save(Long tableId, String tableName, String fileFieldName, List<Long> fileIds) {
+        log.info("保存文件: tableId={}, tableName={}, fileFieldName={}, fileIds={}", tableId, tableName, fileFieldName, fileIds);
         if (Objects.nonNull(tableId) && Objects.nonNull(tableName) && Objects.nonNull(fileFieldName) ) {
             fileRelationalDao.deleteByTableIdAndTableNameAndFileFieldName(tableId, tableName, fileFieldName);
             if (Objects.nonNull(fileIds) && fileIds.size() >0) {

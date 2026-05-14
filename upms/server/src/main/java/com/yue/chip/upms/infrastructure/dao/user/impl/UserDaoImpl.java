@@ -4,6 +4,7 @@ import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.curd.BaseDao;
 import com.yue.chip.upms.infrastructure.dao.user.UserDaoEx;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.vo.user.UserGrowthVo;
 import com.yue.chip.utils.AssertUtil;
 import com.yue.chip.utils.HibernateSessionJdbcUtil;
 import com.yue.chip.utils.TenantDatabaseUtil;
@@ -19,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -219,6 +221,43 @@ public class UserDaoImpl implements UserDaoEx {
                 }
             });
         return result;
+    }
+
+    @Override
+    public List<UserGrowthVo> countByYear() {
+        String hql = "SELECT FUNCTION('DATE_FORMAT', u.createDateTime, '%Y'), COUNT(u) " +
+                      "FROM UserPo u " +
+                      "GROUP BY FUNCTION('DATE_FORMAT', u.createDateTime, '%Y') " +
+                      "ORDER BY FUNCTION('DATE_FORMAT', u.createDateTime, '%Y')";
+        List<Object[]> resultList = (List<Object[]>) baseDao.findAll(hql);
+        return convertToGrowthList(resultList);
+    }
+
+    @Override
+    public List<UserGrowthVo> countByYearMonth(LocalDateTime yearStart, LocalDateTime yearEnd) {
+        String hql = "SELECT FUNCTION('DATE_FORMAT', u.createDateTime, '%Y-%m'), COUNT(u) " +
+                      "FROM UserPo u " +
+                      "WHERE u.createDateTime >= :yearStart AND u.createDateTime < :yearEnd " +
+                      "GROUP BY FUNCTION('DATE_FORMAT', u.createDateTime, '%Y-%m') " +
+                      "ORDER BY FUNCTION('DATE_FORMAT', u.createDateTime, '%Y-%m')";
+        Map<String, Object> params = new HashMap<>();
+        params.put("yearStart", yearStart);
+        params.put("yearEnd", yearEnd);
+        List<Object[]> resultList = (List<Object[]>) baseDao.findAll(hql, params);
+        return convertToGrowthList(resultList);
+    }
+
+    private List<UserGrowthVo> convertToGrowthList(List<Object[]> resultList) {
+        List<UserGrowthVo> list = new ArrayList<>();
+        for (Object[] row : resultList) {
+            String timeLabel = row[0] != null ? row[0].toString() : "";
+            Long count = row[1] != null ? ((Number) row[1]).longValue() : 0L;
+            list.add(UserGrowthVo.builder()
+                    .timeLabel(timeLabel)
+                    .count(count)
+                    .build());
+        }
+        return list;
     }
 
 }

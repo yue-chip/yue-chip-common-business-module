@@ -31,7 +31,7 @@ import java.util.*;
  * @description 用户聚合根 此聚合根非彼聚合根 意思意思
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=false, doNotUseGetters = true)
 @SuperBuilder
 @NoArgsConstructor
 
@@ -171,9 +171,5 @@ public class User extends UserDefinition {
     @Resource
     public void setRemoteTenant(RemoteTenant remoteTenant) {
         User.remoteTenant = remoteTenant;
-    }
-
-    public int hashCode() {
-        return 1;
     }
 }

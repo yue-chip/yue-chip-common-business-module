@@ -35,5 +35,8 @@ public class FileDefinition extends BaseDefinition {
     @Schema(description = "文件下载路径")
     protected String url;
 
+    @Schema(description = "md5")
+    protected String md5;
+
 
 }
