@@ -25,6 +25,7 @@ import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
 import com.yue.chip.upms.infrastructure.po.user.UserRolePo;
+import com.yue.chip.upms.interfaces.dto.user.UserPageDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
@@ -361,8 +362,8 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     }
 
     @Override
-    public IPageResultData<List<UserVo>> userList(String name, Pageable pageable) {
-        Page<UserPo> page = userDao.find(name,null,pageable);
+    public IPageResultData<List<UserVo>> userList(UserPageDto dto, Pageable pageable) {
+        Page<UserPo> page = userDao.find(dto, pageable);
         List<User> listUser = userMapper.toUserList(page.getContent());
         return (IPageResultData<List<UserVo>>) PageResultData.convert(page,userMapper.toUserListVo(listUser));
     }
@@ -426,6 +427,16 @@ public class UpmsRepositoryImpl implements UpmsRepository {
     public void logoutUser(Long userId) {
         userDao.deleteById(userId);
         userRoleDao.deleteByUserId(userId);
+    }
+
+    @Override
+    public Long countUserByYear(Integer year) {
+        return userDao.countByYear(year);
+    }
+
+    @Override
+    public Long countUserByYearAndMonth(Integer year, Integer month) {
+        return userDao.countByYearAndMonth(year, month);
     }
 
 

@@ -1,5 +1,6 @@
 package com.yue.chip.upms.interfaces.facade.console.upms;
 
+import cn.hutool.core.lang.Assert;
 import com.yue.chip.core.*;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.persistence.Validator;
@@ -23,6 +24,7 @@ import com.yue.chip.upms.interfaces.dto.role.RoleAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleResourcesAddDto;
 import com.yue.chip.upms.interfaces.dto.role.RoleUpdateDto;
 import com.yue.chip.upms.interfaces.dto.user.UserAddOrUpdateDto;
+import com.yue.chip.upms.interfaces.dto.user.UserPageDto;
 import com.yue.chip.upms.interfaces.dto.user.UserRoleAddDto;
 import com.yue.chip.upms.interfaces.dto.user.UserUpdatePasswordDto;
 import com.yue.chip.upms.interfaces.vo.organizational.GridVo;
@@ -36,6 +38,7 @@ import com.yue.chip.upms.interfaces.vo.role.RoleVo;
 import com.yue.chip.upms.interfaces.vo.user.UserSelectVo;
 import com.yue.chip.upms.interfaces.vo.user.UserVo;
 import com.yue.chip.utils.CurrentUserUtil;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,6 +50,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -267,8 +271,8 @@ public class UpmsConsoleController {
 
     @GetMapping("/user/list")
     @Operation(description = "用户-用户列表",summary = "用户-用户列表")
-    public IPageResultData<List<UserVo>> userList(@Parameter(description = "姓名",name="name")String name, YueChipPage page) {
-        IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(name,page);
+    public IPageResultData<List<UserVo>> userList(UserPageDto dto, YueChipPage page) {
+        IPageResultData<List<UserVo>> pageResultData = upmsRepository.userList(dto,page);
         return pageResultData;
     }
 
@@ -314,6 +318,31 @@ public class UpmsConsoleController {
     public IResultData<Boolean> userIsExist(@NotNull(message = "账号不能为空")@Parameter(description = "账号",name="username",required = true)String username) {
         ResultData.ResultDataBuilder<Boolean>  builder = ResultData.builder();
         return builder.data(User.builder().username(username).build().checkUsernameIsExist()).build();
+    }
+
+    @GetMapping("/user/count/growth")
+    @Operation(description = "用户-用户增长统计", summary = "用户-用户增长统计")
+    public IResultData<Long> userGrowthCount(@Parameter(description = "统计类型(MONTHLY: 月度, YEARLY: 年度)", name = "type") String type,
+                                              @Parameter(description = "年份", name = "year") Integer year,
+                                              @Parameter(description = "月份", name = "month") Integer month) {
+        ResultData.ResultDataBuilder<Long> builder = ResultData.builder();
+        Long count = 0L;
+        // type 为空时 默认使用当年年度统计
+        if (StrUtil.isBlank(type)) {
+            type = "YEARLY";
+            year = (year == null) ? LocalDateTime.now().getYear() : year;
+        } else if ("YEARLY".equalsIgnoreCase(type)) {
+            Assert.notNull(year, "参数[year]不能为空");
+        } else if ("MONTHLY".equalsIgnoreCase(type)) {
+            Assert.notNull(year, "参数[year]不能为空");
+            Assert.notNull(month, "参数[month]不能为空");
+        }
+        if ("YEARLY".equalsIgnoreCase(type)) {
+            count = upmsRepository.countUserByYear(year);
+        } else if ("MONTHLY".equalsIgnoreCase(type)) {
+            count = upmsRepository.countUserByYearAndMonth(year, month);
+        }
+        return builder.data(count).build();
     }
 
     @PostMapping("/organizational/add")

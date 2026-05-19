@@ -12,6 +12,7 @@ import com.yue.chip.upms.infrastructure.po.resources.ResourcesPo;
 import com.yue.chip.upms.infrastructure.po.role.RolePo;
 import com.yue.chip.upms.infrastructure.po.role.RoleResourcesPo;
 import com.yue.chip.upms.infrastructure.po.user.UserPo;
+import com.yue.chip.upms.interfaces.dto.user.UserPageDto;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeVo;
 import com.yue.chip.upms.interfaces.vo.resources.ResourcesTreeListVo;
 import com.yue.chip.upms.interfaces.vo.role.RoleVo;
@@ -329,10 +330,10 @@ public interface UpmsRepository {
     /**
      * 用户列表
      *
-     * @param name
+     * @param dto 分页条件DTO
      * @return
      */
-    public IPageResultData<List<UserVo>> userList(String name, @NotNull Pageable pageable);
+    public IPageResultData<List<UserVo>> userList(UserPageDto dto, @NotNull Pageable pageable);
 
     public IPageResultData<List<User>> userList(List<Long> organizationalIds, String name, @NotNull Pageable pageable);
 
@@ -368,4 +369,19 @@ public interface UpmsRepository {
     IPageResultData<List<UserExposeVo>> findUserAllByUserType(String name, String nickname, String username, String phoneNumber, String email, State state, String nameLike, @NotNull YueChipPage yueChipPage);
 
     void logoutUser(Long userId);
+
+    /**
+     * 统计年度用户增长数量
+     * @param year 年份
+     * @return 用户数量
+     */
+    Long countUserByYear(Integer year);
+
+    /**
+     * 统计月度用户增长数量
+     * @param year 年份
+     * @param month 月份
+     * @return 用户数量
+     */
+    Long countUserByYearAndMonth(Integer year, Integer month);
 }

@@ -6,6 +6,7 @@ import com.yue.chip.core.YueChipPage;
 import com.yue.chip.core.common.enums.State;
 import com.yue.chip.core.common.enums.UserType;
 import com.yue.chip.upms.vo.UserExposeVo;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
@@ -89,4 +90,8 @@ public interface RemoteUpms extends RemoteUpmsDefinition{
     @PutExchange(PREFIX+UPDATE_PASSWORD)
     ResultData updateUserPassword(@RequestParam(value = "userId",required = false)Long userId,
                                   @RequestParam(value = "password",required = false)String password);
+
+    @Override
+    @GetExchange(PREFIX + VERIFY_USERIDS)
+    ResultData<List<Long>> verifyUserIds(@RequestParam(value = "userIds") List<Long> userIds);
 }
