@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
  * @author Mr.Liu
  * @date 2023/7/6 上午11:39
  */
-@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE,implementationName = "upmsEnumUtilMapper")
 public interface EnumUtilMapper {
     EnumUtilMapper INSTANCE = Mappers.getMapper(EnumUtilMapper.class);
 
