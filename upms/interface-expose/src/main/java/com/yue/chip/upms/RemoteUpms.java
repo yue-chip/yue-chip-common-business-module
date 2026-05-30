@@ -17,7 +17,7 @@ import org.springframework.web.service.annotation.PutExchange;
 import java.util.List;
 import java.util.Map;
 
-@HttpExchange("${http.exchange.host}")
+@HttpExchange("${http.exchange.host.host-business}")
 public interface RemoteUpms extends RemoteUpmsDefinition{
 
     @Override
